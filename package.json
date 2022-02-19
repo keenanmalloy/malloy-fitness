@@ -1,0 +1,10 @@
+{
+  "name": "malloy-fitness",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start-server": "cd server && npm run dev"
+  },
+  "author": "K&J",
+  "license": "ISC"
+}

@@ -1,0 +1,17 @@
+{
+  "exclude": ["./client/*"],
+  "include": ["./server/**/*.ts"],
+  "compilerOptions": {
+    "lib": ["dom", "es2020"],
+    "module": "commonjs",
+    "outDir": "./server/dist",
+    "strict": true,
+    "target": "es2019",
+    "baseUrl": "./server/src",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "strictNullChecks": true,
+    "resolveJsonModule": false,
+    "inlineSourceMap": true
+  }
+}

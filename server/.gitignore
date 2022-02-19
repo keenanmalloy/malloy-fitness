@@ -1,0 +1,11 @@
+dist
+.env.production
+!.env.ci
+!.env*.example
+*.log
+coverage
+private.pem
+node_modules
+data
+yarn-error.log
+package-lock.json
