@@ -1,5 +1,9 @@
 import { Router } from "express";
+import exercises from "./exercises";
+
 const router = Router();
+
+exercises(router);
 
 router.get("/health", (req, res) => res.send("OK"));
 
