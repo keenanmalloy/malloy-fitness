@@ -55,6 +55,14 @@ router.get("/:id", (req, res) => {
     (data) => data.exerciseId === parseInt((req.params as any).id)
   )[0];
 
+  if (!exercise) {
+    return res.json({
+      status: "error",
+      message: "Exercise does not exist",
+      exercise,
+    });
+  }
+
   return res.json({
     status: "success",
     message: "Exercise fetched successfully",
