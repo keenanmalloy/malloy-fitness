@@ -1,73 +1,35 @@
 import { Router } from "express";
-import Joi from "joi";
-import { data } from "../../../test/data";
+import { createExerciseMutation } from "queries/createExerciseMutation";
+import { deleteExerciseMutation } from "queries/deleteExerciseMutation";
+import { retrieveExerciseQuery } from "queries/retrieveExerciseQuery";
+import { retrieveExercisesQuery } from "queries/retrieveExercisesQuery";
+import { updateExerciseMutation } from "queries/updateExerciseMutation";
 
 const router = Router();
 
-const createExerciseSchema = Joi.object({
-  name: Joi.string().min(3).max(20).required(),
-  description: Joi.string().max(250),
-  category: Joi.string().required(),
-  primary: Joi.string().required(),
-  secondary: Joi.string(),
-  image: Joi.string(),
-  video: Joi.string(),
-  movement: Joi.string().valid("isolation", "compound").required(),
-});
-
 // Retrieve all exercises
-router.get("/", (req, res) => {
-  return res.json({
-    message: "Exercises fetched successfully",
-    status: "success",
-    exercises: data,
-  });
+router.get("/", async (req, res) => {
+  await retrieveExercisesQuery(res);
 });
 
 // Create new exercise
-router.post("/", (req, res) => {
-  const data = req.body;
-
-  const { error, value, warning } = createExerciseSchema.validate(data);
-  const exercise_id = Math.ceil(Math.random() * 9999999);
-
-  if (error) {
-    return res.status(422).json({
-      status: "error",
-      message: "Invalid request data",
-      exercise: data,
-    });
-  } else {
-    return res.json({
-      status: "success",
-      message: "User created successfully",
-      exercise: Object.assign(
-        { exercise_id, createdAt: Date.now(), updatedAt: Date.now() },
-        value
-      ),
-    });
-  }
+router.post("/", async (req, res) => {
+  await createExerciseMutation(res, req.body);
 });
 
-// Retrieve exercise by id
-router.get("/:id", (req, res) => {
-  const exercise = data.filter(
-    (data) => data.exerciseId === parseInt((req.params as any).id)
-  )[0];
+// Retrieve exercise
+router.get("/:id", async (req, res) => {
+  await retrieveExerciseQuery(res, req.params.id);
+});
 
-  if (!exercise) {
-    return res.json({
-      status: "error",
-      message: "Exercise does not exist",
-      exercise,
-    });
-  }
+// Delete exercise
+router.delete("/:id", async (req, res) => {
+  await deleteExerciseMutation(res, req.params.id);
+});
 
-  return res.json({
-    status: "success",
-    message: "Exercise fetched successfully",
-    exercise,
-  });
+// Update exercise
+router.put("/:id", async (req, res) => {
+  await updateExerciseMutation(res, req.body, req.params.id);
 });
 
 export default (parentRouter: Router) => {
