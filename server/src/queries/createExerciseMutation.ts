@@ -5,8 +5,8 @@ interface createExercise {
   name: string;
   description: string;
   category: string;
-  primary: string;
-  secondary: string;
+  primary: string[];
+  secondary: string[];
   image: string;
   video: string;
   movement: string;
@@ -16,15 +16,15 @@ interface Response {
   status: string;
   message: string;
   exercise: any;
-  error?: any
+  error?: any;
 }
 
 const createExerciseSchema = Joi.object({
   name: Joi.string().min(3).max(20).required(),
   description: Joi.string().max(250).allow("").optional(),
   category: Joi.string().required(),
-  primary: Joi.string().required(),
-  secondary: Joi.string().allow("").optional(),
+  primary: Joi.array().items(Joi.string()).required(),
+  secondary: Joi.array().items(Joi.string()).optional(),
   image: Joi.string().allow("").optional(),
   video: Joi.string().allow("").optional(),
   movement: Joi.string().valid("isolation", "compound").required(),
@@ -47,27 +47,59 @@ export const createExerciseMutation = async (
       name,
       description,
       category,
-      primary,
-      secondary,
+      primary, // array of ids
+      secondary, // array of ids
       image,
       video,
       movement,
     } = data;
 
-    const query = `INSERT INTO "exercises" (name, description, category, "primary", secondary, image, video, movement) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) ON CONFLICT DO NOTHING RETURNING *`;
-    const params = [
-      name,
-      description,
-      category,
-      primary,
-      secondary,
-      image,
-      video,
-      movement,
-    ];
+    const preparePrimaryValues = () => {
+      if (secondary.length) {
+        return `${primary
+          .map((id) => `(SELECT ins1.exercise_id FROM ins1), ${id}`)
+          .join(",")},`;
+      }
+      return primary
+        .map((id) => `(SELECT ins1.exercise_id FROM ins1), ${id}`)
+        .join(",");
+    };
+
+    const prepareSecondaryValues = () => {
+      return secondary
+        .map((id) => `(SELECT ins1.exercise_id FROM ins1), ${id}`)
+        .join(",");
+    };
+
+    const query = `
+      WITH 
+      
+      data(name, description, category, image, video, movement) AS (
+        VALUES                           
+            ('${name}', '${description}', '${category}', '${image}', '${video}', '${movement}')
+        ), 
+
+      ins1 AS (
+        INSERT INTO exercises (name, description, category, image, video, movement)
+          SELECT name, description, category, image, video, movement
+            FROM data
+          RETURNING exercise_id
+        ), 
+
+      data2(exercise_id, muscle_group_id) AS (
+          VALUES (
+            ${preparePrimaryValues()}
+            ${prepareSecondaryValues()}
+          )
+        )
+        
+      INSERT INTO exercise_muscle_groups (exercise_id, muscle_group_id)
+        SELECT data2.exercise_id, data2.muscle_group_id
+        FROM data2
+      `;
 
     try {
-      const data = await db.query(query, params);
+      const data = await db.query(query);
 
       return res.json({
         status: "success",
@@ -75,10 +107,10 @@ export const createExerciseMutation = async (
         exercise: data.rows[0],
       });
     } catch (error) {
-      console.log({ error });
       return res.json({
         status: "error",
-        message: "Database error",
+        //@ts-ignore
+        message: error && error.message ? error.message : "Database error",
         exercise: null,
       });
     }
