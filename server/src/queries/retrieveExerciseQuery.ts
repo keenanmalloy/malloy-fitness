@@ -6,6 +6,17 @@ interface Response {
   exercise: any;
 }
 
+const getMuscleGroups = async (exerciseId: string) => {
+  const data = await db.query(
+    `SELECT * FROM muscle_groups mg
+    JOIN exercise_muscle_groups emg ON emg.muscle_group_id = mg.muscle_group_id
+  WHERE exercise_id = $1`,
+    [exerciseId]
+  );
+
+  return data.rows;
+};
+
 export const retrieveExerciseQuery = async (
   res: any,
   id: string
@@ -15,7 +26,6 @@ export const retrieveExerciseQuery = async (
 
   try {
     const data = await db.query(query, params);
-
     if (!data.rows.length) {
       return res.json({
         status: "error",
@@ -24,10 +34,18 @@ export const retrieveExerciseQuery = async (
       });
     }
 
+    const exerciseId = data.rows[0].exercise_id;
+    const muscleGroups = await getMuscleGroups(exerciseId);
+    const exercise = {
+      ...data.rows[0],
+      primary: muscleGroups.filter((mg) => mg.group === "primary"),
+      secondary: muscleGroups.filter((mg) => mg.group === "secondary"),
+    };
+
     return res.json({
       status: "success",
       message: "Exercise fetched successfully",
-      exercise: data.rows[0],
+      exercise,
     });
   } catch (error) {
     console.log({ error });
