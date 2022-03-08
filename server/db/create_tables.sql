@@ -18,11 +18,12 @@ CREATE TABLE IF NOT EXISTS exercises (
     image text,
     video text,
     movement character varying(30),
+    range character varying(30),
     created_by bigint
 );
 
 CREATE TABLE IF NOT EXISTS workout_exercises (
-    workout_id bigint REFERENCES workouts(workout_id),
+    workout_id bigint REFERENCES workouts(workout_id) ON DELETE CASCADE,
     exercise_id bigint REFERENCES exercises(exercise_id)
 );
 
@@ -36,7 +37,7 @@ CREATE TABLE IF NOT EXISTS muscle_groups (
 CREATE TABLE IF NOT EXISTS exercise_muscle_groups (
     "group" character varying(30),
     muscle_group_id bigint REFERENCES muscle_groups(muscle_group_id),
-    exercise_id bigint REFERENCES exercises(exercise_id)
+    exercise_id bigint REFERENCES exercises(exercise_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS sets (
