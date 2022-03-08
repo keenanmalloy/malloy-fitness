@@ -1,13 +1,9 @@
 import { Router } from "express";
 import exercises from "./exercises";
-import muscleGroups from "./muscle-groups";
-import workouts from "./workouts";
 
 const router = Router();
 
 exercises(router);
-muscleGroups(router);
-workouts(router);
 
 router.get("/health", (req, res) => res.send("OK"));
 
