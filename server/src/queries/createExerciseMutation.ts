@@ -7,7 +7,6 @@ interface createExercise {
   category: string;
   primary: string[];
   secondary: string[];
-  image: string;
   video: string;
   movement: string;
   range: string;
@@ -26,7 +25,6 @@ const createExerciseSchema = Joi.object({
   category: Joi.string().required(),
   primary: Joi.array().items(Joi.string(), Joi.number()).required(),
   secondary: Joi.array().items(Joi.string(), Joi.number()).optional(),
-  image: Joi.string().allow(null).optional(),
   video: Joi.string().allow(null).optional(),
   movement: Joi.string().valid("isolation", "compound").required(),
   range: Joi.string().allow(null).valid("short", "med", "long").optional(),
@@ -97,7 +95,6 @@ export const createExerciseMutation = async (
       category,
       primary, // array of ids
       secondary, // array of ids
-      image,
       video,
       movement,
       range,
@@ -105,12 +102,12 @@ export const createExerciseMutation = async (
 
     const query = `
       WITH 
-        data(name, description, category, image, video, movement, range) AS (
+        data(name, description, category, video, movement, range) AS (
           VALUES                           
-              ('${name}', '${description}', '${category}', '${image}', '${video}', '${movement}', '${range}')
+              ('${name}', '${description}', '${category}','${video}', '${movement}', '${range}')
           )
-        INSERT INTO exercises (name, description, category, image, video, movement, range)
-          SELECT name, description, category, image, video, movement, range
+        INSERT INTO exercises (name, description, category, video, movement, range)
+          SELECT name, description, category, video, movement, range
             FROM data
           RETURNING *
       `;
