@@ -28,6 +28,19 @@ export const updateSetMutation = async (
       error: error,
     });
   } else {
+    const { repetitions, weight } = data;
+
+    if (
+      (typeof repetitions === "number" && repetitions < 0) ||
+      (typeof weight === "number" && weight < 0)
+    ) {
+      return res.json({
+        status: "error",
+        message: "Only positive numbers allowed for weight and reps",
+        set: null,
+      });
+    }
+
     const { query, params } = update({
       tableName: "sets",
       conditions: {

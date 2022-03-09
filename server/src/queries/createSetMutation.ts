@@ -38,14 +38,27 @@ export const createSetMutation = async (
   } else {
     const { exercise_id, repetitions, weight } = data;
 
+    if (
+      (typeof repetitions === "number" && repetitions < 0) ||
+      (typeof weight === "number" && weight < 0)
+    ) {
+      return res.json({
+        status: "error",
+        message: "Only positive numbers allowed for weight and reps",
+        set: null,
+      });
+    }
+
     const query = `
       WITH 
-        data(exercise_id, repetitions, weight, workoutId) AS (
+        data(exercise_id, repetitions, weight, workout_id) AS (
           VALUES                           
-              ('${exercise_id}', '${repetitions}', '${weight}', '${workoutId}')
+              (${exercise_id}, ${repetitions ?? 0}, ${
+      weight ?? 0
+    }, ${workoutId})
           )
-        INSERT INTO sets (exercise_id, repetitions, weight, workoutId)
-          SELECT exercise_id, repetitions, weight, workoutId
+        INSERT INTO sets (exercise_id, repetitions, weight, workout_id)
+          SELECT exercise_id, repetitions, weight, workout_id
             FROM data
           RETURNING *
       `;
