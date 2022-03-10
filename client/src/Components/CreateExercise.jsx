@@ -1,18 +1,32 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export const CreateExercise = ({ exercises, setExercises }) => {
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [category, setCategory] = useState('');
-  const [profile, setProfile] = useState('');
-  const [type, setType] = useState('');
+  const [name, setName] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
+  const [profile, setProfile] = useState("");
+  const [type, setType] = useState("");
   const [primary, setPrimary] = useState([]);
   const [secondary, setSecondary] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmit = (e) => {
     e.preventDefault();
+
+    /**
+     *  BODY OF `/exercises/`
+     *  API POST REQUEST
+     *
+     *  name: string;
+     *  description: string;
+     *  category: string;
+     *  primary: string[];
+     *  secondary: string[];
+     *  video: string;
+     *  profile: string;
+     */
+
     const exercise = {
       name,
       description,
@@ -20,18 +34,10 @@ export const CreateExercise = ({ exercises, setExercises }) => {
       profile,
       type,
       primary,
-      secondary
+      secondary,
     };
 
-  //   name: string;
-  // description: string;
-  // category: string;
-  // primary: string[];
-  // secondary: string[];
-  // video: string;
-  // movement: string;
-  // range: string;
-    console.log({exercise})
+    console.log({ exercise });
 
     // setIsLoading(true);
 
@@ -47,7 +53,7 @@ export const CreateExercise = ({ exercises, setExercises }) => {
 
   let navigate = useNavigate();
   const routeChange = () => {
-    let path = '/exercises';
+    let path = "/exercises";
     navigate(path);
   };
 
@@ -60,6 +66,18 @@ export const CreateExercise = ({ exercises, setExercises }) => {
         Admin
       </button>
       <form onSubmit={handleSubmit}>
+        {/* 
+          Extract input & label to the component called <Input />
+          Pass it the following props 
+          
+          <Input 
+            onChange={*function*} ex - (e) => setName(e.target.value)
+            value={*text*} 
+            label={*text*} 
+            isRequired={*boolean*} 
+            isTextArea={*boolean*} 
+          />
+        */}
         <label>Exercise name:</label>
         <input
           type="text"
@@ -67,12 +85,31 @@ export const CreateExercise = ({ exercises, setExercises }) => {
           value={name}
           onChange={(e) => setName(e.target.value)}
         />
+
+        {/* 
+          Reuse the <Input /> component created in the above message
+          Remember to set the isTextArea prop so we can conditionally render a textarea in the component
+        */}
         <label>Exercise description:</label>
         <textarea
           required
           value={description}
           onChange={(e) => setDescription(e.target.value)}
         ></textarea>
+
+        {/* 
+          Extract select, option & label to the component called <Select />
+          Pass it the following props 
+          
+          <Select 
+            onChange={*function*} 
+            value={*text*} 
+            label={*text*} 
+            isRequired={*boolean*} 
+            options={*Array of strings*} ex ['chest', 'back', 'legs']
+            defaultOption={*text*} 
+          />
+        */}
         <label>Exercise category:</label>
         <select value={category} onChange={(e) => setCategory(e.target.value)}>
           <option value="">--choose a category --</option>
@@ -82,23 +119,48 @@ export const CreateExercise = ({ exercises, setExercises }) => {
           <option value="legs">legs</option>
           <option value="shoulders">shoulders</option>
         </select>
-        <label>Resistance profile: </label>
-        <label htmlFor="short">Short</label>
-        <input type="radio" name="resistance-range" />
-        <label htmlFor="long">Long</label>
-        <input type="radio" name="resistance-range" />
-        <label htmlFor="mid">Mid</label>
-        <input type="radio" name="resistance-range" />
-        <label>Exercise type: </label>
-        <label htmlFor="compound">Compound</label>
-        <input type="radio" name="type-range" />
-        <label htmlFor="isolation"> Isolation</label>
-        <input type="radio" name="type-range" />
+
+        {/* 
+          Extract the group of radio buttons - input & label to the component called <RadioGroup />
+          Pass it the following props 
+          
+          <RadioGroup 
+            onChange={*function*}
+            label={*text*}
+            checked={*text*} ex. profile state - 'short' || 'long'
+            isRequired={*boolean*} 
+            options={*Array of strings*} ex ['short', 'mid', 'long']
+          />
+        */}
+        <>
+          <label>Resistance profile: </label>
+          <label htmlFor="short">Short</label>
+          <input type="radio" name="resistance-range" />
+
+          <label htmlFor="long">Long</label>
+          <input type="radio" name="resistance-range" />
+
+          <label htmlFor="mid">Mid</label>
+          <input type="radio" name="resistance-range" />
+        </>
+
         <br />
+
+        {/* 
+          Create the following component:
+
+           <SelectMuscleGroups 
+            onPrimaryChange={*function*} ex a function that handles the state for the primary muscle groups selected
+            onSecondaryChange={*function*} ex a function that handles the state for the primary muscle groups selected
+            primary={*Array of Objects (muscle groups)*} -- state
+            secondary={*Array of Objects (muscle groups)*} -- state
+          /> 
+        */}
         <label> Muscle groups: </label>
         <input type="text" placeholder="primary" />
         <input type="text" placeholder="secondary" />
         <br />
+
         {!isLoading && (
           <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 border border-blue-700 rounded">
             Add exercise
