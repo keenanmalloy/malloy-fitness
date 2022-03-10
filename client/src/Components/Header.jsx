@@ -1,7 +1,7 @@
-import React from 'react'
-
 export const Header = () => {
   return (
-    <div>Header</div>
+    <div>
+    <h1 className="text-align: text-center text-5xl ">Admin</h1>
+    </div>
   )
 }
