@@ -3,29 +3,29 @@ import Link from 'next/link';
 import { ExerciseList } from './ExerciseList';
 import Button from './Button';
 
-export const GetAllExercises = () => {
-  const [exercises, setExercises] = useState(null);
+export const GetAllWorkouts = () => {
+  const [workouts, setWorkouts] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    fetch('http://localhost:4000/exercises/')
+    fetch('http://localhost:4000/workouts/')
       .then((res) => {
         return res.json();
       })
       .then((data) => {
-        setExercises(data.exercises);
+        setWorkouts(data.workouts);
         setIsLoading(false);
       });
   }, []);
 
   return (
     <div>
-      {isLoading ? (
+      {/* {isLoading ? (
         <div>Loading...</div>
       ) : (
         <ExerciseList exercises={exercises} setExercises={setExercises} />
-      )}
-
-      <Button href="/exercises/create">Create exercise</Button>
+      )} */}
+    <p>All workouts</p>
+      <Button href="/workouts/create">Create workout</Button>
     </div>
   );
 };

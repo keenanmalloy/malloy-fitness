@@ -1,5 +1,5 @@
-import { db } from "config/db";
-import Joi from "joi";
+import { db } from 'config/db';
+import Joi from 'joi';
 
 interface createExercise {
   name: string;
@@ -8,8 +8,7 @@ interface createExercise {
   primary: string[];
   secondary: string[];
   video: string;
-  movement: string;
-  range: string;
+  profile: string;
 }
 
 interface Response {
@@ -21,13 +20,12 @@ interface Response {
 
 const createExerciseSchema = Joi.object({
   name: Joi.string().min(3).max(20).required(),
-  description: Joi.string().max(250).allow("").optional(),
+  description: Joi.string().max(250).allow('').optional(),
   category: Joi.string().required(),
   primary: Joi.array().items(Joi.string(), Joi.number()).required(),
   secondary: Joi.array().items(Joi.string(), Joi.number()).optional(),
   video: Joi.string().allow(null).optional(),
-  movement: Joi.string().valid("isolation", "compound").required(),
-  range: Joi.string().allow(null).valid("short", "med", "long").optional(),
+  profile: Joi.string().allow(null).valid('short', 'med', 'long').optional(),
 });
 
 const createExerciseMuscleGroups = async (
@@ -39,15 +37,15 @@ const createExerciseMuscleGroups = async (
     if (secondary.length) {
       return `${primary
         .map((id) => `(${exerciseId}, ${id}, 'primary')`)
-        .join(",")},`;
+        .join(',')},`;
     }
-    return primary.map((id) => `(${exerciseId}, ${id}, 'primary')`).join(",");
+    return primary.map((id) => `(${exerciseId}, ${id}, 'primary')`).join(',');
   };
 
   const prepareSecondaryValues = () => {
     return secondary
       .map((id) => `(${exerciseId}, ${id}, 'secondary')`)
-      .join(",");
+      .join(',');
   };
 
   const data = await db.query(`
@@ -74,8 +72,8 @@ export const createExerciseMutation = async (
 
   if (!data.primary.length) {
     return res.status(422).json({
-      status: "error",
-      message: "Invalid request data, missing primary muscle group id(s)",
+      status: 'error',
+      message: 'Invalid request data, missing primary muscle group id(s)',
       exercise: value,
       error: error,
     });
@@ -83,8 +81,8 @@ export const createExerciseMutation = async (
 
   if (error) {
     return res.status(422).json({
-      status: "error",
-      message: "Invalid request data",
+      status: 'error',
+      message: 'Invalid request data',
       exercise: value,
       error: error,
     });
@@ -96,18 +94,17 @@ export const createExerciseMutation = async (
       primary, // array of ids
       secondary, // array of ids
       video,
-      movement,
-      range,
+      profile,
     } = data;
 
     const query = `
       WITH 
-        data(name, description, category, video, movement, range) AS (
+        data(name, description, category, video, profile) AS (
           VALUES                           
-              ('${name}', '${description}', '${category}','${video}', '${movement}', '${range}')
+              ('${name}', '${description}', '${category}','${video}', '${profile}')
           )
-        INSERT INTO exercises (name, description, category, video, movement, range)
-          SELECT name, description, category, video, movement, range
+        INSERT INTO exercises (name, description, category, video, profile)
+          SELECT name, description, category, video, profile
             FROM data
           RETURNING *
       `;
@@ -124,20 +121,21 @@ export const createExerciseMutation = async (
 
       const exercise = {
         ...data.rows[0],
-        primary: muscleGroups.filter((mg) => mg.group === "primary"),
-        secondary: muscleGroups.filter((mg) => mg.group === "secondary"),
+        primary: muscleGroups.filter((mg) => mg.group === 'primary'),
+        secondary: muscleGroups.filter((mg) => mg.group === 'secondary'),
       };
 
       return res.json({
-        status: "success",
-        message: "Exercise created successfully",
+        status: 'success',
+        message: 'Exercise created successfully',
         exercise,
       });
     } catch (error) {
+      console.log({ error });
       return res.json({
-        status: "error",
+        status: 'error',
         //@ts-ignore
-        message: error && error.message ? error.message : "Database error",
+        message: error && error.message ? error.message : 'Database error',
         exercise: null,
       });
     }
