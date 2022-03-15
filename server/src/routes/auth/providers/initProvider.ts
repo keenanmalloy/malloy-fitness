@@ -2,6 +2,14 @@ import { PROVIDERS } from "config/providers";
 import { Request, RequestHandler, Response, Router } from "express";
 import passport from "passport";
 import { Strategy } from "passport-google-oauth20";
+import {
+  createAccountProviderMutation,
+  createAccountWithProviderMutation,
+} from "queries/createAccountMutation";
+import {
+  retrievAccountByEmailQuery,
+  retrieveAccountByProviderQuery,
+} from "queries/retrieveAccountQuery";
 import { setLoginSession } from "sessions";
 
 interface Props {
@@ -21,36 +29,50 @@ export const initProvider = ({ router, middleware }: Props): void => {
         {
           clientID: PROVIDERS.GOOGLE.clientID,
           clientSecret: PROVIDERS.GOOGLE.clientSecret,
-          callbackURL: `/auth/providers/google/callback`,
+          callbackURL: `http://localhost:4000/auth/providers/google/callback`,
           passReqToCallback: true,
           scope: PROVIDERS.GOOGLE.scope,
         },
-        (req, accessToken, refreshToken, profile, done) => {
-          // find or create the user
-          // check if user exists, using profile.id
-          console.log({ profile });
+        async (req, accessToken, refreshToken, profile, done) => {
+          // what if this is null?
+          const json = profile._json;
+          const authProviderUniqueId = json.sub;
+          const name = json.name;
+          const avatarUrl = json.picture;
+          const email = json.email;
+          const locale = json.locale;
 
           // select account provider by provider: 'google' and profile_id: id.toString(),
-          // if there is an account, return done(null, account);
+          const account = await retrieveAccountByProviderQuery(
+            authProviderUniqueId,
+            "google"
+          );
+
+          // if there is an account, return done(undefined, account);
+          if (!!account) {
+            done(undefined, account);
+          }
 
           // See if email already exist.
           // if email exist, merge this provider with the current user.
           try {
             // try fetching the account using email
+            const account = await retrievAccountByEmailQuery(email);
+
             // if we're unable to fetch the account using the email we'll throw out of this try/catch
-            //
+            if (!account) {
+              throw new Error("Account does not exist.");
+            }
+
             // account was successfully fetched so add the new provider:
-            // {
-            //     account_provider: {
-            //       account_id: account.id,
-            //       auth_provider: provider,
-            //       auth_provider_unique_id: id.toString(),
-            //     },
-            //     account_id: account.id,
-            // }
+            await createAccountProviderMutation({
+              account_id: account.account_id,
+              auth_provider: "google",
+              auth_provider_unique_id: authProviderUniqueId,
+            });
 
             // send account instead of empty object
-            return done(undefined, {});
+            return done(undefined, account);
           } catch (error) {
             // We were unable to fetch the account
             console.log("Unable to fetch account", { error });
@@ -58,20 +80,17 @@ export const initProvider = ({ router, middleware }: Props): void => {
           }
 
           // register account & account_provider
-          // const account_data = {
-          //   email,
-          //   active: true,
-          //   display_name,
-          //   avatar_url,
-          // };
-
-          // const account_provider = {
-          //   auth_provider: provider,
-          //   auth_provider_unique_id: id.toString(),
-          // };
+          const newAccount = await createAccountWithProviderMutation({
+            provider: "google",
+            authProviderUniqueId,
+            avatarUrl,
+            email,
+            locale,
+            name,
+          });
 
           // send account instead of empty object
-          return done(undefined, {});
+          return done(undefined, newAccount);
         }
       )
     );
@@ -80,7 +99,7 @@ export const initProvider = ({ router, middleware }: Props): void => {
   });
 
   subRouter.get("/", [
-    (req: any, ...rest: any) => {
+    (req: Request, ...rest: any) => {
       return passport.authenticate("google", {
         session: false,
       })(req, ...rest);
