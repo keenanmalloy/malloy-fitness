@@ -3,26 +3,26 @@ import { DeleteExercise } from './DeleteExercise';
 import { useRouter } from 'next/router';
 import Button  from '../components/Button';
 
-export const GetSingleExercise = () => {
-  const [singleExercise, setSingleExercise] = useState(null);
+export const GetSingleWorkout = () => {
+  const [singleWorkout, setSingleWorkout] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   const id = router.query.id;
 
   useEffect(() => {
-    fetch(`http://localhost:4000/exercises/${id}`)
+    fetch(`http://localhost:4000/workouts/${id}`)
       .then((res) => {
         return res.json();
       })
       .then((data) => {
-        setSingleExercise(data.exercise);
+        setSingleWorkout(data.workout);
         setIsLoading(false);
       });
   }, []);
 
-  const deleteExercise = async (id) => {
-    const response = await fetch(`http://localhost:4000/exercises/${id}`, {
+  const deleteWorkout = async (id) => {
+    const response = await fetch(`http://localhost:4000/workouts/${id}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     }).then((res) => {
@@ -30,7 +30,7 @@ export const GetSingleExercise = () => {
     });
 
     if (response.status === 'success') {
-      setSingleExercise(null);
+      setSingleWorkout(null);
     }
   };
 
@@ -38,22 +38,22 @@ export const GetSingleExercise = () => {
     return <div>Loading...</div>;
   }
 
-  if (!singleExercise) {
-    return <div>No excercise available with id: {id}</div>;
+  if (!singleWorkout) {
+    return <div>No workout available with id: {id}</div>;
   }
 
   return (
     <div>
       <div>
-        <p>{singleExercise.name}</p>
-        <p>{singleExercise.description}</p>
-        <p>{singleExercise.movement}</p>
-        <p>{singleExercise.range}</p>
-        <p>{singleExercise.exercise_id}</p>
+        <p>{singleWorkout.name}</p>
+        <p>{singleWorkout.description}</p>
+        <p>{singleWorkout.movement}</p>
+        <p>{singleWorkout.range}</p>
+        <p>{singleWorkout.workout_id}</p>
       </div>
 
       <DeleteExercise
-        handleClick={() => deleteExercise(singleExercise.exercise_id)}
+        handleClick={() => deleteWorkout(singleWorkout.workout_id)}
       />
 
       <Button href="/">Admin</Button>

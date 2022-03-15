@@ -1,4 +1,4 @@
-import { db } from "config/db";
+import { db } from 'config/db';
 
 interface Response {
   status: string;
@@ -17,8 +17,8 @@ export const retrieveMuscleGroupQuery = async (
     const data = await db.query(query, params);
     if (!data.rows.length) {
       return res.json({
-        status: "error",
-        message: "Muscle Group does not exist",
+        status: 'error',
+        message: 'Muscle Group does not exist',
         muscleGroup: null,
       });
     }
@@ -26,16 +26,16 @@ export const retrieveMuscleGroupQuery = async (
     const muscleGroup = data.rows[0];
 
     return res.json({
-      status: "success",
-      message: "Muscle group fetched successfully",
+      status: 'success',
+      message: 'Muscle group fetched successfully',
       muscleGroup,
     });
   } catch (error) {
     console.log({ error });
     return res.json({
-      status: "error",
-      message: "Database error",
-      exercise: null,
+      status: 'error',
+      message: 'Database error',
+      muscleGroup: null,
     });
   }
 };

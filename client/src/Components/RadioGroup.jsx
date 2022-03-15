@@ -1,29 +1,31 @@
-import React from "react";
+import React from 'react';
 
-/**
- * DESTRUCTURE THE FOLLOWING PROPS
- * onChange={*function*}
- * label={*text*}
- * checked={*text*}
- * isRequired={*boolean*}
- * options={*Array of strings*}
- */
-
-export const RadioGroup = () => {
-  /**
-   * Use the label prop as the title for all the radio buttons.
-   * ( doesn't have to be a <label /> node )
-   *
-   * Below that title label, loop over the options.
-   * Each iteration should look similar as below.
-   *
-   * <label>
-   *   <input type="radio"/>
-   *   <span></span>
-   * </label>
-   *
-   * On each of the iterated option <inputs />, set the onChange, checked, and value props dynamically.
-   */
-
-  return <div>RadioGroup</div>;
+export const RadioGroup = ({
+  onChange,
+  label,
+  checked,
+  isRequired,
+  options,
+  name,
+}) => {
+  return (
+    <div>
+      <label>{label}</label>
+      {options.map((option, key) => {
+        return (
+          <label htmlFor={option} key={key}>
+            <input
+              type="radio"
+              name={name}
+              id={option}
+              checked={option === checked}
+              required={isRequired}
+              onChange={() => onChange(option)}
+            />
+            <span>{option}</span>
+          </label>
+        );
+      })}
+    </div>
+  );
 };

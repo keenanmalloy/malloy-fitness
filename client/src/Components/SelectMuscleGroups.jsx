@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 
 /**
  * onPrimaryChange={*function*} -- how we set them in state
@@ -7,26 +7,41 @@ import React from "react";
  * secondary={*Array of Objects (muscle groups)*} -- state
  */
 
-export const SelectMuscleGroups = () => {
+export const SelectMuscleGroups = ({
+  onPrimaryChange,
+  onSecondaryChange,
+  primary,
+  secondary,
+  label,
+}) => {
+  const [muscleGroups, setMuscleGroups] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    fetch('http://localhost:4000/muscle-groups')
+      .then((res) => {
+        return res.json();
+      })
+      .then((data) => {
+        setMuscleGroups(data.muscleGroups);
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        return setError(true);
+      });
+  }, []);
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error) {
+    return <p>Error</p>;
+  }
+
   /**
    * PART 1
-   *
-   * useState to store the muscleGroups fetched from the API.
-   * lets call it muscleGroups, setMuscleGroups. These should be an array of Objects,
-   * initialized as an empty array OR null.
-   *
-   * useEffect to fetch all the muscle groups dynamically.
-   * once fetched successfully, setMuscleGroups
-   *
-   *
-   * Check for loading state
-   * return a loading state
-   *
-   * Check for error state
-   * return an error message if we have issues fetching the data
-   *
-   * Check for empty state
-   * return a message if there is no data
    *
    * Return data by looping over each object in state (muscleGroups.map())
    * lets return a checkbox for each muscleGroup for now.
@@ -37,5 +52,16 @@ export const SelectMuscleGroups = () => {
    * PART 2 coming soon...
    */
 
-  return <div>SelectMuscleGroups</div>;
+  return (
+    <div>
+      <label>{label}</label>
+      {muscleGroups.map((muscleGroup, key) => {
+        return (
+          <div key={key}>
+            <input type="checkbox" />
+          </div>
+        );
+      })}
+    </div>
+  );
 };
