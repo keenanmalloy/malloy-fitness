@@ -47,3 +47,27 @@ CREATE TABLE IF NOT EXISTS sets (
     workout_id bigint REFERENCES workouts(workout_id) ON DELETE CASCADE,
     exercise_id bigint REFERENCES exercises(exercise_id)
 );
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE TABLE IF NOT EXISTS accounts (
+    account_id bigserial PRIMARY KEY,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    name text,
+    email text,
+    active boolean DEFAULT false,
+    avatar_url text,
+    role text,
+    ticket uuid DEFAULT public.uuid_generate_v4() NOT NULL,
+    ticket_expiry timestamp with time zone DEFAULT now() NOT NULL,
+    locale VARCHAR(2) DEFAULT 'en-CA'
+);
+
+CREATE TABLE IF NOT EXISTS account_providers (
+    account_provider_id bigserial PRIMARY KEY,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    account_id bigint REFERENCES accounts(account_id) ON DELETE CASCADE,
+    auth_provider text,
+    auth_provider_unique_id text
+);

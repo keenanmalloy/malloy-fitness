@@ -1,4 +1,5 @@
 import { Router } from "express";
+import auth from "./auth";
 import exercises from "./exercises";
 import muscleGroups from "./muscle-groups";
 import workouts from "./workouts";
@@ -8,6 +9,7 @@ const router = Router();
 exercises(router);
 muscleGroups(router);
 workouts(router);
+auth(router);
 
 router.get("/health", (req, res) => res.send("OK"));
 
