@@ -1,4 +1,6 @@
 import { db } from "config/db";
+import { Request, Response } from "express";
+import { getLoginSession } from "sessions";
 
 export const retrieveAccountByProviderQuery = async (
   providerUniqueId: string,
@@ -50,10 +52,31 @@ WHERE email = $1
 
   try {
     const data = await db.query(query, params);
-    
     return data.rows[0];
   } catch (error) {
     console.log({ error });
     return null;
+  }
+};
+
+export const retrieveMeQuery = async (req: Request, res: Response) => {
+  try {
+    const session = await getLoginSession(req);
+    if (!session) {
+      throw new Error("Not logged in");
+    }
+
+    return res.json({
+      status: "success",
+      message: "User logged in",
+      session,
+    });
+  } catch (error) {
+    console.log({ error });
+    return res.json({
+      status: "error",
+      message: "Session does not exist",
+      session: null,
+    });
   }
 };
