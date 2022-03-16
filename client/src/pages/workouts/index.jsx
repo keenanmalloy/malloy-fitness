@@ -1,14 +1,13 @@
-import React from 'react'
-import Button from '../../Components/Button';
+import React from 'react';
 import { GetAllWorkouts } from '../../components/GetAllWorkouts';
 
 const WorkoutsPage = () => {
   return (
     <div>
-        WorkoutsPage
+      WorkoutsPage
       <GetAllWorkouts />
-        </div>
-  )
-}
+    </div>
+  );
+};
 
-export default WorkoutsPage
+export default WorkoutsPage;

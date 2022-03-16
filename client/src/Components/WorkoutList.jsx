@@ -2,41 +2,43 @@ import React from 'react';
 import Link from 'next/link';
 import { Button } from  './Button';
 
-export const ExerciseList = ({ exercises, setExercises }) => {
-  const deleteExercise = async (id) => {
-    const response = await fetch(`http://localhost:4000/exercises/${id}`, {
+export const WorkoutList = ({ workouts, setWorkouts }) => {
+  const deleteWorkout = async (id) => {
+    console.log('clicked')
+    const response = await fetch(`http://localhost:4000/workouts/${id}`, {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
     }).then((res) => {
       return res.json();
     });
-    const filteredEx = exercises.filter((exercise) => {
-      return exercise.exercise_id !== id;
+    const filteredWo = workouts.filter((workout) => {
+      return workout.workout_id !== id;
     });
 
-    setExercises(filteredEx);
+  
+    setWorkouts(filteredWo);
   };
 
-  if (!exercises.length) {
-    return <p>No exercises found</p>;
+  if (!workouts.length) {
+    return <p>No workouts found</p>;
   }
   return (
     <div>
-      {exercises.map((exercise) => (
+      {workouts.map((workout) => (
         <div
           className="flex flex-col text-center hover:bg-slate-200"
-          key={exercise.exercise_id}
+          key={workout.workout_id}
         >
           <hr />
-          <Link href={`/exercises/${exercise.exercise_id}`}>
+          <Link href={`/workouts/${workout.workout_id}`}>
             <div>
-              <h2 className="text-3xl font-bold">{exercise.name}</h2>
-              <p>{exercise.category}</p>
-              <p>{exercise.description}</p>
-              <p>{exercise.movement}</p>
-              <p>{exercise.range}</p>
-              <p>{exercise.exercise_id}</p>
-              {/* <p>{exercise.primary}</p> */}
+              <h2 className="text-3xl font-bold">{workout.name}</h2>
+              <p>{workout.category}</p>
+              <p>{workout.description}</p>
+              <p>{workout.movement}</p>
+              <p>{workout.range}</p>
+              <p>{workout.workout_id}</p>
+              {/* <p>{workout.primary}</p> */}
 
               <div className="flex flex-shrink-0">
                 <div className="flex flex-shrink-0 text-sm items-center px-2 mb-2">
@@ -60,8 +62,8 @@ export const ExerciseList = ({ exercises, setExercises }) => {
               </div>
             </div>
           </Link>
-          <Button onClick={() => deleteExercise(exercise.exercise_id)}>
-            Delete exercise
+          <Button onClick={() => deleteWorkout(workout.workout_id)}>
+            Delete workout
           </Button>
         </div>
       ))}

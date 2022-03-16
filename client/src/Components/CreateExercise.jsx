@@ -3,10 +3,9 @@ import { Input } from './Input';
 import { RadioGroup } from './RadioGroup';
 import { Select } from './Select';
 import { SelectMuscleGroups } from './SelectMuscleGroups';
-import Link from 'next/link';
-import Button from './Button';
+import { Button } from './Button';
 
-export const CreateExercise = ({ exercises, setExercises }) => {
+export const CreateExercise = ({ exercises, setExercises, muscleGroups }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
@@ -14,33 +13,19 @@ export const CreateExercise = ({ exercises, setExercises }) => {
   const [primary, setPrimary] = useState([]);
   const [secondary, setSecondary] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    /**
-     *  BODY OF `/exercises/`
-     *  API POST REQUEST
-     *
-     *  name: string;
-     *  description: string;
-     *  category: string;
-     *  primary: string[];
-     *  secondary: string[];
-     *  video: string;
-     *  profile: string;
-     */
 
     const exercise = {
       name,
       description,
       category,
       profile,
-      primary: [1],
-      secondary: [],
+      primary: primary.map((object) => object.value),
+      secondary: secondary.map((object) => object.value),
     };
-
-    console.log({ exercise });
 
     setIsLoading(true);
 
@@ -48,16 +33,21 @@ export const CreateExercise = ({ exercises, setExercises }) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(exercise),
-    }).then(() => {
-      console.log('new exercise added');
-      setIsLoading(false);
-    });
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw Error('could not delete exercise');
+        }
+        console.log('new exercise added', { exercise });
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+      });
   };
 
   return (
     <>
-      <Button href="/exercises">Exercises</Button>
-      <Button href="/">Home</Button>
       <form onSubmit={handleSubmit}>
         <Input
           onChange={(e) => setName(e.target.value)}
@@ -92,23 +82,21 @@ export const CreateExercise = ({ exercises, setExercises }) => {
           name="resistance-range"
         />
 
-        {/* 
-          Create the following component:
+        <SelectMuscleGroups
+          setData={setPrimary}
+          label="Primary"
+          muscleGroups={muscleGroups}
+        />
+        <SelectMuscleGroups
+          setData={setSecondary}
+          label="Secondary"
+          muscleGroups={muscleGroups}
+        />
 
-           <SelectMuscleGroups 
-            onPrimaryChange={*function*} ex a function that handles the state for the primary muscle groups selected
-            onSecondaryChange={*function*} ex a function that handles the state for the primary muscle groups selected
-            primary={*Array of Objects (muscle groups)*} -- state
-            secondary={*Array of Objects (muscle groups)*} -- state
-          /> 
-        */}
-        <label> Muscle groups: </label>
-        <input type="text" placeholder="primary" />
-        <input type="text" placeholder="secondary" />
-
-        <SelectMuscleGroups label="Select" />
-
-        <Button isLoading={isLoading}>{isLoading ? 'Adding exercise...' : 'Add exercise'}</Button>
+        <Button isLoading={isLoading}>
+          {isLoading ? 'Adding exercise...' : 'Add exercise'}
+        </Button>
+        {error && <div>{error}</div>}
       </form>
     </>
   );
