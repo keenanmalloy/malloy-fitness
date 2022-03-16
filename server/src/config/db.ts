@@ -7,4 +7,5 @@ export const db = new Pool({
   ssl: {
     rejectUnauthorized: false,
   },
+  connectionTimeoutMillis: 10000
 });

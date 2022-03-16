@@ -22,7 +22,7 @@ export const retrieveWorkoutsQuery = async (res: any): Promise<Response> => {
     return res.json({
       status: "error",
       message: "Database error",
-      exercise: null,
+      workouts: null,
     });
   }
 };
