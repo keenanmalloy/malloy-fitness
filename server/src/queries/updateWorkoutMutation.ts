@@ -10,7 +10,7 @@ interface Response {
 }
 
 const updateWorkoutSchema = Joi.object({
-  name: Joi.string().min(3).max(20).optional(),
+  name: Joi.string().min(3).max(64).optional(),
   description: Joi.string().max(250).allow("").optional(),
   category: Joi.string().optional(),
 });
@@ -40,7 +40,7 @@ export const updateWorkoutMutation = async (
     try {
       const data = await db.query(query, params);
       if (!data.rowCount) {
-        return res.json({
+        return res.status(404).json({
           status: "error",
           message: "Workout does not exist",
           workout: null,

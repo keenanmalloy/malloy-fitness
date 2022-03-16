@@ -17,7 +17,7 @@ interface Response {
 }
 
 const createWorkoutSchema = Joi.object({
-  name: Joi.string().min(3).max(20).required(),
+  name: Joi.string().min(3).max(64).required(),
   description: Joi.string().max(250).allow("").optional(),
   category: Joi.string().required(),
   exercises: Joi.array().items(Joi.string(), Joi.number()).required(), // array of ids
@@ -106,6 +106,7 @@ export const createWorkoutMutation = async (
         //@ts-ignore
         message: error && error.message ? error.message : "Database error",
         workout: null,
+        error: error,
       });
     }
   }

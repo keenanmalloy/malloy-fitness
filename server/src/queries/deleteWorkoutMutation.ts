@@ -18,7 +18,7 @@ export const deleteWorkoutMutation = async (
     const data = await db.query(query, params);
 
     if (!data.rowCount) {
-      return res.json({
+      return res.status(404).json({
         status: "error",
         message: "Workout does not exist",
         workout: null,
