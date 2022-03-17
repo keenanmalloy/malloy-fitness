@@ -43,7 +43,7 @@ export const updateWorkoutExerciseMutation = async (
     }
 
     if (!order && !priority) {
-      return res.json({
+      return res.status(422).json({
         status: "error",
         message:
           "Both order and priority were missing or were coerced to false. One of order or priority is required to update the exercise within the workout.",
