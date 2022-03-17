@@ -21,7 +21,9 @@ export const retrieveWorkoutQuery = async (
   e.category,
   e.video,
   e.profile,
-  e.exercise_id
+  e.exercise_id,
+  we.priority,
+  we.order
 FROM workouts
 LEFT OUTER JOIN workout_exercises we on workouts.workout_id = we.workout_id
 LEFT OUTER JOIN exercises e on we.exercise_id = e.exercise_id
@@ -43,9 +45,6 @@ WHERE workouts.workout_id = $1`;
     const exercises = !data.rows[0].exercise_id
       ? []
       : data.rows.map((exercise) => {
-          if (!exercise.exercise_id) {
-            return;
-          }
           return {
             name: exercise.name,
             description: exercise.description,
