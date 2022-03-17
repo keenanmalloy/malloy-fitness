@@ -53,12 +53,12 @@ const createWorkoutExercisesLink = async (
 
   const data = await db.query(`
     WITH     
-    data(workout_id, exercise_id, order, priority) AS (
+    data(workout_id, exercise_id, "order", priority) AS (
       VALUES 
         ${preparePrimaryValues()}
       )
-    INSERT INTO workout_exercises (workout_id, exercise_id, order, priority)
-      SELECT workout_id, exercise_id, order, priority
+    INSERT INTO workout_exercises (workout_id, exercise_id, "order", priority)
+      SELECT workout_id, exercise_id, "order", priority
         FROM data
       RETURNING *
     `);

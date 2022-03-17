@@ -23,8 +23,8 @@ export const retrieveWorkoutQuery = async (
   e.profile,
   e.exercise_id
 FROM workouts
-JOIN workout_exercises we on workouts.workout_id = we.workout_id
-JOIN exercises e on we.exercise_id = e.exercise_id
+LEFT OUTER JOIN workout_exercises we on workouts.workout_id = we.workout_id
+LEFT OUTER JOIN exercises e on we.exercise_id = e.exercise_id
 WHERE workouts.workout_id = $1`;
   const params = [id];
 
@@ -38,21 +38,32 @@ WHERE workouts.workout_id = $1`;
       });
     }
 
+    // Because of the LEFT OUTER JOIN, we return a single exercise with a null id.
+    // Check if it exists and return an empty array if it does not.
+    const exercises = !data.rows[0].exercise_id
+      ? []
+      : data.rows.map((exercise) => {
+          if (!exercise.exercise_id) {
+            return;
+          }
+          return {
+            name: exercise.name,
+            description: exercise.description,
+            exercise_id: exercise.exercise_id,
+            category: exercise.category,
+            profile: exercise.profile,
+            video: exercise.video,
+            order: exercise.order,
+            priority: exercise.priority,
+          };
+        });
+
     const workout = {
       name: data.rows[0].workout_name,
       description: data.rows[0].workout_description,
       category: data.rows[0].workout_category,
       workout_id: data.rows[0].workout_id,
-      exercises: data.rows.map((exercise) => {
-        return {
-          name: exercise.name,
-          description: exercise.description,
-          exercise_id: exercise.exercise_id,
-          category: exercise.category,
-          profile: exercise.profile,
-          video: exercise.video,
-        };
-      }),
+      exercises,
     };
 
     return res.json({
