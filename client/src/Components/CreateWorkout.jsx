@@ -1,13 +1,14 @@
 import { useState } from 'react';
 import { Input } from './Input';
 import { Select } from './Select';
-import Button from './Button';
+import { Button } from './Button';
 
 export const CreateWorkout = ({ workouts, setWorkouts }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,6 +17,7 @@ export const CreateWorkout = ({ workouts, setWorkouts }) => {
       name,
       description,
       category,
+      exercises,
     };
 
     setIsLoading(true);
@@ -24,9 +26,16 @@ export const CreateWorkout = ({ workouts, setWorkouts }) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(exercise),
-    }).then(() => {
-      setIsLoading(false);
-    });
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw Error('could not create workout');
+        }
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+      });
   };
 
   return (
@@ -57,7 +66,9 @@ export const CreateWorkout = ({ workouts, setWorkouts }) => {
           defaultOption="--choose a category --"
         />
 
-        <Button isLoading={isLoading}>{isLoading ? 'Adding workout...' : 'Add workout'}</Button>
+        <Button isLoading={isLoading}>
+          {isLoading ? 'Adding workout...' : 'Add workout'}
+        </Button>
       </form>
     </>
   );

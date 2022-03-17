@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { DeleteExercise } from './DeleteExercise';
 import { useRouter } from 'next/router';
-import Button  from '../components/Button';
+import { Button } from  './Button';
 
 export const GetSingleExercise = () => {
   const [singleExercise, setSingleExercise] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const router = useRouter();
 
   const id = router.query.id;
@@ -13,11 +13,16 @@ export const GetSingleExercise = () => {
   useEffect(() => {
     fetch(`http://localhost:4000/exercises/${id}`)
       .then((res) => {
+        if(!res.ok) {
+          throw Error('couldnt fetch exercise')
+        }
         return res.json();
       })
       .then((data) => {
         setSingleExercise(data.exercise);
         setIsLoading(false);
+      }).catch((err) => {
+        setError(err.message);
       });
   }, []);
 
@@ -52,9 +57,9 @@ export const GetSingleExercise = () => {
         <p>{singleExercise.exercise_id}</p>
       </div>
 
-      <DeleteExercise
-        handleClick={() => deleteExercise(singleExercise.exercise_id)}
-      />
+      <Button handleClick={() => deleteExercise(singleExercise.exercise_id)}>
+        Delete exercise
+      </Button>
 
       <Button href="/">Admin</Button>
     </div>
