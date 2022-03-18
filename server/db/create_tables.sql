@@ -22,7 +22,9 @@ CREATE TABLE IF NOT EXISTS exercises (
 
 CREATE TABLE IF NOT EXISTS workout_exercises (
     workout_id bigint REFERENCES workouts(workout_id) ON DELETE CASCADE,
-    exercise_id bigint REFERENCES exercises(exercise_id) ON DELETE CASCADE
+    exercise_id bigint REFERENCES exercises(exercise_id) ON DELETE CASCADE,
+    priority int DEFAULT 0,
+    order int DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS muscle_groups (
