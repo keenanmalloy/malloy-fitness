@@ -6,12 +6,11 @@ import { updateWorkoutExerciseMutation } from "queries/updateWorkoutExerciseMuta
 const router = Router();
 
 // Add exercise to the workout
-router.post("/:id/exercises/:exerciseId", async (req, res) => {
+router.post("/:id/exercises/", async (req, res) => {
   await addExerciseToWorkoutMutation(
     res,
     req.body,
-    req.params.id,
-    req.params.exerciseId
+    req.params.id
   );
 });
 

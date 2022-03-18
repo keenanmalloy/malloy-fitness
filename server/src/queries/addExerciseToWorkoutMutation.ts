@@ -1,9 +1,10 @@
 import { db } from "config/db";
 import Joi from "joi";
 
-interface createExercise {
+interface addExercise {
   order?: number;
   priority?: number;
+  exerciseId: number | string;
 }
 
 interface Response {
@@ -13,18 +14,17 @@ interface Response {
   error?: any;
 }
 
-const createExerciseSchema = Joi.object({
+const addExerciseSchema = Joi.object({
   order: Joi.string().optional(),
   priority: Joi.string().optional(),
 });
 
 export const addExerciseToWorkoutMutation = async (
   res: any,
-  data: createExercise,
-  workoutId: string,
-  exerciseId: string
+  data: addExercise,
+  workoutId: string
 ): Promise<Response> => {
-  const { error, value, warning } = createExerciseSchema.validate(data);
+  const { error, value, warning } = addExerciseSchema.validate(data);
 
   if (error) {
     return res.status(422).json({
@@ -34,13 +34,15 @@ export const addExerciseToWorkoutMutation = async (
       error: error,
     });
   } else {
-    const { order, priority } = data;
+    const { order, priority, exerciseId } = data;
 
     const query = `
       WITH 
         data(workoutId, exerciseId, "order", priority) AS (
           VALUES                           
-              ('${workoutId}', '${exerciseId}', '${order}','${priority}')
+              ('${workoutId}', '${exerciseId}', '${order ?? 0}','${
+      priority ?? 0
+    }')
           )
         INSERT INTO exercises (workoutId, exerciseId, "order", priority)
           SELECT workoutId, exerciseId, "order", priority

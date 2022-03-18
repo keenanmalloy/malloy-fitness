@@ -92,7 +92,7 @@ Provide name, category and array of exercise IDs for the Workout to be created.
 
 # Add exercise to workout
 
-**URL** : `/workouts/:pk/exercises/:pk`
+**URL** : `/workouts/:pk/exercises/`
 
 **Method** : `POST`
 
@@ -105,7 +105,8 @@ Provide name, category and array of exercise IDs for the Workout to be created.
 ```json
 {
   "order": 5,
-  "priority": 3
+  "priority": 3,
+  "exerciseId": 4,
 }
 ```
 
