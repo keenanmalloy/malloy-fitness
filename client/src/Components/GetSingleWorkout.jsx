@@ -64,8 +64,6 @@ export const GetSingleWorkout = () => {
 
       <Button handleClick={() => deleteWorkout(singleWorkout.workout_id)}>Delete workout</Button>
         
-      
-
       <Button href="/">Admin</Button>
     </div>
   );
