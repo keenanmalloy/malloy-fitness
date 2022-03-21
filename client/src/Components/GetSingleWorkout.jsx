@@ -10,7 +10,6 @@ export const GetSingleWorkout = () => {
   const router = useRouter();
 
   const id = router.query.id;
-
   useEffect(() => {
     fetch(`http://localhost:4000/workouts/${id}`)
       .then((res) => {
@@ -53,9 +52,14 @@ export const GetSingleWorkout = () => {
       <div>
         <p>{singleWorkout.name}</p>
         <p>{singleWorkout.description}</p>
-        <p>{singleWorkout.movement}</p>
-        <p>{singleWorkout.range}</p>
         <p>{singleWorkout.workout_id}</p>
+        {singleWorkout.exercises.map((ex) => {
+          return (
+          <div key={ex.exercise_id}>
+          {`${ex.exercise_id}  ${ex.name}`}
+          </div>
+          )
+        })}
       </div>
 
       <Button handleClick={() => deleteWorkout(singleWorkout.workout_id)}>Delete workout</Button>
