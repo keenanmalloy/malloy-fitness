@@ -5,19 +5,19 @@ import { toTimestampz, toUnix } from "time";
 
 const TOKEN_SECRET = `6SZ=3f<Gtxd3E^7J=.sfxX238nf27o3fnGd!9pKhcq`;
 
-interface User {
-  id: string;
-  display_name: string;
+interface Account {
+  name: string;
+  account_id: string;
   email: string;
+  active: boolean;
   avatar_url: string;
-  stripe_account_id: string | null;
+  roll: string | null;
+  ticket: string;
+  ticket_expiry: string;
 }
 
 interface Session {
-  jwt_token: string;
-  jwt_expires_in: number;
-  user: User;
-  refresh_token: string;
+  account: Account;
   createdAt: string;
   maxAge: number;
 }

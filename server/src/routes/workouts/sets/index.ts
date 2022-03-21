@@ -9,32 +9,40 @@ import { deleteSetsByExerciseMutation } from "queries/deleteSetsByExerciseMutati
 const router = Router();
 
 // Retrieve all sets by workout
-router.get("/:id/sets", async (req, res) => {
-  await retrieveSetsQuery(res, req.params.id);
+router.get("/:workoutId/sets", async (req, res) => {
+  await retrieveSetsQuery(res, req.params.workoutId);
 });
 
 // Retrieve all sets by workout by exercise
-router.get("/:id/exercise/:exerciseId/sets", async (req, res) => {
-  await retrieveSetsByExerciseQuery(res, req.params.id, req.params.exerciseId);
+router.get("/:workoutId/exercise/:exerciseId/sets", async (req, res) => {
+  await retrieveSetsByExerciseQuery(
+    res,
+    req.params.workoutId,
+    req.params.exerciseId
+  );
 });
 
 // Create new set
-router.post("/:id/sets", async (req, res) => {
-  await createSetMutation(res, req.body, req.params.id);
+router.post("/:workoutId/sets", async (req, res) => {
+  await createSetMutation(res, req.body, req.params.workoutId);
 });
 
 // Delete set
-router.delete("/:id/sets/:setId", async (req, res) => {
+router.delete("/:workoutId/sets/:setId", async (req, res) => {
   await deleteSetMutation(res, req.params.setId);
 });
 
 // Delete sets by workout by exercise
-router.delete("/:id/exercise/:exerciseId/sets", async (req, res) => {
-  await deleteSetsByExerciseMutation(res, req.params.id, req.params.exerciseId);
+router.delete("/:workoutId/exercise/:exerciseId/sets", async (req, res) => {
+  await deleteSetsByExerciseMutation(
+    res,
+    req.params.workoutId,
+    req.params.exerciseId
+  );
 });
 
 // Update set
-router.put("/:id/sets/:setId", async (req, res) => {
+router.put("/:workoutId/sets/:setId", async (req, res) => {
   await updateSetMutation(res, req.body, req.params.setId);
 });
 

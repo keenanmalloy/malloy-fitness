@@ -6,29 +6,29 @@ import { updateWorkoutExerciseMutation } from "queries/updateWorkoutExerciseMuta
 const router = Router();
 
 // Add exercise to the workout
-router.post("/:id/exercises/", async (req, res) => {
+router.post("/:workoutId/exercises/", async (req, res) => {
   await addExerciseToWorkoutMutation(
     res,
     req.body,
-    req.params.id
+    req.params.workoutId
   );
 });
 
 // Remove exercise in the workout
-router.delete("/:id/exercises/:exerciseId", async (req, res) => {
+router.delete("/:workoutId/exercises/:exerciseId", async (req, res) => {
   await removeExerciseFromWorkoutMutation(
     res,
-    req.params.id,
+    req.params.workoutId,
     req.params.exerciseId
   );
 });
 
 // Update exercise in the workout
-router.put("/:id/exercises/:exerciseId", async (req, res) => {
+router.put("/:workoutId/exercises/:exerciseId", async (req, res) => {
   await updateWorkoutExerciseMutation(
     res,
     req.body,
-    req.params.id,
+    req.params.workoutId,
     req.params.exerciseId
   );
 });
