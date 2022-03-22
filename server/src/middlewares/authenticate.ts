@@ -1,6 +1,11 @@
 import { NextFunction, Response, Request } from "express";
 import { getLoginSession } from "sessions";
 
+/**
+ * Checks if the user is logged in.
+ * If not, sends back a 401 Unauthorized request.
+ * Adds state to express locals to access account information in queries.
+ */
 export const authenticate = async (
   req: Request,
   res: Response,
@@ -16,6 +21,7 @@ export const authenticate = async (
         requestUrl: `${req.baseUrl}${req.route.path}`,
         workoutId: req.params.workoutId,
         exerciseId: req.params.exerciseId,
+        httpMethod: req.method // GET, PUT, POST, PATCH, DELETE, etc.
       };
       return next();
     }

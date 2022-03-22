@@ -1,9 +1,16 @@
 import { db } from "config/db";
+import { Response } from "express";
 
 export const authorizeExerciseQuery = async (
-  exerciseId: string,
-  accountId: string
-): Promise<boolean> => {
+  res: Response,
+  exerciseId: string
+): Promise<{
+  isAuthorized: boolean;
+  createdBy: null | number;
+}> => {
+  const accountId = res.locals.state.account.account_id;
+  const httpMethod = res.locals.state.httpMethod;
+
   const query = `SELECT 
         name,
         created_by,
@@ -17,12 +24,21 @@ export const authorizeExerciseQuery = async (
   try {
     const data = await db.query(query, params);
     if (!data.rows.length) {
-      return false;
+      return {
+        isAuthorized: false,
+        createdBy: null,
+      };
     }
 
-    return true;
+    return {
+      isAuthorized: !!data.rows[0].created_by || httpMethod === "GET",
+      createdBy: data.rows[0].created_by,
+    };
   } catch (error) {
     console.log({ error });
-    return false;
+    return {
+      isAuthorized: false,
+      createdBy: null,
+    };
   }
 };

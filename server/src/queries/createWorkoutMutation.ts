@@ -103,15 +103,16 @@ export const createWorkoutMutation = async (
     });
   } else {
     const { name, description, category, exercises } = data;
+    const accountId = res.locals.state.account.account_id;
 
     const query = `
       WITH 
-        data(name, description, category) AS (
+        data(name, description, category, created_by) AS (
           VALUES                           
-              ('${name}', '${description}', '${category}')
+              ('${name}', '${description}', '${category}', ${accountId})
           )
-        INSERT INTO workouts (name, description, category)
-          SELECT name, description, category
+        INSERT INTO workouts (name, description, category, created_by)
+          SELECT name, description, category, created_by
             FROM data
           RETURNING *
       `;
