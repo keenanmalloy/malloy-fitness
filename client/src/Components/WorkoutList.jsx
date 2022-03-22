@@ -35,8 +35,6 @@ export const WorkoutList = ({ workouts, setWorkouts }) => {
               <h2 className="text-3xl font-bold">{workout.name}</h2>
               <p>{workout.category}</p>
               <p>{workout.description}</p>
-              <p>{workout.movement}</p>
-              <p>{workout.range}</p>
               <p>{workout.workout_id}</p>
               {/* <p>{workout.primary}</p> */}
 

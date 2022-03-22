@@ -7,6 +7,8 @@ const navigation = [
   { name: 'Home', href: '/', current: true },
   { name: 'Exercises', href: '/exercises', current: false },
   { name: 'Workouts', href: '/workouts', current: false },
+  { name: 'Logbook', href: '/logbook', current: false },
+
   // { name: 'Create', href: '/exercises/create', current: false },
 ]
 
