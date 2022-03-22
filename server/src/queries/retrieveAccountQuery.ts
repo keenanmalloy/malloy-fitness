@@ -12,7 +12,7 @@ SELECT
   email,
   active,
   avatar_url,
-  account_id,
+  accounts.account_id as account_id,
   role,
   ticket,
   ticket_expiry

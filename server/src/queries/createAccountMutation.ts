@@ -15,9 +15,9 @@ export const createAccountProviderMutation = async (
       WITH 
         data(account_id, auth_provider, auth_provider_unique_id) AS (
           VALUES                           
-              (${account_id}, ${auth_provider}, ${auth_provider_unique_id})
+              (${account_id}, '${auth_provider}', '${auth_provider_unique_id}')
           )
-        INSERT INTO sets (account_id, auth_provider, auth_provider_unique_id)
+        INSERT INTO account_providers (account_id, auth_provider, auth_provider_unique_id)
           SELECT account_id, auth_provider, auth_provider_unique_id
             FROM data
           RETURNING *

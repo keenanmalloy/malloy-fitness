@@ -50,7 +50,7 @@ export const initProvider = ({ router, middleware }: Props): void => {
 
           // if there is an account, return done(undefined, account);
           if (!!account) {
-            done(undefined, account);
+            return done(undefined, account);
           }
 
           // See if email already exist.
