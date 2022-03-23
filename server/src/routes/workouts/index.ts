@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { cloneWorkoutMutation } from "queries/cloneWorkoutMutation";
 import { createWorkoutMutation } from "queries/createWorkoutMutation";
 import { deleteWorkoutMutation } from "queries/deleteWorkoutMutation";
 import { retrieveWorkoutQuery } from "queries/retrieveWorkoutQuery";
@@ -21,6 +22,11 @@ router.post("/", async (req, res) => {
 // Retrieve workout
 router.get("/:id", async (req, res) => {
   await retrieveWorkoutQuery(res, req.params.id);
+});
+
+// Clone workout
+router.post("/:id/copy", async (req, res) => {
+  await cloneWorkoutMutation(res, req.params.id);
 });
 
 // Delete workout

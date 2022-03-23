@@ -1,18 +1,18 @@
-import { useRouter } from 'next/router';
-import React from 'react';
-import { Button } from 'features/common/Button';
+import { useRouter } from "next/router";
+import React from "react";
+import { Button } from "features/common/Button";
 
 const Login = () => {
-const router = useRouter()
+  const router = useRouter();
   const handleSubmit = () => {
-    router.push('http://localhost:4000/auth/providers/google')
-  }
-       
-  return (
-    <div className='flex items-center'>
-        <Button onClick={handleSubmit}>Login</Button>
-    </div>
-  )
-}
+    router.push("http://localhost:4000/auth/providers/google");
+  };
 
-export default Login
+  return (
+    <div>
+      <Button onClick={handleSubmit}>Login</Button>
+    </div>
+  );
+};
+
+export default Login;
