@@ -9,7 +9,7 @@ const router = useRouter()
   }
        
   return (
-    <div className='flex items-center'>
+    <div>
         <Button onClick={handleSubmit}>Login</Button>
     </div>
   )

@@ -1,13 +1,10 @@
 import React from 'react';
-import { Button } from  '../components/Button';
+import Login from '../components/Login';
 
 const HomePage = () => {
   return (
-    <div>
-      HomePage
-      {/* <Button href="/exercises">Exercises</Button>
-        <Button href="/workouts">Workouts</Button>
-        <Button href="/exercises/create">Create exercise</Button> */}
+    <div className='flex justify-center'>
+      <Login/>
     </div>
   );
 };

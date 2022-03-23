@@ -11,6 +11,7 @@ export const GetSingleExercise = () => {
   const id = router.query.id;
 
   useEffect(() => {
+    if(!router.isReady) return;
     fetch(`http://localhost:4000/exercises/${id}`)
       .then((res) => {
         if(!res.ok) {
@@ -24,7 +25,7 @@ export const GetSingleExercise = () => {
       }).catch((err) => {
         setError(err.message);
       });
-  }, []);
+  }, [router.isReady]);
 
   const deleteExercise = async (id) => {
     const response = await fetch(`http://localhost:4000/exercises/${id}`, {
