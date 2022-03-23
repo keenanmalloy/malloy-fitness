@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import Select from 'react-select';
+import React, { useState, useEffect } from "react";
+import Select from "react-select";
 
 export const SelectMuscleGroups = ({
   setData,

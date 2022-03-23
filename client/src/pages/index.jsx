@@ -1,12 +1,7 @@
-import React from 'react';
-import Login from '../components/Login';
+import React from "react";
 
 const HomePage = () => {
-  return (
-    <div className='flex justify-center'>
-      <Login/>
-    </div>
-  );
+  return <div>HomePage</div>;
 };
 
 export default HomePage;

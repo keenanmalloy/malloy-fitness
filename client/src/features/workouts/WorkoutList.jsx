@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Button } from  './Button';
+import { Button } from  'features/common/Button';
 
 export const WorkoutList = ({ workouts, setWorkouts }) => {
   const deleteWorkout = async (id) => {

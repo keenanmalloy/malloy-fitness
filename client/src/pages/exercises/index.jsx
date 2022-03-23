@@ -1,14 +1,13 @@
-import React from 'react'
-import { Button } from  '../../components/Button';
-import { GetAllExercises } from '../../components/GetAllExercises';
+import React from "react";
+import { GetAllExercises } from "features/exercises/GetAllExercises";
 
 const ExercisesPage = () => {
   return (
     <div>
       ExercisesPage
-      <GetAllExercises/>
-      </div>
-  )
-}
+      <GetAllExercises />
+    </div>
+  );
+};
 
-export default ExercisesPage
+export default ExercisesPage;

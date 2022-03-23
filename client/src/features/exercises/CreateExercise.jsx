@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Input } from './Input';
-import { RadioGroup } from './RadioGroup';
-import { Select } from './Select';
-import { SelectMuscleGroups } from './SelectMuscleGroups';
-import { Button } from './Button';
+import { Input } from '../../components/Input';
+import { RadioGroup } from '../../components/RadioGroup';
+import { Select } from '../form/Select';
+import { SelectMuscleGroups } from '../muscle-groups/SelectMuscleGroups';
+import { Button } from '../../components/Button';
 
 export const CreateExercise = ({ exercises, setExercises, muscleGroups }) => {
   const [name, setName] = useState('');

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Button } from './Button';
+import { Button } from  'features/common/Button';
 import AddExerciseToWorkout from './AddExerciseToWorkout';
 
 export const GetSingleWorkout = () => {

@@ -1,12 +1,13 @@
-import React from 'react'
-import { GetSingleExercise } from '../../components/GetSingleExercise';
+import React from "react";
+import { GetSingleExercise } from "features/exercises/GetSingleExercise";
 
 const ExercisePage = () => {
   return (
-    <div>ExercisePage
-        <GetSingleExercise />
+    <div>
+      ExercisePage
+      <GetSingleExercise />
     </div>
-  )
-}
+  );
+};
 
-export default ExercisePage
+export default ExercisePage;
