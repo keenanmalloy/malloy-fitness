@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Button } from  './Button';
+import { Button } from './Button';
+import AddExerciseToWorkout from './AddExerciseToWorkout';
 
 export const GetSingleWorkout = () => {
   const [singleWorkout, setSingleWorkout] = useState(null);
@@ -11,20 +12,22 @@ export const GetSingleWorkout = () => {
 
   const id = router.query.id;
   useEffect(() => {
+    if (!router.isReady) return;
     fetch(`http://localhost:4000/workouts/${id}`)
       .then((res) => {
-        if(!res.ok) {
-          throw Error('Couldnt fetch workout')
+        if (!res.ok) {
+          throw Error('Couldnt fetch workout');
         }
         return res.json();
       })
       .then((data) => {
         setSingleWorkout(data.workout);
         setIsLoading(false);
-      }).catch((err) => {
+      })
+      .catch((err) => {
         setError(err.message);
       });
-  }, []);
+  }, [router.isReady]);
 
   const deleteWorkout = async (id) => {
     const response = await fetch(`http://localhost:4000/workouts/${id}`, {
@@ -50,21 +53,19 @@ export const GetSingleWorkout = () => {
   return (
     <div>
       <div>
-        <p>{singleWorkout.name}</p>
-        <p>{singleWorkout.description}</p>
+        <h1>{singleWorkout.name}</h1>
         <p>{singleWorkout.workout_id}</p>
         {singleWorkout.exercises.map((ex) => {
           return (
-          <div key={ex.exercise_id}>
-          {`${ex.exercise_id}  ${ex.name}`}
-          </div>
-          )
+            <div key={ex.exercise_id}>{`${ex.exercise_id}  ${ex.name}`}</div>
+          );
         })}
       </div>
 
-      <Button handleClick={() => deleteWorkout(singleWorkout.workout_id)}>Delete workout</Button>
-        
-      <Button href="/">Admin</Button>
+      <Button handleClick={() => deleteWorkout(singleWorkout.workout_id)}>
+        Delete workout
+      </Button>
+      <AddExerciseToWorkout data={singleWorkout}/>
     </div>
   );
 };

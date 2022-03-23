@@ -20,7 +20,9 @@ export const CreateWorkout = ({ workouts, setWorkouts, exercises }) => {
       description: description,
       category: category,
       exercises: data.map((ex) => {
-        return ex.value;
+        return {
+          id: ex.value,
+        };
       }),
     };
 
