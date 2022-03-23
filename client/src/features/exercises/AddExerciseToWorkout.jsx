@@ -1,5 +1,5 @@
 import React from 'react';
-import { Button } from './Button';
+import { Button } from 'features/common/Button';
 import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import Select from 'react-select';
