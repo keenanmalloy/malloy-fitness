@@ -58,7 +58,12 @@ export const GetSingleExercise = () => {
         <p>{singleExercise.range}</p>
         <p>{singleExercise.exercise_id}</p>
       </div>
-
+      
+       {/* 
+          Before we delete an exercise, lets use that modal component as a confirmation panel. 
+          Clicking on this button below should open the modal. In the modal should be the logic
+          to make the DELETE request to the database. 
+        */}
       <Button handleClick={() => deleteExercise(singleExercise.exercise_id)}>
         Delete exercise
       </Button>

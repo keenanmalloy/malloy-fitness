@@ -1,12 +1,14 @@
-import React from 'react';
-import Link from 'next/link';
-import { Button } from  '../common/Button';
+import React from "react";
+import Link from "next/link";
+import { Button } from "../common/Button";
 
 export const ExerciseList = ({ exercises, setExercises }) => {
   const deleteExercise = async (id) => {
+
+    // What happens when this call fails?
     const response = await fetch(`http://localhost:4000/exercises/${id}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
     }).then((res) => {
       return res.json();
     });
@@ -60,6 +62,13 @@ export const ExerciseList = ({ exercises, setExercises }) => {
               </div>
             </div>
           </Link>
+
+          {/* 
+            Before we delete an exercise, lets use that modal component as a confirmation panel. 
+            Clicking on this button below should open the modal. In the modal should be the logic
+            to make the DELETE request to the database. 
+          */}
+
           <Button onClick={() => deleteExercise(exercise.exercise_id)}>
             Delete exercise
           </Button>

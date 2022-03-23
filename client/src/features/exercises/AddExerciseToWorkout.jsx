@@ -1,12 +1,28 @@
-import React from 'react';
-import { Button } from 'features/common/Button';
-import { Dialog, Transition } from '@headlessui/react';
-import { Fragment, useState } from 'react';
-import Select from 'react-select';
+import React from "react";
+import { Button } from "features/common/Button";
+import { Dialog, Transition } from "@headlessui/react";
+import { Fragment, useState } from "react";
+import Select from "react-select";
 
+// Lets refactor the modal from this file.
+// 1. Create a file - features/common/Modal.jsx
+// 2. This component should be structured similar to the following
+//
+// const Modal = ({ isOpen, title, description }) => {
+//      return (
+//          <Transition appear show={isOpen} as={Fragment}>
+//              {/* Guts just past the modal title  */}
+//              {children}
+//          </Transition>
+//      )
+// }
+//
+// Keep in mind the children prop.
+// We want to have the contents of the modal dynamic so we can reuse the component.
+//
 
 const AddExerciseToWorkout = ({ data }) => {
-  console.log({data})
+  console.log({ data });
   let [isOpen, setIsOpen] = useState(true);
 
   function closeModal() {
@@ -17,17 +33,39 @@ const AddExerciseToWorkout = ({ data }) => {
     setIsOpen(true);
   }
 
+  // How can we add an Exercise to the Workout? 
+  // We need a few things.
+  // 1. a) A list of exercises the user can select. 
+  //      *hint* comment below above the <Select> component.
+  //    b) A number input so we can change the order (could just be a counter)
+  //    c) A number input so we can change the priority (could just be a counter)
+  // 
+  // 2. a) State so we can hold the users exercise selection.
+  //    b) State so we can hold the users order number. (ex. 1-99)
+  //    c) State so we can hold the priority number. (ex. 1-99)
+  //
+  // 3. A function that handles the POST request fetching logic to update the workout in the database.
+  //    We'll need a loading & error state. If the action is successful, then lets close the modal.
+  //    
+  //    POST request to /workouts/:pk/exercises
+  //
+  //    Example body:
+  //
+  //    {
+  //      "order": 5,
+  //      "priority": 3,
+  //      "exerciseId": 4,
+  //    }
+
   return (
     <>
-      <div className="fixed inset-0 flex items-center justify-center">
-        <button
-          type="button"
-          onClick={openModal}
-          className="px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-        >
-          Add exercise to workout
-        </button>
-      </div>
+      <button
+        type="button"
+        onClick={openModal}
+        className="px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+      >
+        Add exercise to workout
+      </button>
 
       <Transition appear show={isOpen} as={Fragment}>
         <Dialog
@@ -69,28 +107,46 @@ const AddExerciseToWorkout = ({ data }) => {
                   as="h3"
                   className="text-lg font-medium leading-6 text-gray-900"
                 >
+                  {/* 
+                    Whatever text is here should be dynamic. 
+                    Think about the modal component just created and the props it expects.
+                  */}
                   Payment successful
                 </Dialog.Title>
-                <div className="mt-2">
+                {/* 
+                  Add body of modal as the children of the component.
+                  ex. 
+                  <Modal>
+                    ... rest of the stuff
+                  </Modal>
+
+                  What is exercises pointing to within the context of this module? 
+                  Think about where exercises is coming from and why uncommenting this
+                  snippet below is throwing an error. 
+
+                  *hint* - console.log({ data })
+                */}
+
+                {/* <div className="mt-2">
                   <p className="text-sm text-gray-500">
-                  {/* <Select
-        id="long-value-select"
-        instanceId="long-value-select"
-        defaultValue={[]}
-        isMulti
-        onChange={(data) => setData(data)}
-        name="muscleGroups"
-        options={exercises.map((ex) => {
-          return {
-            label: ex.name,
-            value: ex.exercise_id,
-          };
-        })}
-        className="basic-multi-select"
-        classNamePrefix="select"
-      /> */}
+                    <Select
+                      id="long-value-select"
+                      instanceId="long-value-select"
+                      defaultValue={[]}
+                      isMulti
+                      onChange={(data) => setData(data)}
+                      name="muscleGroups"
+                      options={exercises.map((ex) => {
+                        return {
+                          label: ex.name,
+                          value: ex.exercise_id,
+                        };
+                      })}
+                      className="basic-multi-select"
+                      classNamePrefix="select"
+                    />
                   </p>
-                </div>
+                </div> */}
 
                 <div className="mt-4">
                   <button
@@ -109,25 +165,5 @@ const AddExerciseToWorkout = ({ data }) => {
     </>
   );
 };
-// const handleClick = () => {
-//   fetch(`http://localhost:4000/workouts/${data.workout_id}/exercises`, {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify({
-//       order: 5,
-//       priority: 3,
-//       exerciseId: data.exercises,
-//     }),
-//   }).then((data) => {
-//     console.log(data);
-//     console.log('new exercise added', { data });
-//   });
-// };
-
-// return (
-//   <div>
-//     <Button onClick={}>Add exercise to workout</Button>
-//   </div>
-// );
 
 export default AddExerciseToWorkout;
