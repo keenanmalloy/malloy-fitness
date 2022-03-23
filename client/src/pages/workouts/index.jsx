@@ -1,5 +1,5 @@
-import React from 'react';
-import { GetAllWorkouts } from '../../components/GetAllWorkouts';
+import React from "react";
+import { GetAllWorkouts } from "features/workouts/GetAllWorkouts";
 
 const WorkoutsPage = () => {
   return (

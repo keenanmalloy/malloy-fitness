@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/router';
-import { Button } from  './Button';
+import { Button } from  'features/common/Button';
 
 export const GetSingleWorkout = () => {
   const [singleWorkout, setSingleWorkout] = useState(null);

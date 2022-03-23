@@ -1,12 +1,12 @@
-import React from 'react'
-import Logbook from '../../components/Logbook';
+import React from "react";
+import { Logbook } from "features/Logbook";
 
 const LogbookPage = () => {
   return (
     <div>
-        <Logbook/>
+      <Logbook />
     </div>
-  )
-}
+  );
+};
 
-export default LogbookPage
+export default LogbookPage;

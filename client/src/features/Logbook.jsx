@@ -1,9 +1,7 @@
 import React from 'react'
 
-const Logbook = () => {
+export const Logbook = () => {
   return (
     <div>Logbook</div>
   )
 }
-
-export default Logbook

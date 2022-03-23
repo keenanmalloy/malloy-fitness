@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { ExerciseList } from './ExerciseList';
-import { Button } from  './Button';
+import { Button } from  '../common/Button';
 
 export const GetAllExercises = () => {
   const [exercises, setExercises] = useState(null);

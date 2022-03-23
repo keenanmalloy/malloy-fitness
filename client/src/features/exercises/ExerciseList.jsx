@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Button } from  './Button';
+import { Button } from  '../common/Button';
 
 export const ExerciseList = ({ exercises, setExercises }) => {
   const deleteExercise = async (id) => {
