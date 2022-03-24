@@ -124,13 +124,13 @@ export const createWorkoutMutation = async (
       await createWorkoutExercisesLink(workoutId, exercises);
       const workout = data.rows[0];
 
-      return res.json({
+      return res.status(201).json({
         status: "success",
         message: "Workout created successfully",
         workout,
       });
     } catch (error) {
-      return res.json({
+      return res.status(500).json({
         status: "error",
         //@ts-ignore
         message: error && error.message ? error.message : "Database error",

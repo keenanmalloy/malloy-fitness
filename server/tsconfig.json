@@ -1,0 +1,5 @@
+{
+  "compilerOptions": { "types": ["jest"] },
+  "exclude": ["jest.config.ts"],
+  "extends": "../tsconfig.json",
+}

@@ -7,6 +7,7 @@ import { retrieveWorkoutQuery } from "queries/retrieveWorkoutQuery";
 import { retrieveWorkoutsQuery } from "queries/retrieveWorkoutsQuery";
 import { updateWorkoutMutation } from "queries/updateWorkoutMutation";
 import setsRouter from "./sets";
+import exercisesRouter from "./exercises";
 
 const router = Router();
 
@@ -36,6 +37,7 @@ router.put("/:workoutId", authenticate, authorize, async (req, res) => {
 });
 
 setsRouter(router);
+exercisesRouter(router);
 
 export default (parentRouter: Router) => {
   parentRouter.use("/workouts", router);

@@ -11,7 +11,7 @@ interface Account {
   email: string;
   active: boolean;
   avatar_url: string;
-  roll: string | null;
+  role: string | null;
   ticket: string;
   ticket_expiry: string;
 }
@@ -22,15 +22,17 @@ interface Session {
   maxAge: number;
 }
 
+export const generateAuthToken = async (obj: Session) => {
+  return await Iron.seal(obj, TOKEN_SECRET, Iron.defaults);
+};
+
 export async function setLoginSession(
   res: Response,
   session: any
 ): Promise<void> {
   const createdAt = new Date();
   const obj = { ...session, createdAt, maxAge: MAX_AGE };
-
-  const token = await Iron.seal(obj, TOKEN_SECRET, Iron.defaults);
-
+  const token = await generateAuthToken(obj);
   setTokenCookie(res, token);
 }
 
