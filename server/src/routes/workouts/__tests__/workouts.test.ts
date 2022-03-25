@@ -1,7 +1,6 @@
 import { MAX_AGE } from "cookies";
 import { generateAuthToken } from "sessions";
-import request from "supertest";
-import { app } from "../../../server";
+import { request } from "test/server";
 
 let token: string | null = null;
 let deletable: string | null = null;
@@ -26,7 +25,7 @@ beforeAll(async () => {
 
 describe("GET /workouts", function () {
   it("responds with 401 Unauthorized", async function () {
-    const res = await request(app)
+    const res = await request
       .get("/workouts")
       .set("Accept", "application/json");
 
@@ -35,7 +34,7 @@ describe("GET /workouts", function () {
   });
 
   it("responds with 200 successfully fetched list of workouts", async function () {
-    const res = await request(app)
+    const res = await request
       .get("/workouts")
       .set("Accept", "application/json")
       .set("Cookie", [`token=${token}`]);
@@ -47,7 +46,7 @@ describe("GET /workouts", function () {
 
 describe("POST /workouts/", function () {
   it("responds with 401 Unauthenticated", async function () {
-    const res = await request(app)
+    const res = await request
       .post("/workouts/")
       .send({
         name: "Test Workout",
@@ -60,7 +59,7 @@ describe("POST /workouts/", function () {
   });
 
   it("responds with 422 unprocessable entity", async function () {
-    const res = await request(app)
+    const res = await request
       .post("/workouts/")
       .send({
         name: "Test Workout",
@@ -77,7 +76,7 @@ describe("POST /workouts/", function () {
   // we first create the workout, and then mapping the exercises
   // to the workout created fail. This should fail both transactions instead.
   it("responds with 500 error - workout created, but exercises failed to map", async function () {
-    const res = await request(app)
+    const res = await request
       .post("/workouts/")
       .send({
         name: "Test Workout",
@@ -92,7 +91,7 @@ describe("POST /workouts/", function () {
   });
 
   it("responds with 201 success", async function () {
-    const res = await request(app)
+    const res = await request
       .post("/workouts/")
       .send({
         name: "Test Workout",
@@ -103,7 +102,7 @@ describe("POST /workouts/", function () {
       .set("Accept", "application/json")
       .set("Cookie", [`token=${token}`]);
 
-    deletable = res.body.workout.workout_id;
+    // deletable = res.body.workout.workout_id;
 
     expect(res.status).toEqual(201);
   });
@@ -111,7 +110,7 @@ describe("POST /workouts/", function () {
 
 describe("GET /workouts/:pk", function () {
   it("responds with 401 Unauthenticated", async function () {
-    const res = await request(app)
+    const res = await request
       .get("/workouts/unauthenticated")
       .set("Accept", "application/json");
 
@@ -119,7 +118,7 @@ describe("GET /workouts/:pk", function () {
   });
 
   it("responds with 403 Unauthorized", async function () {
-    const res = await request(app)
+    const res = await request
       .get(`/workouts/98`)
       .set("Accept", "application/json")
       .set("Cookie", [`token=${token}`]);
@@ -128,7 +127,7 @@ describe("GET /workouts/:pk", function () {
   });
 
   it("responds with 200 successfully fetched workout", async function () {
-    const res = await request(app)
+    const res = await request
       .get(`/workouts/${deletable}`)
       .set("Accept", "application/json")
       .set("Cookie", [`token=${token}`]);
@@ -139,7 +138,7 @@ describe("GET /workouts/:pk", function () {
 
 describe("PUT /workouts/:pk", function () {
   it("responds with 401 Unauthenticated", async function () {
-    const res = await request(app)
+    const res = await request
       .put(`/workouts/${deletable}`)
       .set("Accept", "application/json");
 
@@ -147,7 +146,7 @@ describe("PUT /workouts/:pk", function () {
   });
 
   it("responds with 403 Unauthorized", async function () {
-    const res = await request(app)
+    const res = await request
       .put(`/workouts/0`)
       .set("Accept", "application/json")
       .set("Cookie", [`token=${token}`]);
@@ -156,7 +155,7 @@ describe("PUT /workouts/:pk", function () {
   });
 
   it("responds with 422 unprocessable entity", async function () {
-    const res = await request(app)
+    const res = await request
       .put(`/workouts/${deletable}`)
       .send({
         name: "Test Workout Updated",
@@ -170,7 +169,7 @@ describe("PUT /workouts/:pk", function () {
   });
 
   it("responds with 200 successfully updated", async function () {
-    const res = await request(app)
+    const res = await request
       .put(`/workouts/${deletable}`)
       .send({
         name: "Test Workout Updated",
@@ -186,7 +185,7 @@ describe("PUT /workouts/:pk", function () {
 
 describe("DELETE /workouts/:pk", function () {
   it("responds with 401 Unauthenticated", async function () {
-    const res = await request(app)
+    const res = await request
       .delete("/workouts/0")
       .set("Accept", "application/json");
 
@@ -194,7 +193,7 @@ describe("DELETE /workouts/:pk", function () {
   });
 
   it("responds with 403 Unauthorized", async function () {
-    const res = await request(app)
+    const res = await request
       .delete("/workouts/98")
       .set("Accept", "application/json")
       .set("Cookie", [`token=${token}`]);
@@ -203,7 +202,7 @@ describe("DELETE /workouts/:pk", function () {
   });
 
   it("responds with 200 - successfully deleted", async function () {
-    const res = await request(app)
+    const res = await request
       .delete(`/workouts/${deletable}`)
       .set("Accept", "application/json")
       .set("Cookie", [`token=${token}`]);

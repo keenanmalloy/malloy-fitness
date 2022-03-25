@@ -1,9 +1,8 @@
-import request from "supertest";
-import { app } from "../../server";
+import { request } from "test/server";
 
 describe("GET /health", function () {
   it("responds with OK", async function () {
-    const res = await request(app)
+    const res = await request
       .get("/health")
       .set("Accept", "application/json");
 
@@ -15,7 +14,7 @@ describe("GET /health", function () {
 
 describe("GET non existant-route", function () {
   it("responds with 404", async function () {
-    const res = await request(app)
+    const res = await request
       .get("/non-existant-route")
       .set("Accept", "application/json");
 

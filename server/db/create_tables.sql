@@ -2,7 +2,7 @@ CREATE TABLE IF NOT EXISTS workouts (
     workout_id bigserial PRIMARY KEY,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
-    name character TEXT NOT NULL,
+    name text,
     description text,
     category character varying(30),
     created_by bigint
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS exercises (
     exercise_id bigserial PRIMARY KEY,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
-    name character TEXT NOT NULL,
+    name text,
     description text,
     category character varying(30),
     video text,
@@ -24,12 +24,12 @@ CREATE TABLE IF NOT EXISTS workout_exercises (
     workout_id bigint REFERENCES workouts(workout_id) ON DELETE CASCADE,
     exercise_id bigint REFERENCES exercises(exercise_id) ON DELETE CASCADE,
     priority int DEFAULT 0,
-    order int DEFAULT 0
+    "order" int DEFAULT 0
 );
 
 CREATE TABLE IF NOT EXISTS muscle_groups (
     muscle_group_id bigserial PRIMARY KEY,
-    name character TEXT NOT NULL,
+    name text,
     description text,
     image text
 );
