@@ -15,8 +15,9 @@ interface Response {
 }
 
 const addExerciseSchema = Joi.object({
-  order: Joi.string().optional(),
-  priority: Joi.string().optional(),
+  order: Joi.alternatives(Joi.string(), Joi.number()).optional(),
+  priority: Joi.alternatives(Joi.string(), Joi.number()).optional(),
+  exerciseId: Joi.alternatives(Joi.string(), Joi.number()).required(),
 });
 
 export const addExerciseToWorkoutMutation = async (
@@ -36,16 +37,22 @@ export const addExerciseToWorkoutMutation = async (
   } else {
     const { order, priority, exerciseId } = data;
 
+    if (Number.isNaN(parseInt(exerciseId.toString()))) {
+      return res.status(422).json({
+        status: "error",
+        //@ts-ignore
+        message: "Invalid exercise ID",
+      });
+    }
+
     const query = `
       WITH 
-        data(workoutId, exerciseId, "order", priority) AS (
+        data(workout_id, exercise_id, "order", priority) AS (
           VALUES                           
-              ('${workoutId}', '${exerciseId}', '${order ?? 0}','${
-      priority ?? 0
-    }')
+              (${workoutId}, ${exerciseId}, ${order ?? 0}, ${priority ?? 0})
           )
-        INSERT INTO exercises (workoutId, exerciseId, "order", priority)
-          SELECT workoutId, exerciseId, "order", priority
+        INSERT INTO workout_exercises (workout_id, exercise_id, "order", priority)
+          SELECT workout_id, exercise_id, "order", priority
             FROM data
           RETURNING *
       `;
@@ -54,14 +61,14 @@ export const addExerciseToWorkoutMutation = async (
       const data = await db.query(query);
       const exercise = data.rows[0];
 
-      return res.json({
+      return res.status(201).json({
         status: "success",
         message: "Exercise added successfully",
         exercise,
       });
     } catch (error) {
       console.log({ error });
-      return res.json({
+      return res.status(500).json({
         status: "error",
         //@ts-ignore
         message: error && error.message ? error.message : "Database error",

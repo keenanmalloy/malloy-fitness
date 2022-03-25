@@ -10,8 +10,8 @@ interface Response {
 }
 
 const updateWorkoutExerciseSchema = Joi.object({
-  order: Joi.number().optional(),
-  priority: Joi.number().optional(),
+  order: Joi.alternatives(Joi.string(), Joi.number()).optional(),
+  priority: Joi.alternatives(Joi.string(), Joi.number()).optional(),
 });
 
 export const updateWorkoutExerciseMutation = async (
@@ -91,7 +91,7 @@ export const updateWorkoutExerciseMutation = async (
       });
     } catch (error) {
       console.log({ error });
-      return res.json({
+      return res.status(500).json({
         status: "error",
         message: "Database error",
         exercise: null,

@@ -105,6 +105,19 @@ export const createWorkoutMutation = async (
     const { name, description, category, exercises } = data;
     const accountId = res.locals.state.account.account_id;
 
+    const validateExercises = (exercises: Exercises) => {
+      return exercises.find((ex) => Number.isNaN(parseInt(ex.id.toString())));
+    };
+
+    if (validateExercises(exercises)) {
+      return res.status(400).json({
+        status: "error",
+        message: "Invalid exercise ID",
+        exercises: exercises,
+        workout: null,
+      });
+    }
+
     const query = `
       WITH 
         data(name, description, category, created_by) AS (

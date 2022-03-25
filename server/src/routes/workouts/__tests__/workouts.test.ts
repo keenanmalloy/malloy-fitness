@@ -10,9 +10,9 @@ beforeAll(async () => {
     createdAt: new Date().toString(),
     maxAge: MAX_AGE,
     account: {
-      account_id: "9",
-      name: "Jackson Malloy",
-      email: "jacksmalloy@gmail.com",
+      account_id: "1",
+      name: "Tester",
+      email: "tester@malloyfit.ca",
       active: false,
       avatar_url:
         "https://lh3.googleusercontent.com/a-/AOh14GgumKfRBh0AY4W13SE5EtwiFavA-FFGwxYTZkeX9Q=s96-c",
@@ -72,22 +72,20 @@ describe("POST /workouts/", function () {
     expect(res.status).toEqual(422);
   });
 
-  // There is a bug here, since 2 transactions occur,
-  // we first create the workout, and then mapping the exercises
-  // to the workout created fail. This should fail both transactions instead.
-  it("responds with 500 error - workout created, but exercises failed to map", async function () {
+  it("responds with 400 error - workout created, but exercises failed to map", async function () {
     const res = await request
       .post("/workouts/")
       .send({
         name: "Test Workout",
         description: "Coming from an integration test",
         category: "Test",
-        exercises: [{ id: "error", order: 1, priority: 1 }],
+        exercises: [{ id: "this isn't an ID", order: 1, priority: 1 }],
       })
       .set("Accept", "application/json")
       .set("Cookie", [`token=${token}`]);
 
-    expect(res.status).toEqual(500);
+    expect(res.status).toEqual(400);
+    expect(res.body.message).toEqual('Invalid exercise ID')
   });
 
   it("responds with 201 success", async function () {
@@ -97,12 +95,12 @@ describe("POST /workouts/", function () {
         name: "Test Workout",
         description: "Coming from an integration test",
         category: "Test",
-        exercises: [{ id: 98, order: 1, priority: 1 }],
+        exercises: [{ id: 1000, order: 1, priority: 1 }],
       })
       .set("Accept", "application/json")
       .set("Cookie", [`token=${token}`]);
 
-    // deletable = res.body.workout.workout_id;
+    deletable = res.body.workout.workout_id;
 
     expect(res.status).toEqual(201);
   });
