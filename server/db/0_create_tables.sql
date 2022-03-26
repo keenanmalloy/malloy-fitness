@@ -79,15 +79,15 @@ CREATE TABLE IF NOT EXISTS account_providers (
 INSERT INTO accounts (account_id, created_at, updated_at, name, email, active, avatar_url, role, ticket, ticket_expiry, locale) VALUES (1, '2022-03-25 14:57:10.384907', '2022-03-25 14:57:10.384907', 'tester', 'tester@malloyfit.ca', false, null, null, '37f879ec-7b9b-40a9-97a3-5266d9653ea4', '2022-03-25 14:57:10.384907', 'ca');
 
 -- Create dummy workouts
-INSERT INTO workouts (workout_id, created_at, updated_at, name, description, category, created_by) VALUES (1000, '2022-03-25 15:31:45.499581', '2022-03-25 15:31:45.499581', 'Test workout 1', 'Description of a workout', 'test', 1);
-INSERT INTO workouts (workout_id, created_at, updated_at, name, description, category, created_by) VALUES (1001, '2022-03-25 15:31:45.499581', '2022-03-25 15:31:45.499581', 'Test workout 1', 'Description of a workout', 'test', 1);
-INSERT INTO workouts (workout_id, created_at, updated_at, name, description, category, created_by) VALUES (1002, '2022-03-25 15:31:45.499581', '2022-03-25 15:31:45.499581', 'Test workout 1', 'Description of a workout', 'test', 1);
-INSERT INTO workouts (workout_id, created_at, updated_at, name, description, category, created_by) VALUES (1003, '2022-03-25 15:31:45.499581', '2022-03-25 15:31:45.499581', 'Test workout 1', 'Description of a workout', 'test', 2);
-INSERT INTO workouts (workout_id, created_at, updated_at, name, description, category, created_by) VALUES (1004, '2022-03-25 15:31:45.499581', '2022-03-25 15:31:45.499581', 'Test workout 1', 'Description of a workout', 'test', 2);
-INSERT INTO workouts (workout_id, created_at, updated_at, name, description, category, created_by) VALUES (1005, '2022-03-25 15:31:45.499581', '2022-03-25 15:31:45.499581', 'Test workout 1', 'Description of a workout', 'test', 2);
-INSERT INTO workouts (workout_id, created_at, updated_at, name, description, category, created_by) VALUES (1006, '2022-03-25 15:31:45.499581', '2022-03-25 15:31:45.499581', 'Test workout 1', 'Description of a workout', 'test', null);
-INSERT INTO workouts (workout_id, created_at, updated_at, name, description, category, created_by) VALUES (1007, '2022-03-25 15:31:45.499581', '2022-03-25 15:31:45.499581', 'Test workout 1', 'Description of a workout', 'test', null);
-INSERT INTO workouts (workout_id, created_at, updated_at, name, description, category, created_by) VALUES (1008, '2022-03-25 15:31:45.499581', '2022-03-25 15:31:45.499581', 'Test workout 1', 'Description of a workout', 'test', null);
+INSERT INTO workouts (workout_id, created_at, updated_at, name, description, category, created_by) VALUES (1000, '2022-03-25 15:31:45.499581', '2022-03-25 15:31:45.499581', 'Test workout 1', 'Description of a workout 1', 'test', 1);
+INSERT INTO workouts (workout_id, created_at, updated_at, name, description, category, created_by) VALUES (1001, '2022-03-25 15:31:45.499581', '2022-03-25 15:31:45.499581', 'Test workout 2', 'Description of a workout 2', 'test', 1);
+INSERT INTO workouts (workout_id, created_at, updated_at, name, description, category, created_by) VALUES (1002, '2022-03-25 15:31:45.499581', '2022-03-25 15:31:45.499581', 'Test workout 3', 'Description of a workout3 ', 'test', 1);
+INSERT INTO workouts (workout_id, created_at, updated_at, name, description, category, created_by) VALUES (1003, '2022-03-25 15:31:45.499581', '2022-03-25 15:31:45.499581', 'Test workout 4', 'Description of a workout 4', 'test', 2);
+INSERT INTO workouts (workout_id, created_at, updated_at, name, description, category, created_by) VALUES (1004, '2022-03-25 15:31:45.499581', '2022-03-25 15:31:45.499581', 'Test workout 5', 'Description of a workout 5', 'test', 2);
+INSERT INTO workouts (workout_id, created_at, updated_at, name, description, category, created_by) VALUES (1005, '2022-03-25 15:31:45.499581', '2022-03-25 15:31:45.499581', 'Test workout 6', 'Description of a workout 6', 'test', 2);
+INSERT INTO workouts (workout_id, created_at, updated_at, name, description, category, created_by) VALUES (1006, '2022-03-25 15:31:45.499581', '2022-03-25 15:31:45.499581', 'Test workout 7', 'Description of a workout 7', 'test', null);
+INSERT INTO workouts (workout_id, created_at, updated_at, name, description, category, created_by) VALUES (1007, '2022-03-25 15:31:45.499581', '2022-03-25 15:31:45.499581', 'Test workout 8', 'Description of a workout 8', 'test', null);
+INSERT INTO workouts (workout_id, created_at, updated_at, name, description, category, created_by) VALUES (1008, '2022-03-25 15:31:45.499581', '2022-03-25 15:31:45.499581', 'Test workout 9', 'Description of a workout 9', 'test', null);
 
 -- Create dummy exercises
 INSERT INTO exercises (exercise_id, created_at, updated_at, name, description, category, video, profile, created_by) VALUES (1000, '2022-03-25 15:09:07.004811', '2022-03-25 15:09:07.004811', 'Test exercise 1', 'Description of an exercise', 'test', null, 'test', 1);

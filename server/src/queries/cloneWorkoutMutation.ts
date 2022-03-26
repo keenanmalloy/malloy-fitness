@@ -1,4 +1,5 @@
 import { db } from "config/db";
+import { Request, Response } from "express";
 import Joi from "joi";
 
 type Exercises = {
@@ -6,13 +7,6 @@ type Exercises = {
   priority?: number;
   order?: number;
 }[];
-
-interface Response {
-  status: string;
-  message: string;
-  workout: any;
-  error?: any;
-}
 
 const cloneWorkoutSchema = Joi.object({
   name: Joi.string().min(3).max(64).required(),
@@ -58,7 +52,10 @@ const cloneWorkoutExercisesLink = async (
   return data.rows;
 };
 
-export const cloneWorkoutMutation = async (res: any, workoutId: string) => {
+export const cloneWorkoutMutation = async (
+  res: Response,
+  workoutId: string
+) => {
   try {
     const workout = await retrieveWorkoutQuery(workoutId);
     if (!workout) {
@@ -68,8 +65,7 @@ export const cloneWorkoutMutation = async (res: any, workoutId: string) => {
       });
     }
 
-    // @@ TODO fix account_id
-    const accountId = "1";
+    const accountId = res.locals.state.account.account_id;
 
     const workoutQuery = `
       WITH
@@ -96,7 +92,7 @@ export const cloneWorkoutMutation = async (res: any, workoutId: string) => {
     };
 
     if (!workout.workoutExercises.length) {
-      return res.json({ message: "Workout Successfully Cloned" });
+      return res.status(201).json({ message: "Workout Successfully Cloned" });
     }
 
     const weQuery = `
@@ -113,7 +109,7 @@ export const cloneWorkoutMutation = async (res: any, workoutId: string) => {
 
     await db.query(weQuery);
 
-    return res.json({ message: "Workout Successfully Cloned" });
+    return res.status(201).json({ message: "Workout Successfully Cloned" });
   } catch (error) {
     console.log({ error });
     return res.status(500).json({

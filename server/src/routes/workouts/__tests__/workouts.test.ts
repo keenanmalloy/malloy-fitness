@@ -85,7 +85,7 @@ describe("POST /workouts/", function () {
       .set("Cookie", [`token=${token}`]);
 
     expect(res.status).toEqual(400);
-    expect(res.body.message).toEqual('Invalid exercise ID')
+    expect(res.body.message).toEqual("Invalid exercise ID");
   });
 
   it("responds with 201 success", async function () {
@@ -101,6 +101,25 @@ describe("POST /workouts/", function () {
       .set("Cookie", [`token=${token}`]);
 
     deletable = res.body.workout.workout_id;
+
+    expect(res.status).toEqual(201);
+  });
+});
+
+describe("POST /workouts/:pk/copy", function () {
+  it("responds with 401 Unauthenticated", async function () {
+    const res = await request
+      .post("/workouts/1000/copy")
+      .set("Accept", "application/json");
+
+    expect(res.status).toEqual(401);
+  });
+
+  it("responds with 201 success", async function () {
+    const res = await request
+      .post("/workouts/1000/copy")
+      .set("Accept", "application/json")
+      .set("Cookie", [`token=${token}`]);
 
     expect(res.status).toEqual(201);
   });

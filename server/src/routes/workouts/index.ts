@@ -28,8 +28,8 @@ router.post("/", authenticate, authorize, async (req, res) => {
 });
 
 // Clone workout
-router.post("/:id/copy", async (req, res) => {
-  await cloneWorkoutMutation(res, req.params.id);
+router.post("/:workoutId/copy", authenticate, async (req, res) => {
+  await cloneWorkoutMutation(res, req.params.workoutId);
 });
 
 // Delete workout
