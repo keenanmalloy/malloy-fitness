@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
-import { Button } from  './Button';
+import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import { Button } from "features/common/Button";
 
 export const GetSingleExercise = () => {
   const [singleExercise, setSingleExercise] = useState(null);
@@ -11,30 +11,32 @@ export const GetSingleExercise = () => {
   const id = router.query.id;
 
   useEffect(() => {
+    if(!router.isReady) return;
     fetch(`http://localhost:4000/exercises/${id}`)
       .then((res) => {
-        if(!res.ok) {
-          throw Error('couldnt fetch exercise')
+        if (!res.ok) {
+          throw Error("couldnt fetch exercise");
         }
         return res.json();
       })
       .then((data) => {
         setSingleExercise(data.exercise);
         setIsLoading(false);
-      }).catch((err) => {
+      })
+      .catch((err) => {
         setError(err.message);
       });
-  }, []);
+  }, [router.isReady]);
 
   const deleteExercise = async (id) => {
     const response = await fetch(`http://localhost:4000/exercises/${id}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
     }).then((res) => {
       return res.json();
     });
 
-    if (response.status === 'success') {
+    if (response.status === "success") {
       setSingleExercise(null);
     }
   };
@@ -56,7 +58,12 @@ export const GetSingleExercise = () => {
         <p>{singleExercise.range}</p>
         <p>{singleExercise.exercise_id}</p>
       </div>
-
+      
+       {/* 
+          Before we delete an exercise, lets use that modal component as a confirmation panel. 
+          Clicking on this button below should open the modal. In the modal should be the logic
+          to make the DELETE request to the database. 
+        */}
       <Button handleClick={() => deleteExercise(singleExercise.exercise_id)}>
         Delete exercise
       </Button>

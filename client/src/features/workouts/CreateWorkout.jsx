@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import { Input } from './Input';
-import { Select as SelectComponent } from './Select';
-import { Button } from './Button';
+import { Input } from 'features/form/Input';
+import { Select as SelectComponent } from 'features/form/Select';
+import { Button } from 'features/common/Button';
 import Select from 'react-select';
 
 export const CreateWorkout = ({ workouts, setWorkouts, exercises }) => {
@@ -20,7 +20,9 @@ export const CreateWorkout = ({ workouts, setWorkouts, exercises }) => {
       description: description,
       category: category,
       exercises: data.map((ex) => {
-        return ex.value;
+        return {
+          id: ex.value,
+        };
       }),
     };
 

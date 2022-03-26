@@ -1,6 +1,7 @@
 import { Router } from "express";
 import { authenticate } from "middlewares/authenticate";
 import { authorize } from "middlewares/authorize";
+import { cloneWorkoutMutation } from "queries/cloneWorkoutMutation";
 import { createWorkoutMutation } from "queries/createWorkoutMutation";
 import { deleteWorkoutMutation } from "queries/deleteWorkoutMutation";
 import { retrieveWorkoutQuery } from "queries/retrieveWorkoutQuery";
@@ -24,6 +25,11 @@ router.get("/:workoutId", authenticate, authorize, async (req, res) => {
 // Create new workout
 router.post("/", authenticate, authorize, async (req, res) => {
   await createWorkoutMutation(res, req.body);
+});
+
+// Clone workout
+router.post("/:id/copy", async (req, res) => {
+  await cloneWorkoutMutation(res, req.params.id);
 });
 
 // Delete workout

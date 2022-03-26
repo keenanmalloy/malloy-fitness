@@ -1,5 +1,5 @@
-import React from 'react';
-import { CreateExercise } from '../../components/CreateExercise';
+import React from "react";
+import { CreateExercise } from "features/exercises/CreateExercise";
 
 export async function getServerSideProps() {
   const res = await fetch(`http://localhost:4000/muscle-groups`);
@@ -9,11 +9,11 @@ export async function getServerSideProps() {
 }
 
 export default function ExerciseCreatePage(props) {
-  const muscleGroups = props.data.muscleGroups
+  const muscleGroups = props.data.muscleGroups;
   return (
     <div>
       ExerciseCreatePages
-      <CreateExercise  muscleGroups={muscleGroups}/>
+      <CreateExercise muscleGroups={muscleGroups} />
     </div>
   );
 }

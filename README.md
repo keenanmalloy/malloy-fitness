@@ -16,10 +16,10 @@ Endpoints for viewing and manipulating workouts.
 - [Create a workout](docs/workouts/post.md) : `POST /workouts/`
 - [Update a workout](docs/workouts/put.md) : `PUT /workouts/:pk/`
 - [Delete a workout](docs/workouts/delete.md) : `DELETE /workouts/:pk/`
-
 - [Add an exercise to a workout](docs/workouts/post.md) : `POST /workouts/:pk/exercises/`
 - [Update an exercise order / priority in a workout](docs/workouts/put.md) : `PUT /workouts/:pk/exercises/:pk/`
 - [Remove an exercise from a workout](docs/workouts/delete.md) : `DELETE /workouts/:pk/exercises/:pk/`
+
 ### Exercises
 
 Endpoints for viewing and manipulating exercises.
