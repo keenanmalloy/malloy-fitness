@@ -32,6 +32,20 @@ describe("GET /exercises", function () {
     expect(res.status).toEqual(200);
     expect(res.body.message).toEqual("Exercises fetched successfully");
   });
+
+  it("responds with 200 where query shows no results", async function () {
+    const res = await request
+      .get("/exercises?q=this-does-not-exist")
+      .set("Accept", "application/json");
+
+    expect(res.status).toEqual(200);
+    expect(res.body.message).toEqual("Exercises fetched successfully");
+    expect(res.body).toMatchObject({
+      status: expect.any(String),
+      message: expect.any(String),
+      exercises: expect.arrayContaining([]),
+    });
+  });
 });
 
 describe("GET /exercises/:pk", function () {

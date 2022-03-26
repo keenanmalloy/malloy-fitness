@@ -82,7 +82,7 @@ export const retrieveExercisesQuery = async (req: Request, res: Response) => {
     return res.status(500).json({
       status: "error",
       message: "Database error",
-      exercise: null,
+      exercises: null,
     });
   }
 };
