@@ -8,7 +8,7 @@ export const GetAllWorkouts = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:4000/workouts/')
+    fetch('http://localhost:4000/workouts/', { credentials: 'include' })
       .then((res) => {
         if(!res.ok) {
           throw Error('Couldnt fetch all workouts')

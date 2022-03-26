@@ -7,6 +7,7 @@ export const UpdateExercise = () => {
     const response = await fetch('http://localhost:4000/exercises/9', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify({
         name: 'step forward curl',
         description:

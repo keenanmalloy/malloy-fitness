@@ -9,6 +9,7 @@ export const ExerciseList = ({ exercises, setExercises }) => {
     const response = await fetch(`http://localhost:4000/exercises/${id}`, {
       method: "DELETE",
       headers: { "Content-Type": "application/json" },
+      credentials: 'include'
     }).then((res) => {
       return res.json();
     });

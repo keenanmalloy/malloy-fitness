@@ -1,13 +1,9 @@
 import { db } from "config/db";
+import { Response } from "express";
 
-interface Response {
-  status: string;
-  message: string;
-  workouts: any;
-}
-
-export const retrieveWorkoutsQuery = async (res: any): Promise<Response> => {
-  const query = `SELECT * FROM workouts`;
+export const retrieveWorkoutsQuery = async (res: Response): Promise<any> => {
+  const accountId = res.locals.state.account.account_id;
+  const query = `SELECT * FROM workouts WHERE created_by = ${accountId}`
 
   try {
     const data = await db.query(query);

@@ -1,6 +1,6 @@
 {
   "exclude": ["./client/*"],
-  "include": ["./server/**/*.ts"],
+  "include": ["./server/**/*.ts", "./server/**/*.test.ts"],
   "compilerOptions": {
     "lib": ["dom", "es2020"],
     "module": "commonjs",

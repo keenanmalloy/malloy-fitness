@@ -12,7 +12,7 @@ export const GetSingleExercise = () => {
 
   useEffect(() => {
     if(!router.isReady) return;
-    fetch(`http://localhost:4000/exercises/${id}`)
+    fetch(`http://localhost:4000/exercises/${id}`, { credentials: 'include' })
       .then((res) => {
         if (!res.ok) {
           throw Error("couldnt fetch exercise");

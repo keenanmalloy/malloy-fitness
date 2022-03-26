@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Input } from '../../components/Input';
-import { RadioGroup } from '../../components/RadioGroup';
+import { Input } from 'features/form/Input';
+import { RadioGroup } from 'features/form/RadioGroup';
 import { Select } from '../form/Select';
 import { SelectMuscleGroups } from '../muscle-groups/SelectMuscleGroups';
-import { Button } from '../../components/Button';
+import { Button } from 'features/common/Button';
 
 export const CreateExercise = ({ exercises, setExercises, muscleGroups }) => {
   const [name, setName] = useState('');
@@ -33,6 +33,7 @@ export const CreateExercise = ({ exercises, setExercises, muscleGroups }) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(exercise),
+      credentials: 'include'
     })
       .then((res) => {
         if (!res.ok) {

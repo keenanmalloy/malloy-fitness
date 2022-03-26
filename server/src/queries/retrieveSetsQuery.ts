@@ -6,21 +6,25 @@ interface Response {
   sets: any;
 }
 
-export const retrieveSetsQuery = async (res: any, workoutId: any): Promise<Response> => {
-  const query = `SELECT * FROM sets WHERE workout_id = $1`;
-  const params = [workoutId]
+export const retrieveSetsQuery = async (
+  res: any,
+  workoutId: any
+): Promise<Response> => {
+  const accountId = res.locals.state.account.account_id;
+  const query = `SELECT * FROM sets LEFT JOIN workouts ON workouts.workout_id = sets.workout_id WHERE workouts.workout_id = $1 AND workouts.created_by = $2`;
+  const params = [workoutId, accountId];
 
   try {
     const data = await db.query(query, params);
 
-    return res.json({
+    return res.status(200).json({
       message: "Sets fetched successfully",
       status: "success",
       sets: data.rows,
     });
   } catch (error) {
     console.log({ error });
-    return res.json({
+    return res.status(500).json({
       status: "error",
       message: "Database error",
       exercise: null,

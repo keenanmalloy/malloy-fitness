@@ -1,16 +1,16 @@
-import { PROVIDERS } from 'config/providers';
-import { Request, RequestHandler, Response, Router } from 'express';
-import passport from 'passport';
-import { Strategy } from 'passport-google-oauth20';
+import { PROVIDERS } from "config/providers";
+import { Request, RequestHandler, Response, Router } from "express";
+import passport from "passport";
+import { Strategy } from "passport-google-oauth20";
 import {
   createAccountProviderMutation,
   createAccountWithProviderMutation,
-} from 'queries/createAccountMutation';
+} from "queries/createAccountMutation";
 import {
   retrievAccountByEmailQuery,
   retrieveAccountByProviderQuery,
-} from 'queries/retrieveAccountQuery';
-import { setLoginSession } from 'sessions';
+} from "queries/retrieveAccountQuery";
+import { setLoginSession } from "sessions";
 
 interface Props {
   router: Router;
@@ -45,12 +45,12 @@ export const initProvider = ({ router, middleware }: Props): void => {
           // select account provider by provider: 'google' and profile_id: id.toString(),
           const account = await retrieveAccountByProviderQuery(
             authProviderUniqueId,
-            'google'
+            "google"
           );
 
           // if there is an account, return done(undefined, account);
           if (!!account) {
-            done(undefined, account);
+            return done(undefined, account);
           }
 
           // See if email already exist.
@@ -61,13 +61,13 @@ export const initProvider = ({ router, middleware }: Props): void => {
 
             // if we're unable to fetch the account using the email we'll throw out of this try/catch
             if (!account) {
-              throw new Error('Account does not exist.');
+              throw new Error("Account does not exist.");
             }
 
             // account was successfully fetched so add the new provider:
             await createAccountProviderMutation({
               account_id: account.account_id,
-              auth_provider: 'google',
+              auth_provider: "google",
               auth_provider_unique_id: authProviderUniqueId,
             });
 
@@ -75,13 +75,13 @@ export const initProvider = ({ router, middleware }: Props): void => {
             return done(undefined, account);
           } catch (error) {
             // We were unable to fetch the account
-            console.log('Unable to fetch account', { error });
+            console.log("Unable to fetch account", { error });
             // noop continue to register user
           }
 
           // register account & account_provider
           const newAccount = await createAccountWithProviderMutation({
-            provider: 'google',
+            provider: "google",
             authProviderUniqueId,
             avatarUrl,
             email,
@@ -98,23 +98,23 @@ export const initProvider = ({ router, middleware }: Props): void => {
     next();
   });
 
-  subRouter.get('/', [
+  subRouter.get("/", [
     (req: Request, ...rest: any) => {
-      return passport.authenticate('google', {
+      return passport.authenticate("google", {
         session: false,
       })(req, ...rest);
     },
 
-    passport.authenticate('google', {
+    passport.authenticate("google", {
       session: false,
       scope: PROVIDERS.GOOGLE.scope,
     }),
   ]);
 
   subRouter.get(
-    '/callback',
-    passport.authenticate('google', {
-      failureRedirect: `http://localhost:3000/auth/failed`,
+    "/callback",
+    passport.authenticate("google", {
+      failureRedirect: `http://localhost:3000/?error=failed-google-oauth`,
       session: false,
     }),
 
@@ -130,7 +130,7 @@ export const initProvider = ({ router, middleware }: Props): void => {
       await setLoginSession(res, session);
 
       // redirect back user to app url, need to change URL to env variable
-      res.redirect(`http://localhost:3000/auth/success`);
+      res.redirect(`http://localhost:3000/`);
     }
   );
 

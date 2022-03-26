@@ -10,13 +10,11 @@ interface Response {
 }
 
 const updateExerciseSchema = Joi.object({
-  name: Joi.string().min(3).max(20).optional(),
-  description: Joi.string().max(250).allow("").optional(),
+  name: Joi.string().min(3).max(200).optional(),
+  description: Joi.string().max(500).allow('').optional(),
   category: Joi.string().optional(),
-  primary: Joi.string().optional(),
-  secondary: Joi.string().allow("").optional(),
-  video: Joi.string().allow("").optional(),
-  movement: Joi.string().valid("isolation", "compound").optional(),
+  video: Joi.string().allow(null).optional(),
+  profile: Joi.string().allow(null).valid('short', 'med', 'long').optional(),
 });
 
 export const updateExerciseMutation = async (

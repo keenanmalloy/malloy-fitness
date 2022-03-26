@@ -5,22 +5,26 @@ import { toTimestampz, toUnix } from "time";
 
 const TOKEN_SECRET = `6SZ=3f<Gtxd3E^7J=.sfxX238nf27o3fnGd!9pKhcq`;
 
-interface User {
-  id: string;
-  display_name: string;
+interface Account {
+  name: string;
+  account_id: string;
   email: string;
+  active: boolean;
   avatar_url: string;
-  stripe_account_id: string | null;
+  role: string | null;
+  ticket: string;
+  ticket_expiry: string;
 }
 
 interface Session {
-  jwt_token: string;
-  jwt_expires_in: number;
-  user: User;
-  refresh_token: string;
+  account: Account;
   createdAt: string;
   maxAge: number;
 }
+
+export const generateAuthToken = async (obj: Session) => {
+  return await Iron.seal(obj, TOKEN_SECRET, Iron.defaults);
+};
 
 export async function setLoginSession(
   res: Response,
@@ -28,9 +32,7 @@ export async function setLoginSession(
 ): Promise<void> {
   const createdAt = new Date();
   const obj = { ...session, createdAt, maxAge: MAX_AGE };
-
-  const token = await Iron.seal(obj, TOKEN_SECRET, Iron.defaults);
-
+  const token = await generateAuthToken(obj);
   setTokenCookie(res, token);
 }
 
