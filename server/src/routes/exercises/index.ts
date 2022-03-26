@@ -11,7 +11,7 @@ const router = Router();
 
 // Retrieve all exercises
 router.get("/", async (req, res) => {
-  await retrieveExercisesQuery(res);
+  await retrieveExercisesQuery(req, res);
 });
 
 // Retrieve exercise
