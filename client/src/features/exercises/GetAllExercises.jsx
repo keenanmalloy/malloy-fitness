@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
-import { ExerciseList } from './ExerciseList';
-import { Button } from  '../common/Button';
+import React, { useState, useEffect } from "react";
+import Link from "next/link";
+import { ExerciseList } from "./ExerciseList";
+import { Button } from "../common/Button";
 
 export const GetAllExercises = () => {
   const [exercises, setExercises] = useState(null);
@@ -9,17 +9,18 @@ export const GetAllExercises = () => {
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    fetch('http://localhost:4000/exercises/')
+    fetch("http://localhost:4000/exercises/", { credentials: "include" })
       .then((res) => {
-        if(!res.ok) {
-          throw Error('couldnt fetch all exercises')
+        if (!res.ok) {
+          throw Error("couldnt fetch all exercises");
         }
         return res.json();
       })
       .then((data) => {
         setExercises(data.exercises);
         setIsLoading(false);
-      }).catch((err) => {
+      })
+      .catch((err) => {
         setError(err.message);
       });
   }, []);
