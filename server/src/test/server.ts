@@ -17,9 +17,6 @@ const close = async () => {
 
 beforeAll(async () => {
   await start();
-  process.env.DATABASE_URL =
-    "postgres://myuser:myuserpassword@localhost:4444/postgres";
-
   request = agent(server);
 });
 
