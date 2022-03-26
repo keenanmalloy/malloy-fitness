@@ -68,34 +68,6 @@ describe("POST /workouts/:pk/exercises", function () {
   });
 });
 
-// describe("GET /workouts/:pk", function () {
-//   it("responds with 401 Unauthenticated", async function () {
-//     const res = await request
-//       .get("/workouts/unauthenticated")
-//       .set("Accept", "application/json");
-
-//     expect(res.status).toEqual(401);
-//   });
-
-//   it("responds with 403 Unauthorized", async function () {
-//     const res = await request
-//       .get(`/workouts/98`)
-//       .set("Accept", "application/json")
-//       .set("Cookie", [`token=${token}`]);
-
-//     expect(res.status).toEqual(403);
-//   });
-
-//   it("responds with 200 successfully fetched workout", async function () {
-//     const res = await request
-//       .get(`/workouts/${deletable}`)
-//       .set("Accept", "application/json")
-//       .set("Cookie", [`token=${token}`]);
-
-//     expect(res.status).toEqual(200);
-//   });
-// });
-
 describe("PUT /workouts/:pk/exercises/:pk", function () {
   it("responds with 401 Unauthenticated", async function () {
     const res = await request
@@ -122,58 +94,66 @@ describe("PUT /workouts/:pk/exercises/:pk", function () {
     expect(res.status).toEqual(403);
   });
 
-//   it("responds with 500 server error as DB cannot process text in int field", async function () {
-//     const res = await request
-//       .put(`/workouts/1000/exercises/${deletable}`)
-//       .send({
-//         order: 2,
-//         priority: 'WHAT',
-//       })
-//       .set("Accept", "application/json")
-//       .set("Cookie", [`token=${token}`]);
+  it("responds with 200 successfully updated", async function () {
+    const res = await request
+      .put(`/workouts/1000/exercises/${deletable}`)
+      .send({
+        order: 2,
+        priority: 2,
+      })
+      .set("Accept", "application/json")
+      .set("Cookie", [`token=${token}`]);
 
-//     expect(res.status).toEqual(500);
-//   });
+    expect(res.status).toEqual(200);
+  });
 
-  //   it("responds with 200 successfully updated", async function () {
-  //     const res = await request
-  //       .put(`/workouts/${deletable}`)
-  //       .send({
-  //         name: "Test Workout Updated",
-  //         description: "Coming from an integration test - Updated",
-  //         category: "Test - Updated",
-  //       })
-  //       .set("Accept", "application/json")
-  //       .set("Cookie", [`token=${token}`]);
+  it("responds with 404 not found", async function () {
+    const res = await request
+      .put(`/workouts/1000/exercises/1006`)
+      .send({
+        order: 2,
+        priority: 2,
+      })
+      .set("Accept", "application/json")
+      .set("Cookie", [`token=${token}`]);
 
-  //     expect(res.status).toEqual(200);
-  //   });
+    expect(res.status).toEqual(404);
+  });
 });
 
-// describe("DELETE /workouts/:pk", function () {
-//   it("responds with 401 Unauthenticated", async function () {
-//     const res = await request
-//       .delete("/workouts/0")
-//       .set("Accept", "application/json");
+describe("DELETE /workouts/:pk/exercises/:pk", function () {
+  it("responds with 401 Unauthenticated", async function () {
+    const res = await request
+      .delete("/workouts/1000/exercises/1000")
+      .set("Accept", "application/json");
 
-//     expect(res.status).toEqual(401);
-//   });
+    expect(res.status).toEqual(401);
+  });
 
-//   it("responds with 403 Unauthorized", async function () {
-//     const res = await request
-//       .delete("/workouts/98")
-//       .set("Accept", "application/json")
-//       .set("Cookie", [`token=${token}`]);
+  it("responds with 403 Unauthorized", async function () {
+    const res = await request
+      .delete("/workouts/1003/exercises/1000")
+      .set("Accept", "application/json")
+      .set("Cookie", [`token=${token}`]);
 
-//     expect(res.status).toEqual(403);
-//   });
+    expect(res.status).toEqual(403);
+  });
 
-//   it("responds with 200 - successfully deleted", async function () {
-//     const res = await request
-//       .delete(`/workouts/${deletable}`)
-//       .set("Accept", "application/json")
-//       .set("Cookie", [`token=${token}`]);
+  it("responds with 200 successfully deleted", async function () {
+    const res = await request
+      .delete(`/workouts/1000/exercises/${deletable}`)
+      .set("Accept", "application/json")
+      .set("Cookie", [`token=${token}`]);
 
-//     expect(res.status).toEqual(200);
-//   });
-// });
+    expect(res.status).toEqual(200);
+  });
+
+  it("responds with 404 not found", async function () {
+    const res = await request
+      .delete(`/workouts/1000/exercises/${deletable}`)
+      .set("Accept", "application/json")
+      .set("Cookie", [`token=${token}`]);
+
+    expect(res.status).toEqual(404);
+  });
+});

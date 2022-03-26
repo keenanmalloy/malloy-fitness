@@ -24,7 +24,8 @@ CREATE TABLE IF NOT EXISTS workout_exercises (
     workout_id bigint REFERENCES workouts(workout_id) ON DELETE CASCADE,
     exercise_id bigint REFERENCES exercises(exercise_id) ON DELETE CASCADE,
     priority int DEFAULT 0,
-    "order" int DEFAULT 0
+    "order" int DEFAULT 0,
+    PRIMARY KEY (workout_id, exercise_id)
 );
 
 CREATE TABLE IF NOT EXISTS muscle_groups (
@@ -88,7 +89,6 @@ INSERT INTO workouts (workout_id, created_at, updated_at, name, description, cat
 INSERT INTO workouts (workout_id, created_at, updated_at, name, description, category, created_by) VALUES (1007, '2022-03-25 15:31:45.499581', '2022-03-25 15:31:45.499581', 'Test workout 1', 'Description of a workout', 'test', null);
 INSERT INTO workouts (workout_id, created_at, updated_at, name, description, category, created_by) VALUES (1008, '2022-03-25 15:31:45.499581', '2022-03-25 15:31:45.499581', 'Test workout 1', 'Description of a workout', 'test', null);
 
-
 -- Create dummy exercises
 INSERT INTO exercises (exercise_id, created_at, updated_at, name, description, category, video, profile, created_by) VALUES (1000, '2022-03-25 15:09:07.004811', '2022-03-25 15:09:07.004811', 'Test exercise 1', 'Description of an exercise', 'test', null, 'test', 1);
 INSERT INTO exercises (exercise_id, created_at, updated_at, name, description, category, video, profile, created_by) VALUES (1001, '2022-03-25 15:09:07.004811', '2022-03-25 15:09:07.004811', 'Test exercise 2', 'Description of an exercise', 'test', null, 'test', 1);
@@ -100,3 +100,7 @@ INSERT INTO exercises (exercise_id, created_at, updated_at, name, description, c
 INSERT INTO exercises (exercise_id, created_at, updated_at, name, description, category, video, profile, created_by) VALUES (1007, '2022-03-25 15:09:07.004811', '2022-03-25 15:09:07.004811', 'Test exercise 8', 'Description of an exercise', 'test', null, 'test', null);
 INSERT INTO exercises (exercise_id, created_at, updated_at, name, description, category, video, profile, created_by) VALUES (1008, '2022-03-25 15:09:07.004811', '2022-03-25 15:09:07.004811', 'Test exercise 9', 'Description of an exercise', 'test', null, 'test', null);
 
+-- Create dummy muscle-groups
+INSERT INTO public.muscle_groups (muscle_group_id, name, description, image) VALUES (1000, 'Muscle Group 1', 'Description of muscle group 1', null);
+INSERT INTO public.muscle_groups (muscle_group_id, name, description, image) VALUES (1001, 'Muscle Group 2', 'Description of muscle group 2', null);
+INSERT INTO public.muscle_groups (muscle_group_id, name, description, image) VALUES (1002, 'Muscle Group 3', 'Description of muscle group 3', null);

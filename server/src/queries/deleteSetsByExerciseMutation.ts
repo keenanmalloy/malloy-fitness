@@ -19,21 +19,21 @@ export const deleteSetsByExerciseMutation = async (
     const data = await db.query(query, params);
 
     if (!data.rowCount) {
-      return res.json({
+      return res.status(404).json({
         status: "error",
         message: "Sets do not exist",
         set: null,
       });
     }
 
-    return res.json({
+    return res.status(200).json({
       status: "success",
       message: "Sets deleted successfully",
       sets: data.rows,
     });
   } catch (error) {
     console.log({ error });
-    return res.json({
+    return res.status(500).json({
       status: "error",
       message: "Database error",
       set: null,
