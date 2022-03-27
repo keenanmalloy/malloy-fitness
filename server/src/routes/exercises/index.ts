@@ -9,7 +9,8 @@ import { updateExerciseMutation } from "queries/updateExerciseMutation";
 
 const router = Router();
 
-// Retrieve all exercises
+// Retrieve all exercises ----- /
+// Search exercises ----------- /?q=barbell
 router.get("/", async (req, res) => {
   await retrieveExercisesQuery(req, res);
 });

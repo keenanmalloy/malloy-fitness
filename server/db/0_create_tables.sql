@@ -2,6 +2,16 @@ CREATE TABLE IF NOT EXISTS workouts (
     workout_id bigserial PRIMARY KEY,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
+
+    -- What's the difference between started_at and workout_dt?
+    -- started_at gets saved when the user begins their workout.
+    -- workout_dt is a datetime that can be set in the future by the user. 
+    started_at timestamp with time zone,
+    ended_at timestamp with time zone,
+    workout_dt timestamp with time zone,
+
+    completed boolean default false NOT NULL,
+
     name text,
     description text,
     category character varying(30),
@@ -12,6 +22,11 @@ CREATE TABLE IF NOT EXISTS exercises (
     exercise_id bigserial PRIMARY KEY,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
+
+    -- Can be of either 'public' | 'private'
+    -- Public view means anyone can see the exercise / view the exercise
+    -- Private view means only the user who created the exercise can view the exercise
+    view text DEFAULT 'private',
     name text,
     description text,
     category character varying(30),
