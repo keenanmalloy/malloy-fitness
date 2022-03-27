@@ -5,7 +5,7 @@ import { uploadFile } from "./upload";
 const router = Router();
 
 // Upload video / image file
-router.post("/upload", authenticate, async (req, res) => {
+router.get("/upload", authenticate, async (req, res) => {
   await uploadFile(req, res);
 });
 

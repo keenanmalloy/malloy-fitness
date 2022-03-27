@@ -23,21 +23,32 @@ beforeAll(async () => {
   });
 });
 
-describe("POST /storage/upload", function () {
+describe("GET /storage/upload", function () {
   it("responds with 401 unauthorized", async function () {
     const res = await request
-      .post("/storage/upload")
+      .get("/storage/upload")
       .set("Accept", "application/json");
 
     expect(res.status).toEqual(401);
   });
 
-  //   it("responds with 404 not found", async function () {
-  //     const res = await request
-  //       .post("/storage/upload")
-  //       .set("Accept", "application/json")
-  //       .set("Cookie", [`token=${token}`]);
+  it("responds with 400 missing filename", async function () {
+    const res = await request
+      .get("/storage/upload")
+      .set("Accept", "application/json")
+      .set("Cookie", [`token=${token}`]);
 
-  //     expect(res.status).toEqual(404);
-  //   });
+    expect(res.body.message).toEqual("Missing file name");
+    expect(res.status).toEqual(400);
+  });
+
+  it("responds with 400 missing filename", async function () {
+    const res = await request
+      .get("/storage/upload?file=test-file")
+      .set("Accept", "application/json")
+      .set("Cookie", [`token=${token}`]);
+
+    expect(res.body.message).toEqual("Missing file type");
+    expect(res.status).toEqual(400);
+  });
 });
