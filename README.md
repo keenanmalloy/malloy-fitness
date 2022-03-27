@@ -19,6 +19,8 @@ Endpoints for viewing and manipulating workouts.
 - [Add an exercise to a workout](docs/workouts/post.md) : `POST /workouts/:pk/exercises/`
 - [Update an exercise order / priority in a workout](docs/workouts/put.md) : `PUT /workouts/:pk/exercises/:pk/`
 - [Remove an exercise from a workout](docs/workouts/delete.md) : `DELETE /workouts/:pk/exercises/:pk/`
+- [Start workout](docs/workouts/start/patch.md) : `PATCH /workouts/:pk/start`
+- [End workout](docs/workouts/end/patch.md) : `PATCH /workouts/:pk/end`
 
 ### Exercises
 
