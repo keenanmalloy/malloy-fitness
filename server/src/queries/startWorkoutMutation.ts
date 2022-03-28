@@ -1,9 +1,10 @@
 import { db } from "config/db";
+import { Response } from "express";
 
-export const startWorkoutMutation = async (res: any, id: string) => {
+export const startWorkoutMutation = async (res: Response, id: string) => {
   const query = `
     UPDATE workouts
-    SET started_at = $1
+    SET started_at = $1, workout_dt = $1
     WHERE workout_id = $2 AND created_by = $3
     RETURNING *;
   `;

@@ -15,9 +15,13 @@ import endWorkoutRouter from "./end";
 
 const router = Router();
 
-// Retrieve all workouts
+// Retrieve all workouts ------------------- /
+// Retrieve todays workout(s) -------------- /?d=today
+// Retrieve yesterdays workout(s) ---------- /?d=yesterday
+// Retrieve tomorrows workout(s) ----------- /?d=tomorrow
+// Retrieve workout(s) at a specific date -- /?d=YYYY-MM-DD
 router.get("/", authenticate, async (req, res) => {
-  await retrieveWorkoutsQuery(res);
+  await retrieveWorkoutsQuery(req, res);
 });
 
 // Retrieve workout

@@ -42,6 +42,46 @@ describe("GET /workouts", function () {
     expect(res.status).toEqual(200);
     expect(res.body.message).toEqual("Workouts fetched successfully");
   });
+
+  it("responds with 200 successfully fetched list of workouts filtered by today", async function () {
+    const res = await request
+      .get("/workouts?d=today")
+      .set("Accept", "application/json")
+      .set("Cookie", [`token=${token}`]);
+
+    expect(res.status).toEqual(200);
+    expect(res.body.message).toEqual("Workouts fetched successfully");
+  });
+
+  it("responds with 200 successfully fetched list of workouts filtered by yesterday", async function () {
+    const res = await request
+      .get("/workouts?d=yesterday")
+      .set("Accept", "application/json")
+      .set("Cookie", [`token=${token}`]);
+
+    expect(res.status).toEqual(200);
+    expect(res.body.message).toEqual("Workouts fetched successfully");
+  });
+
+  it("responds with 200 successfully fetched list of workouts filtered by tomorrow", async function () {
+    const res = await request
+      .get("/workouts?d=tomorrow")
+      .set("Accept", "application/json")
+      .set("Cookie", [`token=${token}`]);
+
+    expect(res.status).toEqual(200);
+    expect(res.body.message).toEqual("Workouts fetched successfully");
+  });
+
+  it("responds with 200 successfully fetched list of workouts filtered by 2022-03-26", async function () {
+    const res = await request
+      .get("/workouts?d=2022-03-26")
+      .set("Accept", "application/json")
+      .set("Cookie", [`token=${token}`]);
+
+    expect(res.status).toEqual(200);
+    expect(res.body.message).toEqual("Workouts fetched successfully");
+  });
 });
 
 describe("POST /workouts/", function () {
