@@ -7,14 +7,24 @@ import { deleteWorkoutMutation } from "queries/deleteWorkoutMutation";
 import { retrieveWorkoutQuery } from "queries/retrieveWorkoutQuery";
 import { retrieveWorkoutsQuery } from "queries/retrieveWorkoutsQuery";
 import { updateWorkoutMutation } from "queries/updateWorkoutMutation";
+
 import setsRouter from "./sets";
 import exercisesRouter from "./exercises";
+import startWorkoutRouter from "./start";
+import endWorkoutRouter from "./end";
 
 const router = Router();
 
-// Retrieve all workouts
+// Retrieve all workouts (LIMIT 20) -------- /
+// Retrieve todays workout(s) -------------- /?date=today
+// Retrieve yesterdays workout(s) ---------- /?date=yesterday
+// Retrieve tomorrows workout(s) ----------- /?date=tomorrow
+// Retrieve workout(s) at a specific date -- /?date=YYYY-MM-DD
+// Retrieve workout(s) by category --------- /?category=legs
+// Retrieve workout(s) by completed true --- /?complete=1
+// Retrieve workout(s) by completed false -- /?complete=0
 router.get("/", authenticate, async (req, res) => {
-  await retrieveWorkoutsQuery(res);
+  await retrieveWorkoutsQuery(req, res);
 });
 
 // Retrieve workout
@@ -44,6 +54,8 @@ router.put("/:workoutId", authenticate, authorize, async (req, res) => {
 
 setsRouter(router);
 exercisesRouter(router);
+startWorkoutRouter(router);
+endWorkoutRouter(router);
 
 export default (parentRouter: Router) => {
   parentRouter.use("/workouts", router);
