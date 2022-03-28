@@ -1,5 +1,5 @@
-import { db } from "config/db";
-import Joi from "joi";
+import { db } from 'config/db';
+import Joi from 'joi';
 
 interface addExercise {
   order?: number;
@@ -29,8 +29,8 @@ export const addExerciseToWorkoutMutation = async (
 
   if (error) {
     return res.status(422).json({
-      status: "error",
-      message: "Invalid request data",
+      status: 'error',
+      message: 'Invalid request data',
       exercise: value,
       error: error,
     });
@@ -39,9 +39,9 @@ export const addExerciseToWorkoutMutation = async (
 
     if (Number.isNaN(parseInt(exerciseId.toString()))) {
       return res.status(422).json({
-        status: "error",
+        status: 'error',
         //@ts-ignore
-        message: "Invalid exercise ID",
+        message: 'Invalid exercise ID',
       });
     }
 
@@ -62,16 +62,17 @@ export const addExerciseToWorkoutMutation = async (
       const exercise = data.rows[0];
 
       return res.status(201).json({
-        status: "success",
-        message: "Exercise added successfully",
+        status: 'success',
+        message: 'Exercise added successfully',
         exercise,
       });
     } catch (error) {
       console.log({ error });
+
       return res.status(500).json({
-        status: "error",
+        status: 'error',
         //@ts-ignore
-        message: error && error.message ? error.message : "Database error",
+        message: error && error.message ? error.message : 'Database error',
         exercise: null,
       });
     }

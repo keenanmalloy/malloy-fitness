@@ -1,29 +1,17 @@
-import React from "react";
-import { Button } from "features/common/Button";
-import { Dialog, Transition } from "@headlessui/react";
-import { Fragment, useState } from "react";
-import Select from "react-select";
-
-// Lets refactor the modal from this file.
-// 1. Create a file - features/common/Modal.jsx
-// 2. This component should be structured similar to the following
-//
-// const Modal = ({ isOpen, title, description }) => {
-//      return (
-//          <Transition appear show={isOpen} as={Fragment}>
-//              {/* Guts just past the modal title  */}
-//              {children}
-//          </Transition>
-//      )
-// }
-//
-// Keep in mind the children prop.
-// We want to have the contents of the modal dynamic so we can reuse the component.
-//
+import React from 'react';
+import { Button } from 'features/common/Button';
+import { Dialog, Transition } from '@headlessui/react';
+import { Fragment, useState } from 'react';
+import Select from 'react-select';
+import Modal from 'features/common/Modal';
 
 const AddExerciseToWorkout = ({ data }) => {
-  console.log({ data });
-  let [isOpen, setIsOpen] = useState(true);
+  const [exercise, setExercise] = useState(null);
+  const [order, setOrder] = useState(null);
+  const [priority, setPriority] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
 
   function closeModal() {
     setIsOpen(false);
@@ -33,20 +21,55 @@ const AddExerciseToWorkout = ({ data }) => {
     setIsOpen(true);
   }
 
-  // How can we add an Exercise to the Workout? 
-  // We need a few things.
-  // 1. a) A list of exercises the user can select. 
-  //      *hint* comment below above the <Select> component.
-  //    b) A number input so we can change the order (could just be a counter)
-  //    c) A number input so we can change the priority (could just be a counter)
-  // 
-  // 2. a) State so we can hold the users exercise selection.
-  //    b) State so we can hold the users order number. (ex. 1-99)
-  //    c) State so we can hold the priority number. (ex. 1-99)
-  //
+  function handleExerciseChange(selectedOption) {
+    setExercise(selectedOption);
+  }
+
+  function handleOrderChange(selectedOption) {
+    setOrder(selectedOption);
+  }
+
+  function handlePriorityChange(selectedOption) {
+    setPriority(selectedOption);
+  }
+
+  function handleSubmit(e) {
+    e.preventDefault();
+
+    if (!exercise) {
+      // handle state error
+      setError('Please select an exercise');
+      return;
+    }
+
+    const payload = {
+      exerciseId: exercise.value,
+      order: order?.value ?? null,
+      priority: priority?.value ?? null,
+    };
+
+    setIsLoading(true);
+    fetch(`http://localhost:4000/workouts/${data.workout_id}/exercises/`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw Error('could not add exercise');
+        }
+        console.log('new exercise added', { payload });
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+      });
+
+    closeModal();
+  }
   // 3. A function that handles the POST request fetching logic to update the workout in the database.
   //    We'll need a loading & error state. If the action is successful, then lets close the modal.
-  //    
+  //
   //    POST request to /workouts/:pk/exercises
   //
   //    Example body:
@@ -58,112 +81,202 @@ const AddExerciseToWorkout = ({ data }) => {
   //    }
 
   return (
-    <>
-      <button
-        type="button"
-        onClick={openModal}
-        className="px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-      >
-        Add exercise to workout
-      </button>
-
-      <Transition appear show={isOpen} as={Fragment}>
-        <Dialog
-          as="div"
-          className="fixed inset-0 z-10 overflow-y-auto"
-          onClose={closeModal}
-        >
-          <div className="min-h-screen px-4 text-center">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0"
-              enterTo="opacity-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100"
-              leaveTo="opacity-0"
-            >
-              <Dialog.Overlay className="fixed inset-0" />
-            </Transition.Child>
-
-            {/* This element is to trick the browser into centering the modal contents. */}
-            <span
-              className="inline-block h-screen align-middle"
-              aria-hidden="true"
-            >
-              &#8203;
-            </span>
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
-            >
-              <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
-                <Dialog.Title
-                  as="h3"
-                  className="text-lg font-medium leading-6 text-gray-900"
-                >
-                  {/* 
-                    Whatever text is here should be dynamic. 
-                    Think about the modal component just created and the props it expects.
-                  */}
-                  Payment successful
-                </Dialog.Title>
-                {/* 
-                  Add body of modal as the children of the component.
-                  ex. 
-                  <Modal>
-                    ... rest of the stuff
-                  </Modal>
-
-                  What is exercises pointing to within the context of this module? 
-                  Think about where exercises is coming from and why uncommenting this
-                  snippet below is throwing an error. 
-
-                  *hint* - console.log({ data })
-                */}
-
-                {/* <div className="mt-2">
-                  <p className="text-sm text-gray-500">
-                    <Select
-                      id="long-value-select"
-                      instanceId="long-value-select"
-                      defaultValue={[]}
-                      isMulti
-                      onChange={(data) => setData(data)}
-                      name="muscleGroups"
-                      options={exercises.map((ex) => {
-                        return {
-                          label: ex.name,
-                          value: ex.exercise_id,
-                        };
-                      })}
-                      className="basic-multi-select"
-                      classNamePrefix="select"
-                    />
-                  </p>
-                </div> */}
-
-                <div className="mt-4">
-                  <button
-                    type="button"
-                    className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-                    onClick={closeModal}
-                  >
-                    Add exercise
-                  </button>
-                </div>
-              </div>
-            </Transition.Child>
+    <Fragment>
+      <Button onClick={openModal}>Add Exercise</Button>
+      <Modal isOpen={isOpen} closeModal={closeModal}>
+        <div className="flex flex-col">
+          <div className="flex flex-col">
+            <div className="flex flex-col">
+              <label className="block text-sm font-medium leading-5 text-gray-700">
+                Exercise
+              </label>
+              {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
+              <Select
+                placeholder="Select an exercise..."
+                id="long-value-select"
+                instanceId="long-value-select"
+                defaultValue={[]}
+                name="exercise"
+                options={data.exercises.map((ex) => {
+                  return {
+                    label: ex.name,
+                    value: ex.exercise_id,
+                  };
+                })}
+                className="basic-multi-select"
+                classNamePrefix="select"
+                onChange={handleExerciseChange}
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="block text-sm font-medium leading-5 text-gray-700">
+                Order
+              </label>
+              <Select
+                placeholder="Select an order..."
+                id="long-value-select"
+                instanceId="long-value-select"
+                defaultValue={[]}
+                name="order"
+                options={
+                  // create dynamic array of objects with key value pairs
+                  Array.from(Array(data.exercises.length + 1).keys()).map(
+                    (i) => {
+                      return {
+                        label: i + 1,
+                        value: i + 1,
+                      };
+                    }
+                  )
+                }
+                className="basic-multi-select"
+                classNamePrefix="select"
+                onChange={handleOrderChange}
+              />
+            </div>
+            <div className="flex flex-col">
+              <label className="block text-sm font-medium leading-5 text-gray-700">
+                Priority
+              </label>
+              <Select
+                placeholder="Select a priority..."
+                id="long-value-select"
+                instanceId="long-value-select"
+                defaultValue={[]}
+                name="priority"
+                options={[
+                  {
+                    label: 1,
+                    value: 1,
+                  },
+                  {
+                    label: 2,
+                    value: 2,
+                  },
+                  {
+                    label: 3,
+                    value: 3,
+                  },
+                ]}
+                className="basic-multi-select"
+                classNamePrefix="select"
+                onChange={handlePriorityChange}
+              />
+            </div>
           </div>
-        </Dialog>
-      </Transition>
-    </>
+          <div className="flex justify-end">
+            <Button onClick={handleSubmit}>Submit</Button>
+          </div>
+        </div>
+      </Modal>
+    </Fragment>
   );
 };
+
+// How can we add an Exercise to the Workout?
+// We need a few things.
+// 1. a) A list of exercises the user can select.
+//      *hint* comment below above the <Select> component.
+//    b) A number input so we can change the order (could just be a counter)
+//    c) A number input so we can change the priority (could just be a counter)
+//
+// 2. a) State so we can hold the users exercise selection.
+//    b) State so we can hold the users order number. (ex. 1-99)
+//    c) State so we can hold the priority number. (ex. 1-99)
+//
+// 3. A function that handles the POST request fetching logic to update the workout in the database.
+//    We'll need a loading & error state. If the action is successful, then lets close the modal.
+//
+//    POST request to /workouts/:pk/exercises
+//
+//    Example body:
+//
+//    {
+//      "order": 5,
+//      "priority": 3,
+//      "exerciseId": 4,
+//    }
+
+//   return (
+//     <>
+//       <button
+//         type="button"
+//         onClick={openModal}
+//         className="px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
+//       >
+//         Add exercise to workout
+//       </button>
+//       <Modal
+//         isOpen={isOpen}
+//         title="Add exercise to workout"
+//         description="Select an exercise and add it to the workout."
+//         closeModal={closeModal}
+//       >
+//         <div className="mt-2">
+//           <div className="text-sm text-gray-500">
+//             <Select
+//               placeholder="Select an exercise..."
+//               id="long-value-select"
+//               instanceId="long-value-select"
+//               defaultValue={[]}
+//               isMulti
+//               onChange={(data) => setExercise(data)}
+//               name="muscleGroups"
+//               options={data.exercises.map((ex) => {
+//                 return {
+//                   label: ex.name,
+//                   value: ex.exercise_id,
+//                 };
+//               })}
+//               className="basic-multi-select"
+//               classNamePrefix="select"
+//             />
+//             <Select
+//               placeholder="Select an order..."
+//               id="long-value-select"
+//               instanceId="long-value-select"
+//               defaultValue={[]}
+//               isMulti
+//               onChange={(data) => setOrder(data)}
+//               name="muscleGroups"
+//               options={data.exercises.map((ex) => {
+//                 return {
+//                   label: ex.order,
+//                 };
+//               })}
+//               className="basic-multi-select"
+//               classNamePrefix="select"
+//             />
+//             <Select
+//               placeholder="Select a priority..."
+//               id="long-value-select"
+//               instanceId="long-value-select"
+//               defaultValue={[]}
+//               isMulti
+//               onChange={(data) => setPriority(data)}
+//               name="muscleGroups"
+//               options={data.exercises.map((ex) => {
+//                 return {
+//                   label: ex.priority,
+//                 };
+//               })}
+//               className="basic-multi-select"
+//               classNamePrefix="select"
+//             />
+//           </div>
+//         </div>
+//         <div className="mt-4">
+//           <button
+//             type="button"
+//             className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
+//             onClick={closeModal}
+//           >
+//             Add exercise
+//           </button>
+//         </div>
+//       </Modal>
+//     </>
+//   );
+// };
 
 export default AddExerciseToWorkout;

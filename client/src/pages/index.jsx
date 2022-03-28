@@ -1,5 +1,5 @@
-import Upload from "features/Upload";
-import React from "react";
+import Upload from 'features/Upload';
+import React from 'react';
 
 const HomePage = () => {
   return (
