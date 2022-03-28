@@ -6,6 +6,7 @@ import { deleteExerciseMutation } from "queries/deleteExerciseMutation";
 import { retrieveExerciseQuery } from "queries/retrieveExerciseQuery";
 import { retrieveExercisesQuery } from "queries/retrieveExercisesQuery";
 import { updateExerciseMutation } from "queries/updateExerciseMutation";
+import muscleGroups from "./muscle-groups";
 
 const router = Router();
 
@@ -34,6 +35,8 @@ router.delete("/:exerciseId", authenticate, authorize, async (req, res) => {
 router.put("/:exerciseId", authenticate, authorize, async (req, res) => {
   await updateExerciseMutation(res, req.body, req.params.exerciseId);
 });
+
+muscleGroups(router);
 
 export default (parentRouter: Router) => {
   parentRouter.use("/exercises", router);
