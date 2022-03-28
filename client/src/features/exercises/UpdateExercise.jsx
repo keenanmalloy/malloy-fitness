@@ -32,25 +32,10 @@ export const UpdateExercise = ({ muscleGroups }) => {
     fetch('http://localhost:4000/exercises', {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-<<<<<<< HEAD
-      body: JSON.stringify(exercise),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw Error('could not update exercise');
-        }
-        console.log('Exercise updated', { exercise });
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
-=======
       credentials: 'include',
       body: JSON.stringify({
         name: 'step forward curl',
-        description:
-          'row that shit',
+        description: 'row that shit',
         category: 'back',
         primary: 'back',
         secondary: 'biceps',
@@ -62,7 +47,6 @@ export const UpdateExercise = ({ muscleGroups }) => {
       return res.json();
     });
     updateSetExercises(response.exercise);
->>>>>>> 97a5acf42fb5f8ab9bf35e01dbac644a0dd1886c
   };
   return (
     <>

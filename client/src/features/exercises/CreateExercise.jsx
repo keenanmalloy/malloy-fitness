@@ -2,11 +2,7 @@ import { useState } from 'react';
 import { Input } from 'features/form/Input';
 import { RadioGroup } from 'features/form/RadioGroup';
 import { Select } from '../form/Select';
-<<<<<<< HEAD
 import { SelectMuscleGroups } from 'features/muscle-groups/SelectMuscleGroups';
-=======
-import { SelectMuscleGroups } from '../muscle-groups/SelectMuscleGroups';
->>>>>>> 97a5acf42fb5f8ab9bf35e01dbac644a0dd1886c
 import { Button } from 'features/common/Button';
 
 export const CreateExercise = ({ exercises, setExercises, muscleGroups }) => {
@@ -37,7 +33,7 @@ export const CreateExercise = ({ exercises, setExercises, muscleGroups }) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(exercise),
-      credentials: 'include'
+      credentials: 'include',
     })
       .then((res) => {
         if (!res.ok) {

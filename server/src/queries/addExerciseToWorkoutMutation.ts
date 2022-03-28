@@ -15,15 +15,9 @@ interface Response {
 }
 
 const addExerciseSchema = Joi.object({
-<<<<<<< HEAD
-  exerciseId: Joi.any().optional(),
-  order: Joi.any().optional(),
-  priority: Joi.any().optional(),
-=======
   order: Joi.alternatives(Joi.string(), Joi.number()).optional(),
   priority: Joi.alternatives(Joi.string(), Joi.number()).optional(),
   exerciseId: Joi.alternatives(Joi.string(), Joi.number()).required(),
->>>>>>> 97a5acf42fb5f8ab9bf35e01dbac644a0dd1886c
 });
 
 export const addExerciseToWorkoutMutation = async (
@@ -45,9 +39,9 @@ export const addExerciseToWorkoutMutation = async (
 
     if (Number.isNaN(parseInt(exerciseId.toString()))) {
       return res.status(422).json({
-        status: "error",
+        status: 'error',
         //@ts-ignore
-        message: "Invalid exercise ID",
+        message: 'Invalid exercise ID',
       });
     }
 
@@ -67,26 +61,16 @@ export const addExerciseToWorkoutMutation = async (
       const data = await db.query(query);
       const exercise = data.rows[0];
 
-<<<<<<< HEAD
-      return res.json({
+      return res.status(201).json({
         status: 'success',
         message: 'Exercise added successfully',
-=======
-      return res.status(201).json({
-        status: "success",
-        message: "Exercise added successfully",
->>>>>>> 97a5acf42fb5f8ab9bf35e01dbac644a0dd1886c
         exercise,
       });
     } catch (error) {
       console.log({ error });
-<<<<<<< HEAD
-      return res.json({
-        status: 'error',
-=======
+
       return res.status(500).json({
-        status: "error",
->>>>>>> 97a5acf42fb5f8ab9bf35e01dbac644a0dd1886c
+        status: 'error',
         //@ts-ignore
         message: error && error.message ? error.message : 'Database error',
         exercise: null,
