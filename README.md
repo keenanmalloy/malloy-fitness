@@ -29,6 +29,9 @@ Endpoints for viewing and manipulating exercises.
 - [Create an exercise](docs/exercises/post.md) : `POST /exercises/`
 - [Update an exercise](docs/exercises/put.md) : `PUT /exercises/:pk/`
 - [Delete an exercise](docs/exercises/delete.md) : `DELETE /exercises/:pk/`
+- [Add a muscle-group to an exercise](docs/exercises/muscle-groups/post.md) : `POST /exercises/:pk/muscle-group`
+- [Remvoes a primary muscle-group from an exercise](docs/exercises/muscle-groups/delete.md) : `DELETE /exercises/:pk/muscle-group/:pk/primary`
+- [Removes a secondary muscle-group from an exercise](docs/exercises/muscle-groups/delete.md) : `DELETE /exercises/:pk/muscle-group/:pk/secondary`
 
 ### Sets
 
