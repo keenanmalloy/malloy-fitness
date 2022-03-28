@@ -1,6 +1,5 @@
 import React from 'react';
 import { Button } from 'features/common/Button';
-import { Dialog, Transition } from '@headlessui/react';
 import { Fragment, useState } from 'react';
 import Select from 'react-select';
 import Modal from 'features/common/Modal';
@@ -52,6 +51,7 @@ const AddExerciseToWorkout = ({ data }) => {
     fetch(`http://localhost:4000/workouts/${data.workout_id}/exercises/`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
       body: JSON.stringify(payload),
     })
       .then((res) => {
@@ -67,18 +67,6 @@ const AddExerciseToWorkout = ({ data }) => {
 
     closeModal();
   }
-  // 3. A function that handles the POST request fetching logic to update the workout in the database.
-  //    We'll need a loading & error state. If the action is successful, then lets close the modal.
-  //
-  //    POST request to /workouts/:pk/exercises
-  //
-  //    Example body:
-  //
-  //    {
-  //      "order": 5,
-  //      "priority": 3,
-  //      "exerciseId": 4,
-  //    }
 
   return (
     <Fragment>
@@ -172,111 +160,5 @@ const AddExerciseToWorkout = ({ data }) => {
     </Fragment>
   );
 };
-
-// How can we add an Exercise to the Workout?
-// We need a few things.
-// 1. a) A list of exercises the user can select.
-//      *hint* comment below above the <Select> component.
-//    b) A number input so we can change the order (could just be a counter)
-//    c) A number input so we can change the priority (could just be a counter)
-//
-// 2. a) State so we can hold the users exercise selection.
-//    b) State so we can hold the users order number. (ex. 1-99)
-//    c) State so we can hold the priority number. (ex. 1-99)
-//
-// 3. A function that handles the POST request fetching logic to update the workout in the database.
-//    We'll need a loading & error state. If the action is successful, then lets close the modal.
-//
-//    POST request to /workouts/:pk/exercises
-//
-//    Example body:
-//
-//    {
-//      "order": 5,
-//      "priority": 3,
-//      "exerciseId": 4,
-//    }
-
-//   return (
-//     <>
-//       <button
-//         type="button"
-//         onClick={openModal}
-//         className="px-4 py-2 text-sm font-medium text-white bg-black rounded-md bg-opacity-20 hover:bg-opacity-30 focus:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-opacity-75"
-//       >
-//         Add exercise to workout
-//       </button>
-//       <Modal
-//         isOpen={isOpen}
-//         title="Add exercise to workout"
-//         description="Select an exercise and add it to the workout."
-//         closeModal={closeModal}
-//       >
-//         <div className="mt-2">
-//           <div className="text-sm text-gray-500">
-//             <Select
-//               placeholder="Select an exercise..."
-//               id="long-value-select"
-//               instanceId="long-value-select"
-//               defaultValue={[]}
-//               isMulti
-//               onChange={(data) => setExercise(data)}
-//               name="muscleGroups"
-//               options={data.exercises.map((ex) => {
-//                 return {
-//                   label: ex.name,
-//                   value: ex.exercise_id,
-//                 };
-//               })}
-//               className="basic-multi-select"
-//               classNamePrefix="select"
-//             />
-//             <Select
-//               placeholder="Select an order..."
-//               id="long-value-select"
-//               instanceId="long-value-select"
-//               defaultValue={[]}
-//               isMulti
-//               onChange={(data) => setOrder(data)}
-//               name="muscleGroups"
-//               options={data.exercises.map((ex) => {
-//                 return {
-//                   label: ex.order,
-//                 };
-//               })}
-//               className="basic-multi-select"
-//               classNamePrefix="select"
-//             />
-//             <Select
-//               placeholder="Select a priority..."
-//               id="long-value-select"
-//               instanceId="long-value-select"
-//               defaultValue={[]}
-//               isMulti
-//               onChange={(data) => setPriority(data)}
-//               name="muscleGroups"
-//               options={data.exercises.map((ex) => {
-//                 return {
-//                   label: ex.priority,
-//                 };
-//               })}
-//               className="basic-multi-select"
-//               classNamePrefix="select"
-//             />
-//           </div>
-//         </div>
-//         <div className="mt-4">
-//           <button
-//             type="button"
-//             className="inline-flex justify-center px-4 py-2 text-sm font-medium text-blue-900 bg-blue-100 border border-transparent rounded-md hover:bg-blue-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-blue-500"
-//             onClick={closeModal}
-//           >
-//             Add exercise
-//           </button>
-//         </div>
-//       </Modal>
-//     </>
-//   );
-// };
 
 export default AddExerciseToWorkout;
