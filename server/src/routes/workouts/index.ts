@@ -15,11 +15,14 @@ import endWorkoutRouter from "./end";
 
 const router = Router();
 
-// Retrieve all workouts ------------------- /
-// Retrieve todays workout(s) -------------- /?d=today
-// Retrieve yesterdays workout(s) ---------- /?d=yesterday
-// Retrieve tomorrows workout(s) ----------- /?d=tomorrow
-// Retrieve workout(s) at a specific date -- /?d=YYYY-MM-DD
+// Retrieve all workouts (LIMIT 20) -------- /
+// Retrieve todays workout(s) -------------- /?date=today
+// Retrieve yesterdays workout(s) ---------- /?date=yesterday
+// Retrieve tomorrows workout(s) ----------- /?date=tomorrow
+// Retrieve workout(s) at a specific date -- /?date=YYYY-MM-DD
+// Retrieve workout(s) by category --------- /?category=legs
+// Retrieve workout(s) by completed true --- /?complete=1
+// Retrieve workout(s) by completed false -- /?complete=0
 router.get("/", authenticate, async (req, res) => {
   await retrieveWorkoutsQuery(req, res);
 });

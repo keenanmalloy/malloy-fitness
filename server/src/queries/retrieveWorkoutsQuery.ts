@@ -3,10 +3,18 @@ import { Request, Response } from "express";
 import { isValidDate } from "time";
 
 export const retrieveWorkoutsQuery = async (req: Request, res: Response) => {
-  const dateQuery = req.query.d as string | undefined;
+  const dateQuery = req.query.date as string | undefined;
+  const categoryQuery = req.query.category as string | undefined;
+  const completedQuery = req.query.completed as string | undefined;
 
   const accountId = res.locals.state.account.account_id;
-  const query = generateFilter(dateQuery, accountId);
+  const query = `
+  SELECT * FROM workouts 
+  WHERE created_by = ${accountId} 
+  ${generateDateFilter(dateQuery)} 
+  ${generateCategoryFilter(categoryQuery)}
+  ${generateCompletedFilter(completedQuery)}
+  LIMIT 20`;
 
   try {
     const data = await db.query(query);
@@ -26,9 +34,8 @@ export const retrieveWorkoutsQuery = async (req: Request, res: Response) => {
   }
 };
 
-const generateFilter = (
-  query: "today" | "yesterday" | "tomorrow" | string | undefined,
-  accountId: string
+const generateDateFilter = (
+  query: "today" | "yesterday" | "tomorrow" | string | undefined
 ) => {
   if (query === "today") {
     const today = new Date();
@@ -37,7 +44,7 @@ const generateFilter = (
       month: "2-digit",
       day: "2-digit",
     }).format(today);
-    return `SELECT * FROM workouts WHERE created_by = ${accountId} AND Date(workout_dt) = '${todayDate}'`;
+    return `AND Date(workout_dt) = '${todayDate}'`;
   }
 
   if (query === "yesterday") {
@@ -49,7 +56,7 @@ const generateFilter = (
       month: "2-digit",
       day: "2-digit",
     }).format(yesterday);
-    return `SELECT * FROM workouts WHERE created_by = ${accountId} AND Date(workout_dt) = '${yesterdayDate}'`;
+    return `AND Date(workout_dt) = '${yesterdayDate}'`;
   }
 
   if (query === "tomorrow") {
@@ -62,22 +69,35 @@ const generateFilter = (
       day: "2-digit",
     }).format(tomorrow);
 
-    return `SELECT * FROM workouts WHERE created_by = ${accountId} AND Date(workout_dt) = '${tmrwDate}'`;
+    return `AND Date(workout_dt) = '${tmrwDate}'`;
   }
 
-  // This means we've passed a datetime object.
   if (!!query) {
     if (isValidDate(query)) {
-      return `SELECT * FROM workouts WHERE created_by = ${accountId} AND Date(workout_dt) = '${query}'`;
+      return `AND Date(workout_dt) = '${query}'`;
     }
 
-    // Default to return all the workouts if error.
     console.log(
       'ERROR: invalid date passed to /workouts?d="invalid-date-passed". Returning all workouts instead. '
     );
-    return `SELECT * FROM workouts WHERE created_by = ${accountId}`;
+    return ``;
   }
 
-  // Default to return all the workouts regardless of time.
-  return `SELECT * FROM workouts WHERE created_by = ${accountId}`;
+  return ``;
+};
+
+const generateCategoryFilter = (categoryQuery: string | undefined) => {
+  if (!!categoryQuery) {
+    return `AND category LIKE '%${categoryQuery}%'`;
+  }
+
+  return ``;
+};
+
+const generateCompletedFilter = (completedQuery: string | undefined) => {
+  if (!!completedQuery) {
+    return `AND completed = '${Boolean(completedQuery)}'`;
+  }
+
+  return ``;
 };
