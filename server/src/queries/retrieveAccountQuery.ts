@@ -67,14 +67,14 @@ export const retrieveMeQuery = async (req: Request, res: Response) => {
       throw new Error("Not logged in");
     }
 
-    return res.json({
+    return res.status(200).json({
       status: "success",
       message: "User logged in",
       session,
     });
   } catch (error) {
     console.log({ error });
-    return res.json({
+    return res.status(500).json({
       status: "error",
       message: "Session does not exist",
       session: null,

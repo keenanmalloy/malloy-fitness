@@ -19,14 +19,14 @@ export const retrieveWorkoutsQuery = async (req: Request, res: Response) => {
   try {
     const data = await db.query(query);
 
-    return res.json({
+    return res.status(200).json({
       message: "Workouts fetched successfully",
       status: "success",
       workouts: data.rows,
     });
   } catch (error) {
     console.log({ error });
-    return res.json({
+    return res.status(500).json({
       status: "error",
       message: "Database error",
       workouts: null,

@@ -22,14 +22,14 @@ export const endWorkoutMutation = async (res: any, id: string) => {
       });
     }
 
-    return res.json({
+    return res.status(200).json({
       status: "success",
       message: "Workout updated successfully",
       workout: data.rows[0],
     });
   } catch (error) {
     console.log({ error });
-    return res.json({
+    return res.status(500).json({
       status: "error",
       message: "Database error",
       workout: null,

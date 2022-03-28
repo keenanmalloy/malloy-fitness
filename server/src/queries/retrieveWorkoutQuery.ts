@@ -33,7 +33,7 @@ WHERE workouts.workout_id = $1`;
   try {
     const data = await db.query(query, params);
     if (!data.rows.length) {
-      return res.json({
+      return res.status(404).json({
         status: "error",
         message: "Workout does not exist",
         workout: null,
@@ -65,14 +65,14 @@ WHERE workouts.workout_id = $1`;
       exercises,
     };
 
-    return res.json({
+    return res.status(200).json({
       status: "success",
       message: "Workout fetched successfully",
       workout,
     });
   } catch (error) {
     console.log({ error });
-    return res.json({
+    return res.status(500).json({
       status: "error",
       message: "Database error",
       workout: null,
