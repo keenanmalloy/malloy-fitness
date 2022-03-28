@@ -103,15 +103,29 @@ export const createWorkoutMutation = async (
     });
   } else {
     const { name, description, category, exercises } = data;
+    const accountId = res.locals.state.account.account_id;
+
+    const validateExercises = (exercises: Exercises) => {
+      return exercises.find((ex) => Number.isNaN(parseInt(ex.id.toString())));
+    };
+
+    if (validateExercises(exercises)) {
+      return res.status(400).json({
+        status: "error",
+        message: "Invalid exercise ID",
+        exercises: exercises,
+        workout: null,
+      });
+    }
 
     const query = `
       WITH 
-        data(name, description, category) AS (
+        data(name, description, category, created_by) AS (
           VALUES                           
-              ('${name}', '${description}', '${category}')
+              ('${name}', '${description}', '${category}', ${accountId})
           )
-        INSERT INTO workouts (name, description, category)
-          SELECT name, description, category
+        INSERT INTO workouts (name, description, category, created_by)
+          SELECT name, description, category, created_by
             FROM data
           RETURNING *
       `;
@@ -123,13 +137,14 @@ export const createWorkoutMutation = async (
       await createWorkoutExercisesLink(workoutId, exercises);
       const workout = data.rows[0];
 
-      return res.json({
+      return res.status(201).json({
         status: "success",
         message: "Workout created successfully",
         workout,
       });
     } catch (error) {
-      return res.json({
+      console.log({ error });
+      return res.status(500).json({
         status: "error",
         //@ts-ignore
         message: error && error.message ? error.message : "Database error",

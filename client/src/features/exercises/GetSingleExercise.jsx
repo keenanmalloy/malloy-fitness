@@ -21,8 +21,13 @@ export const GetSingleExercise = () => {
   const id = router.query.id;
 
   useEffect(() => {
+<<<<<<< HEAD
     if (!router.isReady) return;
     fetch(`http://localhost:4000/exercises/${id}`)
+=======
+    if(!router.isReady) return;
+    fetch(`http://localhost:4000/exercises/${id}`, { credentials: 'include' })
+>>>>>>> 97a5acf42fb5f8ab9bf35e01dbac644a0dd1886c
       .then((res) => {
         if (!res.ok) {
           throw Error('couldnt fetch exercise');

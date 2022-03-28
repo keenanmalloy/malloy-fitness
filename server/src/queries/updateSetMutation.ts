@@ -10,8 +10,8 @@ interface Response {
 }
 
 const updateSetSchema = Joi.object({
-  weight: Joi.number(),
-  repetitions: Joi.number(),
+  weight: Joi.number().optional(),
+  repetitions: Joi.number().optional(),
 });
 
 export const updateSetMutation = async (
@@ -34,7 +34,7 @@ export const updateSetMutation = async (
       (typeof repetitions === "number" && repetitions < 0) ||
       (typeof weight === "number" && weight < 0)
     ) {
-      return res.json({
+      return res.status(422).json({
         status: "error",
         message: "Only positive numbers allowed for weight and reps",
         set: null,
@@ -52,21 +52,21 @@ export const updateSetMutation = async (
     try {
       const data = await db.query(query, params);
       if (!data.rowCount) {
-        return res.json({
+        return res.status(404).json({
           status: "error",
           message: "Set does not exist",
           set: null,
         });
       }
 
-      return res.json({
+      return res.status(200).json({
         status: "success",
         message: "Set updated successfully",
         set: data.rows[0],
       });
     } catch (error) {
       console.log({ error });
-      return res.json({
+      return res.status(500).json({
         status: "error",
         message: "Database error",
         set: null,

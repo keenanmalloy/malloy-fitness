@@ -13,7 +13,7 @@ export const GetSingleWorkout = () => {
   const id = router.query.id;
   useEffect(() => {
     if (!router.isReady) return;
-    fetch(`http://localhost:4000/workouts/${id}`)
+    fetch(`http://localhost:4000/workouts/${id}`, { credentials: "include" })
       .then((res) => {
         if (!res.ok) {
           throw Error("Couldnt fetch workout");
@@ -32,6 +32,7 @@ export const GetSingleWorkout = () => {
   const deleteWorkout = async (id) => {
     const response = await fetch(`http://localhost:4000/workouts/${id}`, {
       method: "DELETE",
+      credentials: 'include',
       headers: { "Content-Type": "application/json" },
     }).then((res) => {
       return res.json();

@@ -1,4 +1,4 @@
-import { db } from 'config/db';
+import { db } from "config/db";
 
 interface Response {
   status: string;
@@ -14,16 +14,16 @@ export const retrieveMuscleGroupsQuery = async (
   try {
     const data = await db.query(query);
 
-    return res.json({
-      message: 'Muscle groups fetched successfully',
-      status: 'success',
+    return res.status(200).json({
+      message: "Muscle groups fetched successfully",
+      status: "success",
       muscleGroups: data.rows,
     });
   } catch (error) {
     console.log({ error });
-    return res.json({
-      status: 'error',
-      message: 'Database error',
+    return res.status(500).json({
+      status: "error",
+      message: "Database error",
       muscleGroups: null,
     });
   }

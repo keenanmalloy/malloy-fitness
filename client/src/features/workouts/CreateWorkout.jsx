@@ -32,6 +32,7 @@ export const CreateWorkout = ({ workouts, setWorkouts, exercises }) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(workout),
+      credentials: 'include'
     })
       .then((res) => {
         if (!res.ok) {

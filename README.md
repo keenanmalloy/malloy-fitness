@@ -19,6 +19,8 @@ Endpoints for viewing and manipulating workouts.
 - [Add an exercise to a workout](docs/workouts/post.md) : `POST /workouts/:pk/exercises/`
 - [Update an exercise order / priority in a workout](docs/workouts/put.md) : `PUT /workouts/:pk/exercises/:pk/`
 - [Remove an exercise from a workout](docs/workouts/delete.md) : `DELETE /workouts/:pk/exercises/:pk/`
+- [Start workout](docs/workouts/start/patch.md) : `PATCH /workouts/:pk/start`
+- [End workout](docs/workouts/end/patch.md) : `PATCH /workouts/:pk/end`
 
 ### Exercises
 
@@ -29,6 +31,9 @@ Endpoints for viewing and manipulating exercises.
 - [Create an exercise](docs/exercises/post.md) : `POST /exercises/`
 - [Update an exercise](docs/exercises/put.md) : `PUT /exercises/:pk/`
 - [Delete an exercise](docs/exercises/delete.md) : `DELETE /exercises/:pk/`
+- [Add a muscle-group to an exercise](docs/exercises/muscle-groups/post.md) : `POST /exercises/:pk/muscle-group`
+- [Removes a primary muscle-group from an exercise](docs/exercises/muscle-groups/delete.md) : `DELETE /exercises/:pk/muscle-group/:pk/primary`
+- [Removes a secondary muscle-group from an exercise](docs/exercises/muscle-groups/delete.md) : `DELETE /exercises/:pk/muscle-group/:pk/secondary`
 
 ### Sets
 

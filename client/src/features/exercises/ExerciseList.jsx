@@ -6,8 +6,14 @@ export const ExerciseList = ({ exercises, setExercises }) => {
   const deleteExercise = async (id) => {
     // What happens when this call fails?
     const response = await fetch(`http://localhost:4000/exercises/${id}`, {
+<<<<<<< HEAD
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
+=======
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" },
+      credentials: 'include'
+>>>>>>> 97a5acf42fb5f8ab9bf35e01dbac644a0dd1886c
     }).then((res) => {
       return res.json();
     });

@@ -42,7 +42,7 @@ export const createSetMutation = async (
       (typeof repetitions === "number" && repetitions < 0) ||
       (typeof weight === "number" && weight < 0)
     ) {
-      return res.json({
+      return res.status(422).json({
         status: "error",
         message: "Only positive numbers allowed for weight and reps",
         set: null,
@@ -67,13 +67,13 @@ export const createSetMutation = async (
       const data = await db.query(query);
       const set = data.rows[0];
 
-      return res.json({
+      return res.status(200).json({
         status: "success",
         message: "Set created successfully",
         set,
       });
     } catch (error) {
-      return res.json({
+      return res.status(500).json({
         status: "error",
         //@ts-ignore
         message: error && error.message ? error.message : "Database error",

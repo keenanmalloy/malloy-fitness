@@ -10,8 +10,8 @@ interface Response {
 }
 
 const updateWorkoutExerciseSchema = Joi.object({
-  order: Joi.number().optional(),
-  priority: Joi.number().optional(),
+  order: Joi.alternatives(Joi.string(), Joi.number()).optional(),
+  priority: Joi.alternatives(Joi.string(), Joi.number()).optional(),
 });
 
 export const updateWorkoutExerciseMutation = async (
@@ -35,7 +35,7 @@ export const updateWorkoutExerciseMutation = async (
       (typeof order === "number" && order < 0) ||
       (typeof priority === "number" && priority < 0)
     ) {
-      return res.json({
+      return res.status(422).json({
         status: "error",
         message: "Only positive numbers allowed for weight and reps",
         exercise: null,
@@ -53,15 +53,15 @@ export const updateWorkoutExerciseMutation = async (
 
     const generateSetClause = () => {
       if (order && !priority) {
-        return `"order" = '${order}'`;
+        return `"order" = ${order}`;
       }
       if (priority && !order) {
-        return `priority = '${priority}'`;
+        return `priority = ${priority}`;
       }
 
       return `
-        "order" = '${order}'
-        priority = '${priority}'
+        "order" = ${order},
+        priority = ${priority}
       `;
     };
 
@@ -77,21 +77,21 @@ export const updateWorkoutExerciseMutation = async (
     try {
       const data = await db.query(query, params);
       if (!data.rowCount) {
-        return res.json({
+        return res.status(404).json({
           status: "error",
           message: "Exercise does not exist",
           exercise: null,
         });
       }
 
-      return res.json({
+      return res.status(200).json({
         status: "success",
         message: "Exercise updated successfully",
         exercise: data.rows[0],
       });
     } catch (error) {
       console.log({ error });
-      return res.json({
+      return res.status(500).json({
         status: "error",
         message: "Database error",
         exercise: null,
