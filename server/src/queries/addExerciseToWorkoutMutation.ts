@@ -1,5 +1,5 @@
-import { db } from "config/db";
-import Joi from "joi";
+import { db } from 'config/db';
+import Joi from 'joi';
 
 interface addExercise {
   order?: number;
@@ -15,8 +15,9 @@ interface Response {
 }
 
 const addExerciseSchema = Joi.object({
-  order: Joi.string().optional(),
-  priority: Joi.string().optional(),
+  exerciseId: Joi.any().optional(),
+  order: Joi.any().optional(),
+  priority: Joi.any().optional(),
 });
 
 export const addExerciseToWorkoutMutation = async (
@@ -28,8 +29,8 @@ export const addExerciseToWorkoutMutation = async (
 
   if (error) {
     return res.status(422).json({
-      status: "error",
-      message: "Invalid request data",
+      status: 'error',
+      message: 'Invalid request data',
       exercise: value,
       error: error,
     });
@@ -38,14 +39,12 @@ export const addExerciseToWorkoutMutation = async (
 
     const query = `
       WITH 
-        data(workoutId, exerciseId, "order", priority) AS (
+        data(workout_id, exercise_id, "order", priority) AS (
           VALUES                           
-              ('${workoutId}', '${exerciseId}', '${order ?? 0}','${
-      priority ?? 0
-    }')
+              (${workoutId}, ${exerciseId}, ${order ?? 0}, ${priority ?? 0})
           )
-        INSERT INTO exercises (workoutId, exerciseId, "order", priority)
-          SELECT workoutId, exerciseId, "order", priority
+        INSERT INTO workout_exercises (workout_id, exercise_id, "order", priority)
+          SELECT workout_id, exercise_id, "order", priority
             FROM data
           RETURNING *
       `;
@@ -55,16 +54,16 @@ export const addExerciseToWorkoutMutation = async (
       const exercise = data.rows[0];
 
       return res.json({
-        status: "success",
-        message: "Exercise added successfully",
+        status: 'success',
+        message: 'Exercise added successfully',
         exercise,
       });
     } catch (error) {
       console.log({ error });
       return res.json({
-        status: "error",
+        status: 'error',
         //@ts-ignore
-        message: error && error.message ? error.message : "Database error",
+        message: error && error.message ? error.message : 'Database error',
         exercise: null,
       });
     }

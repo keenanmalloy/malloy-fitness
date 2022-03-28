@@ -1,9 +1,9 @@
 import { useState } from 'react';
-import { Input } from '../../components/Input';
-import { RadioGroup } from '../../components/RadioGroup';
+import { Input } from 'features/form/Input';
+import { RadioGroup } from 'features/form/RadioGroup';
 import { Select } from '../form/Select';
-import { SelectMuscleGroups } from '../muscle-groups/SelectMuscleGroups';
-import { Button } from '../../components/Button';
+import { SelectMuscleGroups } from 'features/muscle-groups/SelectMuscleGroups';
+import { Button } from 'features/common/Button';
 
 export const CreateExercise = ({ exercises, setExercises, muscleGroups }) => {
   const [name, setName] = useState('');
@@ -36,9 +36,9 @@ export const CreateExercise = ({ exercises, setExercises, muscleGroups }) => {
     })
       .then((res) => {
         if (!res.ok) {
-          throw Error('could not delete exercise');
+          throw Error('could not add exercise');
         }
-        console.log('new exercise added', { exercise });
+        console.log('New exercise added', { exercise });
         setIsLoading(false);
       })
       .catch((err) => {
