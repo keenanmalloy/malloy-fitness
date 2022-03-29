@@ -1,36 +1,29 @@
-import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import { ExerciseList } from "./ExerciseList";
-import { Button } from "../common/Button";
+import React from 'react';
+import { ExerciseList } from './ExerciseList';
+import { Button } from '../common/Button';
+import { useExercisesQuery } from './useExercisesQuery';
 
 export const GetAllExercises = () => {
-  const [exercises, setExercises] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { data, isError, isLoading } = useExercisesQuery();
 
-  useEffect(() => {
-    fetch("http://localhost:4000/exercises/", { credentials: "include" })
-      .then((res) => {
-        if (!res.ok) {
-          throw Error("couldnt fetch all exercises");
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setExercises(data.exercises);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
-  }, []);
+  if (isLoading) {
+    return <p>loading...</p>;
+  }
+
+  if (isError) {
+    return <p style={{ color: 'red' }}>fetching error...</p>;
+  }
+
+  if (!data.exercises) {
+    return <p>none available...</p>;
+  }
 
   return (
     <div>
       {isLoading ? (
         <div>Loading...</div>
       ) : (
-        <ExerciseList exercises={exercises} setExercises={setExercises} />
+        <ExerciseList exercises={data.exercises} />
       )}
 
       <Button href="/exercises/create">Create exercise</Button>

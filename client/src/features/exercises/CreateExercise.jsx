@@ -4,16 +4,16 @@ import { RadioGroup } from 'features/form/RadioGroup';
 import { Select } from '../form/Select';
 import { SelectMuscleGroups } from 'features/muscle-groups/SelectMuscleGroups';
 import { Button } from 'features/common/Button';
+import { useCreateExerciseMutation } from './useCreateExerciseMutation';
 
-export const CreateExercise = ({ exercises, setExercises, muscleGroups }) => {
+export const CreateExercise = ({ muscleGroups }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [profile, setProfile] = useState('short');
   const [primary, setPrimary] = useState([]);
   const [secondary, setSecondary] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { mutate, isLoading, isError } = useCreateExerciseMutation();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -26,25 +26,7 @@ export const CreateExercise = ({ exercises, setExercises, muscleGroups }) => {
       primary: primary.map((object) => object.value),
       secondary: secondary.map((object) => object.value),
     };
-
-    setIsLoading(true);
-
-    fetch('http://localhost:4000/exercises', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(exercise),
-      credentials: 'include',
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw Error('could not add exercise');
-        }
-        console.log('New exercise added', { exercise });
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
+    mutate({ exercise });
   };
 
   return (
@@ -97,7 +79,7 @@ export const CreateExercise = ({ exercises, setExercises, muscleGroups }) => {
         <Button isLoading={isLoading}>
           {isLoading ? 'Adding exercise...' : 'Add exercise'}
         </Button>
-        {error && <div>{error}</div>}
+        {isError && <div>{isError}</div>}
       </form>
     </>
   );

@@ -3,14 +3,14 @@ import { Input } from 'features/form/Input';
 import { Select as SelectComponent } from 'features/form/Select';
 import { Button } from 'features/common/Button';
 import Select from 'react-select';
+import { useCreateWorkoutMutation } from './useCreateWorkoutMutation';
 
-export const CreateWorkout = ({ workouts, setWorkouts, exercises }) => {
+export const CreateWorkout = ({ exercises }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
   const [data, setData] = useState([]);
+  const { mutate, isLoading, isError } = useCreateWorkoutMutation();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -25,24 +25,7 @@ export const CreateWorkout = ({ workouts, setWorkouts, exercises }) => {
         };
       }),
     };
-
-    setIsLoading(true);
-
-    fetch('http://localhost:4000/workouts', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(workout),
-      credentials: 'include'
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw Error('could not create workout');
-        }
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
+    mutate({ workout });
   };
 
   return (

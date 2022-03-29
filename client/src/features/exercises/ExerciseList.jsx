@@ -1,27 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { Button } from '../common/Button';
 
-export const ExerciseList = ({ exercises, setExercises }) => {
-  const deleteExercise = async (id) => {
-    // What happens when this call fails?
-    const response = await fetch(`http://localhost:4000/exercises/${id}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-    }).then((res) => {
-      return res.json();
-    });
-    const filteredEx = exercises.filter((exercise) => {
-      return exercise.exercise_id !== id;
-    });
-
-    setExercises(filteredEx);
-  };
-
-  if (!exercises.length) {
-    return <p>No exercises found</p>;
-  }
+export const ExerciseList = ({ exercises }) => {
   return (
     <div>
       {exercises.map((exercise) => (

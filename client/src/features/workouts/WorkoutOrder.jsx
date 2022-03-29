@@ -1,7 +1,6 @@
 import React from 'react';
 
 const WorkoutOrder = ({ exercise, workoutId }) => {
-  console.log({ exercise, workoutId });
   const incrementOrder = () => {
     fetch(
       `http://localhost:4000/workouts/${workoutId}/exercises/${exercise.exercise_id}/`,
