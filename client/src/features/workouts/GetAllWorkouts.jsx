@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Button } from  'features/common/Button';
+import { Button } from 'features/common/Button';
 import { WorkoutList } from './WorkoutList';
 
 export const GetAllWorkouts = () => {
@@ -10,15 +10,16 @@ export const GetAllWorkouts = () => {
   useEffect(() => {
     fetch('http://localhost:4000/workouts/', { credentials: 'include' })
       .then((res) => {
-        if(!res.ok) {
-          throw Error('Couldnt fetch all workouts')
+        if (!res.ok) {
+          throw Error('Couldnt fetch all workouts');
         }
         return res.json();
       })
       .then((data) => {
         setWorkouts(data.workouts);
         setIsLoading(false);
-      }).catch((err) => {
+      })
+      .catch((err) => {
         setError(err.message);
       });
   }, []);

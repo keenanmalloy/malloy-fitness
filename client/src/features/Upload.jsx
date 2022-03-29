@@ -1,9 +1,9 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 export default function Upload() {
   const [success, setIsSuccess] = useState(null);
   const [filetype, setFiletype] = useState(null);
-  const [key, setKey] = useState("");
+  const [key, setKey] = useState('');
 
   const uploadPhoto = async (e) => {
     if (!e.target.files.length) {
@@ -17,20 +17,20 @@ export default function Upload() {
 
     const res = await fetch(
       `http://localhost:4000/storage/upload?file=${filename}&type=${filetype}`,
-      { credentials: "include" }
+      { credentials: 'include' }
     );
     const { url, fields } = await res.json();
 
     setKey(fields.key);
 
     const formData = new FormData();
-    formData.append("Content-Type", file.type);
+    formData.append('Content-Type', file.type);
     Object.entries({ ...fields, file }).forEach(([key, value]) => {
       formData.append(key, value);
     });
 
     const upload = await fetch(url, {
-      method: "POST",
+      method: 'POST',
       body: formData,
     });
 
@@ -40,7 +40,7 @@ export default function Upload() {
         `Uploaded successfully! - visit https://cdn.trckd.ca/${fields.key}`
       );
     } else {
-      console.error("Upload failed.");
+      console.error('Upload failed.');
     }
   };
 
@@ -51,7 +51,7 @@ export default function Upload() {
 
       {!!success && (
         <div>
-          {filetype && filetype.includes("image") ? (
+          {filetype && filetype.includes('image') ? (
             <img src={`https://cdn.trckd.ca/${key}`} />
           ) : (
             <video autoPlay src={`https://cdn.trckd.ca/${key}`} />
