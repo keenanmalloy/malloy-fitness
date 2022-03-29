@@ -1,3 +1,4 @@
+import { RemoveExerciseFromWorkout } from 'features/exercises/RemoveExerciseFromWorkout';
 import React from 'react';
 import WorkoutOrder from './WorkoutOrder';
 import WorkoutPriority from './WorkoutPriority';
@@ -19,6 +20,10 @@ const WorkoutExercises = ({ exercises, workoutId }) => {
               {`${ex.exercise_id}  ${ex.name}`}
               <WorkoutOrder workoutId={workoutId} exercise={ex} />
               <WorkoutPriority workoutId={workoutId} exercise={ex} />
+              <RemoveExerciseFromWorkout
+                workoutId={workoutId}
+                exerciseId={ex.exercise_id}
+              />
             </div>
           );
         })}

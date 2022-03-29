@@ -1,16 +1,35 @@
 import React from 'react';
 import { Button } from 'features/common/Button';
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import Select from 'react-select';
 import Modal from 'features/common/Modal';
 
 const AddExerciseToWorkout = ({ data }) => {
+  console.log({ data });
   const [exercise, setExercise] = useState(null);
+  const [exercises, setExercises] = useState([]);
   const [order, setOrder] = useState(null);
   const [priority, setPriority] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    fetch('http://localhost:4000/exercises/', { credentials: 'include' })
+      .then((res) => {
+        if (!res.ok) {
+          throw Error('couldnt fetch all exercises');
+        }
+        return res.json();
+      })
+      .then((data) => {
+        setExercises(data.exercises);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+      });
+  }, []);
 
   function closeModal() {
     setIsOpen(false);
@@ -68,6 +87,10 @@ const AddExerciseToWorkout = ({ data }) => {
     closeModal();
   }
 
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
   return (
     <Fragment>
       <Button onClick={openModal}>Add Exercise</Button>
@@ -85,7 +108,7 @@ const AddExerciseToWorkout = ({ data }) => {
                 instanceId="long-value-select"
                 defaultValue={[]}
                 name="exercise"
-                options={data.exercises.map((ex) => {
+                options={exercises.map((ex) => {
                   return {
                     label: ex.name,
                     value: ex.exercise_id,

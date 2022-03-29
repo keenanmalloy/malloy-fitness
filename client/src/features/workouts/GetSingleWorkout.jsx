@@ -68,7 +68,6 @@ export const GetSingleWorkout = () => {
       </div>
       <DeleteWorkout workoutId={singleWorkout.workout_id} />
       <AddExerciseToWorkout data={singleWorkout} />
-      <RemoveExerciseFromWorkout />
     </div>
   );
 };
