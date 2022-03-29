@@ -1,57 +1,39 @@
-import React, { useState, useEffect } from 'react';
-import { useRouter } from 'next/router';
+import React from 'react';
 import { Button } from 'features/common/Button';
 import { DeleteExercise } from './DeleteExercise';
+import { useExerciseQuery } from './useExerciseQuery';
 
-export const GetSingleExercise = () => {
-  const [singleExercise, setSingleExercise] = useState(null);
-  const [error, setError] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  const router = useRouter();
-
-  const id = router.query.id;
-
-  useEffect(() => {
-    if (!router.isReady) return;
-    fetch(`http://localhost:4000/exercises/${id}`, { credentials: 'include' })
-      .then((res) => {
-        if (!res.ok) {
-          throw Error('couldnt fetch exercise');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setSingleExercise(data.exercise);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
-  }, [router.isReady]);
-
-  if (error) {
-    return <div>No exercise available with id: {id}</div>;
-  }
+export const GetSingleExercise = ({ id }) => {
+  const { data, isError, isLoading } = useExerciseQuery(id);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <p>loading...</p>;
+  }
+
+  if (isError) {
+    return <p style={{ color: 'red' }}>fetching error...</p>;
+  }
+
+  if (data && !data.exercise) {
+    return <p>none available...</p>;
   }
 
   return (
     <div>
       <div>
-        <p>{singleExercise.name}</p>
-        <p>{singleExercise.description}</p>
-        <p>{singleExercise.profile}</p>
-        <p>{singleExercise.primary.map((group) => group.name)}</p>
-        <p>{singleExercise.secondary.map((group) => group.name)}</p>
-        <p>{singleExercise.created_by}</p>
-        <p>{singleExercise.exercise_id}</p>
+        <p>{data.exercise.name}</p>
+        <p>{data.exercise.description}</p>
+        <p>{data.exercise.profile}</p>
+        <p>{data.exercise.primary.map((group) => group.name)}</p>
+        <p>{data.exercise.secondary.map((group) => group.name)}</p>
+        <p>{data.exercise.created_by}</p>
+        <p>{data.exercise.exercise_id}</p>
       </div>
 
-      <Button href={`/exercises/update/${id}`}>Update exercise</Button>
-      <DeleteExercise exerciseId={singleExercise.exercise_id} />
+      <Button href={`/exercises/update/${data.exercise.exercise_id}`}>
+        Update exercise
+      </Button>
+      <DeleteExercise exerciseId={data.exercise.exercise_id} />
     </div>
   );
 };

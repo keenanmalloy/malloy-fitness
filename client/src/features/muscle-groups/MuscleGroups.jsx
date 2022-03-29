@@ -1,5 +1,5 @@
-import React from "react";
-import { useMuscleGroupQuery } from "./useMuscleGroupQuery";
+import React from 'react';
+import { useMuscleGroupQuery } from './useMuscleGroupQuery';
 
 export const MuscleGroups = () => {
   const { data, isError, isLoading } = useMuscleGroupQuery();
@@ -9,7 +9,7 @@ export const MuscleGroups = () => {
   }
 
   if (isError) {
-    return <p style={{ color: "red" }}>fetching error...</p>;
+    return <p style={{ color: 'red' }}>fetching error...</p>;
   }
 
   if (!data.muscleGroups) {

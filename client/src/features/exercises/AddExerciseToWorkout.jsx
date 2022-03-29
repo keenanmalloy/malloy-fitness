@@ -1,35 +1,19 @@
 import React from 'react';
 import { Button } from 'features/common/Button';
-import { Fragment, useState, useEffect } from 'react';
+import { Fragment, useState } from 'react';
 import Select from 'react-select';
 import Modal from 'features/common/Modal';
+import { useExercisesQuery } from './useExercisesQuery';
+import { useAddExerciseToWorkoutMutation } from './useAddExerciseToWorkoutMutation';
 
-const AddExerciseToWorkout = ({ data }) => {
-  console.log({ data });
+const AddExerciseToWorkout = ({ workout }) => {
   const [exercise, setExercise] = useState(null);
-  const [exercises, setExercises] = useState([]);
   const [order, setOrder] = useState(null);
   const [priority, setPriority] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
 
-  useEffect(() => {
-    fetch('http://localhost:4000/exercises/', { credentials: 'include' })
-      .then((res) => {
-        if (!res.ok) {
-          throw Error('couldnt fetch all exercises');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setExercises(data.exercises);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
-  }, []);
+  const { data, isError, isLoading } = useExercisesQuery();
+  const { mutate } = useAddExerciseToWorkoutMutation();
 
   function closeModal() {
     setIsOpen(false);
@@ -56,7 +40,6 @@ const AddExerciseToWorkout = ({ data }) => {
 
     if (!exercise) {
       // handle state error
-      setError('Please select an exercise');
       return;
     }
 
@@ -66,29 +49,23 @@ const AddExerciseToWorkout = ({ data }) => {
       priority: priority?.value ?? null,
     };
 
-    setIsLoading(true);
-    fetch(`http://localhost:4000/workouts/${data.workout_id}/exercises/`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify(payload),
-    })
-      .then((res) => {
-        if (!res.ok) {
-          throw Error('could not add exercise');
-        }
-        console.log('new exercise added', { payload });
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
+    console.log({ payload });
+
+    mutate({ workoutId: workout.workout_id, payload });
 
     closeModal();
   }
 
   if (isLoading) {
     return <p>Loading...</p>;
+  }
+
+  if (isError) {
+    return <p style={{ color: 'red' }}>fetching error...</p>;
+  }
+
+  if (!data.exercises) {
+    return <p>none available...</p>;
   }
 
   return (
@@ -101,14 +78,16 @@ const AddExerciseToWorkout = ({ data }) => {
               <label className="block text-sm font-medium leading-5 text-gray-700">
                 Exercise
               </label>
-              {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
+              {isError && (
+                <p className="mt-1 text-sm text-red-600">{isError}</p>
+              )}
               <Select
                 placeholder="Select an exercise..."
                 id="long-value-select"
                 instanceId="long-value-select"
                 defaultValue={[]}
                 name="exercise"
-                options={exercises.map((ex) => {
+                options={data.exercises.map((ex) => {
                   return {
                     label: ex.name,
                     value: ex.exercise_id,
@@ -131,7 +110,7 @@ const AddExerciseToWorkout = ({ data }) => {
                 name="order"
                 options={
                   // create dynamic array of objects with key value pairs
-                  Array.from(Array(data.exercises.length + 1).keys()).map(
+                  Array.from(Array(workout.exercises.length + 1).keys()).map(
                     (i) => {
                       return {
                         label: i + 1,

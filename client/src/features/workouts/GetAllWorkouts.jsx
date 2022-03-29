@@ -1,35 +1,28 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { Button } from 'features/common/Button';
 import { WorkoutList } from './WorkoutList';
+import { useWorkoutsQuery } from './useWorkoutsQuery';
 
 export const GetAllWorkouts = () => {
-  const [workouts, setWorkouts] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const { data, isError, isLoading } = useWorkoutsQuery();
 
-  useEffect(() => {
-    fetch('http://localhost:4000/workouts/', { credentials: 'include' })
-      .then((res) => {
-        if (!res.ok) {
-          throw Error('Couldnt fetch all workouts');
-        }
-        return res.json();
-      })
-      .then((data) => {
-        setWorkouts(data.workouts);
-        setIsLoading(false);
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
-  }, []);
+  if (isLoading) {
+    return <p>loading...</p>;
+  }
 
+  if (isError) {
+    return <p style={{ color: 'red' }}>fetching error...</p>;
+  }
+
+  if (!data.workouts) {
+    return <p>none available...</p>;
+  }
   return (
     <div>
       {isLoading ? (
         <div>Loading...</div>
       ) : (
-        <WorkoutList workouts={workouts} setWorkouts={setWorkouts} />
+        <WorkoutList workouts={data.workouts} />
       )}
       <Button href="/workouts/create">Create workout</Button>
     </div>
