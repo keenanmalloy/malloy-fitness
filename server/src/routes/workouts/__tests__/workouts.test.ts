@@ -42,6 +42,84 @@ describe("GET /workouts", function () {
     expect(res.status).toEqual(200);
     expect(res.body.message).toEqual("Workouts fetched successfully");
   });
+
+  it("responds with 200 successfully fetched list of workouts filtered by today", async function () {
+    const res = await request
+      .get("/workouts?date=today")
+      .set("Accept", "application/json")
+      .set("Cookie", [`token=${token}`]);
+
+    expect(res.status).toEqual(200);
+    expect(res.body.message).toEqual("Workouts fetched successfully");
+  });
+
+  it("responds with 200 successfully fetched list of workouts filtered by yesterday", async function () {
+    const res = await request
+      .get("/workouts?date=yesterday")
+      .set("Accept", "application/json")
+      .set("Cookie", [`token=${token}`]);
+
+    expect(res.status).toEqual(200);
+    expect(res.body.message).toEqual("Workouts fetched successfully");
+  });
+
+  it("responds with 200 successfully fetched list of workouts filtered by tomorrow", async function () {
+    const res = await request
+      .get("/workouts?date=tomorrow")
+      .set("Accept", "application/json")
+      .set("Cookie", [`token=${token}`]);
+
+    expect(res.status).toEqual(200);
+    expect(res.body.message).toEqual("Workouts fetched successfully");
+  });
+
+  it("responds with 200 successfully fetched list of workouts filtered by 2022-03-26", async function () {
+    const date = "2022-03-26";
+    const res = await request
+      .get(`/workouts?date=${date}`)
+      .set("Accept", "application/json")
+      .set("Cookie", [`token=${token}`]);
+
+    expect(res.body.workouts[0].workout_dt.includes(date));
+    expect(res.status).toEqual(200);
+    expect(res.body.message).toEqual("Workouts fetched successfully");
+  });
+
+  it("responds with 200 successfully fetched list of workouts filtered by category", async function () {
+    const category = "arms";
+    const res = await request
+      .get(`/workouts?category=${category}`)
+      .set("Accept", "application/json")
+      .set("Cookie", [`token=${token}`]);
+
+    expect(res.status).toEqual(200);
+    expect(res.body.message).toEqual("Workouts fetched successfully");
+  });
+
+  it("responds with 200 successfully fetched list of workouts filtered by completed = true", async function () {
+    const completed = 1;
+    const res = await request
+      .get(`/workouts?completed=${completed}`)
+      .set("Accept", "application/json")
+      .set("Cookie", [`token=${token}`]);
+
+    expect(res.status).toEqual(200);
+    expect(res.body.message).toEqual("Workouts fetched successfully");
+  });
+
+  it("responds with 200 successfully using multiple filters", async function () {
+    const category = "arms";
+    const date = "2022-03-26";
+    const completed = 1;
+
+    const res = await request
+      .get(`/workouts?category=${category}&date=${date}&completed=${completed}`)
+      .set("Accept", "application/json")
+      .set("Cookie", [`token=${token}`]);
+
+    expect(res.status).toEqual(200);
+    expect(res.body.message).toEqual("Workouts fetched successfully");
+  });
 });
 
 describe("POST /workouts/", function () {

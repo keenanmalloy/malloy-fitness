@@ -1,6 +1,53 @@
 {
-    "editor.codeActionsOnSave": { "source.fixAll.eslint": true }, 
-    "editor.formatOnSave": true, 
-    "eslint.alwaysShowStatus": true, 
-    "files.autoSave": "onFocusChange"
+  "liveServer.settings.donotVerifyTags": true,
+  "liveServer.settings.donotShowInfoMsg": true,
+  "explorer.confirmDelete": false,
+  "security.workspace.trust.untrustedFiles": "open",
+  "files.autoSave": "onFocusChange",
+  "[html]": {
+    "editor.defaultFormatter": "mohd-akram.vscode-html-format"
+  },
+  "editor.formatOnSave": true,
+  "workbench.colorTheme": "Material Theme Palenight High Contrast",
+  "workbench.iconTheme": "vscode-icons",
+  "files.associations": {
+    "*.js": "javascript",
+    "*.jsx": "javascriptreact"
+  },
+
+  "[javascript]": {
+    "editor.formatOnSave": true
+  },
+  "[javascriptreact]": {
+    "editor.formatOnSave": true
+  },
+  "eslint.alwaysShowStatus": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true
+  },
+  "bracket-pair-colorizer-2.depreciation-notice": false,
+  "explorer.confirmDragAndDrop": false,
+  "javascript.updateImportsOnFileMove.enabled": "always",
+  "workbench.editor.untitled.hint": "hidden",
+  "editor.linkedEditing": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "prettier.singleQuote": true,
+  "eslint.format.enable": true,
+  "javascript.format.semicolons": "insert",
+  "workbench.startupEditor": "none",
+  "terminal.integrated.enableMultiLinePasteWarning": false,
+  "tailwindCSS.includeLanguages": {
+    "*.js": "javascript",
+    "*.jsx": "javascriptreact",
+    "html": "HTML"
+  },
+  "tailwindCSS.experimental.classRegex": ["class:\\s*\"([^\"]*)\""],
+  "emmet.triggerExpansionOnTab": true,
+  "tailwindCSS.emmetCompletions": true,
+
+  "editor.quickSuggestions": {
+    "strings": true
+  },
+  "git.confirmSync": false,
+  "editor.inlineSuggest.enabled": true
 }

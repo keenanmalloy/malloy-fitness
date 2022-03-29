@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@hapi/iron": "^6.0.0",
+    "aws-sdk": "^2.1101.0",
     "axios": "^0.26.0",
     "body-parser": "^1.19.2",
     "cookie": "^0.4.2",

@@ -1,5 +1,5 @@
-import React from "react";
-import { GetAllExercises } from "features/exercises/GetAllExercises";
+import React from 'react';
+import { GetAllExercises } from 'features/exercises/GetAllExercises';
 
 const ExercisesPage = () => {
   return (
