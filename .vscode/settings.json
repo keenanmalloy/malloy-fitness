@@ -1,15 +1,7 @@
 {
-  "liveServer.settings.donotVerifyTags": true,
-  "liveServer.settings.donotShowInfoMsg": true,
   "explorer.confirmDelete": false,
-  "security.workspace.trust.untrustedFiles": "open",
   "files.autoSave": "onFocusChange",
-  "[html]": {
-    "editor.defaultFormatter": "mohd-akram.vscode-html-format"
-  },
   "editor.formatOnSave": true,
-  "workbench.colorTheme": "Material Theme Palenight High Contrast",
-  "workbench.iconTheme": "vscode-icons",
   "files.associations": {
     "*.js": "javascript",
     "*.jsx": "javascriptreact"
@@ -25,7 +17,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll": true
   },
-  "bracket-pair-colorizer-2.depreciation-notice": false,
   "explorer.confirmDragAndDrop": false,
   "javascript.updateImportsOnFileMove.enabled": "always",
   "workbench.editor.untitled.hint": "hidden",
@@ -36,15 +27,7 @@
   "javascript.format.semicolons": "insert",
   "workbench.startupEditor": "none",
   "terminal.integrated.enableMultiLinePasteWarning": false,
-  "tailwindCSS.includeLanguages": {
-    "*.js": "javascript",
-    "*.jsx": "javascriptreact",
-    "html": "HTML"
-  },
-  "tailwindCSS.experimental.classRegex": ["class:\\s*\"([^\"]*)\""],
   "emmet.triggerExpansionOnTab": true,
-  "tailwindCSS.emmetCompletions": true,
-
   "editor.quickSuggestions": {
     "strings": true
   },
