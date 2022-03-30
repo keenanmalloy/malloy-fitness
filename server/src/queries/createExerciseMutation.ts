@@ -1,6 +1,6 @@
-import { db } from "config/db";
-import { Response } from "express";
-import Joi from "joi";
+import { db } from 'config/db';
+import { Response } from 'express';
+import Joi from 'joi';
 
 interface createExercise {
   name: string;
@@ -14,12 +14,12 @@ interface createExercise {
 
 const createExerciseSchema = Joi.object({
   name: Joi.string().min(3).max(200).required(),
-  description: Joi.string().max(500).allow("").optional(),
+  description: Joi.string().max(500).allow('').optional(),
   category: Joi.string().required(),
   primary: Joi.array().items(Joi.string(), Joi.number()).required(),
   secondary: Joi.array().items(Joi.string(), Joi.number()).optional(),
   video: Joi.string().allow(null).optional(),
-  profile: Joi.string().allow(null).valid("short", "med", "long").optional(),
+  profile: Joi.string().allow(null).valid('short', 'mid', 'long').optional(),
 });
 
 const createExerciseMuscleGroups = async (
@@ -31,15 +31,15 @@ const createExerciseMuscleGroups = async (
     if (secondary.length) {
       return `${primary
         .map((id) => `(${exerciseId}, ${id}, 'primary')`)
-        .join(",")},`;
+        .join(',')},`;
     }
-    return primary.map((id) => `(${exerciseId}, ${id}, 'primary')`).join(",");
+    return primary.map((id) => `(${exerciseId}, ${id}, 'primary')`).join(',');
   };
 
   const prepareSecondaryValues = () => {
     return secondary
       .map((id) => `(${exerciseId}, ${id}, 'secondary')`)
-      .join(",");
+      .join(',');
   };
 
   const data = await db.query(`
@@ -66,8 +66,8 @@ export const createExerciseMutation = async (
 
   if (!data.primary.length) {
     return res.status(422).json({
-      status: "error",
-      message: "Invalid request data, missing primary muscle group id(s)",
+      status: 'error',
+      message: 'Invalid request data, missing primary muscle group id(s)',
       exercise: value,
       error: error,
     });
@@ -75,8 +75,8 @@ export const createExerciseMutation = async (
 
   if (error) {
     return res.status(422).json({
-      status: "error",
-      message: "Invalid request data",
+      status: 'error',
+      message: 'Invalid request data',
       exercise: value,
       error: error,
     });
@@ -116,21 +116,21 @@ export const createExerciseMutation = async (
 
       const exercise = {
         ...data.rows[0],
-        primary: muscleGroups.filter((mg) => mg.group === "primary"),
-        secondary: muscleGroups.filter((mg) => mg.group === "secondary"),
+        primary: muscleGroups.filter((mg) => mg.group === 'primary'),
+        secondary: muscleGroups.filter((mg) => mg.group === 'secondary'),
       };
 
       return res.status(201).json({
-        status: "success",
-        message: "Exercise created successfully",
+        status: 'success',
+        message: 'Exercise created successfully',
         exercise,
       });
     } catch (error) {
       console.log({ error });
       return res.status(500).json({
-        status: "error",
+        status: 'error',
         //@ts-ignore
-        message: error && error.message ? error.message : "Database error",
+        message: error && error.message ? error.message : 'Database error',
         exercise: null,
       });
     }
