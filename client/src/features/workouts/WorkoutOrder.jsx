@@ -1,41 +1,51 @@
+import { Button } from 'features/common/Button';
 import React from 'react';
+import { useQueryClient } from 'react-query';
+import { useUpdateWorkoutExerciseMutation } from './useUpdateWorkoutExerciseMutation';
 
 const WorkoutOrder = ({ exercise, workoutId }) => {
+  const { isLoading, mutate, isError } = useUpdateWorkoutExerciseMutation(
+    workoutId,
+    exercise.exercise_id
+  );
+
+  const queryClient = useQueryClient();
+
   const incrementOrder = () => {
-    fetch(
-      `http://localhost:4000/workouts/${workoutId}/exercises/${exercise.exercise_id}/`,
+    mutate(
       {
-        method: 'PUT',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          order: exercise.order + 1,
-        }),
+        order: exercise.order + 1,
+      },
+      {
+        onSuccess: () => {
+          queryClient.refetchQueries('fetchWorkout');
+        },
       }
-    ).then((res) => {
-      return res.json();
-    });
+    );
   };
 
   const decrementOrder = () => {
-    fetch(
-      `http://localhost:4000/workouts/${workoutId}/exercises/${exercise.exercise_id}/`,
+    mutate(
       {
-        method: 'PUT',
-        credentials: 'include',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          order: exercise.order - 1,
-        }),
+        order: exercise.order - 1,
+      },
+      {
+        onSuccess: () => {
+          queryClient.refetchQueries('fetchWorkout');
+        },
       }
-    ).then((res) => {
-      return res.json();
-    });
+    );
   };
+
   return (
     <div>
-      <button onClick={incrementOrder}>Order Up</button>
-      <button onClick={decrementOrder}>Order Down</button>
+      <p>order: {exercise.order}</p>
+      <p>priority: {exercise.priority}</p>
+
+      <Button onClick={incrementOrder}>Order Up</Button>
+      <Button isDisabled={exercise.order === 1} onClick={decrementOrder}>
+        Order Down
+      </Button>
     </div>
   );
 };

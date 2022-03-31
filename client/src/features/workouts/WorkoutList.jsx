@@ -1,24 +1,8 @@
-import React from "react";
-import Link from "next/link";
-import { Button } from "features/common/Button";
+import React from 'react';
+import Link from 'next/link';
+import { DeleteWorkout } from './DeleteWorkout';
 
-export const WorkoutList = ({ workouts, setWorkouts }) => {
-  const deleteWorkout = async (id) => {
-    console.log("clicked");
-    const response = await fetch(`http://localhost:4000/workouts/${id}`, {
-      method: "DELETE",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-    }).then((res) => {
-      return res.json();
-    });
-    const filteredWo = workouts.filter((workout) => {
-      return workout.workout_id !== id;
-    });
-
-    setWorkouts(filteredWo);
-  };
-
+export const WorkoutList = ({ workouts }) => {
   if (!workouts.length) {
     return <p>No workouts found</p>;
   }
@@ -60,9 +44,7 @@ export const WorkoutList = ({ workouts, setWorkouts }) => {
               </div>
             </div>
           </Link>
-          <Button onClick={() => deleteWorkout(workout.workout_id)}>
-            Delete workout
-          </Button>
+          <DeleteWorkout workoutId={workout.workout_id} />
         </div>
       ))}
     </div>

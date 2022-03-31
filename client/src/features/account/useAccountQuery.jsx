@@ -1,10 +1,10 @@
 import { useQuery } from 'react-query';
 
-const fetchWorkouts = async () => {
+const fetchAccount = async () => {
   try {
     // fetch the data, the fetch call returns a promise of a response.
     // we await for the promise to resolve with the await keyword.
-    const res = await fetch('http://localhost:4000/workouts/', {
+    const res = await fetch(`http://localhost:4000/auth/me`, {
       credentials: 'include',
     });
 
@@ -18,6 +18,6 @@ const fetchWorkouts = async () => {
   }
 };
 
-export const useWorkoutsQuery = () => {
-  return useQuery('fetchWorkouts', fetchWorkouts);
+export const useAccountQuery = () => {
+  return useQuery('fetchAccount', fetchAccount);
 };

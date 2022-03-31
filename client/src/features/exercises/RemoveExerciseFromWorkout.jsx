@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import Modal from 'features/common/Modal';
 import { Button } from 'features/common/Button';
+import { useQueryClient } from 'react-query';
+import { useRemoveExerciseFromWorkoutMutation } from './useRemoveExerciseFromWorkoutMutation';
 
 /**
  * A component that contains the logic to remove an exercise from a workout.
@@ -13,8 +15,8 @@ import { Button } from 'features/common/Button';
  */
 export const RemoveExerciseFromWorkout = ({ workoutId, exerciseId }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const { mutate, isLoading, isError } = useRemoveExerciseFromWorkoutMutation();
+  const queryCLient = useQueryClient();
 
   function closeModal() {
     setIsOpen(false);
@@ -26,25 +28,14 @@ export const RemoveExerciseFromWorkout = ({ workoutId, exerciseId }) => {
 
   function handleSubmit(e) {
     e.preventDefault();
-
-    setIsLoading(true);
-    fetch(
-      `http://localhost:4000/workouts/${workoutId}/exercises/${exerciseId}`,
+    mutate(
+      { workoutId, exerciseId },
       {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
+        onSuccess: () => {
+          queryCLient.refetchQueries('fetchWorkout');
+        },
       }
-    )
-      .then((res) => {
-        if (!res.ok) {
-          throw Error('could not remove exercise');
-        }
-        closeModal();
-      })
-      .catch((err) => {
-        setError(err.message);
-      });
+    );
   }
 
   return (
@@ -58,7 +49,12 @@ export const RemoveExerciseFromWorkout = ({ workoutId, exerciseId }) => {
       <Modal isOpen={isOpen} closeModal={closeModal}>
         <p>Are you sure you want to remove this exercise from your workout?</p>
         <form onSubmit={handleSubmit}>
-          <Button type="submit">Remove Exercise</Button>
+          <Button type="submit" disabled={isLoading}>
+            {isLoading ? 'Removing Exercise...' : 'Remove Exercise'}
+          </Button>
+          {isError && (
+            <small className="text-red-500">Something went wrong...</small>
+          )}
         </form>
       </Modal>
     </div>
