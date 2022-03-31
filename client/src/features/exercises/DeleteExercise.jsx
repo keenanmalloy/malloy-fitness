@@ -1,10 +1,15 @@
 import { Button } from 'features/common/Button';
 import Modal from 'features/common/Modal';
 import React, { useState } from 'react';
+import { useQueryClient } from 'react-query';
+import { useDeleteExerciseMutation } from './useDeleteExerciseMutation';
 
 export const DeleteExercise = ({ exerciseId }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const { mutate, isLoading, isError } = useDeleteExerciseMutation(exerciseId);
+
+  const queryCLient = useQueryClient();
+
   function closeModal() {
     setIsOpen(false);
   }
@@ -13,24 +18,16 @@ export const DeleteExercise = ({ exerciseId }) => {
     setIsOpen(true);
   }
 
-  const handleClick = async (id) => {
-    setIsLoading(true);
-    const response = await fetch(`http://localhost:4000/exercises/${id}`, {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-    }).then((res) => {
-      return res.json();
-    });
-
-    if (response.status === 'success') {
-      setIsLoading(false);
-    }
+  const handleClick = (exerciseId) => {
+    mutate(
+      { exerciseId },
+      {
+        onSuccess: () => {
+          queryCLient.refetchQueries('fetchExercise');
+        },
+      }
+    );
   };
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
 
   return (
     <>
@@ -43,9 +40,16 @@ export const DeleteExercise = ({ exerciseId }) => {
             permanent.
           </p>
           <div className="flex flex-col">
-            <Button className="mt-4" onClick={() => handleClick(exerciseId)}>
-              Delete
+            <Button
+              className="mt-4"
+              disabled={isLoading}
+              onClick={() => handleClick(exerciseId)}
+            >
+              {isLoading ? 'Deleting...' : 'Delete'}
             </Button>
+            {isError && (
+              <small className="text-red-500">Something went wrong...</small>
+            )}
             <Button className="mt-4" onClick={closeModal}>
               Cancel
             </Button>

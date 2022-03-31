@@ -4,16 +4,22 @@ import { RadioGroup } from 'features/form/RadioGroup';
 import { Select } from 'features/form/Select';
 import { SelectMuscleGroups } from 'features/muscle-groups/SelectMuscleGroups';
 import React, { useState } from 'react';
+import { useQueryClient } from 'react-query';
+import { useUpdateExerciseMutation } from './useUpdateExerciseMutation';
 
-export const UpdateExercise = ({ muscleGroups }) => {
+export const UpdateExercise = ({ exercise }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [profile, setProfile] = useState('short');
   const [primary, setPrimary] = useState([]);
   const [secondary, setSecondary] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState(null);
+
+  const queryClient = useQueryClient();
+
+  const { isLoading, mutate, isError } = useUpdateExerciseMutation(
+    exercise.exercise_id
+  );
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -27,26 +33,15 @@ export const UpdateExercise = ({ muscleGroups }) => {
       secondary: secondary.map((object) => object.value),
     };
 
-    setIsLoading(true);
-
-    fetch('http://localhost:4000/exercises', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify({
-        name: 'step forward curl',
-        description: 'row that shit',
-        category: 'back',
-        primary: 'back',
-        secondary: 'biceps',
-        image: '',
-        video: '',
-        movement: 'compound',
-      }),
-    }).then((res) => {
-      return res.json();
-    });
-    updateSetExercises(response.exercise);
+    mutate(
+      { exercise },
+      {
+        onSuccess: () => {
+          queryClient.refetchQueries('fetchExercises');
+          setIsOpen(false);
+        },
+      }
+    );
   };
   return (
     <>
@@ -95,10 +90,12 @@ export const UpdateExercise = ({ muscleGroups }) => {
           muscleGroups={muscleGroups}
         />
 
-        <Button isLoading={isLoading}>
+        <Button disabled={isLoading}>
           {isLoading ? 'Updating exercise...' : 'Update exercise'}
         </Button>
-        {error && <div>{error}</div>}
+        {isError && (
+          <small className="text-red-500">Something went wrong...</small>
+        )}
       </form>
     </>
   );
