@@ -60,7 +60,7 @@ export const CreateMuscleGroup = () => {
             isTextArea
           />
 
-          <Upload />
+          <Upload onChange={(key) => setImage(`https://cdn.trckd.ca/${key}`)} />
 
           <Button disabled={isLoading}>
             {isLoading ? 'Creating...' : 'Create'}

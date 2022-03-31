@@ -11,7 +11,7 @@ interface CreateMuscleGroup {
 const createMuscleGroupSchema = Joi.object({
   name: Joi.string().min(3).max(200).required(),
   description: Joi.string().max(500).allow('').optional(),
-  image: Joi.string().max(500).allow('').optional(),
+  image: Joi.string().max(500).allow(null).optional(),
 });
 
 export const createMuscleGroupMutation = async (

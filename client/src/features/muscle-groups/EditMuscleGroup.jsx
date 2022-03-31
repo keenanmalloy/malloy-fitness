@@ -62,7 +62,16 @@ export const EditMuscleGroup = ({ mg }) => {
             isTextArea
           />
 
-          <Upload />
+          <Upload
+            onChange={(key) => {
+              if (key) {
+                setImage(`https://cdn.trckd.ca/${key}`);
+              } else {
+                setImage(null);
+              }
+            }}
+            defaultSrc={image}
+          />
 
           <Button disabled={isLoading}>
             {isLoading ? 'Updating...' : 'Update'}
