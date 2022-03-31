@@ -20,6 +20,7 @@ export const MuscleGroup = ({ muscleGroupId }) => {
     <section>
       <h3 className="text-lg">{data.muscleGroup.name}</h3>
       <p className="text-xs">{data.muscleGroup.description}</p>
+      {data.muscleGroup.image && <img src={data.muscleGroup.image} />}
     </section>
   );
 };

@@ -39,8 +39,8 @@ CREATE TABLE IF NOT EXISTS workout_exercises (
     workout_exercise_id bigserial PRIMARY KEY,
     workout_id bigint REFERENCES workouts(workout_id) ON DELETE CASCADE,
     exercise_id bigint REFERENCES exercises(exercise_id) ON DELETE CASCADE,
-    priority int DEFAULT 0,
-    "order" int DEFAULT 0,
+    priority int DEFAULT 1,
+    "order" int DEFAULT 1,
     UNIQUE (workout_id, exercise_id)
 );
 
@@ -64,7 +64,15 @@ CREATE TABLE IF NOT EXISTS sets (
     repetitions int DEFAULT 0,
     weight int DEFAULT 0,
     workout_id bigint REFERENCES workouts(workout_id) ON DELETE CASCADE,
-    exercise_id bigint REFERENCES exercises(exercise_id)
+    exercise_id bigint REFERENCES exercises(exercise_id),
+    set_order int DEFAULT 1
+);
+
+CREATE TABLE IF NOT EXISTS rest_periods (
+    rest_period_id bigserial PRIMARY KEY,
+    set_id bigint REFERENCES sets(set_id) ON DELETE CASCADE,
+    started_at timestamp with time zone DEFAULT now() NOT NULL,
+    ended_at timestamp with time zone
 );
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";

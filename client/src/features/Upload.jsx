@@ -1,8 +1,9 @@
 import { useState } from 'react';
 
-export default function Upload() {
+export default function Upload({ onChange, defaultSrc }) {
   const [success, setIsSuccess] = useState(null);
   const [filetype, setFiletype] = useState(null);
+  const [cleared, setCleared] = useState(null);
   const [key, setKey] = useState('');
 
   const uploadPhoto = async (e) => {
@@ -36,6 +37,7 @@ export default function Upload() {
 
     if (upload.ok) {
       setIsSuccess(true);
+      onChange(fields.key);
       console.log(
         `Uploaded successfully! - visit https://cdn.trckd.ca/${fields.key}`
       );
@@ -49,7 +51,18 @@ export default function Upload() {
       <p>Upload image OR video (max 5GB).</p>
       <input onChange={uploadPhoto} type="file" accept="image/*, video/*" />
 
-      {!!success && (
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          setCleared(true);
+          setKey('');
+          onChange(null);
+        }}
+      >
+        X
+      </button>
+
+      {cleared ? null : !!success ? (
         <div>
           {filetype && filetype.includes('image') ? (
             <img src={`https://cdn.trckd.ca/${key}`} />
@@ -57,7 +70,15 @@ export default function Upload() {
             <video autoPlay src={`https://cdn.trckd.ca/${key}`} />
           )}
         </div>
-      )}
+      ) : !!defaultSrc ? (
+        <div>
+          {defaultSrc.includes('/images/') ? (
+            <img src={defaultSrc} />
+          ) : (
+            <video autoPlay src={defaultSrc} />
+          )}
+        </div>
+      ) : null}
     </>
   );
 }
