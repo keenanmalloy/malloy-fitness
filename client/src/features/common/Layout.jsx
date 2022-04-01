@@ -4,11 +4,13 @@ import Navbar from './Navbar';
 
 const Layout = ({ children }) => {
   return (
-    <>
-      {children}
+    <main>
+      <section className="flex w-100 items-center justify-center">
+        <div className="max-w-xl">{children}</div>
+      </section>
       <Navbar />
       {/* <Footer /> */}
-    </>
+    </main>
   );
 };
 

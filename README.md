@@ -16,6 +16,7 @@ Endpoints for viewing and manipulating workouts.
 
 - [Gets all workouts](docs/workouts/get.md) : `GET /workouts/`
 - [Get a single workout](docs/workouts/get.md) : `GET /workouts/:pk/`
+- [Get a single workout exercise](docs/workouts/exercises/get.md) : `GET /workouts/:pk/exercises/:pk/`
 - [Create a workout](docs/workouts/post.md) : `POST /workouts/`
 - [Update a workout](docs/workouts/put.md) : `PUT /workouts/:pk/`
 - [Delete a workout](docs/workouts/delete.md) : `DELETE /workouts/:pk/`

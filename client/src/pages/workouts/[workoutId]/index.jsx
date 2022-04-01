@@ -9,7 +9,7 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const workoutId = params && params.id;
+  const workoutId = params && params.workoutId;
 
   return {
     props: { workoutId },
