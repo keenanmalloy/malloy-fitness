@@ -1,6 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { DeleteWorkout } from './DeleteWorkout';
+import { UpdateWorkout } from './UpdateWorkout';
+import { Button } from 'features/common/Button';
 
 export const WorkoutList = ({ workouts }) => {
   if (!workouts.length) {
@@ -20,7 +22,6 @@ export const WorkoutList = ({ workouts }) => {
               <p>{workout.category}</p>
               <p>{workout.description}</p>
               <p>{workout.workout_id}</p>
-              {/* <p>{workout.primary}</p> */}
 
               <div className="flex flex-shrink-0">
                 <div className="flex flex-shrink-0 text-sm items-center px-2 mb-2">
