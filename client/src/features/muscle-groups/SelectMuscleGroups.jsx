@@ -8,7 +8,7 @@ export const SelectMuscleGroups = ({
   value,
   isRequired,
   options,
-  defaultOption,
+  defaultValue,
   muscleGroups,
 }) => {
   // const [muscleGroups, setMuscleGroups] = useState([]);
@@ -26,7 +26,7 @@ export const SelectMuscleGroups = ({
       <Select
         id="long-value-select"
         instanceId="long-value-select"
-        defaultValue={[]}
+        defaultValue={defaultValue}
         isMulti
         onChange={(data) => setData(data)}
         name="muscleGroups"

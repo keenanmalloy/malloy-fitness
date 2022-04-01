@@ -3,6 +3,7 @@ import AddExerciseToWorkout from 'features/exercises/AddExerciseToWorkout';
 import WorkoutExercises from './WorkoutExercises';
 import { DeleteWorkout } from './DeleteWorkout';
 import { useWorkoutQuery } from './useWorkoutQuery';
+import { UpdateWorkout } from './UpdateWorkout';
 
 export const GetSingleWorkout = ({ workoutId }) => {
   const { data, isError, isLoading } = useWorkoutQuery(workoutId);
@@ -21,12 +22,14 @@ export const GetSingleWorkout = ({ workoutId }) => {
   return (
     <div>
       <div>
-        <h1>{data.workout.name}</h1>
-        <p>{data.workout.workout_id}</p>
-        <WorkoutExercises
+        <h1>name: {data.workout.name}</h1>
+        <p>id: {data.workout.workout_id}</p>
+        <p>category: {data.workout.category}</p>
+        <p>description: {data.workout.description}</p>
+        {/* <WorkoutExercises
           workoutId={data.workout.workout_id}
           exercises={data.workout.exercises}
-        />
+        /> */}
         {/* 
 
           If the call is successful, we'll need a way to "refetch" the workout or update the state of exercises.
@@ -45,6 +48,7 @@ export const GetSingleWorkout = ({ workoutId }) => {
 
         */}
       </div>
+      <UpdateWorkout workout={data.workout} />
       <DeleteWorkout workoutId={data.workout.workout_id} />
       <AddExerciseToWorkout workout={data.workout} />
     </div>
