@@ -38,7 +38,9 @@ export const CreateMuscleGroup = () => {
 
   return (
     <>
-      <Button onClick={() => setIsOpen(!isOpen)}>Create Muscle Group</Button>
+      <Button onClick={() => setIsOpen(!isOpen)} className="w-full">
+        Create Muscle Group
+      </Button>
 
       <Modal
         isOpen={isOpen}

@@ -4,7 +4,7 @@ import Link from 'next/link';
 
 export const Header = () => {
   return (
-    <nav className="dark:bg-gray-900 p-2 bg-white shadow md:flex md:items-center md:justify-between md:p-6 fixed top-0 left-0 w-full">
+    <nav className="dark:bg-gray-900 p-2 bg-white shadow md:flex md:items-center md:justify-between md:p-6 fixed top-0 left-0 w-full z-10">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 text-gray-300">
         <div className="flex-1 flex items-center justify-between sm:items-stretch sm:justify-start">
           <Link href="/profile">
