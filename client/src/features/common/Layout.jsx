@@ -9,7 +9,6 @@ const Layout = ({ children }) => {
         <div className="max-w-xl">{children}</div>
       </section>
       <Navbar />
-      {/* <Footer /> */}
     </main>
   );
 };
