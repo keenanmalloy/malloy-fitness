@@ -9,7 +9,7 @@ import Modal from 'features/common/Modal';
 export const CreateMuscleGroup = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const queryClient = useQueryClient();
@@ -30,6 +30,9 @@ export const CreateMuscleGroup = () => {
       {
         onSuccess: () => {
           queryClient.refetchQueries('fetchMuscleGroups');
+          setName('');
+          setDescription('');
+          setImage(null);
           setIsOpen(false);
         },
       }
