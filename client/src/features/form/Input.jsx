@@ -1,6 +1,13 @@
 import React from 'react';
 
-export const Input = ({ onChange, value, label, isRequired, isTextArea }) => {
+export const Input = ({
+  onChange,
+  value,
+  label,
+  isRequired,
+  isTextArea,
+  autoFocus,
+}) => {
   if (isTextArea) {
     return (
       <div className="py-2">
@@ -11,6 +18,7 @@ export const Input = ({ onChange, value, label, isRequired, isTextArea }) => {
           required={isRequired}
           value={value}
           onChange={onChange}
+          autoFocus={!!autoFocus}
         />
       </div>
     );
@@ -25,6 +33,7 @@ export const Input = ({ onChange, value, label, isRequired, isTextArea }) => {
         required={isRequired}
         value={value}
         onChange={onChange}
+        autoFocus={!!autoFocus}
       />
     </div>
   );

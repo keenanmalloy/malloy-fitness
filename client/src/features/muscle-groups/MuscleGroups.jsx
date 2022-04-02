@@ -1,6 +1,5 @@
 import { useMuscleGroupsQuery } from './useMuscleGroupsQuery';
 import Link from 'next/link';
-import { CreateMuscleGroup } from './CreateMuscleGroup';
 import { DeleteMuscleGroup } from './DeleteMuscleGroup';
 import { EditMuscleGroup } from './EditMuscleGroup';
 import { SearchMuscleGroups } from './SearchMuscleGroups';
@@ -31,7 +30,7 @@ export const MuscleGroups = () => {
       <section className="w-72 relative">
         <SearchMuscleGroups query={query} setQuery={setQuery} />
         <ul className="flex flex-col divide-y-2 divide-gray-100">
-          {/* @@TODO add alert component here */}
+          {/* @@TODO add error alert component here */}
           <p style={{ color: 'red' }}>fetching error...</p>{' '}
         </ul>
       </section>
@@ -39,7 +38,15 @@ export const MuscleGroups = () => {
   }
 
   if (!data.muscleGroups) {
-    return <p>none available...</p>;
+    return (
+      <section className="w-72 relative">
+        <SearchMuscleGroups query={query} setQuery={setQuery} />
+        <ul className="flex flex-col divide-y-2 divide-gray-100">
+          {/* @@TODO add success alert component here */}
+          <p>no muscle-groups fetched</p>{' '}
+        </ul>
+      </section>
+    );
   }
 
   return (
@@ -56,6 +63,7 @@ export const MuscleGroups = () => {
                     mg.name.toLowerCase().includes(query.toLowerCase()) ||
                     mg.description.toLowerCase().includes(query.toLowerCase())
                 )
+                .sort((a, b) => b.muscle_group_id - a.muscle_group_id)
                 .map((mg) => {
                   return (
                     <li key={mg.muscle_group_id} className="border-solid py-6">
@@ -71,7 +79,13 @@ export const MuscleGroups = () => {
                         <div className="flex">
                           <DeleteMuscleGroup id={mg.muscle_group_id} />
                           <div className="w-1" />
-                          <EditMuscleGroup mg={mg} />
+                          <EditMuscleGroup
+                            name={mg.name}
+                            description={mg.description}
+                            image={mg.image}
+                            refetchMuscleGroup="fetchMuscleGroups"
+                            id={mg.muscle_group_id}
+                          />
                         </div>
                       </footer>
                     </li>
@@ -82,27 +96,35 @@ export const MuscleGroups = () => {
             /* Results without search */
 
             <>
-              {data.muscleGroups.map((mg) => {
-                return (
-                  <li key={mg.muscle_group_id} className="border-solid py-6">
-                    <h3 className="text-lg">{mg.name}</h3>
-                    <p className="text-xs">{mg.description}</p>
+              {data.muscleGroups
+                .sort((a, b) => b.muscle_group_id - a.muscle_group_id)
+                .map((mg) => {
+                  return (
+                    <li key={mg.muscle_group_id} className="border-solid py-6">
+                      <h3 className="text-lg">{mg.name}</h3>
+                      <p className="text-xs">{mg.description}</p>
 
-                    <footer className="flex justify-between justify-self-stretch place-content-stretch justify-items-stretch">
-                      <Link href={`/muscle-groups/${mg.muscle_group_id}`}>
-                        <button className="bg-white mt-2 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-32">
-                          Visit
-                        </button>
-                      </Link>
-                      <div className="flex">
-                        <DeleteMuscleGroup id={mg.muscle_group_id} />
-                        <div className="w-1" />
-                        <EditMuscleGroup mg={mg} />
-                      </div>
-                    </footer>
-                  </li>
-                );
-              })}
+                      <footer className="flex justify-between justify-self-stretch place-content-stretch justify-items-stretch">
+                        <Link href={`/muscle-groups/${mg.muscle_group_id}`}>
+                          <button className="bg-white mt-2 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-32">
+                            Visit
+                          </button>
+                        </Link>
+                        <div className="flex">
+                          <DeleteMuscleGroup id={mg.muscle_group_id} />
+                          <div className="w-1" />
+                          <EditMuscleGroup
+                            name={mg.name}
+                            description={mg.description}
+                            image={mg.image}
+                            refetchMuscleGroup="fetchMuscleGroups"
+                            id={mg.muscle_group_id}
+                          />
+                        </div>
+                      </footer>
+                    </li>
+                  );
+                })}
             </>
           )
         }

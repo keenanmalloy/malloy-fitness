@@ -7,17 +7,16 @@ import { useUpdateMuscleGroupMutation } from './useUpdateMuscleGroupMutation';
 import Modal from 'features/common/Modal';
 import { MdEdit } from 'react-icons/md';
 
-export const EditMuscleGroup = ({ mg }) => {
-  const [name, setName] = useState(mg.name);
-  const [description, setDescription] = useState(mg.description);
-  const [image, setImage] = useState(mg.image);
+export const EditMuscleGroup = (props) => {
+  const { id, refetchKey } = props;
+  const [name, setName] = useState(props.name);
+  const [description, setDescription] = useState(props.description);
+  const [image, setImage] = useState(props.image);
   const [isOpen, setIsOpen] = useState(false);
 
   const queryClient = useQueryClient();
 
-  const { isLoading, mutate, isError } = useUpdateMuscleGroupMutation(
-    mg.muscle_group_id
-  );
+  const { isLoading, mutate, isError } = useUpdateMuscleGroupMutation(id);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -32,7 +31,7 @@ export const EditMuscleGroup = ({ mg }) => {
       { muscleGroup },
       {
         onSuccess: () => {
-          queryClient.refetchQueries('fetchMuscleGroups');
+          queryClient.refetchQueries(refetchKey);
           setIsOpen(false);
         },
       }
