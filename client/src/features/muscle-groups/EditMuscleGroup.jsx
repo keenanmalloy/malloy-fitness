@@ -5,6 +5,7 @@ import { useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useUpdateMuscleGroupMutation } from './useUpdateMuscleGroupMutation';
 import Modal from 'features/common/Modal';
+import { MdEdit } from 'react-icons/md';
 
 export const EditMuscleGroup = ({ mg }) => {
   const [name, setName] = useState(mg.name);
@@ -40,12 +41,14 @@ export const EditMuscleGroup = ({ mg }) => {
 
   return (
     <>
-      <Button onClick={() => setIsOpen(!isOpen)}>Edit</Button>
+      <Button onClick={() => setIsOpen(true)} className="px-0 py-0">
+        <MdEdit className="h-6 w-10" />
+      </Button>
 
       <Modal
         isOpen={isOpen}
         title="Editing Muscle Group"
-        description={'a form to edit a muscle-group'}
+        description={'A form to edit a muscle-group'}
         closeModal={() => setIsOpen(false)}
       >
         <form onSubmit={handleSubmit}>
@@ -73,12 +76,12 @@ export const EditMuscleGroup = ({ mg }) => {
             defaultSrc={image}
           />
 
-          <Button disabled={isLoading}>
+          <Button disabled={isLoading} className="w-full mt-2">
             {isLoading ? 'Updating...' : 'Update'}
           </Button>
 
           {isError && (
-            <small className="text-red-500">Something went wrong...</small>
+            <small className="text-red-500 pt-2">Something went wrong...</small>
           )}
         </form>
       </Modal>

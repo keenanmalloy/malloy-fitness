@@ -1,35 +1,13 @@
 import React from 'react';
 
-/**
- * DESTRUCTURE THE FOLLOWING PROPS
- * onChange={*function*}
- * value={*text*}
- * label={*text*}
- * isRequired={*boolean*}
- * isTextArea={*boolean*}
- * {onChange, value, label, isRequired, isTextArea}
- */
-
 export const Input = ({ onChange, value, label, isRequired, isTextArea }) => {
-  /**
-   * If isTextArea is true, return textarea JSX
-   * otherwise return a regular input. Remember to use the isRequired boolean to
-   * set the required attribute on both <textarea /> and <input />.
-   *
-   * ex.
-   * if (isTextArea) {
-   *    return ...
-   * }
-   *
-   *
-   */
-
   if (isTextArea) {
     return (
-      <div>
+      <div className="py-2">
         <label>{label}</label>
         <textarea
           type="text"
+          className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           required={isRequired}
           value={value}
           onChange={onChange}
@@ -39,10 +17,11 @@ export const Input = ({ onChange, value, label, isRequired, isTextArea }) => {
   }
 
   return (
-    <div>
+    <div className="py-2">
       <label>{label}</label>
       <input
         type="text"
+        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         required={isRequired}
         value={value}
         onChange={onChange}

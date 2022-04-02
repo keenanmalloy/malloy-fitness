@@ -2,7 +2,6 @@ import { useMuscleGroupsQuery } from './useMuscleGroupsQuery';
 import Link from 'next/link';
 import { CreateMuscleGroup } from './CreateMuscleGroup';
 import { DeleteMuscleGroup } from './DeleteMuscleGroup';
-import { Button } from 'features/common/Button';
 import { EditMuscleGroup } from './EditMuscleGroup';
 
 export const MuscleGroups = () => {
@@ -21,23 +20,26 @@ export const MuscleGroups = () => {
   }
 
   return (
-    <section className="pb-32">
-      <ul>
+    <section className="w-72">
+      <ul className="flex flex-col divide-y-2 divide-gray-100">
         {data.muscleGroups.map((mg) => {
           return (
-            <li key={mg.muscle_group_id} className="my-2 p-5 rounded-md">
+            <li key={mg.muscle_group_id} className="border-solid py-6">
               <h3 className="text-lg">{mg.name}</h3>
               <p className="text-xs">{mg.description}</p>
 
-              <div>
+              <footer className="flex justify-between justify-self-stretch place-content-stretch justify-items-stretch">
                 <Link href={`/muscle-groups/${mg.muscle_group_id}`}>
-                  <Button>Visit</Button>
+                  <button className="bg-white mt-2 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-32">
+                    Visit
+                  </button>
                 </Link>
-
-                <DeleteMuscleGroup id={mg.muscle_group_id} />
-
-                <EditMuscleGroup mg={mg} />
-              </div>
+                <div className="flex">
+                  <DeleteMuscleGroup id={mg.muscle_group_id} />
+                  <div className="w-1" />
+                  <EditMuscleGroup mg={mg} />
+                </div>
+              </footer>
             </li>
           );
         })}

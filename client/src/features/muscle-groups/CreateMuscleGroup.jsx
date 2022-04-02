@@ -62,7 +62,7 @@ export const CreateMuscleGroup = () => {
 
           <Upload onChange={(key) => setImage(`https://cdn.trckd.ca/${key}`)} />
 
-          <Button disabled={isLoading}>
+          <Button disabled={isLoading} className="w-full mt-2">
             {isLoading ? 'Creating...' : 'Create'}
           </Button>
 

@@ -1,10 +1,17 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { IoMdClose } from 'react-icons/io';
 
 export default function Upload({ onChange, defaultSrc }) {
   const [success, setIsSuccess] = useState(null);
   const [filetype, setFiletype] = useState(null);
   const [cleared, setCleared] = useState(null);
   const [key, setKey] = useState('');
+
+  const ref = useRef();
+
+  const reset = () => {
+    ref.current.value = '';
+  };
 
   const uploadPhoto = async (e) => {
     if (!e.target.files.length) {
@@ -47,9 +54,31 @@ export default function Upload({ onChange, defaultSrc }) {
   };
 
   return (
-    <>
-      <p>Upload image OR video (max 5GB).</p>
-      <input onChange={uploadPhoto} type="file" accept="image/*, video/*" />
+    <section className="py-2 relative">
+      <div className="flex flex-col">
+        <label className="">Upload image or video</label>
+        <small className="text-xs text-gray-500">(max 5GB).</small>
+      </div>
+
+      <input
+        onChange={uploadPhoto}
+        type="file"
+        accept="image/*, video/*"
+        ref={ref}
+        className="
+        block
+        w-full
+        px-2
+        py-1.5
+        font-normal
+        text-gray-700
+        bg-white bg-clip-padding
+        border border-solid border-gray-300
+        rounded
+        transition
+        ease-in-out
+        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+      />
 
       <button
         onClick={(e) => {
@@ -57,9 +86,12 @@ export default function Upload({ onChange, defaultSrc }) {
           setCleared(true);
           setKey('');
           onChange(null);
+          setIsSuccess(null);
+          reset();
         }}
+        className="absolute top-0 right-0 mt-1 mr-1 hover:text-gray-600"
       >
-        X
+        <IoMdClose />
       </button>
 
       {cleared ? null : !!success ? (
@@ -79,6 +111,6 @@ export default function Upload({ onChange, defaultSrc }) {
           )}
         </div>
       ) : null}
-    </>
+    </section>
   );
 }
