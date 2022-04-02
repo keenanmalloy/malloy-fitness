@@ -128,3 +128,6 @@ INSERT INTO exercises (exercise_id, created_at, updated_at, name, description, c
 INSERT INTO public.muscle_groups (muscle_group_id, name, description, image) VALUES (1000, 'Muscle Group 1', 'Description of muscle group 1', null);
 INSERT INTO public.muscle_groups (muscle_group_id, name, description, image) VALUES (1001, 'Muscle Group 2', 'Description of muscle group 2', null);
 INSERT INTO public.muscle_groups (muscle_group_id, name, description, image) VALUES (1002, 'Muscle Group 3', 'Description of muscle group 3', null);
+INSERT INTO public.muscle_groups (muscle_group_id, name, description, image) VALUES (1003, 'Muscle Group 4', 'Description of muscle group 4', null);
+INSERT INTO public.muscle_groups (muscle_group_id, name, description, image) VALUES (1004, 'Muscle Group 5', 'Description of muscle group 5', null);
+INSERT INTO public.muscle_groups (muscle_group_id, name, description, image) VALUES (1005, 'Muscle Group 6', 'Description of muscle group 6', null);

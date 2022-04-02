@@ -5,17 +5,37 @@ import { DeleteMuscleGroup } from './DeleteMuscleGroup';
 import { EditMuscleGroup } from './EditMuscleGroup';
 import { SearchMuscleGroups } from './SearchMuscleGroups';
 import { useState } from 'react';
+import { Skeleton } from 'features/common/Skeleton';
 
 export const MuscleGroups = () => {
   const { data, isError, isLoading } = useMuscleGroupsQuery();
   const [query, setQuery] = useState('');
 
   if (isLoading) {
-    return <p>loading...</p>;
+    return (
+      <div className="w-72">
+        <Skeleton className="h-10 w-full mt-5" />
+        <Skeleton className="h-10 w-full mt-2" />
+        <Skeleton className="h-28 w-full mt-5" />
+        <Skeleton className="h-28 w-full mt-2" />
+        <Skeleton className="h-28 w-full mt-2" />
+        <Skeleton className="h-28 w-full mt-2" />
+        <Skeleton className="h-28 w-full mt-2" />
+        <Skeleton className="h-28 w-full mt-2" />
+      </div>
+    );
   }
 
   if (isError) {
-    return <p style={{ color: 'red' }}>fetching error...</p>;
+    return (
+      <section className="w-72 relative">
+        <SearchMuscleGroups query={query} setQuery={setQuery} />
+        <ul className="flex flex-col divide-y-2 divide-gray-100">
+          {/* @@TODO add alert component here */}
+          <p style={{ color: 'red' }}>fetching error...</p>{' '}
+        </ul>
+      </section>
+    );
   }
 
   if (!data.muscleGroups) {
