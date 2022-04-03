@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS workout_exercises (
     exercise_id bigint REFERENCES exercises(exercise_id) ON DELETE CASCADE,
     priority int DEFAULT 1,
     "order" int DEFAULT 1,
+    notes text,
     UNIQUE (workout_id, exercise_id)
 );
 

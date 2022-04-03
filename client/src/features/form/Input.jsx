@@ -23,9 +23,10 @@ export const Input = ({
           onChange={onChange}
           autoFocus={!!autoFocus}
           disabled={isDisabled}
+          onBlur={onChange}
         />
         {isLoading && (
-          <CgSpinner className="w-4 h-4 animate-spin absolute top-6 right-1 text-gray-300" />
+          <CgSpinner className="w-6 h-6 animate-spin absolute top-6 right-1 text-gray-300" />
         )}
       </div>
     );
@@ -42,9 +43,10 @@ export const Input = ({
         onChange={onChange}
         autoFocus={!!autoFocus}
         disabled={isDisabled}
+        onBlur={onChange}
       />
       {isLoading && (
-        <CgSpinner className="w-4 h-4 animate-spin absolute top-6 right-1 text-gray-300" />
+        <CgSpinner className="w-6 h-6 animate-spin absolute top-6 right-1 text-gray-300" />
       )}
     </div>
   );
