@@ -1,7 +1,7 @@
 import { useState, useRef } from 'react';
 import { IoMdClose } from 'react-icons/io';
 
-export default function Upload({ onChange, defaultSrc }) {
+export default function Upload({ onChange, defaultSrc, hidePreview }) {
   const [success, setIsSuccess] = useState(null);
   const [filetype, setFiletype] = useState(null);
   const [cleared, setCleared] = useState(null);
@@ -94,23 +94,27 @@ export default function Upload({ onChange, defaultSrc }) {
         <IoMdClose />
       </button>
 
-      {cleared ? null : !!success ? (
-        <div>
-          {filetype && filetype.includes('image') ? (
-            <img src={`https://cdn.trckd.ca/${key}`} />
-          ) : (
-            <video autoPlay src={`https://cdn.trckd.ca/${key}`} />
-          )}
-        </div>
-      ) : !!defaultSrc ? (
-        <div>
-          {defaultSrc.includes('/images/') ? (
-            <img src={defaultSrc} />
-          ) : (
-            <video autoPlay src={defaultSrc} />
-          )}
-        </div>
-      ) : null}
+      {!hidePreview && (
+        <>
+          {cleared ? null : !!success ? (
+            <div>
+              {filetype && filetype.includes('image') ? (
+                <img src={`https://cdn.trckd.ca/${key}`} />
+              ) : (
+                <video autoPlay src={`https://cdn.trckd.ca/${key}`} />
+              )}
+            </div>
+          ) : !!defaultSrc ? (
+            <div>
+              {defaultSrc.includes('/images/') ? (
+                <img src={defaultSrc} />
+              ) : (
+                <video autoPlay src={defaultSrc} />
+              )}
+            </div>
+          ) : null}
+        </>
+      )}
     </section>
   );
 }

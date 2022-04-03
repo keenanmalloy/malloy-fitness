@@ -80,6 +80,8 @@ CREATE TABLE IF NOT EXISTS accounts (
     account_id bigserial PRIMARY KEY,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    given_name text,
+    family_name text,
     name text,
     email text,
     active boolean DEFAULT false,
@@ -87,7 +89,9 @@ CREATE TABLE IF NOT EXISTS accounts (
     role text,
     ticket uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     ticket_expiry timestamp with time zone DEFAULT now() NOT NULL,
-    locale VARCHAR(2) DEFAULT 'en-CA'
+    description text,
+    phone text,
+    locale VARCHAR(5) DEFAULT 'en-CA'
 );
 
 CREATE TABLE IF NOT EXISTS account_providers (

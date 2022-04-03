@@ -1,4 +1,5 @@
 import React from 'react';
+import { CgSpinner } from 'react-icons/cg';
 
 export const Input = ({
   onChange,
@@ -7,10 +8,12 @@ export const Input = ({
   isRequired,
   isTextArea,
   autoFocus,
+  isDisabled,
+  isLoading,
 }) => {
   if (isTextArea) {
     return (
-      <div className="py-2">
+      <div className="py-2 relative">
         <label>{label}</label>
         <textarea
           type="text"
@@ -19,13 +22,17 @@ export const Input = ({
           value={value}
           onChange={onChange}
           autoFocus={!!autoFocus}
+          disabled={isDisabled}
         />
+        {isLoading && (
+          <CgSpinner className="w-4 h-4 animate-spin absolute top-6 right-1 text-gray-300" />
+        )}
       </div>
     );
   }
 
   return (
-    <div className="py-2">
+    <div className="py-2 relative">
       <label>{label}</label>
       <input
         type="text"
@@ -34,7 +41,11 @@ export const Input = ({
         value={value}
         onChange={onChange}
         autoFocus={!!autoFocus}
+        disabled={isDisabled}
       />
+      {isLoading && (
+        <CgSpinner className="w-4 h-4 animate-spin absolute top-6 right-1 text-gray-300" />
+      )}
     </div>
   );
 };
