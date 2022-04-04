@@ -1,5 +1,5 @@
-import { db } from "config/db";
-import { Response } from "express";
+import { db } from 'config/db';
+import { Response } from 'express';
 
 export const authorizeWorkoutQuery = async (
   res: Response,
@@ -23,6 +23,7 @@ export const authorizeWorkoutQuery = async (
 
   try {
     const data = await db.query(query, params);
+
     if (!data.rows.length) {
       return {
         isAuthorized: false,
@@ -31,7 +32,7 @@ export const authorizeWorkoutQuery = async (
     }
 
     return {
-      isAuthorized: !!data.rows[0].created_by || httpMethod === "GET",
+      isAuthorized: !!data.rows[0].created_by || httpMethod === 'GET',
       createdBy: data.rows[0].created_by,
     };
   } catch (error) {

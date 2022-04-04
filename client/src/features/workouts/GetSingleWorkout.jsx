@@ -1,9 +1,9 @@
 import React from 'react';
 import AddExerciseToWorkout from 'features/exercises/AddExerciseToWorkout';
-import WorkoutExercises from './WorkoutExercises';
 import { DeleteWorkout } from './DeleteWorkout';
 import { useWorkoutQuery } from './useWorkoutQuery';
 import { UpdateWorkout } from './UpdateWorkout';
+import WorkoutExercises from './WorkoutExercises';
 
 export const GetSingleWorkout = ({ workoutId }) => {
   const { data, isError, isLoading } = useWorkoutQuery(workoutId);
@@ -26,10 +26,10 @@ export const GetSingleWorkout = ({ workoutId }) => {
         <p>id: {data.workout.workout_id}</p>
         <p>category: {data.workout.category}</p>
         <p>description: {data.workout.description}</p>
-        {/* <WorkoutExercises
+        <WorkoutExercises
           workoutId={data.workout.workout_id}
           exercises={data.workout.exercises}
-        /> */}
+        />
         {/* 
 
           If the call is successful, we'll need a way to "refetch" the workout or update the state of exercises.

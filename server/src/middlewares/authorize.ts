@@ -1,6 +1,6 @@
-import { NextFunction, Response, Request } from "express";
-import { authorizeExerciseQuery } from "queries/authorizeExerciseQuery";
-import { authorizeWorkoutQuery } from "queries/authorizeWorkoutQuery";
+import { NextFunction, Response, Request } from 'express';
+import { authorizeExerciseQuery } from 'queries/authorizeExerciseQuery';
+import { authorizeWorkoutQuery } from 'queries/authorizeWorkoutQuery';
 
 /**
  * Checks the DB for authorization of resource.
@@ -20,7 +20,7 @@ export const authorize = async (
     if (isAuthorized) {
       return next();
     }
-    return res.status(403).json({ message: "Unauthorized" });
+    return res.status(403).json({ message: 'Unauthorized' });
   }
 
   if (!!exerciseId) {
@@ -28,7 +28,7 @@ export const authorize = async (
     if (isAuthorized) {
       return next();
     }
-    return res.status(403).json({ message: "Unauthorized" });
+    return res.status(403).json({ message: 'Unauthorized' });
   }
 
   return next();

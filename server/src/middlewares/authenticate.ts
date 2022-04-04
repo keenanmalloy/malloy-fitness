@@ -1,5 +1,5 @@
-import { NextFunction, Response, Request } from "express";
-import { getLoginSession } from "sessions";
+import { NextFunction, Response, Request } from 'express';
+import { getLoginSession } from 'sessions';
 
 /**
  * Checks if the user is logged in.
@@ -21,19 +21,19 @@ export const authenticate = async (
         requestUrl: `${req.baseUrl}${req.route.path}`,
         workoutId: req.params.workoutId,
         exerciseId: req.params.exerciseId,
-        httpMethod: req.method // GET, PUT, POST, PATCH, DELETE, etc.
+        httpMethod: req.method, // GET, PUT, POST, PATCH, DELETE, etc.
       };
       return next();
     }
     return res
       .status(401)
-      .json({ message: "Unauthorized", error: "Please login" });
+      .json({ message: 'Unauthorized', error: 'Please login' });
   } catch (error) {
     return (
       res
         .status(401)
         // @ts-ignore
-        .json({ message: "Unauthorized", error: error.message })
+        .json({ message: 'Unauthorized', error: error.message })
     );
   }
 };
