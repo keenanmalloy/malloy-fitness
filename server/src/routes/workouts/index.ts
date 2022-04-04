@@ -19,6 +19,7 @@ const router = Router();
 // Retrieve todays workout(s) -------------- /?date=today
 // Retrieve yesterdays workout(s) ---------- /?date=yesterday
 // Retrieve tomorrows workout(s) ----------- /?date=tomorrow
+// Retrieve future workout(s) -------------- /?date=future
 // Retrieve workout(s) at a specific date -- /?date=YYYY-MM-DD
 // Retrieve workout(s) by category --------- /?category=legs
 // Retrieve workout(s) by completed true --- /?complete=1

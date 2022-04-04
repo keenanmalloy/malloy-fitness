@@ -1,4 +1,4 @@
-import { db } from "config/db";
+import { db } from 'config/db';
 
 interface createAccountProvider {
   account_id: string;
@@ -39,6 +39,8 @@ interface createAccountWithProvider {
   authProviderUniqueId: string;
 
   name: string;
+  familyName: string;
+  givenName: string;
   avatarUrl: string;
   email: string;
   locale: string;
@@ -47,13 +49,21 @@ interface createAccountWithProvider {
 export const createAccountWithProviderMutation = async (
   data: createAccountWithProvider
 ) => {
-  const { provider, authProviderUniqueId, name, avatarUrl, email, locale } =
-    data;
+  const {
+    provider,
+    authProviderUniqueId,
+    name,
+    avatarUrl,
+    email,
+    locale,
+    familyName,
+    givenName,
+  } = data;
 
   const query = `
         WITH ins1 AS (
-            INSERT INTO accounts(name, avatar_url, email)
-            VALUES ('${name}', '${avatarUrl}', '${email}')
+            INSERT INTO accounts(name, avatar_url, email, family_name, given_name, locale)
+            VALUES ('${name}', '${avatarUrl}', '${email}', '${familyName}', '${givenName}', '${locale}')
             RETURNING account_id
         )
         INSERT INTO account_providers (account_id, auth_provider, auth_provider_unique_id)

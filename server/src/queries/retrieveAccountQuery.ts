@@ -1,10 +1,10 @@
-import { db } from "config/db";
-import { Request, Response } from "express";
-import { getLoginSession } from "sessions";
+import { db } from 'config/db';
+import { Request, Response } from 'express';
+import { getLoginSession } from 'sessions';
 
 export const retrieveAccountByProviderQuery = async (
   providerUniqueId: string,
-  provider: "google"
+  provider: 'google'
 ) => {
   const query = `
 SELECT
@@ -62,22 +62,23 @@ WHERE email = $1
 
 export const retrieveMeQuery = async (req: Request, res: Response) => {
   try {
-    const session = await getLoginSession(req);
-    if (!session) {
-      throw new Error("Not logged in");
-    }
+    const accountId = res.locals.state.account.account_id;
+    const data = await db.query(
+      `SELECT * FROM accounts WHERE account_id = $1`,
+      [accountId]
+    );
 
     return res.status(200).json({
-      status: "success",
-      message: "User logged in",
-      session,
+      status: 'success',
+      message: 'User logged in',
+      account: data.rows[0],
     });
   } catch (error) {
     console.log({ error });
     return res.status(500).json({
-      status: "error",
-      message: "Session does not exist",
-      session: null,
+      status: 'error',
+      message: 'Session does not exist',
+      account: null,
     });
   }
 };

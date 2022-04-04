@@ -9,7 +9,7 @@ import Modal from 'features/common/Modal';
 export const CreateMuscleGroup = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
-  const [image, setImage] = useState('');
+  const [image, setImage] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const queryClient = useQueryClient();
@@ -30,6 +30,9 @@ export const CreateMuscleGroup = () => {
       {
         onSuccess: () => {
           queryClient.refetchQueries('fetchMuscleGroups');
+          setName('');
+          setDescription('');
+          setImage(null);
           setIsOpen(false);
         },
       }
@@ -38,7 +41,9 @@ export const CreateMuscleGroup = () => {
 
   return (
     <>
-      <Button onClick={() => setIsOpen(!isOpen)}>Create Muscle Group</Button>
+      <Button onClick={() => setIsOpen(!isOpen)} className="w-full">
+        Create Muscle Group
+      </Button>
 
       <Modal
         isOpen={isOpen}
@@ -62,7 +67,7 @@ export const CreateMuscleGroup = () => {
 
           <Upload onChange={(key) => setImage(`https://cdn.trckd.ca/${key}`)} />
 
-          <Button disabled={isLoading}>
+          <Button disabled={isLoading} className="w-full mt-2">
             {isLoading ? 'Creating...' : 'Create'}
           </Button>
 
