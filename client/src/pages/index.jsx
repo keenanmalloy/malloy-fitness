@@ -1,16 +1,9 @@
-import { MuscleGroups } from 'features/muscle-groups/MuscleGroups';
-import Login from 'features/login/Login';
-import { useState } from 'react';
-import Upload from 'features/Upload';
-import { Profile } from 'features/account/Profile';
-import { useWorkoutsQuery } from 'features/workouts/useWorkoutsQuery';
-import { Button } from 'features/common/Button';
-import { useRouter } from 'next/router';
+import React from 'react';
+import { useFutureWorkoutsQuery } from 'features/workouts/useWorkoutsQuery';
+import { Feed } from 'features/feed/Feed';
 
 function HomePage() {
-  const [startWorkoutError, setStartWorkoutError] = useState(null);
-  const { data, isError, isLoading } = useWorkoutsQuery();
-  const router = useRouter();
+  const { data, isError, isLoading } = useFutureWorkoutsQuery();
 
   if (isLoading) {
     return <p>loading...</p>;

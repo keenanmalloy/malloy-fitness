@@ -11,5 +11,7 @@ const fetchMuscleGroup = async ({ id }) => {
 };
 
 export const useMuscleGroupQuery = (id) => {
-  return useQuery('fetchMuscleGroups', () => fetchMuscleGroup({ id }));
+  return useQuery(['fetchMuscleGroup'], () => fetchMuscleGroup({ id }), {
+    refetchOnWindowFocus: false,
+  });
 };

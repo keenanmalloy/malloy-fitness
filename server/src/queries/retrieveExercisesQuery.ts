@@ -1,5 +1,5 @@
-import { db } from "config/db";
-import { Response, Request } from "express";
+import { db } from 'config/db';
+import { Response, Request } from 'express';
 
 // https://stackoverflow.com/questions/2218999/how-to-remove-all-duplicates-from-an-array-of-objects
 function getUniqueListBy(arr: any, key: string) {
@@ -19,6 +19,7 @@ export const retrieveExercisesQuery = async (req: Request, res: Response) => {
       e.category,
       e.created_by,
       e.description,
+      e.view,
       mg.muscle_group_id,
       mg.name AS muscle_group_name,
       mg.description AS muscle_group_description,
@@ -42,6 +43,7 @@ export const retrieveExercisesQuery = async (req: Request, res: Response) => {
       e.category,
       e.created_by,
       e.description,
+      e.view,
       mg.muscle_group_id,
       mg.name AS muscle_group_name,
       mg.description AS muscle_group_description,
@@ -58,7 +60,15 @@ export const retrieveExercisesQuery = async (req: Request, res: Response) => {
     const data = await db.query(query);
     const exercises = getUniqueListBy(
       data.rows.map(
-        ({ name, exercise_id, profile, category, created_by, description }) => {
+        ({
+          name,
+          exercise_id,
+          profile,
+          category,
+          created_by,
+          description,
+          view,
+        }) => {
           return {
             name,
             exercise_id,
@@ -66,22 +76,23 @@ export const retrieveExercisesQuery = async (req: Request, res: Response) => {
             category,
             created_by,
             description,
+            view,
           };
         }
       ),
-      "exercise_id"
+      'exercise_id'
     );
 
     return res.status(200).json({
-      message: "Exercises fetched successfully",
-      status: "success",
+      message: 'Exercises fetched successfully',
+      status: 'success',
       exercises,
     });
   } catch (error) {
     console.log({ error });
     return res.status(500).json({
-      status: "error",
-      message: "Database error",
+      status: 'error',
+      message: 'Database error',
       exercises: null,
     });
   }

@@ -11,5 +11,5 @@ const fetchMuscleGroups = async () => {
 };
 
 export const useMuscleGroupsQuery = () => {
-  return useQuery('fetchMuscleGroups', fetchMuscleGroups);
+  return useQuery(['fetchMuscleGroups'], fetchMuscleGroups);
 };

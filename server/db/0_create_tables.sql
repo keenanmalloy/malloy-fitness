@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS workout_exercises (
     exercise_id bigint REFERENCES exercises(exercise_id) ON DELETE CASCADE,
     priority int DEFAULT 1,
     "order" int DEFAULT 1,
+    notes text,
     UNIQUE (workout_id, exercise_id)
 );
 
@@ -80,6 +81,8 @@ CREATE TABLE IF NOT EXISTS accounts (
     account_id bigserial PRIMARY KEY,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    given_name text,
+    family_name text,
     name text,
     email text,
     active boolean DEFAULT false,
@@ -87,7 +90,9 @@ CREATE TABLE IF NOT EXISTS accounts (
     role text,
     ticket uuid DEFAULT public.uuid_generate_v4() NOT NULL,
     ticket_expiry timestamp with time zone DEFAULT now() NOT NULL,
-    locale VARCHAR(2) DEFAULT 'en-CA'
+    description text,
+    phone text,
+    locale VARCHAR(5) DEFAULT 'en-CA'
 );
 
 CREATE TABLE IF NOT EXISTS account_providers (
@@ -128,3 +133,6 @@ INSERT INTO exercises (exercise_id, created_at, updated_at, name, description, c
 INSERT INTO public.muscle_groups (muscle_group_id, name, description, image) VALUES (1000, 'Muscle Group 1', 'Description of muscle group 1', null);
 INSERT INTO public.muscle_groups (muscle_group_id, name, description, image) VALUES (1001, 'Muscle Group 2', 'Description of muscle group 2', null);
 INSERT INTO public.muscle_groups (muscle_group_id, name, description, image) VALUES (1002, 'Muscle Group 3', 'Description of muscle group 3', null);
+INSERT INTO public.muscle_groups (muscle_group_id, name, description, image) VALUES (1003, 'Muscle Group 4', 'Description of muscle group 4', null);
+INSERT INTO public.muscle_groups (muscle_group_id, name, description, image) VALUES (1004, 'Muscle Group 5', 'Description of muscle group 5', null);
+INSERT INTO public.muscle_groups (muscle_group_id, name, description, image) VALUES (1005, 'Muscle Group 6', 'Description of muscle group 6', null);
