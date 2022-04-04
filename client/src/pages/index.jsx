@@ -1,13 +1,16 @@
 import { MuscleGroups } from 'features/muscle-groups/MuscleGroups';
 import Login from 'features/login/Login';
-import React from 'react';
+import { useState } from 'react';
 import Upload from 'features/Upload';
 import { Profile } from 'features/account/Profile';
 import { useWorkoutsQuery } from 'features/workouts/useWorkoutsQuery';
 import { Button } from 'features/common/Button';
+import { useRouter } from 'next/router';
 
 function HomePage() {
+  const [startWorkoutError, setStartWorkoutError] = useState(null);
   const { data, isError, isLoading } = useWorkoutsQuery();
+  const router = useRouter();
 
   if (isLoading) {
     return <p>loading...</p>;
@@ -21,8 +24,43 @@ function HomePage() {
     return <p>none available...</p>;
   }
 
-  const startWorkout = (id) => {
-    console.log({ id });
+  const getSingleWorkout = async (id) => {
+    const res = await fetch(`http://localhost:4000/workouts/${id}`, {
+      credentials: 'include',
+    });
+    const json = await res.json();
+    return json;
+  };
+
+  const initializeWorkout = async (id) => {
+    const res = await fetch(`http://localhost:4000/workouts/${id}/start`, {
+      method: 'PATCH',
+      credentials: 'include',
+    });
+    const json = await res.json();
+    return json;
+  };
+
+  const startWorkout = async (workoutId) => {
+    const workoutRes = await getSingleWorkout(workoutId);
+    if (workoutRes.status !== 'success') {
+      return;
+    }
+    const firstExercise = workoutRes.workout.exercises.sort((a, b) => {
+      if (a.order < b.order) {
+        return -1;
+      }
+      if (a.order > b.order) {
+        return 1;
+      }
+      if (a.priority < b.priority) {
+        return -1;
+      }
+      if (a.priority > b.priority) {
+        return 1;
+      }
+      return 0;
+    })[0];
 
     // GET /workouts/:pk and distinguish the first exercise within the workout
     // if success, continue
@@ -33,6 +71,20 @@ function HomePage() {
     // redirect to page localhost:3000/workouts/:pk/exercises/:pk
     // If error
     // show same error in UI as above
+    const isStarted = workoutRes.workout.started_at;
+    //isStarted not defined yet, need to return started_at from api
+    if (isStarted) {
+      return router.push(
+        `/workouts/${workoutId}/exercises/${firstExercise.exercise_id}`
+      );
+    }
+    const json = await initializeWorkout(workoutId);
+    if (json.status !== 'success') {
+      return;
+    }
+    router.push(
+      `/workouts/${workoutId}/exercises/${firstExercise.exercise_id}`
+    );
   };
 
   return (
@@ -62,7 +114,7 @@ function HomePage() {
                 className="w-full"
                 onClick={() => startWorkout(w.workout_id)}
               >
-                Start
+                {w.started_at ? 'Continue' : 'Start'}
               </Button>
             </div>
           </div>
