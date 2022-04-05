@@ -1,4 +1,4 @@
-import { db } from "config/db";
+import { db } from 'config/db';
 
 interface Response {
   status: string;
@@ -21,15 +21,16 @@ export const retrieveExerciseQuery = async (
   res: any,
   id: string
 ): Promise<Response> => {
-  const query = `SELECT * FROM exercises WHERE exercise_id = $1`;
-  const params = [id];
+  const accountId = res.locals.state.account.account_id;
+  const query = `SELECT * FROM exercises WHERE exercise_id = $1 AND (created_by = $2 OR view = 'public')`;
+  const params = [id, accountId];
 
   try {
     const data = await db.query(query, params);
     if (!data.rows.length) {
       return res.status(404).json({
-        status: "error",
-        message: "Exercise does not exist",
+        status: 'error',
+        message: 'Exercise does not exist',
         exercise: null,
       });
     }
@@ -38,20 +39,20 @@ export const retrieveExerciseQuery = async (
     const muscleGroups = await getMuscleGroups(exerciseId);
     const exercise = {
       ...data.rows[0],
-      primary: muscleGroups.filter((mg) => mg.group === "primary"),
-      secondary: muscleGroups.filter((mg) => mg.group === "secondary"),
+      primary: muscleGroups.filter((mg) => mg.group === 'primary'),
+      secondary: muscleGroups.filter((mg) => mg.group === 'secondary'),
     };
 
     return res.status(200).json({
-      status: "success",
-      message: "Exercise fetched successfully",
+      status: 'success',
+      message: 'Exercise fetched successfully',
       exercise,
     });
   } catch (error) {
     console.log({ error });
     return res.status(500).json({
-      status: "error",
-      message: "Database error",
+      status: 'error',
+      message: 'Database error',
       exercise: null,
     });
   }

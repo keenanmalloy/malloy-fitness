@@ -1,32 +1,31 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { ExerciseList } from './ExerciseList';
-import { Button } from '../common/Button';
-import { useExercisesQuery } from './useExercisesQuery';
+import { Input } from 'features/form/Input';
+import { CreateExercise } from './CreateExercise';
 
 export const GetAllExercises = () => {
-  const { data, isError, isLoading } = useExercisesQuery();
+  const [query, setQuery] = useState('');
 
-  if (isLoading) {
-    return <p>loading...</p>;
-  }
-
-  if (isError) {
-    return <p style={{ color: 'red' }}>fetching error...</p>;
-  }
-
-  if (!data.exercises) {
-    return <p>none available...</p>;
-  }
+  const handleQuery = (e) => {
+    setQuery(e.target.value);
+  };
 
   return (
-    <div>
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : (
-        <ExerciseList exercises={data.exercises} />
-      )}
-
-      <Button href="/exercises/create">Create exercise</Button>
-    </div>
+    <section>
+      <div className="sticky top-10 bg-white">
+        <Input
+          onChange={handleQuery}
+          value={query}
+          label="search"
+          isRequired
+          type="search"
+          autoFocus
+        />
+        <div className="pb-2 w-full">
+          <CreateExercise />
+        </div>
+      </div>
+      <ExerciseList query={query} />
+    </section>
   );
 };
