@@ -9,23 +9,32 @@ export const RadioGroup = ({
   name,
 }) => {
   return (
-    <div>
+    <div className="py-2">
       <label>{label}</label>
-      {options.map((option, key) => {
-        return (
-          <label htmlFor={option} key={key}>
-            <input
-              type="radio"
-              name={name}
-              id={option}
-              checked={option === checked}
-              required={isRequired}
-              onChange={() => onChange(option)}
-            />
-            <span>{option}</span>
-          </label>
-        );
-      })}
+      <ul className="grid grid-cols-3 mt-2">
+        {options.map((option, key) => {
+          return (
+            <li key={key} className="relative flex align-center">
+              <input
+                className="sr-only peer"
+                type="radio"
+                value={option}
+                name={name}
+                id={option}
+                checked={option === checked}
+                required={isRequired}
+                onChange={() => onChange(option)}
+              />
+              <label
+                className="flex justify-center mx-1 px-5 py-3 w-full bg-white rounded-md cursor-pointer hover:bg-gray-50 peer-checked:ring-blue-500 peer-checked:ring-2 peer-checked:bg-white"
+                htmlFor={option}
+              >
+                {option}
+              </label>
+            </li>
+          );
+        })}
+      </ul>
     </div>
   );
 };

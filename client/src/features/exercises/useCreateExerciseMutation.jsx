@@ -7,6 +7,9 @@ const createExercise = async ({ exercise }) => {
     body: JSON.stringify(exercise),
     credentials: 'include',
   });
+  if (!res.ok) {
+    throw new Error(res.statusText);
+  }
   const json = await res.json();
   return json;
 };

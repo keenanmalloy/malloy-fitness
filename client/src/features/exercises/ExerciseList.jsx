@@ -1,10 +1,47 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
+import { useExercisesQuery } from './useExercisesQuery';
+import { Button } from 'features/common/Button';
+import { UpdateExercise } from './UpdateExercise';
 
-export const ExerciseList = ({ exercises }) => {
+function useDebounce(value, delay = 500) {
+  const [debouncedValue, setDebouncedValue] = useState(value);
+
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedValue(value);
+    }, delay);
+
+    // Cancel the timeout if value changes (also on delay change or unmount)
+    return () => {
+      clearTimeout(handler);
+    };
+  }, [value, delay]);
+
+  return debouncedValue;
+}
+
+export const ExerciseList = ({ query }) => {
+  const debouncedSearchQuery = useDebounce(query, 600);
+  const { data, isError, isLoading } = useExercisesQuery(debouncedSearchQuery);
+
+  if (isLoading) {
+    return <p>loading...</p>;
+  }
+
+  if (isError) {
+    return <p style={{ color: 'red' }}>fetching error...</p>;
+  }
+
+  if (!data.exercises) {
+    return <p>none available...</p>;
+  }
+
+  console.log({ data });
+
   return (
     <div>
-      {exercises.map((exercise) => (
+      {data.exercises.map((exercise) => (
         <div
           className="flex flex-col text-center hover:bg-slate-200"
           key={exercise.exercise_id}
@@ -41,6 +78,9 @@ export const ExerciseList = ({ exercises }) => {
               </div>
             </div>
           </Link>
+          {exercise.view === 'private' && (
+            <UpdateExercise exercise={exercise} />
+          )}
         </div>
       ))}
     </div>
