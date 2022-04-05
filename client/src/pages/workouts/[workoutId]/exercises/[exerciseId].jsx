@@ -1,6 +1,7 @@
 import React from 'react';
 import { useWorkoutExerciseQuery } from 'features/workouts/useWorkoutExerciseQuery';
 import { SetsByExercise } from 'features/sets/SetsByExercise';
+import { WorkoutExercise } from 'features/workouts/WorkoutExercise';
 
 export async function getStaticPaths() {
   return {
@@ -67,10 +68,7 @@ const WorkoutExercisePage = ({ exerciseId, workoutId }) => {
   return (
     <div>
       Workout Exercise Page
-      <p>{data.exercise.name}</p>
-      <p>{data.exercise.video}</p>
-      {/* <GetSingleWorkout exerciseId={exerciseId} /> */}
-      <SetsByExercise workoutId={workoutId} exerciseId={exerciseId} />
+      <WorkoutExercise />
     </div>
   );
 };

@@ -2,6 +2,7 @@ import React from 'react';
 import { Input } from 'features/form/Input';
 import { Avatar } from './Avatar';
 import { AccountField } from './AccountField';
+import { Logout } from 'features/auth/Logout';
 
 export const AccountPanel = ({ account }) => {
   const [givenName, setGivenName] = React.useState(account.given_name);
@@ -85,6 +86,7 @@ export const AccountPanel = ({ account }) => {
         }).format(new Date(account.created_at))}
         .
       </small>
+      <Logout />
     </div>
   );
 };

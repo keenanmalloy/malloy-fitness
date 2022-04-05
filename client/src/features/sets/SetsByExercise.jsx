@@ -14,6 +14,5 @@ export const SetsByExercise = ({ workoutId, exerciseId }) => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  console.log({ data });
   return <div>SetsByExercise</div>;
 };

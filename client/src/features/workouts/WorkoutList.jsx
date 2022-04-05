@@ -1,8 +1,8 @@
 import React from 'react';
 import Link from 'next/link';
 import { DeleteWorkout } from './DeleteWorkout';
-import { UpdateWorkout } from './UpdateWorkout';
 import { Button } from 'features/common/Button';
+import Overview from 'features/overview/Overview';
 
 export const WorkoutList = ({ workouts }) => {
   if (!workouts.length) {
@@ -46,6 +46,7 @@ export const WorkoutList = ({ workouts }) => {
             </div>
           </Link>
           <DeleteWorkout workoutId={workout.workout_id} />
+          <Overview workout={workout} workoutId={workout.workout_id} />
         </div>
       ))}
     </div>

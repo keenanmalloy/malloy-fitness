@@ -41,18 +41,18 @@ const navigation = [
       />
     ),
   },
-  {
-    name: 'Profile',
-    href: '/profile',
-    icon: (
-      <RiUser3Fill
-        style={{
-          width: 20,
-          height: 20,
-        }}
-      />
-    ),
-  },
+  // {
+  //   name: 'Profile',
+  //   href: '/profile',
+  //   icon: (
+  //     <RiUser3Fill
+  //       style={{
+  //         width: 20,
+  //         height: 20,
+  //       }}
+  //     />
+  //   ),
+  // },
 ];
 
 function classNames(...classes) {
