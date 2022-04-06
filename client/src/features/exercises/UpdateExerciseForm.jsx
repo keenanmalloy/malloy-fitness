@@ -5,8 +5,15 @@ import { useQueryClient } from 'react-query';
 import { useUpdateExerciseMutation } from './useUpdateExerciseMutation';
 import { Button } from 'features/common/Button';
 import Select from 'react-select';
+import { useAddMuscleGroupToExerciseMutation } from './useAddMuscleGroupToExerciseMutation';
+import { useRemoveMuscleGroupFromExerciseMutation } from './useRemoveMuscleGroupFromExerciseMutation';
 
-export const UpdateExerciseForm = ({ exercise, muscleGroups, setIsOpen }) => {
+export const UpdateExerciseForm = ({
+  exercise,
+  muscleGroups,
+  setIsOpen,
+  queryKey,
+}) => {
   const [name, setName] = useState(exercise.name);
   const [description, setDescription] = useState(exercise.description);
   const [category, setCategory] = useState(exercise.category);
@@ -19,6 +26,11 @@ export const UpdateExerciseForm = ({ exercise, muscleGroups, setIsOpen }) => {
     exercise.exercise_id
   );
 
+  const { mutate: addMuscleGroupMutation } =
+    useAddMuscleGroupToExerciseMutation(exercise.exercise_id);
+  const { mutate: removeMuscleGroupMutation } =
+    useRemoveMuscleGroupFromExerciseMutation(exercise.exercise_id);
+
   const queryClient = useQueryClient();
 
   const handleSubmit = (e) => {
@@ -29,19 +41,62 @@ export const UpdateExerciseForm = ({ exercise, muscleGroups, setIsOpen }) => {
       description,
       category,
       profile,
-      // primary: primary.map((object) => object.value),
-      // secondary: secondary.map((object) => object.value),
     };
 
     mutate(
       { exercise },
       {
         onSuccess: () => {
-          queryClient.refetchQueries('fetchExercises');
+          queryClient.refetchQueries(queryKey);
           setIsOpen(false);
         },
       }
     );
+  };
+
+  const updateMuscleGroup = ({ data, group }) => {
+    // get the muscle groups that are not in the primary array
+    const newPrimary = data.map((object) => object.value);
+    const oldPrimary = exercise[group].map((object) => object.muscle_group_id);
+
+    // get difference array values in newPrimary and oldPrimary
+    const difference =
+      newPrimary.length > oldPrimary.length
+        ? newPrimary.filter((x) => !oldPrimary.includes(x))
+        : oldPrimary.filter((x) => !newPrimary.includes(x));
+
+    const isAddition = newPrimary.length > oldPrimary.length;
+    const isRemove = newPrimary.length < oldPrimary.length;
+
+    if (isAddition) {
+      addMuscleGroupMutation(
+        {
+          group,
+          muscleGroupId: difference[0],
+        },
+        {
+          onSuccess: () => {
+            queryClient.refetchQueries(queryKey);
+          },
+        }
+      );
+    }
+
+    if (isRemove) {
+      for (const id of difference) {
+        removeMuscleGroupMutation(
+          {
+            group,
+            muscleGroupId: id,
+          },
+          {
+            onSuccess: () => {
+              queryClient.refetchQueries(queryKey);
+            },
+          }
+        );
+      }
+    }
   };
 
   return (
@@ -147,6 +202,7 @@ export const UpdateExerciseForm = ({ exercise, muscleGroups, setIsOpen }) => {
             }),
           }}
           onChange={(data) => {
+            updateMuscleGroup({ data, group: 'primary' });
             setPrimary(data);
             setIsPrimaryError(false);
           }}
@@ -175,7 +231,11 @@ export const UpdateExerciseForm = ({ exercise, muscleGroups, setIsOpen }) => {
               value: mg.muscle_group_id,
             };
           })}
-          onChange={(data) => setSecondary(data)}
+          onChange={(data) => {
+            updateMuscleGroup({ data, group: 'secondary' });
+            setSecondary(data);
+            setIsPrimaryError(false);
+          }}
           name="secondary-muscle-groups"
           options={muscleGroups.map((muscleGroup) => {
             return {

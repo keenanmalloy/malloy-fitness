@@ -45,6 +45,7 @@ export const GetSingleExercise = ({ id }) => {
       <UpdateExercise
         exercise={data.exercise}
         muscleGroups={mgData.muscleGroups}
+        queryKey="fetchExercise"
       />
       <DeleteExercise exerciseId={data.exercise.exercise_id} />
     </div>
