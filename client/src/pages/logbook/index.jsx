@@ -1,11 +1,12 @@
-import React from "react";
-import { Logbook } from "features/Logbook";
+import React from 'react';
+import { Logbook } from 'features/Logbook';
+import Layout from 'features/common/Layout';
 
 const LogbookPage = () => {
   return (
-    <div>
+    <Layout>
       <Logbook />
-    </div>
+    </Layout>
   );
 };
 

@@ -5,6 +5,7 @@ import { useQueryClient } from 'react-query';
 import { useUpdateExerciseMutation } from './useUpdateExerciseMutation';
 import { Button } from 'features/common/Button';
 import Select from 'react-select';
+import { EXERCISE_CATEGORIES } from 'features/enviornment';
 
 export const UpdateExerciseForm = ({ exercise, muscleGroups, setIsOpen }) => {
   const [name, setName] = useState(exercise.name);
@@ -84,28 +85,7 @@ export const UpdateExerciseForm = ({ exercise, muscleGroups, setIsOpen }) => {
                 : {}),
             }),
           }}
-          options={[
-            {
-              label: 'chest',
-              value: 'chest',
-            },
-            {
-              label: 'arms',
-              value: 'arms',
-            },
-            {
-              label: 'back',
-              value: 'back',
-            },
-            {
-              label: 'legs',
-              value: 'legs',
-            },
-            {
-              label: 'shoulders',
-              value: 'shoulders',
-            },
-          ]}
+          options={EXERCISE_CATEGORIES}
         />
         {isCategoryError && (
           <div className="text-red-500 text-xs italic text-right">

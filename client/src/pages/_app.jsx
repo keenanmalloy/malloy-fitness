@@ -20,9 +20,7 @@ const queryClient = new QueryClient({
 export default function MyApp({ Component, pageProps }) {
   return (
     <QueryClientProvider client={queryClient}>
-      <Layout>
-        <Component {...pageProps} />
-      </Layout>
+      <Component {...pageProps} />
     </QueryClientProvider>
   );
 }
