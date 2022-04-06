@@ -4,6 +4,7 @@ import { authorize } from 'middlewares/authorize';
 import { addExerciseToWorkoutMutation } from 'queries/addExerciseToWorkoutMutation';
 import { removeExerciseFromWorkoutMutation } from 'queries/removeExerciseFromWorkoutMutation';
 import { retrieveExerciseWorkoutQuery } from 'queries/retrieveExerciseWorkoutQuery';
+import { updateWorkoutExerciseMetadataMutation } from 'queries/updateWorkoutExerciseMetadataMutation';
 import { updateWorkoutExerciseMutation } from 'queries/updateWorkoutExerciseMutation';
 
 const router = Router();
@@ -43,6 +44,21 @@ router.put(
   authorize,
   async (req, res) => {
     await updateWorkoutExerciseMutation(
+      res,
+      req.body,
+      req.params.workoutId,
+      req.params.exerciseId
+    );
+  }
+);
+
+// Update exercise metadata in the workout
+router.patch(
+  '/:workoutId/exercises/:exerciseId',
+  authenticate,
+  authorize,
+  async (req, res) => {
+    await updateWorkoutExerciseMetadataMutation(
       res,
       req.body,
       req.params.workoutId,

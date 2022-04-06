@@ -8,7 +8,12 @@ interface Response {
 
 const getMuscleGroups = async (exerciseId: string) => {
   const data = await db.query(
-    `SELECT * FROM muscle_groups mg
+    `SELECT
+      mg.name as muscle_group_name,
+      mg.description as muscle_group_description,
+      mg.muscle_group_id,
+      "group" as muscle_group
+    FROM muscle_groups mg
     JOIN exercise_muscle_groups emg ON emg.muscle_group_id = mg.muscle_group_id
   WHERE exercise_id = $1`,
     [exerciseId]
@@ -37,10 +42,29 @@ export const retrieveExerciseQuery = async (
 
     const exerciseId = data.rows[0].exercise_id;
     const muscleGroups = await getMuscleGroups(exerciseId);
+
     const exercise = {
       ...data.rows[0],
-      primary: muscleGroups.filter((mg) => mg.group === 'primary'),
-      secondary: muscleGroups.filter((mg) => mg.group === 'secondary'),
+      primary: muscleGroups
+        .filter((mg) => mg.muscle_group === 'primary')
+        .map((mg) => {
+          return {
+            name: mg.muscle_group_name,
+            description: mg.muscle_group_description,
+            muscle_group_id: mg.muscle_group_id,
+            group: mg.muscle_group,
+          };
+        }),
+      secondary: muscleGroups
+        .filter((mg) => mg.muscle_group === 'secondary')
+        .map((mg) => {
+          return {
+            name: mg.muscle_group_name,
+            description: mg.muscle_group_description,
+            muscle_group_id: mg.muscle_group_id,
+            group: mg.muscle_group,
+          };
+        }),
     };
 
     return res.status(200).json({

@@ -42,6 +42,10 @@ CREATE TABLE IF NOT EXISTS workout_exercises (
     priority int DEFAULT 1,
     "order" int DEFAULT 1,
     notes text,
+    sets text,
+    repetitions text,
+    reps_in_reserve text,
+    rest_period text,
     UNIQUE (workout_id, exercise_id)
 );
 

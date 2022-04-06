@@ -36,7 +36,7 @@ export const retrieveExercisesQuery = async (req: Request, res: Response) => {
     FROM exercises e
         LEFT OUTER JOIN exercise_muscle_groups emg
               on emg.exercise_id = e.exercise_id
-                  JOIN muscle_groups mg on mg.muscle_group_id = emg.muscle_group_id
+                LEFT OUTER JOIN muscle_groups mg on mg.muscle_group_id = emg.muscle_group_id
     
     WHERE 
       e.name LIKE '%${req.query.q}%' 
@@ -68,7 +68,7 @@ export const retrieveExercisesQuery = async (req: Request, res: Response) => {
     FROM exercises e
         LEFT OUTER JOIN exercise_muscle_groups emg
               on emg.exercise_id = e.exercise_id
-                  JOIN muscle_groups mg on mg.muscle_group_id = emg.muscle_group_id`;
+                LEFT OUTER JOIN muscle_groups mg on mg.muscle_group_id = emg.muscle_group_id`;
 
   const accountId = res.locals.state.account.account_id;
   const params = [accountId];
@@ -101,8 +101,8 @@ export const retrieveExercisesQuery = async (req: Request, res: Response) => {
               )
               .map((mg) => {
                 return {
-                  name: mg.name,
-                  description: mg.description,
+                  name: mg.muscle_group_name,
+                  description: mg.muscle_group_description,
                   muscle_group_id: mg.muscle_group_id,
                   group: mg.muscle_group,
                 };
@@ -110,12 +110,13 @@ export const retrieveExercisesQuery = async (req: Request, res: Response) => {
             secondary: data.rows
               .filter(
                 (e) =>
-                  e.exercise_id === exercise_id && e.muscle_group === 'primary'
+                  e.exercise_id === exercise_id &&
+                  e.muscle_group === 'secondary'
               )
               .map((mg) => {
                 return {
-                  name: mg.name,
-                  description: mg.description,
+                  name: mg.muscle_group_name,
+                  description: mg.muscle_group_description,
                   muscle_group_id: mg.muscle_group_id,
                   group: mg.muscle_group,
                 };
