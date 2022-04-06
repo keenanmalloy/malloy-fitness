@@ -1,6 +1,5 @@
-import { db } from "config/db";
-import Joi from "joi";
-import { update } from "utils/update";
+import { db } from 'config/db';
+import Joi from 'joi';
 
 interface Response {
   status: string;
@@ -23,8 +22,8 @@ export const updateWorkoutExerciseMutation = async (
   const { error, value, warning } = updateWorkoutExerciseSchema.validate(data);
   if (error) {
     return res.status(422).json({
-      status: "error",
-      message: "Invalid request data",
+      status: 'error',
+      message: 'Invalid request data',
       exercise: value,
       error: error,
     });
@@ -32,21 +31,21 @@ export const updateWorkoutExerciseMutation = async (
     const { order, priority } = data;
 
     if (
-      (typeof order === "number" && order < 0) ||
-      (typeof priority === "number" && priority < 0)
+      (typeof order === 'number' && order < 0) ||
+      (typeof priority === 'number' && priority < 0)
     ) {
       return res.status(422).json({
-        status: "error",
-        message: "Only positive numbers allowed for weight and reps",
+        status: 'error',
+        message: 'Only positive numbers allowed for weight and reps',
         exercise: null,
       });
     }
 
     if (!order && !priority) {
       return res.status(422).json({
-        status: "error",
+        status: 'error',
         message:
-          "Both order and priority were missing or were coerced to false. One of order or priority is required to update the exercise within the workout.",
+          'Both order and priority were missing or were coerced to false. One of order or priority is required to update the exercise within the workout.',
         exercise: null,
       });
     }
@@ -78,22 +77,22 @@ export const updateWorkoutExerciseMutation = async (
       const data = await db.query(query, params);
       if (!data.rowCount) {
         return res.status(404).json({
-          status: "error",
-          message: "Exercise does not exist",
+          status: 'error',
+          message: 'Exercise does not exist',
           exercise: null,
         });
       }
 
       return res.status(200).json({
-        status: "success",
-        message: "Exercise updated successfully",
+        status: 'success',
+        message: 'Exercise updated successfully',
         exercise: data.rows[0],
       });
     } catch (error) {
       console.log({ error });
       return res.status(500).json({
-        status: "error",
-        message: "Database error",
+        status: 'error',
+        message: 'Database error',
         exercise: null,
       });
     }
