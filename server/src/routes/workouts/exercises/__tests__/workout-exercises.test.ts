@@ -71,7 +71,7 @@ describe('POST /workouts/:pk/exercises', function () {
 describe('PATCH /workouts/:pk/exercises/:pk - update workout-exercise metadata', function () {
   it('responds with 401 Unauthenticated', async function () {
     const res = await request
-      .put(`/workouts/1000/exercises/${deletable}`)
+      .patch(`/workouts/1000/exercises/${deletable}`)
       .send({
         order: 2,
         priority: 2,
@@ -83,7 +83,7 @@ describe('PATCH /workouts/:pk/exercises/:pk - update workout-exercise metadata',
 
   it('responds with 403 Unauthorized', async function () {
     const res = await request
-      .put(`/workouts/1003/exercises/${deletable}`)
+      .patch(`/workouts/1003/exercises/${deletable}`)
       .send({
         order: 2,
         priority: 2,
@@ -92,6 +92,34 @@ describe('PATCH /workouts/:pk/exercises/:pk - update workout-exercise metadata',
       .set('Cookie', [`token=${token}`]);
 
     expect(res.status).toEqual(403);
+  });
+
+  it('responds with 422 unprocessable entity', async function () {
+    const res = await request
+      .patch(`/workouts/1000/exercises/${deletable}`)
+      .send({
+        order: 2,
+      })
+      .set('Accept', 'application/json')
+      .set('Cookie', [`token=${token}`]);
+
+    expect(res.status).toEqual(422);
+  });
+
+  it('responds with 200 success', async function () {
+    const res = await request
+      .patch(`/workouts/1000/exercises/${deletable}`)
+      .send({
+        notes: 'update notes',
+        sets: '2',
+        repetitions: '10-12',
+        reps_in_reserve: '1',
+        rest_period: '120 seconds',
+      })
+      .set('Accept', 'application/json')
+      .set('Cookie', [`token=${token}`]);
+
+    expect(res.status).toEqual(200);
   });
 });
 
@@ -121,7 +149,7 @@ describe('PUT /workouts/:pk/exercises/:pk', function () {
     expect(res.status).toEqual(403);
   });
 
-  it('responds with 200 successfully updated', async function () {
+  it('responds with 422 unprocessable entity', async function () {
     const res = await request
       .put(`/workouts/1000/exercises/${deletable}`)
       .send({})

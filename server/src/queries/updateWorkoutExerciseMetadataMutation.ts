@@ -35,8 +35,6 @@ export const updateWorkoutExerciseMetadataMutation = async (
       data,
     });
 
-    console.log({ query, params });
-
     try {
       const data = await db.query(query, params);
       if (!data.rowCount) {
