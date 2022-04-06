@@ -37,8 +37,6 @@ export const ExerciseList = ({ query }) => {
     return <p>none available...</p>;
   }
 
-  console.log({ data });
-
   return (
     <div>
       {data.exercises.map((exercise) => (
@@ -79,7 +77,7 @@ export const ExerciseList = ({ query }) => {
             </div>
           </Link>
           {exercise.view === 'private' && (
-            <UpdateExercise exercise={exercise} />
+            <UpdateExercise exercise={exercise} queryKey="fetchExercises" />
           )}
         </div>
       ))}
