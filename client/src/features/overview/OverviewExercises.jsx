@@ -6,7 +6,6 @@ import StartWorkout from 'features/workouts/StartWorkout';
 
 export const OverviewExercises = ({ workoutId }) => {
   const { data, isError, isLoading } = useWorkoutQuery(workoutId);
-  console.log({ data, workoutId });
 
   if (isLoading) {
     return <p>loading...</p>;

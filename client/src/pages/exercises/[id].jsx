@@ -1,5 +1,6 @@
 import React from 'react';
 import { GetSingleExercise } from 'features/exercises/GetSingleExercise';
+import Layout from 'features/common/Layout';
 
 export async function getStaticPaths() {
   return {
@@ -18,10 +19,10 @@ export async function getStaticProps({ params }) {
 
 const ExercisePage = ({ exerciseId }) => {
   return (
-    <div>
+    <Layout>
       ExercisePage
       <GetSingleExercise id={exerciseId} />
-    </div>
+    </Layout>
   );
 };
 

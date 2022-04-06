@@ -1,3 +1,4 @@
+import Layout from 'features/common/Layout';
 import { MuscleGroup } from 'features/muscle-groups/MuscleGroup';
 
 export async function getStaticPaths() {
@@ -17,10 +18,10 @@ export async function getStaticProps({ params }) {
 
 const MuscleGroupsPage = ({ muscleGroupId }) => {
   return (
-    <div className="p-5">
+    <Layout className="p-5">
       <h1 className="text-2xl">Muscle Group</h1>
       <MuscleGroup muscleGroupId={muscleGroupId} />
-    </div>
+    </Layout>
   );
 };
 

@@ -1,11 +1,12 @@
+import Layout from 'features/common/Layout';
 import { MuscleGroups } from 'features/muscle-groups/MuscleGroups';
 
 const MuscleGroupsPage = () => {
   return (
-    <div>
+    <Layout>
       <h1 className="py-5">Muscle Groups</h1>
       <MuscleGroups />
-    </div>
+    </Layout>
   );
 };
 
