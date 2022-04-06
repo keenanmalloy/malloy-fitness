@@ -21,7 +21,8 @@ Endpoints for viewing and manipulating workouts.
 - [Update a workout](docs/workouts/put.md) : `PUT /workouts/:pk/`
 - [Delete a workout](docs/workouts/delete.md) : `DELETE /workouts/:pk/`
 - [Add an exercise to a workout](docs/workouts/post.md) : `POST /workouts/:pk/exercises/`
-- [Update an exercise order / priority in a workout](docs/workouts/put.md) : `PUT /workouts/:pk/exercises/:pk/`
+- [Update an exercise order / priority in a workout](docs/workouts/exercises/put.md) : `PUT /workouts/:pk/exercises/:pk/`
+- [Update notes, sets, repetitions, reps_in_reserve, rest_period](docs/workouts/exercises/patch.md) : `PATCH /workouts/:pk/exercises/:pk`
 - [Remove an exercise from a workout](docs/workouts/delete.md) : `DELETE /workouts/:pk/exercises/:pk/`
 - [Start workout](docs/workouts/start/patch.md) : `PATCH /workouts/:pk/start`
 - [End workout](docs/workouts/end/patch.md) : `PATCH /workouts/:pk/end`
