@@ -1,22 +1,20 @@
-import React from "react";
-import { CreateWorkout } from "features/workouts/CreateWorkout";
+import React, { useState } from 'react';
+import { CreateWorkout } from 'features/workouts/CreateWorkout';
+import { useExercisesQuery } from 'features/exercises/useExercisesQuery';
+import { Input } from 'features/form/Input';
+import { GetAllExercises } from 'features/exercises/GetAllExercises';
+import { ExerciseList } from 'features/exercises/ExerciseList';
+import { Button } from 'features/common/Button';
 
-export async function getServerSideProps() {
-  const res = await fetch(`http://localhost:4000/exercises`);
-  const data = await res.json();
-
-  return { props: { data } };
-}
-
-const ExerciseCreatePage = (props) => {
-  const exercises = props.data.exercises;
-
+const CreateWorkoutPage = () => {
   return (
     <div>
-      ExerciseCreatePages
-      <CreateWorkout exercises={exercises} />
+      <h1 className="text-3xl p-5">Create Workout</h1>
+      <Button href="/workouts">Workouts</Button>
+      <Button href="/">Home</Button>
+      <CreateWorkout />
     </div>
   );
 };
 
-export default ExerciseCreatePage;
+export default CreateWorkoutPage;

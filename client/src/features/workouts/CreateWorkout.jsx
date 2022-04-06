@@ -4,6 +4,7 @@ import { Select as SelectComponent } from 'features/form/Select';
 import { Button } from 'features/common/Button';
 import Select from 'react-select';
 import { useCreateWorkoutMutation } from './useCreateWorkoutMutation';
+import { ChooseWorkoutExercises } from './ChooseWorkoutExercises';
 
 export const CreateWorkout = ({ exercises }) => {
   const [name, setName] = useState('');
@@ -11,6 +12,7 @@ export const CreateWorkout = ({ exercises }) => {
   const [category, setCategory] = useState('');
   const [data, setData] = useState([]);
   const { mutate, isLoading, isError } = useCreateWorkoutMutation();
+  const [exercises, setExercises] = useState([]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -19,19 +21,17 @@ export const CreateWorkout = ({ exercises }) => {
       name: name,
       description: description,
       category: category,
-      exercises: data.map((ex) => {
-        return {
-          id: ex.value,
-        };
-      }),
+      // exercises: data.map((ex) => {
+      //   return {
+      //     id: ex.value,
+      //   };
+      // }),
     };
     mutate({ workout });
   };
 
   return (
     <>
-      <Button href="/workouts">Workouts</Button>
-      <Button href="/">Home</Button>
       <form onSubmit={handleSubmit}>
         <Input
           onChange={(e) => setName(e.target.value)}
@@ -55,8 +55,13 @@ export const CreateWorkout = ({ exercises }) => {
           options={['chest', 'arms', 'back', 'legs', 'shoulders']}
           defaultOption="--choose a category --"
         />
+        <div>{exercises.join(', ')}</div>
+        <ChooseWorkoutExercises
+          exercises={exercises}
+          setExercises={setExercises}
+        />
 
-        <Select
+        {/* <Select
           id="long-value-select"
           instanceId="long-value-select"
           defaultValue={[]}
@@ -71,11 +76,11 @@ export const CreateWorkout = ({ exercises }) => {
           })}
           className="basic-multi-select"
           classNamePrefix="select"
-        />
+        /> */}
 
-        <Button isLoading={isLoading}>
+        {/* <Button isLoading={isLoading}>
           {isLoading ? 'Adding workout...' : 'Add workout'}
-        </Button>
+        </Button> */}
       </form>
     </>
   );

@@ -37,8 +37,6 @@ export const ExerciseList = ({ query }) => {
     return <p>none available...</p>;
   }
 
-  console.log({ data });
-
   return (
     <div>
       {data.exercises.map((exercise) => (
