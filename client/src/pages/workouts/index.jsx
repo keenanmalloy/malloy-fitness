@@ -1,12 +1,13 @@
-import React from "react";
-import { GetAllWorkouts } from "features/workouts/GetAllWorkouts";
+import React from 'react';
+import { GetAllWorkouts } from 'features/workouts/GetAllWorkouts';
+import Layout from 'features/common/Layout';
 
 const WorkoutsPage = () => {
   return (
-    <div>
+    <Layout>
       WorkoutsPage
       <GetAllWorkouts />
-    </div>
+    </Layout>
   );
 };
 

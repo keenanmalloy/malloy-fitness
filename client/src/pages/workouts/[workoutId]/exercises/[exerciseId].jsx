@@ -2,6 +2,7 @@ import React from 'react';
 import { useWorkoutExerciseQuery } from 'features/workouts/useWorkoutExerciseQuery';
 import { SetsByExercise } from 'features/sets/SetsByExercise';
 import { WorkoutExercise } from 'features/workouts/WorkoutExercise';
+import WorkoutExerciseHeader from 'features/workouts/WorkoutExerciseHeader';
 
 export async function getStaticPaths() {
   return {
@@ -23,6 +24,8 @@ const WorkoutExercisePage = ({ exerciseId, workoutId }) => {
     exerciseId,
     workoutId
   );
+
+  console.log({ data });
 
   if (isError) {
     return <div>Error!</div>;
@@ -67,8 +70,8 @@ const WorkoutExercisePage = ({ exerciseId, workoutId }) => {
 
   return (
     <div>
-      Workout Exercise Page
-      <WorkoutExercise />
+      <WorkoutExerciseHeader />
+      <WorkoutExercise workoutId={workoutId} />
     </div>
   );
 };

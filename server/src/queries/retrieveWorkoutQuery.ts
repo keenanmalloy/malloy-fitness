@@ -1,4 +1,4 @@
-import { db } from "config/db";
+import { db } from 'config/db';
 
 interface Response {
   status: string;
@@ -23,7 +23,12 @@ export const retrieveWorkoutQuery = async (
   e.profile,
   e.exercise_id,
   we.priority,
-  we.order
+  we.order,
+  we.notes,
+  we.sets,
+  we.repetitions,
+  we.reps_in_reserve,
+  we.rest_period
 FROM workouts
 LEFT OUTER JOIN workout_exercises we on workouts.workout_id = we.workout_id
 LEFT OUTER JOIN exercises e on we.exercise_id = e.exercise_id
@@ -34,8 +39,8 @@ WHERE workouts.workout_id = $1`;
     const data = await db.query(query, params);
     if (!data.rows.length) {
       return res.status(404).json({
-        status: "error",
-        message: "Workout does not exist",
+        status: 'error',
+        message: 'Workout does not exist',
         workout: null,
       });
     }
@@ -54,6 +59,11 @@ WHERE workouts.workout_id = $1`;
             video: exercise.video,
             order: exercise.order,
             priority: exercise.priority,
+            notes: exercise.notes,
+            sets: exercise.sets,
+            repetitions: exercise.repetitions,
+            repsInReserve: exercise.reps_in_reserve,
+            restPeriod: exercise.rest_period,
           };
         });
 
@@ -66,15 +76,15 @@ WHERE workouts.workout_id = $1`;
     };
 
     return res.status(200).json({
-      status: "success",
-      message: "Workout fetched successfully",
+      status: 'success',
+      message: 'Workout fetched successfully',
       workout,
     });
   } catch (error) {
     console.log({ error });
     return res.status(500).json({
-      status: "error",
-      message: "Database error",
+      status: 'error',
+      message: 'Database error',
       workout: null,
     });
   }

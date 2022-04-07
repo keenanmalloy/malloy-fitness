@@ -5,6 +5,7 @@ import { RadioGroup } from 'features/form/RadioGroup';
 import { useCreateExerciseMutation } from './useCreateExerciseMutation';
 import Select from 'react-select';
 import { useQueryClient } from 'react-query';
+import { EXERCISE_CATEGORIES } from 'features/enviornment';
 
 export const CreateExerciseForm = ({ muscleGroups }) => {
   const [name, setName] = useState('');
@@ -94,28 +95,7 @@ export const CreateExerciseForm = ({ muscleGroups }) => {
                 : {}),
             }),
           }}
-          options={[
-            {
-              label: 'chest',
-              value: 'chest',
-            },
-            {
-              label: 'arms',
-              value: 'arms',
-            },
-            {
-              label: 'back',
-              value: 'back',
-            },
-            {
-              label: 'legs',
-              value: 'legs',
-            },
-            {
-              label: 'shoulders',
-              value: 'shoulders',
-            },
-          ]}
+          options={EXERCISE_CATEGORIES}
         />
         {isCategoryError && (
           <div className="text-red-500 text-xs italic text-right">

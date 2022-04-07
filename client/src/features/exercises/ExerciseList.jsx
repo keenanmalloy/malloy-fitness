@@ -77,7 +77,7 @@ export const ExerciseList = ({ query }) => {
             </div>
           </Link>
           {exercise.view === 'private' && (
-            <UpdateExercise exercise={exercise} />
+            <UpdateExercise exercise={exercise} queryKey="fetchExercises" />
           )}
         </div>
       ))}

@@ -6,7 +6,7 @@ import Modal from 'features/common/Modal';
 import { UpdateExerciseForm } from './UpdateExerciseForm';
 import { useMuscleGroupsQuery } from 'features/muscle-groups/useMuscleGroupsQuery';
 
-export const UpdateExercise = ({ exercise }) => {
+export const UpdateExercise = ({ exercise, queryKey }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { data, isError, isLoading } = useMuscleGroupsQuery();
 
@@ -31,6 +31,7 @@ export const UpdateExercise = ({ exercise }) => {
         <UpdateExerciseForm
           exercise={exercise}
           muscleGroups={data.muscleGroups}
+          queryKey={queryKey}
           setIsOpen={setIsOpen}
         />
       </Modal>

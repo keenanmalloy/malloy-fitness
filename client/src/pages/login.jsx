@@ -1,11 +1,12 @@
-import React from "react";
-import Login from "features/login/Login";
+import React from 'react';
+import Login from 'features/login/Login';
+import Layout from 'features/common/Layout';
 
 const LoginPage = () => {
   return (
-    <div>
+    <Layout>
       <Login />
-    </div>
+    </Layout>
   );
 };
 

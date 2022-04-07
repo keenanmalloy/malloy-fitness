@@ -3,7 +3,7 @@ import Modal from 'features/common/Modal';
 import React, { useState } from 'react';
 import { OverviewExercises } from './OverviewExercises';
 
-const Overview = ({ workout, workoutId }) => {
+const Overview = ({ workoutId }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (

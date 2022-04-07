@@ -2,6 +2,7 @@ import React from 'react';
 import { useFutureWorkoutsQuery } from 'features/workouts/useWorkoutsQuery';
 import { Feed } from 'features/feed/Feed';
 import Overview from 'features/overview/Overview';
+import Layout from 'features/common/Layout';
 
 function HomePage() {
   const { data, isError, isLoading } = useFutureWorkoutsQuery();
@@ -19,9 +20,9 @@ function HomePage() {
   }
 
   return (
-    <div>
+    <Layout>
       <Overview workoutId={100} />
-    </div>
+    </Layout>
   );
 }
 
