@@ -40,7 +40,7 @@ export const ChooseWorkoutExerciseList = ({
   }
 
   return (
-    <div>
+    <div className="p-1">
       {data.exercises.map((exercise) => (
         <article
           className="flex flex-col py-2 relative "
@@ -52,14 +52,23 @@ export const ChooseWorkoutExerciseList = ({
             onChange={(e) => {
               setExercises((prev) => {
                 if (e.target.checked) {
-                  return [...prev, exercise.exercise_id];
+                  return [
+                    ...prev,
+                    {
+                      id: exercise.exercise_id,
+                      sets: null,
+                      repetitions: null,
+                      repsInReserve: null,
+                      restPeriod: null,
+                    },
+                  ];
                 } else {
-                  return prev.filter((ex) => ex !== exercise.exercise_id);
+                  return prev.filter((ex) => ex.id !== exercise.exercise_id);
                 }
               });
             }}
             value={exercise.exercise_id}
-            checked={exercises.includes(exercise.exercise_id)}
+            checked={exercises.some((ex) => ex.id === exercise.exercise_id)}
           />
           <div className="px-3 py-3 rounded-md peer-checked:ring-blue-500 peer-checked:ring-2 peer-checked:bg-white">
             <h2 className="text-xl font-bold">{exercise.name}</h2>
@@ -70,7 +79,7 @@ export const ChooseWorkoutExerciseList = ({
           </div>
 
           <span className="hidden peer-checked:flex absolute right-2 top-4 bg-blue-500 rounded-full text-white w-5 h-5  justify-center items-center">
-            {exercises.indexOf(exercise.exercise_id) + 1}
+            {exercises.findIndex((ex) => ex.id === exercise.exercise_id) + 1}
           </span>
         </article>
       ))}

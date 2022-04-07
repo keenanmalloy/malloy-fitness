@@ -10,8 +10,9 @@ import muscleGroups from './muscle-groups';
 
 const router = Router();
 
-// Retrieve all exercises ----- /
-// Search exercises ----------- /?q=barbell
+// Retrieve all exercises -------------- /
+// Search exercises -------------------- /?q=barbell
+// Select exercises from array of IDS -- /?ids=1,2,3
 router.get('/', authenticate, async (req, res) => {
   await retrieveExercisesQuery(req, res);
 });

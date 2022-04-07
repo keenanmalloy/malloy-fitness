@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
-import { CreateWorkout } from 'features/workouts/CreateWorkout';
-import { useExercisesQuery } from 'features/exercises/useExercisesQuery';
 import { Input } from 'features/form/Input';
-import { GetAllExercises } from 'features/exercises/GetAllExercises';
-import { ExerciseList } from 'features/exercises/ExerciseList';
 import { Button } from 'features/common/Button';
-import Modal from 'features/common/Modal';
+import FullPageModal from 'features/common/FullPageModal';
 import { ChooseWorkoutExerciseList } from './ChooseWorkoutExerciseList';
+import { IoMdClose } from 'react-icons/io';
 
 export const ChooseWorkoutExercises = ({ exercises, setExercises }) => {
   const [query, setQuery] = useState('');
@@ -16,7 +13,6 @@ export const ChooseWorkoutExercises = ({ exercises, setExercises }) => {
     setIsOpen(false);
   }
   function openModal() {
-    console.log('clicked');
     setIsOpen(true);
   }
 
@@ -26,13 +22,14 @@ export const ChooseWorkoutExercises = ({ exercises, setExercises }) => {
 
   return (
     <>
-      <Button type="button" onClick={openModal}>
+      <Button type="button" onClick={openModal} className="w-full mt-2">
         Choose exercises
       </Button>
-      <Modal isOpen={isOpen} closeModal={closeModal}>
-        {exercises.join(', ')}
-
-        <div className="sticky top-10 bg-white">
+      <FullPageModal isOpen={isOpen} closeModal={closeModal} isFull>
+        <div className="sticky top-0 bg-white z-40">
+          <button className="absolute top-2 z-50 right-0">
+            <IoMdClose onClick={closeModal} />
+          </button>
           <Input
             onChange={handleQuery}
             value={query}
@@ -47,7 +44,7 @@ export const ChooseWorkoutExercises = ({ exercises, setExercises }) => {
           exercises={exercises}
           setExercises={setExercises}
         />
-      </Modal>
+      </FullPageModal>
     </>
   );
 };
