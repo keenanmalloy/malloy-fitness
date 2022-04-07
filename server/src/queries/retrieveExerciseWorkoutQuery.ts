@@ -8,7 +8,12 @@ export const retrieveExerciseWorkoutQuery = async (
 ) => {
   try {
     const mainExercise = await queryMainExercise(workoutId, exerciseId);
-    const orderedExercise = await queryExerciseByOrder(
+    const nextOrderEx = await queryExerciseByNextOrder(
+      workoutId,
+      mainExercise.order
+    );
+
+    const prevOrderEx = await queryExerciseByPrevOrder(
       workoutId,
       mainExercise.order
     );
@@ -19,7 +24,7 @@ export const retrieveExerciseWorkoutQuery = async (
     );
 
     const nextExerciseByOrder =
-      orderedExercise.filter(
+      nextOrderEx.filter(
         (ex) => ex.exercise_id !== exerciseId && mainExercise.order < ex.order
       )[0] ?? null;
 
@@ -30,7 +35,7 @@ export const retrieveExerciseWorkoutQuery = async (
       )[0] ?? null;
 
     const prevExerciseByOrder =
-      orderedExercise.filter(
+      prevOrderEx.filter(
         (ex) => ex.exercise_id !== exerciseId && mainExercise.order > ex.order
       )[0] ?? null;
 
@@ -86,11 +91,8 @@ const queryMainExercise = async (workoutId: string, exerciseId: string) => {
   return data.rows[0];
 };
 
-const queryExerciseByOrder = async (workoutId: string, order: number) => {
-  let query;
-  // if the order is 1, only fetch the next exercise
-  if (!order) {
-    query = `
+const queryExerciseByNextOrder = async (workoutId: string, order: number) => {
+  let query = `
         SELECT
             exercises.exercise_id,
             priority,
@@ -100,22 +102,31 @@ const queryExerciseByOrder = async (workoutId: string, order: number) => {
             ON exercises.exercise_id = workout_exercises.exercise_id
         WHERE
             workout_id = ${workoutId}
-        AND workout_exercises.order IN(1, 2)
-   `;
-  } else {
-    query = `
-        SELECT
-            exercises.exercise_id,
-            priority,
-            "order"
-        FROM exercises
-        JOIN workout_exercises
-            ON exercises.exercise_id = workout_exercises.exercise_id
-        WHERE
-            workout_id = ${workoutId}
-        AND workout_exercises.order IN(${order - 1}, ${order}, ${order + 1})
+        AND workout_exercises.order > ${order}
+        ORDER BY 
+          workout_exercises.order ASC, workout_exercises.priority ASC
+        LIMIT 1
     `;
-  }
+
+  const data = await db.query(query);
+  return data.rows;
+};
+
+const queryExerciseByPrevOrder = async (workoutId: string, order: number) => {
+  let query = `
+        SELECT
+            exercises.exercise_id,
+            priority,
+            "order"
+        FROM exercises
+        JOIN workout_exercises
+            ON exercises.exercise_id = workout_exercises.exercise_id
+        WHERE
+            workout_id = ${workoutId}
+        AND workout_exercises.order < ${order}
+          ORDER BY workout_exercises.order ASC, workout_exercises.priority ASC
+        LIMIT 1
+    `;
 
   const data = await db.query(query);
   return data.rows;
