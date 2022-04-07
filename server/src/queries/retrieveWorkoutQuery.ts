@@ -16,6 +16,11 @@ export const retrieveWorkoutQuery = async (
   workouts.category as workout_category,
   workouts.created_by as workout_created_by,
   workouts.workout_id,
+  workouts.started_at,
+  workouts.ended_at,
+  workouts.type,
+  workouts.workout_dt,
+  workouts.completed,
   e.name,
   e.description,
   e.category,
@@ -72,6 +77,11 @@ WHERE workouts.workout_id = $1`;
       description: data.rows[0].workout_description,
       category: data.rows[0].workout_category,
       workout_id: data.rows[0].workout_id,
+      workout_dt: data.rows[0].workout_dt,
+      started_at: data.rows[0].started_at,
+      ended_at: data.rows[0].ended_at,
+      type: data.rows[0].type,
+      completed: data.rows[0].completed,
       exercises,
     };
 
