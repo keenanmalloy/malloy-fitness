@@ -4,7 +4,7 @@ import { OverviewRow } from 'features/overview/OverviewRow';
 import WorkoutExerciseLog from './WorkoutExerciseLog';
 import { Button } from 'features/common/Button';
 
-export const WorkoutExercise = ({ workoutId }) => {
+export const WorkoutExercise = ({ workoutId, exerciseId }) => {
   const { data, isError, isLoading } = useWorkoutQuery(workoutId);
 
   if (isLoading) {
@@ -20,6 +20,7 @@ export const WorkoutExercise = ({ workoutId }) => {
   }
 
   const addSet = () => {};
+  const nextExercise = () => {};
 
   return (
     <div>
@@ -34,10 +35,13 @@ export const WorkoutExercise = ({ workoutId }) => {
       <div className="box-border h-32 text-center w-auto">
         {data.workout.exercises[0].video}
       </div>
-      <WorkoutExerciseLog />
+      <WorkoutExerciseLog workoutId={workoutId} exerciseId={exerciseId} />
       <div className="flex justify-around">
         <Button onClick={addSet}>+ Add Set</Button>
         <Button>Notes</Button>
+      </div>
+      <div className="flex justify-center py-1">
+        <Button onClick={nextExercise}>Next Exercise</Button>
       </div>
     </div>
   );

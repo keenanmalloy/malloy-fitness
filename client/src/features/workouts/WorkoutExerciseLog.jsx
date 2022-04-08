@@ -1,7 +1,21 @@
+import { useSetsByExerciseQuery } from 'features/sets/useSetsByExerciseQuery';
 import React from 'react';
 import WorkoutExerciseLogRow from './WorkoutExerciseLogRow';
 
-const WorkoutExerciseLog = () => {
+const WorkoutExerciseLog = ({ workoutId, exerciseId }) => {
+  const { data, isError, isLoading } = useSetsByExerciseQuery(
+    workoutId,
+    exerciseId
+  );
+
+  if (isError) {
+    return <div>Error!</div>;
+  }
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div>
       <div className="flex justify-evenly">
@@ -9,15 +23,11 @@ const WorkoutExerciseLog = () => {
         <p>Weight (LBS)</p>
       </div>
       <ul className="py-1">
-        <li className="py-1">
-          <WorkoutExerciseLogRow setNumber="01" repNumber="10-12" />
-        </li>
-        <li className="py-1">
-          <WorkoutExerciseLogRow setNumber="02" repNumber="10-12" />
-        </li>
-        <li className="py-1">
-          <WorkoutExerciseLogRow setNumber="03" repNumber="10-12" />
-        </li>
+        {data.sets.map((set) => (
+          <li className="py-1">
+            <WorkoutExerciseLogRow setNumber="01" repNumber="10-12" />
+          </li>
+        ))}
       </ul>
     </div>
   );

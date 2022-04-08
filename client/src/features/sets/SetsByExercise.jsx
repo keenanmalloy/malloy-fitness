@@ -7,6 +7,8 @@ export const SetsByExercise = ({ workoutId, exerciseId }) => {
     exerciseId
   );
 
+  console.log({ data });
+
   if (isError) {
     return <div>Error!</div>;
   }
