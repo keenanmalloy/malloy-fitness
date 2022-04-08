@@ -1,5 +1,5 @@
 import React from 'react';
-import { GetSingleExercise } from 'features/exercises/GetSingleExercise';
+import { GetSingleExercise } from 'features/exercises/components/GetSingleExercise';
 import Layout from 'features/common/Layout';
 
 export async function getStaticPaths() {

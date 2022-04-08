@@ -1,5 +1,5 @@
 import React from 'react';
-import Login from 'features/login/Login';
+import Login from 'features/account/components/Login';
 import Layout from 'features/common/Layout';
 
 const LoginPage = () => {

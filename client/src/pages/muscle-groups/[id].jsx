@@ -1,5 +1,5 @@
 import Layout from 'features/common/Layout';
-import { MuscleGroup } from 'features/muscle-groups/MuscleGroup';
+import { MuscleGroup } from 'features/muscle-groups/components/MuscleGroup';
 
 export async function getStaticPaths() {
   return {

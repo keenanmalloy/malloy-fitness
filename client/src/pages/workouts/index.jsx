@@ -1,5 +1,5 @@
 import React from 'react';
-import { GetAllWorkouts } from 'features/workouts/GetAllWorkouts';
+import { GetAllWorkouts } from 'features/workouts/components/GetAllWorkouts';
 import Layout from 'features/common/Layout';
 
 const WorkoutsPage = () => {
