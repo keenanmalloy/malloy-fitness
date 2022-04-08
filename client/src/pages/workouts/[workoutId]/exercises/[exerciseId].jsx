@@ -25,8 +25,6 @@ const WorkoutExercisePage = ({ exerciseId, workoutId }) => {
     workoutId
   );
 
-  console.log({ data });
-
   if (isError) {
     return <div>Error!</div>;
   }
@@ -70,8 +68,8 @@ const WorkoutExercisePage = ({ exerciseId, workoutId }) => {
 
   return (
     <div>
-      <WorkoutExerciseHeader />
-      <WorkoutExercise workoutId={workoutId} />
+      <WorkoutExerciseHeader workoutId={workoutId} />
+      <WorkoutExercise workoutId={workoutId} exerciseId={exerciseId} />
     </div>
   );
 };

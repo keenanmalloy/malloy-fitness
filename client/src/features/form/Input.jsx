@@ -10,6 +10,7 @@ export const Input = ({
   autoFocus,
   isDisabled,
   isLoading,
+  placeholder,
 }) => {
   if (isTextArea) {
     return (
@@ -24,6 +25,7 @@ export const Input = ({
           autoFocus={!!autoFocus}
           disabled={isDisabled}
           onBlur={onChange}
+          placeholder={placeholder}
         />
         {isLoading && (
           <CgSpinner className="w-6 h-6 animate-spin absolute top-6 right-1 text-gray-300" />
@@ -44,6 +46,7 @@ export const Input = ({
         autoFocus={!!autoFocus}
         disabled={isDisabled}
         onBlur={onChange}
+        placeholder={placeholder}
       />
       {isLoading && (
         <CgSpinner className="w-6 h-6 animate-spin absolute top-6 right-1 text-gray-300" />
