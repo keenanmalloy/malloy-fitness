@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useExercisesQuery } from './useExercisesQuery';
-import { Button } from 'features/common/Button';
 import { UpdateExercise } from './UpdateExercise';
 
 function useDebounce(value, delay = 500) {
