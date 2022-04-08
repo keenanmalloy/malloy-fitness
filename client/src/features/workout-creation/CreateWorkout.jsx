@@ -18,17 +18,26 @@ export const CreateWorkout = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    console.log({ exercises });
+
     const workout = {
       name: name,
       description: description,
       category: category,
-      exercises: exercises.map((id, key) => {
+      exercises: exercises.map((ex, key) => {
         return {
-          id,
+          id: ex.id,
           order: key + 1,
+          priority: ex.priority,
+          repetitions: ex.repetitions,
+          repsInReserve: ex.repsInReserve,
+          restPeriod: ex.restPeriod,
+          sets: ex.sets,
         };
       }),
     };
+
+    console.log(workout);
 
     mutate({ workout });
   };

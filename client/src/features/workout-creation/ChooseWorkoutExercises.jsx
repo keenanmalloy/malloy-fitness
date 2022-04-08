@@ -44,6 +44,9 @@ export const ChooseWorkoutExercises = ({ exercises, setExercises }) => {
           exercises={exercises}
           setExercises={setExercises}
         />
+        <Button onClick={closeModal} className="w-full mt-2">
+          Save
+        </Button>
       </FullPageModal>
     </>
   );

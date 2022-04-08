@@ -60,6 +60,8 @@ export const ChooseWorkoutExerciseList = ({
                       repetitions: null,
                       repsInReserve: null,
                       restPeriod: null,
+                      priority: null,
+                      order: exercises.length + 1,
                     },
                   ];
                 } else {

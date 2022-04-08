@@ -1,5 +1,5 @@
-import { db } from "config/db";
-import Joi from "joi";
+import { db } from 'config/db';
+import Joi from 'joi';
 
 type Exercises = {
   id: string | number;
@@ -24,14 +24,18 @@ interface Response {
 
 const createWorkoutSchema = Joi.object({
   name: Joi.string().min(3).max(64).required(),
-  description: Joi.string().max(250).allow("").optional(),
+  description: Joi.string().max(250).allow('').optional(),
   category: Joi.string().required(),
   exercises: Joi.array()
     .items(
       Joi.object().keys({
         id: Joi.any().required(),
-        order: Joi.number().optional(),
-        priority: Joi.number().optional(),
+        order: Joi.number().optional().allow(null),
+        priority: Joi.number().optional().allow(null),
+        repetitions: Joi.any().optional().allow(null),
+        repsInReserve: Joi.any().optional().allow(null),
+        restPeriod: Joi.any().optional().allow(null),
+        sets: Joi.any().optional().allow(null),
       })
     )
     .required(),
@@ -48,7 +52,7 @@ const createWorkoutExercisesLink = async (
           exercise.priority ?? 0
         })`;
       })
-      .join(",");
+      .join(',');
   };
 
   const data = await db.query(`
@@ -72,15 +76,13 @@ export const createWorkoutMutation = async (
 ): Promise<Response> => {
   if (!data.exercises) {
     return res.status(422).json({
-      status: "error",
-      message: `Invalid request data, missing array of objects of id, order and priority. 
-        Order is used so we can sort the exercises. 
-        Priority is used to prioritize exercises placed at the same order.`,
+      status: 'error',
+      message: `Invalid request data, missing exercises.`,
       workout: null,
       example: {
-        name: "My Workout",
-        description: "",
-        category: "Legs",
+        name: 'My Workout',
+        description: '',
+        category: 'Legs',
         exercises: [
           { id: 1, order: 1 },
           { id: 2, order: 2 },
@@ -96,8 +98,8 @@ export const createWorkoutMutation = async (
 
   if (error) {
     return res.status(422).json({
-      status: "error",
-      message: "Invalid request data",
+      status: 'error',
+      message: 'Invalid request data',
       workout: value,
       error: error,
     });
@@ -111,8 +113,8 @@ export const createWorkoutMutation = async (
 
     if (validateExercises(exercises)) {
       return res.status(400).json({
-        status: "error",
-        message: "Invalid exercise ID",
+        status: 'error',
+        message: 'Invalid exercise ID',
         exercises: exercises,
         workout: null,
       });
@@ -138,16 +140,16 @@ export const createWorkoutMutation = async (
       const workout = data.rows[0];
 
       return res.status(201).json({
-        status: "success",
-        message: "Workout created successfully",
+        status: 'success',
+        message: 'Workout created successfully',
         workout,
       });
     } catch (error) {
       console.log({ error });
       return res.status(500).json({
-        status: "error",
+        status: 'error',
         //@ts-ignore
-        message: error && error.message ? error.message : "Database error",
+        message: error && error.message ? error.message : 'Database error',
         workout: null,
         error: error,
       });
