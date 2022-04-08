@@ -4,7 +4,7 @@ const updateField = async (payload) => {
   try {
     // fetch the data, the fetch call returns a promise of a response.
     // we await for the promise to resolve with the await keyword.
-    const res = await fetch(`http://localhost:4000/auth/me`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/me`, {
       method: 'PATCH',
       credentials: 'include',
       headers: { 'Content-Type': 'application/json' },

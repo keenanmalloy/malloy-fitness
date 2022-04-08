@@ -6,7 +6,7 @@ const removeMuscleGroupFromExercise = async ({
   group,
 }) => {
   const res = await fetch(
-    `http://localhost:4000/exercises/${exerciseId}/muscle-group/${muscleGroupId}/${group}`,
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/exercises/${exerciseId}/muscle-group/${muscleGroupId}/${group}`,
     {
       method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },

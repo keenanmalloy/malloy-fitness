@@ -2,7 +2,7 @@ import { useMutation, useQueryClient } from 'react-query';
 
 const addMuscleGroupToExercise = async ({ exerciseId, payload }) => {
   const res = await fetch(
-    `http://localhost:4000/exercises/${exerciseId}/muscle-group/`,
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/exercises/${exerciseId}/muscle-group/`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },

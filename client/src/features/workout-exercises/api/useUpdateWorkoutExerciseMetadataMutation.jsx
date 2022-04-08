@@ -7,7 +7,7 @@ const updateWorkoutExerciseMetadata = async ({
 }) => {
   console.log({ body });
   const res = await fetch(
-    `http://localhost:4000/workouts/${workoutId}/exercises/${exerciseId}`,
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/workouts/${workoutId}/exercises/${exerciseId}`,
     {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },

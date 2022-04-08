@@ -5,18 +5,24 @@ import { useRouter } from 'next/router';
 const StartWorkout = ({ workoutId }) => {
   const router = useRouter();
   const getSingleWorkout = async (id) => {
-    const res = await fetch(`http://localhost:4000/workouts/${id}`, {
-      credentials: 'include',
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/workouts/${id}`,
+      {
+        credentials: 'include',
+      }
+    );
     const json = await res.json();
     return json;
   };
 
   const initializeWorkout = async (id) => {
-    const res = await fetch(`http://localhost:4000/workouts/${id}/start`, {
-      method: 'PATCH',
-      credentials: 'include',
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/workouts/${id}/start`,
+      {
+        method: 'PATCH',
+        credentials: 'include',
+      }
+    );
     const json = await res.json();
     return json;
   };

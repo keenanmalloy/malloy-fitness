@@ -2,9 +2,12 @@ import { useQuery } from 'react-query';
 
 const fetchWorkouts = async () => {
   try {
-    const res = await fetch('http://localhost:4000/workouts/', {
-      credentials: 'include',
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/workouts/`,
+      {
+        credentials: 'include',
+      }
+    );
     const json = await res.json();
     return json;
   } catch (error) {
@@ -18,9 +21,12 @@ export const useWorkoutsQuery = () => {
 
 const fetchFutureWorkouts = async () => {
   try {
-    const res = await fetch('http://localhost:4000/workouts/?date=future', {
-      credentials: 'include',
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/workouts/?date=future`,
+      {
+        credentials: 'include',
+      }
+    );
     const json = await res.json();
     return json;
   } catch (error) {

@@ -9,7 +9,7 @@ export const Logout = () => {
   const router = useRouter();
 
   const handleClick = () => {
-    fetch('http://localhost:4000/auth/logout', {
+    fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/logout`, {
       method: 'POST',
       credentials: 'include',
     });

@@ -36,10 +36,13 @@ const WorkoutTimer = ({ startedAt, workoutId }) => {
   }, []);
 
   const endWorkout = async (id) => {
-    const res = await fetch(`http://localhost:4000/workouts/${id}/end`, {
-      method: 'PATCH',
-      credentials: 'include',
-    });
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/workouts/${id}/end`,
+      {
+        method: 'PATCH',
+        credentials: 'include',
+      }
+    );
     const json = await res.json();
     return json;
   };

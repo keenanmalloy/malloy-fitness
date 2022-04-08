@@ -3,7 +3,7 @@ import { useMutation } from 'react-query';
 const updateWorkoutExercise = async ({ workoutId, exerciseId, payload }) => {
   console.log({ payload });
   const res = await fetch(
-    `http://localhost:4000/workouts/${workoutId}/exercises/${exerciseId}/`,
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/workouts/${workoutId}/exercises/${exerciseId}/`,
     {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },

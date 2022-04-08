@@ -1,11 +1,13 @@
-import { useRouter } from "next/router";
-import React from "react";
-import { Button } from "features/common/Button";
+import { useRouter } from 'next/router';
+import React from 'react';
+import { Button } from 'features/common/Button';
 
 const Login = () => {
   const router = useRouter();
   const handleSubmit = () => {
-    router.push("http://localhost:4000/auth/providers/google");
+    router.push(
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/providers/google`
+    );
   };
 
   return (

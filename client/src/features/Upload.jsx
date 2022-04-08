@@ -24,7 +24,7 @@ export default function Upload({ onChange, defaultSrc, hidePreview }) {
     setFiletype(filetype);
 
     const res = await fetch(
-      `http://localhost:4000/storage/upload?file=${filename}&type=${filetype}`,
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/storage/upload?file=${filename}&type=${filetype}`,
       { credentials: 'include' }
     );
     const { url, fields } = await res.json();

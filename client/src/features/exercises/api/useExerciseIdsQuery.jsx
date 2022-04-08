@@ -4,7 +4,7 @@ const fetchExercises = async (ids) => {
   // fetch the data, the fetch call returns a promise of a response.
   // we await for the promise to resolve with the await keyword.
   const res = await fetch(
-    `http://localhost:4000/exercises/?ids=${ids.join(',')}`,
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/exercises/?ids=${ids.join(',')}`,
     {
       credentials: 'include',
     }
