@@ -1,4 +1,4 @@
-import { GetAccount } from 'features/account/GetAccount';
+import { GetAccount } from 'features/account/components/GetAccount';
 import Layout from 'features/common/Layout';
 import React from 'react';
 

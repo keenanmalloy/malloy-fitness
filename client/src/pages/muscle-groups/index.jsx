@@ -1,5 +1,5 @@
 import Layout from 'features/common/Layout';
-import { MuscleGroups } from 'features/muscle-groups/MuscleGroups';
+import { MuscleGroups } from 'features/muscle-groups/components/MuscleGroups';
 
 const MuscleGroupsPage = () => {
   return (

@@ -1,5 +1,5 @@
 import React from 'react';
-import { CreateWorkout } from 'features/workouts/CreateWorkout';
+import { CreateWorkout } from 'features/workout-creation/CreateWorkout';
 import Layout from 'features/common/Layout';
 
 const CreateWorkoutPage = () => {

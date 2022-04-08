@@ -29,7 +29,7 @@ export const initProvider = ({ router, middleware }: Props): void => {
         {
           clientID: PROVIDERS.GOOGLE.clientID,
           clientSecret: PROVIDERS.GOOGLE.clientSecret,
-          callbackURL: `http://localhost:4000/auth/providers/google/callback`,
+          callbackURL: `${process.env.API_ENDPOINT}/auth/providers/google/callback`,
           passReqToCallback: true,
           scope: PROVIDERS.GOOGLE.scope,
         },
@@ -118,7 +118,7 @@ export const initProvider = ({ router, middleware }: Props): void => {
   subRouter.get(
     '/callback',
     passport.authenticate('google', {
-      failureRedirect: `http://localhost:3000/?error=failed-google-oauth`,
+      failureRedirect: `${process.env.APP_ENDPOINT}/?error=failed-google-oauth`,
       session: false,
     }),
 
@@ -134,7 +134,7 @@ export const initProvider = ({ router, middleware }: Props): void => {
       await setLoginSession(res, session);
 
       // redirect back user to app url, need to change URL to env variable
-      res.redirect(`http://localhost:3000/`);
+      res.redirect(`${process.env.APP_ENDPOINT}/`);
     }
   );
 

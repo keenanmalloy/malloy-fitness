@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
-import Modal from './common/Modal';
-import { Button } from './common/Button';
+import Modal from 'features/common/Modal';
+import { Button } from 'features/common/Button';
 
 export const Schedule = () => {
   const [value, onChange] = useState(new Date());

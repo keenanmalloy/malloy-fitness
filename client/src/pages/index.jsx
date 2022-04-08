@@ -1,7 +1,6 @@
 import React from 'react';
-import { useFutureWorkoutsQuery } from 'features/workouts/useWorkoutsQuery';
-import { Feed } from 'features/feed/Feed';
-import Overview from 'features/overview/Overview';
+import { useFutureWorkoutsQuery } from 'features/workouts/api/useWorkoutsQuery';
+import Overview from 'features/workout-overview/Overview';
 import Layout from 'features/common/Layout';
 
 function HomePage() {
