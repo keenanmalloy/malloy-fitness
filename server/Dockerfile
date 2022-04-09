@@ -3,7 +3,7 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
 COPY . .
-RUN npm build
+RUN npm run build
 
 FROM node:14-alpine
 ARG NODE_ENV=production
