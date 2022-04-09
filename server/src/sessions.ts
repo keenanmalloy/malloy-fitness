@@ -1,7 +1,7 @@
-import Iron from "@hapi/iron";
-import { getTokenCookie, MAX_AGE, setTokenCookie } from "./cookies";
-import { Request, Response } from "express";
-import { toTimestampz, toUnix } from "time";
+import Iron from '@hapi/iron';
+import { getTokenCookie, MAX_AGE, setTokenCookie } from './cookies';
+import { Request, Response } from 'express';
+import { toTimestampz, toUnix } from 'time';
 
 const TOKEN_SECRET = `6SZ=3f<Gtxd3E^7J=.sfxX238nf27o3fnGd!9pKhcq`;
 
@@ -38,15 +38,15 @@ export async function setLoginSession(
 
 export async function getLoginSession(req: Request): Promise<Session | null> {
   const token = getTokenCookie(req);
-  if (!token) throw new Error("Missing token from session");
+  if (!token) throw new Error('Missing token from session');
 
   const session = await Iron.unseal(token, TOKEN_SECRET, Iron.defaults);
 
   const expiresAt = toUnix(new Date(session.createdAt)) + session.maxAge * 1000;
 
-  // Validate the expiration date of the session
+  // Validate the expiration date of the session.
   if (new Date() > toTimestampz(expiresAt)) {
-    throw new Error("Session expired");
+    throw new Error('Session expired');
   }
 
   return session;
