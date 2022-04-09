@@ -1,1 +1,1 @@
-web: node -r ./server/dist/start.js
+web: cd server && npm run build && npm run start
