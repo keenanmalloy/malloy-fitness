@@ -15,7 +15,7 @@ ENV PGOPTIONS "-c search_path=auth"
 WORKDIR /app
 
 COPY package.json package-lock.json ./
-RUN npm install && npm cache clean -f
+RUN npm install
 
 COPY --from=builder /app/dist/ dist/
 
