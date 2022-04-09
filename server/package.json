@@ -10,6 +10,14 @@
     "test": "NODE_ENV=test jest",
     "start": "node -r ./dist/start.js"
   },
+  "_moduleAliases": {
+    "middlewares": "./dist/middlewares",
+    "queries": "./dist/queries",
+    "config": "./dist/config",
+    "utils": "./dist/utils",
+    "sessions": "./dist/sessions",
+    "time": "./dist/time"
+  },
   "dependencies": {
     "@hapi/iron": "^6.0.0",
     "aws-sdk": "^2.1101.0",

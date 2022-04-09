@@ -3,12 +3,21 @@
   "include": ["src/**/*.ts"],
   "compilerOptions": {
     "types": ["jest"],
-    "lib": ["dom", "ESNext"],
+    "lib": ["dom", "es2020"],
+    "baseUrl": "./src",
+    "paths": {
+      "*": [
+        "*",
+        "src/middlewares/*",
+        "src/queries/*",
+        "src/config/*",
+        "src/utils/*"
+      ]
+    },
     "module": "commonjs",
     "outDir": "dist",
     "strict": true,
     "target": "esnext",
-    "baseUrl": "./src",
     "esModuleInterop": true,
     "moduleResolution": "node",
     "strictNullChecks": true,

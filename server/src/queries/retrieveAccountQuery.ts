@@ -1,6 +1,5 @@
 import { db } from 'config/db';
 import { Request, Response } from 'express';
-import { getLoginSession } from 'sessions';
 
 export const retrieveAccountByProviderQuery = async (
   providerUniqueId: string,
