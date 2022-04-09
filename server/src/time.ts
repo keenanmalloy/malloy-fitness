@@ -11,10 +11,10 @@ export const toTimestampz = (unix: Miliseconds): Date => {
 type Timestampz = Date;
 
 export const formatTime = (time: Timestampz) => {
-  return new Intl.DateTimeFormat("en-US").format(new Date(time));
+  return new Intl.DateTimeFormat('en-US').format(new Date(time));
 };
 
-// https://stackoverflow.com/questions/18758772/how-do-i-validate-a-date-in-this-format-yyyy-mm-dd-using-jquery
+//https://stackoverflow.com/questions/18758772/how-do-i-validate-a-date-in-this-format-yyyy-mm-dd-using-jquery
 export function isValidDate(dateString: string) {
   const regEx = /^\d{4}-\d{2}-\d{2}$/;
   if (!dateString.match(regEx)) return false; // Invalid format
