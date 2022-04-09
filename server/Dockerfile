@@ -1,9 +1,9 @@
 FROM node:14-alpine AS builder
 WORKDIR /app
-COPY package.json yarn.lock ./
-RUN yarn install
+COPY package.json package-lock.json ./
+RUN npm install
 COPY . .
-RUN yarn build
+RUN npm build
 
 FROM node:14-alpine
 ARG NODE_ENV=production
@@ -14,12 +14,12 @@ ENV PGOPTIONS "-c search_path=auth"
 
 WORKDIR /app
 
-COPY package.json yarn.lock ./
-RUN yarn install && yarn cache clean
+COPY package.json package-lock.json ./
+RUN npm install && npm cache clean
 
 COPY --from=builder /app/dist/ dist/
 
 HEALTHCHECK --interval=60s --timeout=2s --retries=3 CMD wget localhost:${PORT}/healthz -q -O - > /dev/null 2>&1
 
 EXPOSE $PORT
-CMD ["yarn", "start"]
+CMD ["npm", "run", "start"]
