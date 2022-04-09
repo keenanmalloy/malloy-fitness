@@ -50,6 +50,6 @@ jobs:
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
           vercel-org-id: ${{ secrets.VERCEL_ORGANIZATION_ID}} #Required
-          vercel-project-id: ${{ secrets.VERCEL_STAGING_APP_PROJECT_ID}} #Required
+          vercel-project-id: ${{ secrets.VERCEL_PRODUCTION_APP_PROJECT_ID}} #Required
           vercel-args: '--prod' #Optional
           working-directory: ./client
