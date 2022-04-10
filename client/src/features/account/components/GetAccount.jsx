@@ -12,5 +12,9 @@ export const GetAccount = () => {
     return <p className="text-red-500">Error fetching account...</p>;
   }
 
+  if (!data.account) {
+    return null;
+  }
+
   return <AccountPanel account={data.account} />;
 };

@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import { MdEdit } from 'react-icons/md';
 import { EditWorkoutExerciseMetadataPreview } from 'features/workout-creation/EditWorkoutExerciseMetadataPreview';
+import { RemoveWorkoutExerciseFromPreview } from './RemoveWorkoutExerciseFromPreview';
 
 export const WorkoutExercisesPreview = ({ exercises, setExercises }) => {
   const { data, isLoading, isError } = useExerciseIdsQuery(
@@ -32,7 +33,7 @@ export const WorkoutExercisesPreview = ({ exercises, setExercises }) => {
         .map((exercise, key) => (
           <li
             key={exercise.exercise_id}
-            className="flex items-center justify-between"
+            className="flex items-center justify-between py-1"
           >
             <div className="flex items-center">
               <span className="p-2 bg-blue-500 text-white rounded-sm">
@@ -40,7 +41,13 @@ export const WorkoutExercisesPreview = ({ exercises, setExercises }) => {
               </span>
               <div>
                 <p className="capitalize pl-2">{exercise.name}</p>
-                <div className="uppercase pl-2 text-xs flex space-x-3">
+                <div
+                  style={{
+                    fontSize: '0.5rem',
+                    paddingTop: '0.2rem',
+                  }}
+                  className="uppercase pl-2 flex space-x-3"
+                >
                   <p>
                     sets:
                     {
@@ -76,23 +83,17 @@ export const WorkoutExercisesPreview = ({ exercises, setExercises }) => {
                 </div>
               </div>
             </div>
-            <div>
+            <div className="flex">
               <EditWorkoutExerciseMetadataPreview
                 exercises={exercises}
                 setExercises={setExercises}
                 exerciseId={exercise.exercise_id}
               />
-              <button
-                className="ml-2"
-                type="button"
-                onClick={() => {
-                  setExercises((prev) =>
-                    prev.filter((ex) => ex.id !== exercise.exercise_id)
-                  );
-                }}
-              >
-                <IoMdClose />
-              </button>
+              <RemoveWorkoutExerciseFromPreview
+                exercises={exercises}
+                setExercises={setExercises}
+                exercise={exercise}
+              />
             </div>
           </li>
         ))}

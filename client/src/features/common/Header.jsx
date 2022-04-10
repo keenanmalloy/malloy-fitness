@@ -18,13 +18,15 @@ export const Header = () => {
             </button>
           </Link>
 
-          <div className="flex">
-            <h1 className="uppercase text-base">tr</h1>
-            <h1 className="uppercase text-base text-gray-400">a</h1>
-            <h1 className="uppercase text-base">ck</h1>
-            <h1 className="uppercase text-base text-gray-400">e</h1>
-            <h1 className="uppercase text-base">d</h1>
-          </div>
+          <Link href="/">
+            <div className="flex">
+              <h1 className="uppercase text-base">tr</h1>
+              <h1 className="uppercase text-base text-gray-400">a</h1>
+              <h1 className="uppercase text-base">ck</h1>
+              <h1 className="uppercase text-base text-gray-400">e</h1>
+              <h1 className="uppercase text-base">d</h1>
+            </div>
+          </Link>
 
           <Link href="/search">
             <button>

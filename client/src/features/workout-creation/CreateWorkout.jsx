@@ -37,9 +37,9 @@ export const CreateWorkout = () => {
       }),
     };
 
-    console.log(workout);
+    console.log({ workout });
 
-    mutate({ workout });
+    // mutate({ workout });
   };
 
   return (
@@ -96,7 +96,7 @@ export const CreateWorkout = () => {
         setExercises={setExercises}
       />
 
-      <Button isLoading={isLoading} className="w-full">
+      <Button isLoading={isLoading} className="w-full mt-2">
         {isLoading ? 'Adding workout...' : 'Add workout'}
       </Button>
     </form>

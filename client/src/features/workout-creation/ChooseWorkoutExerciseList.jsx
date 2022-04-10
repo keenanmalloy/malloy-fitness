@@ -35,12 +35,12 @@ export const ChooseWorkoutExerciseList = ({
     return <p style={{ color: 'red' }}>fetching error...</p>;
   }
 
-  if (!data.exercises) {
-    return <p>none available...</p>;
+  if (!data.exercises.length) {
+    return <p>Could not find an exercise with {query}...</p>;
   }
 
   return (
-    <div className="p-1">
+    <section>
       {data.exercises.map((exercise) => (
         <article
           className="flex flex-col py-2 relative "
@@ -72,12 +72,14 @@ export const ChooseWorkoutExerciseList = ({
             value={exercise.exercise_id}
             checked={exercises.some((ex) => ex.id === exercise.exercise_id)}
           />
-          <div className="px-3 py-3 rounded-md peer-checked:ring-blue-500 peer-checked:ring-2 peer-checked:bg-white">
-            <h2 className="text-xl font-bold">{exercise.name}</h2>
-            <p>Category: {exercise.category}</p>
-            <p>Description: {exercise.description}</p>
-            <p>Movement: {exercise.movement}</p>
-            <p>Range: {exercise.range}</p>
+          <div className="px-2 py-2 rounded-md ring-blue-50 ring-2 peer-checked:ring-blue-500 peer-checked:ring-2 peer-checked:bg-white">
+            <h2 className="text-lg font-bold">{exercise.name}</h2>
+            <div className="text-gray-500">
+              <p>Category: {exercise.category}</p>
+              <p>Description: {exercise.description}</p>
+              <p>Movement: {exercise.movement}</p>
+              <p>Range: {exercise.range}</p>
+            </div>
           </div>
 
           <span className="hidden peer-checked:flex absolute right-2 top-4 bg-blue-500 rounded-full text-white w-5 h-5  justify-center items-center">
@@ -85,6 +87,6 @@ export const ChooseWorkoutExerciseList = ({
           </span>
         </article>
       ))}
-    </div>
+    </section>
   );
 };

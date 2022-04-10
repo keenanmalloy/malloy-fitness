@@ -11,13 +11,14 @@ export const Input = ({
   isDisabled,
   isLoading,
   placeholder,
+  type = 'text',
 }) => {
   if (isTextArea) {
     return (
       <div className="py-2 relative">
         <label>{label}</label>
         <textarea
-          type="text"
+          type={type}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           required={isRequired}
           value={value}
@@ -38,7 +39,7 @@ export const Input = ({
     <div className="py-2 relative">
       <label>{label}</label>
       <input
-        type="text"
+        type={type}
         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
         required={isRequired}
         value={value}

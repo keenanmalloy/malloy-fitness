@@ -26,19 +26,20 @@ export const ChooseWorkoutExercises = ({ exercises, setExercises }) => {
         Choose exercises
       </Button>
       <FullPageModal isOpen={isOpen} closeModal={closeModal} isFull>
-        <div className="sticky top-0 bg-white z-40">
-          <button className="absolute top-2 z-50 right-0">
+        <header className="sticky top-0 bg-white z-40 flex justify-between">
+          <button className="z-50 px-3">
             <IoMdClose onClick={closeModal} />
           </button>
-          <Input
-            onChange={handleQuery}
-            value={query}
-            label="search"
-            isRequired
-            type="search"
-            autoFocus
-          />
-        </div>
+          <div className="w-full">
+            <Input
+              onChange={handleQuery}
+              value={query}
+              isRequired
+              type="search"
+              placeholder={'Search'}
+            />
+          </div>
+        </header>
         <ChooseWorkoutExerciseList
           query={query}
           exercises={exercises}
