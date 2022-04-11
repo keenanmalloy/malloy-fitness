@@ -4,7 +4,7 @@ import Modal from 'features/common/Modal';
 import { Button } from 'features/common/Button';
 import { useRouter } from 'next/router';
 
-const WorkoutTimer = ({ startedAt, workoutId }) => {
+const WorkoutTimer = ({ startedAt, workoutId, endedAt }) => {
   const router = useRouter();
   const startTime = new Date(startedAt);
   const currentTime = new Date();
@@ -57,6 +57,26 @@ const WorkoutTimer = ({ startedAt, workoutId }) => {
         setError(true);
       });
   };
+
+  if (!!endedAt) {
+    return (
+      <div className="flex">
+        <div className="px-4">
+          <h2>
+            {formatTime(
+              Math.floor(
+                Math.abs(
+                  (new Date(endedAt).getTime() -
+                    new Date(startedAt).getTime()) /
+                    1000
+                )
+              )
+            )}
+          </h2>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex">
