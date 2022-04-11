@@ -2,7 +2,7 @@ import { Button } from 'features/common/Button';
 import React from 'react';
 import { useRouter } from 'next/router';
 
-const StartWorkout = ({ workoutId }) => {
+const StartWorkout = ({ workoutId, hasStarted, hasEnded }) => {
   const router = useRouter();
   const getSingleWorkout = async (id) => {
     const res = await fetch(
@@ -62,10 +62,19 @@ const StartWorkout = ({ workoutId }) => {
       `/workouts/${workoutId}/exercises/${firstExercise.exercise_id}`
     );
   };
+
+  if (hasEnded) {
+    return null;
+  }
   return (
-    <Button onClick={() => startWorkout(workoutId)} className="w-full">
-      Start Workout
-    </Button>
+    <div>
+      <Button onClick={() => startWorkout(workoutId)} className="w-full">
+        Start Workout
+      </Button>
+      <Button onClick={() => startWorkout(workoutId)}>
+        {hasStarted ? 'Continue Workout' : 'Start Workout'}
+      </Button>
+    </div>
   );
 };
 
