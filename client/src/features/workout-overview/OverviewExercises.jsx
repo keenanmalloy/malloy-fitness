@@ -40,7 +40,11 @@ export const OverviewExercises = ({ workoutId }) => {
           );
         })}
       </ul>
-      <StartWorkout workoutId={workoutId} />
+      <StartWorkout
+        workoutId={workoutId}
+        hasStarted={!!data.workout.started_at}
+        hasEnded={!!data.workout.ended_at}
+      />
     </div>
   );
 };

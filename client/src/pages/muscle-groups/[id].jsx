@@ -18,8 +18,8 @@ export async function getStaticProps({ params }) {
 
 const MuscleGroupsPage = ({ muscleGroupId }) => {
   return (
-    <Layout className="p-5">
-      <h1 className="text-2xl">Muscle Group</h1>
+    <Layout>
+      <h1 className="text-2xl p-5">Muscle Group</h1>
       <MuscleGroup muscleGroupId={muscleGroupId} />
     </Layout>
   );

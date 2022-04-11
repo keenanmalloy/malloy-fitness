@@ -11,7 +11,6 @@ export const SearchMuscleGroups = ({ query, setQuery }) => {
         label="search"
         isRequired
         type="search"
-        autoFocus
       />
       <div className="pb-2 w-full">
         <CreateMuscleGroup />

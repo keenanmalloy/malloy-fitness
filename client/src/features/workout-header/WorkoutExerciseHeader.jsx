@@ -37,6 +37,7 @@ const WorkoutExerciseHeader = ({ workoutId }) => {
         <RiTimerFill />
         <div>
           <WorkoutTimer
+            endedAt={data.workout.ended_at}
             startedAt={data.workout.started_at}
             workoutId={workoutId}
           />

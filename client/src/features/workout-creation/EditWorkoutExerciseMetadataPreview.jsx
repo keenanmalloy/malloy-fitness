@@ -116,7 +116,9 @@ export const EditWorkoutExerciseMetadataPreview = ({
             value={priority}
             label="priority"
           />
-          <Button className="w-full">Save</Button>
+          <Button className="w-full" onClick={() => setIsOpen(false)}>
+            Save
+          </Button>
         </form>
       </Modal>
     </>

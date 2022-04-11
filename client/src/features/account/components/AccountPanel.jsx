@@ -13,7 +13,7 @@ export const AccountPanel = ({ account }) => {
   const [avatar, setAvatar] = React.useState(account.avatar_url);
 
   return (
-    <div>
+    <section className="p-5">
       <div>
         <AccountField
           label="First name"
@@ -40,7 +40,7 @@ export const AccountPanel = ({ account }) => {
           prevValue={account.name}
         />
       </div>
-      <div>
+      <div className="pt-2">
         <label>Photo</label>
         <Avatar
           onChange={(url) => setAvatar(url)}
@@ -86,7 +86,9 @@ export const AccountPanel = ({ account }) => {
         }).format(new Date(account.created_at))}
         .
       </small>
-      <Logout />
-    </div>
+      <div className="mt-5 flex justify-end">
+        <Logout />
+      </div>
+    </section>
   );
 };

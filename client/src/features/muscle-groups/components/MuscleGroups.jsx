@@ -12,7 +12,7 @@ export const MuscleGroups = () => {
 
   if (isLoading) {
     return (
-      <div className="w-72">
+      <div className="p-5">
         <Skeleton className="h-10 w-full mt-5" />
         <Skeleton className="h-10 w-full mt-2" />
         <Skeleton className="h-28 w-full mt-5" />
@@ -27,7 +27,7 @@ export const MuscleGroups = () => {
 
   if (isError) {
     return (
-      <section className="w-72 relative">
+      <section className="relative p-5">
         <SearchMuscleGroups query={query} setQuery={setQuery} />
         <ul className="flex flex-col divide-y-2 divide-gray-100">
           {/* @@TODO add error alert component here */}
@@ -39,7 +39,7 @@ export const MuscleGroups = () => {
 
   if (!data.muscleGroups) {
     return (
-      <section className="w-72 relative">
+      <section className="relative p-5">
         <SearchMuscleGroups query={query} setQuery={setQuery} />
         <ul className="flex flex-col divide-y-2 divide-gray-100">
           {/* @@TODO add success alert component here */}
@@ -50,7 +50,7 @@ export const MuscleGroups = () => {
   }
 
   return (
-    <section className="w-72 relative">
+    <section className="relative p-5">
       <SearchMuscleGroups query={query} setQuery={setQuery} />
       <ul className="flex flex-col divide-y-2 divide-gray-100">
         {
@@ -61,7 +61,7 @@ export const MuscleGroups = () => {
                 .filter(
                   (mg) =>
                     mg.name.toLowerCase().includes(query.toLowerCase()) ||
-                    mg.description.toLowerCase().includes(query.toLowerCase())
+                    mg?.description?.toLowerCase().includes(query.toLowerCase())
                 )
                 .sort((a, b) => b.muscle_group_id - a.muscle_group_id)
                 .map((mg) => {

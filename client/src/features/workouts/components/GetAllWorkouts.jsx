@@ -7,24 +7,22 @@ export const GetAllWorkouts = () => {
   const { data, isError, isLoading } = useWorkoutsQuery();
 
   if (isLoading) {
-    return <p>loading...</p>;
+    return <p className="w-full p-5">loading...</p>;
   }
 
   if (isError) {
-    return <p style={{ color: 'red' }}>fetching error...</p>;
+    return <p className="w-full p-5 text-red-500">fetching error...</p>;
   }
 
   if (!data.workouts) {
-    return <p>none available...</p>;
+    return <p className="w-full p-5">none available...</p>;
   }
   return (
-    <div>
-      {isLoading ? (
-        <div>Loading...</div>
-      ) : (
-        <WorkoutList workouts={data.workouts} />
-      )}
-      <Button href="/workouts/create">Create workout</Button>
+    <div className="w-full p-5">
+      <WorkoutList workouts={data.workouts} />
+      <Button href="/workouts/create" className="w-full">
+        Create workout
+      </Button>
     </div>
   );
 };

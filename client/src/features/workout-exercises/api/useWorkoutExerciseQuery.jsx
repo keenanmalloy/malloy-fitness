@@ -18,7 +18,7 @@ const fetchWorkoutExercise = async ({ exerciseId, workoutId }) => {
 };
 
 export const useWorkoutExerciseQuery = (exerciseId, workoutId) => {
-  return useQuery('fetchWorkoutExercise', () =>
+  return useQuery(['fetchWorkoutExercise', exerciseId], () =>
     fetchWorkoutExercise({ exerciseId, workoutId })
   );
 };

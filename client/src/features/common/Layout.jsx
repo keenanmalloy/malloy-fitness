@@ -10,7 +10,7 @@ const Layout = ({ children }) => {
       <Header />
 
       <section className="flex w-100 items-center justify-center">
-        <div className="max-w-xl">{children}</div>
+        <div className="max-w-xl flex-1">{children}</div>
       </section>
 
       {/* Empty div to cover the height of the navbar */}
