@@ -65,7 +65,20 @@ export const ChooseWorkoutExerciseList = ({
                     },
                   ];
                 } else {
-                  return prev.filter((ex) => ex.id !== exercise.exercise_id);
+                  const removeableOrder = prev.filter(
+                    (ex) => ex.id === exercise.exercise_id
+                  )[0].order;
+
+                  const updatedOrders = prev.map((d) => {
+                    return {
+                      ...d,
+                      order: removeableOrder < d.order ? d.order - 1 : d.order,
+                    };
+                  });
+
+                  return updatedOrders.filter(
+                    (ex) => ex.id !== exercise.exercise_id
+                  );
                 }
               });
             }}

@@ -4,6 +4,7 @@ import { Button } from 'features/common/Button';
 import FullPageModal from 'features/common/FullPageModal';
 import { ChooseWorkoutExerciseList } from './ChooseWorkoutExerciseList';
 import { IoMdClose } from 'react-icons/io';
+import { WorkoutExercisesPreview } from './WorkoutExercisesPreview';
 
 export const ChooseWorkoutExercises = ({ exercises, setExercises }) => {
   const [query, setQuery] = useState('');
@@ -48,6 +49,10 @@ export const ChooseWorkoutExercises = ({ exercises, setExercises }) => {
         <Button onClick={closeModal} className="w-full mt-2">
           Save
         </Button>
+        <WorkoutExercisesPreview
+          exercises={exercises}
+          setExercises={setExercises}
+        />
       </FullPageModal>
     </>
   );

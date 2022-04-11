@@ -63,9 +63,9 @@ const StartWorkout = ({ workoutId }) => {
     );
   };
   return (
-    <div>
-      <Button onClick={() => startWorkout(workoutId)}>Start Workout</Button>
-    </div>
+    <Button onClick={() => startWorkout(workoutId)} className="w-full">
+      Start Workout
+    </Button>
   );
 };
 

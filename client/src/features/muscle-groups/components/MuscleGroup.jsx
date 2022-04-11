@@ -9,7 +9,7 @@ export const MuscleGroup = ({ muscleGroupId }) => {
 
   if (isFetching) {
     return (
-      <div className="w-72">
+      <div className="p-5">
         <div className="flex justify-between">
           <Skeleton className="h-8 w-32 rounded-sm" />
           <Skeleton className="h-8 w-10 rounded-sm" />
@@ -24,7 +24,7 @@ export const MuscleGroup = ({ muscleGroupId }) => {
 
   if (isError) {
     return (
-      <div className="w-72">
+      <div className="p-5">
         <p style={{ color: 'red' }}>fetching error...</p>
       </div>
     );
@@ -32,14 +32,14 @@ export const MuscleGroup = ({ muscleGroupId }) => {
 
   if (!data.muscleGroup) {
     return (
-      <div className="w-72">
+      <div className="p-5">
         <p>does not exist...</p>
       </div>
     );
   }
 
   return (
-    <section className="w-72 relative">
+    <section className="p-5 relative">
       <header className="flex justify-between">
         <Link href={`/muscle-groups/`}>
           <button className="bg-white  text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-32">

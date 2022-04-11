@@ -17,9 +17,6 @@ export const CreateWorkout = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    console.log({ exercises });
-
     const workout = {
       name: name,
       description: description,
@@ -37,9 +34,7 @@ export const CreateWorkout = () => {
       }),
     };
 
-    console.log({ workout });
-
-    // mutate({ workout });
+    mutate({ workout });
   };
 
   return (
@@ -99,6 +94,9 @@ export const CreateWorkout = () => {
       <Button isLoading={isLoading} className="w-full mt-2">
         {isLoading ? 'Adding workout...' : 'Add workout'}
       </Button>
+      {isError && (
+        <small className="text-red-500">Something went wrong...</small>
+      )}
     </form>
   );
 };

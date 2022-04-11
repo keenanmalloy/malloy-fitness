@@ -7,8 +7,10 @@ const Overview = ({ workoutId }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
-    <div>
-      <Button onClick={() => setIsOpen(true)}>Details</Button>
+    <>
+      <Button onClick={() => setIsOpen(true)} className="w-full">
+        Details
+      </Button>
 
       <Modal
         isOpen={isOpen}
@@ -17,7 +19,7 @@ const Overview = ({ workoutId }) => {
       >
         <OverviewExercises workoutId={workoutId} />
       </Modal>
-    </div>
+    </>
   );
 };
 

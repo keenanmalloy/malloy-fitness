@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
-import { MdEdit } from 'react-icons/md';
 import Modal from 'features/common/Modal';
 import { Button } from 'features/common/Button';
 
@@ -26,9 +25,22 @@ export const RemoveWorkoutExerciseFromPreview = ({
           <Button onClick={() => setIsOpen(false)}>Cancel</Button>
           <Button
             onClick={() => {
-              setExercises((prev) =>
-                prev.filter((ex) => ex.id !== exercise.exercise_id)
-              );
+              setExercises((prev) => {
+                const removeableOrder = prev.filter(
+                  (ex) => ex.id === exercise.exercise_id
+                )[0].order;
+
+                const updatedOrders = prev.map((d) => {
+                  return {
+                    ...d,
+                    order: removeableOrder < d.order ? d.order - 1 : d.order,
+                  };
+                });
+
+                return updatedOrders.filter(
+                  (ex) => ex.id !== exercise.exercise_id
+                );
+              });
             }}
           >
             Confirm
