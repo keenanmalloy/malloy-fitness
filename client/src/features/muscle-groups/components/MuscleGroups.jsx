@@ -61,7 +61,7 @@ export const MuscleGroups = () => {
                 .filter(
                   (mg) =>
                     mg.name.toLowerCase().includes(query.toLowerCase()) ||
-                    mg.description.toLowerCase().includes(query.toLowerCase())
+                    mg?.description?.toLowerCase().includes(query.toLowerCase())
                 )
                 .sort((a, b) => b.muscle_group_id - a.muscle_group_id)
                 .map((mg) => {
