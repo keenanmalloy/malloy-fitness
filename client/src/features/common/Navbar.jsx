@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { RiHome5Fill, RiUser3Fill } from 'react-icons/ri';
 import { IoBarbell } from 'react-icons/io5';
-import { GiMuscleUp } from 'react-icons/gi';
+import { GiMuscleUp, GiWeightLiftingUp } from 'react-icons/gi';
 import Link from 'next/link';
 
 const navigation = [
@@ -32,6 +32,18 @@ const navigation = [
   {
     name: 'Workouts',
     href: '/workouts',
+    icon: (
+      <GiWeightLiftingUp
+        style={{
+          width: 20,
+          height: 20,
+        }}
+      />
+    ),
+  },
+  {
+    name: 'Muscles',
+    href: '/muscle-groups',
     icon: (
       <GiMuscleUp
         style={{

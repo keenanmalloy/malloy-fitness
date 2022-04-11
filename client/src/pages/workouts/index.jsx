@@ -5,7 +5,6 @@ import Layout from 'features/common/Layout';
 const WorkoutsPage = () => {
   return (
     <Layout>
-      WorkoutsPage
       <GetAllWorkouts />
     </Layout>
   );

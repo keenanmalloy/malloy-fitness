@@ -20,7 +20,7 @@ export const Avatar = ({ onChange, value, field, prevValue }) => {
   }, [value, field]);
 
   return (
-    <div className="flex flex-row-reverse">
+    <div className="flex flex-reverse justify-left">
       <Upload
         onChange={(key) => {
           if (!key) {
@@ -36,7 +36,7 @@ export const Avatar = ({ onChange, value, field, prevValue }) => {
       ) : (
         <img
           src={value}
-          className="inline object-cover w-20 h-20 rounded-full p-1"
+          className="inline object-cover w-20 h-20 rounded-full p-1 ml-3"
         />
       )}
     </div>

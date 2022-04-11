@@ -68,6 +68,9 @@ const StartWorkout = ({ workoutId, hasStarted, hasEnded }) => {
   }
   return (
     <div>
+      <Button onClick={() => startWorkout(workoutId)} className="w-full">
+        Start Workout
+      </Button>
       <Button onClick={() => startWorkout(workoutId)}>
         {hasStarted ? 'Continue Workout' : 'Start Workout'}
       </Button>
