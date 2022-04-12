@@ -21,7 +21,7 @@ export const Panel = ({ workouts, day }) => {
 
 const RestDay = () => {
   return (
-    <div className="w-80 my-4 px-2">
+    <div className="my-4 px-2">
       <div className="flex flex-row items-start gap-4 px-2">
         <div className="w-full flex flex-row justify-between">
           <div className="pt-2 w-40">
@@ -58,10 +58,10 @@ const ScheduleNextDay = ({ day }) => {
   };
 
   return (
-    <div className="w-80 my-4 px-2">
+    <div className="my-4 px-2">
       <div className="flex flex-row items-start gap-4 px-2">
         <div className="w-full flex flex-row justify-between">
-          <div className="pt-2 w-80">
+          <div className="pt-2">
             <p className="text-xl font-medium">Schedule your next workout</p>
             <Link href="/workouts">
               <button className="bg-white mt-2 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-32">
@@ -94,7 +94,7 @@ const ScheduledWorkouts = ({ workouts }) => {
 
   return workouts.map((w) => {
     return (
-      <div className="w-80 mt-2 px-2 py-4" key={w.workout_id}>
+      <div className="mt-2 px-2 py-4" key={w.workout_id}>
         <div className="flex flex-row items-start gap-4">
           <div className="w-full flex flex-row justify-between">
             <div className="pt-2 w-52">

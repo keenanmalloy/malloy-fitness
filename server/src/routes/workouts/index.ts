@@ -12,6 +12,7 @@ import setsRouter from './sets';
 import exercisesRouter from './exercises';
 import startWorkoutRouter from './start';
 import endWorkoutRouter from './end';
+import { cloneScheduleWorkoutMutation } from 'queries/cloneScheduleMutation';
 
 const router = Router();
 
@@ -38,9 +39,20 @@ router.post('/', authenticate, authorize, async (req, res) => {
   await createWorkoutMutation(res, req.body);
 });
 
-// Clone workout
+// Clone OR schedule workout ------------ /
+// Schedule todays workout -------------- /?date=today
+// Schedule tomorrows workout ----------- /?date=tomorrow
+// Schedule workout at a specific date -- /?date=YYYY-MM-DD
 router.post('/:workoutId/copy', authenticate, async (req, res) => {
-  await cloneWorkoutMutation(res, req.params.workoutId);
+  if (!!req.query.date) {
+    await cloneScheduleWorkoutMutation(
+      res,
+      req.params.workoutId,
+      req.query.date as string
+    );
+  } else {
+    await cloneWorkoutMutation(res, req.params.workoutId);
+  }
 });
 
 // Delete workout
