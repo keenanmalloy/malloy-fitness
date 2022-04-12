@@ -1,4 +1,4 @@
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 
 const scheduleNewWorkout = async ({ id, date }) => {
   const res = await fetch(
@@ -14,5 +14,10 @@ const scheduleNewWorkout = async ({ id, date }) => {
 };
 
 export const useScheduleNewWorkoutMutation = (id) => {
-  return useMutation(({ date }) => scheduleNewWorkout({ id, date }));
+  const queryClient = useQueryClient();
+  return useMutation(({ date }) => scheduleNewWorkout({ id, date }), {
+    onSuccess: () => {
+      queryClient.refetchQueries('fetchWorkouts');
+    },
+  });
 };

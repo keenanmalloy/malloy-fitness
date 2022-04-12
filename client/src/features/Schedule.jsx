@@ -16,9 +16,20 @@ export const Schedule = ({ workoutId }) => {
   const handleScheduling = () => {
     // format date YYYY-MM-DD
     const date = value.toISOString().split('T')[0];
-    mutate({
-      date,
-    });
+    mutate(
+      {
+        date,
+      },
+      {
+        onSuccess: () => {
+          setIsOpen(false);
+        },
+        onError: (error) => {
+          // notify user
+          console.log('error', error);
+        },
+      }
+    );
   };
 
   return (
