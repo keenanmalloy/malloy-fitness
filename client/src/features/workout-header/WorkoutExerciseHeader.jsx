@@ -17,7 +17,7 @@ const WorkoutExerciseHeader = ({ workoutId }) => {
     return <p style={{ color: 'red' }}>fetching error...</p>;
   }
 
-  if (data && !data.workout) {
+  if (!data) {
     return <p>none available...</p>;
   }
 
