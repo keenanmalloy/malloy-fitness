@@ -1,10 +1,10 @@
 import { useQuery } from 'react-query';
 
-const fetchExercise = async ({ id }) => {
+const fetchExercises = async (ids) => {
   // fetch the data, the fetch call returns a promise of a response.
   // we await for the promise to resolve with the await keyword.
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/exercises/${id}`,
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/exercises/?mgIds=${ids.join(',')}`,
     {
       credentials: 'include',
     }
@@ -17,6 +17,8 @@ const fetchExercise = async ({ id }) => {
   return json;
 };
 
-export const useExerciseQuery = (id) => {
-  return useQuery(['fetchExercise', id], () => fetchExercise({ id }));
+export const useRelatedExercisesQuery = (ids) => {
+  return useQuery(['fetchExerciseByIds', ids], () => fetchExercises(ids), {
+    refetchOnWindowFocus: false,
+  });
 };

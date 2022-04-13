@@ -11,7 +11,8 @@ export const GetAllExercises = () => {
   };
 
   return (
-    <section>
+    <section className="p-5">
+      <h1 className="pb-10">Exercises</h1>
       <div className="sticky top-10 bg-white">
         <Input
           onChange={handleQuery}
@@ -19,7 +20,6 @@ export const GetAllExercises = () => {
           label="search"
           isRequired
           type="search"
-          autoFocus
         />
         <div className="pb-2 w-full">
           <CreateExercise />

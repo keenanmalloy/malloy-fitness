@@ -4,17 +4,23 @@ import { authorize } from 'middlewares/authorize';
 import { createExerciseMutation } from 'queries/createExerciseMutation';
 import { deleteExerciseMutation } from 'queries/deleteExerciseMutation';
 import { retrieveExerciseQuery } from 'queries/retrieveExerciseQuery';
+import { retrieveExercisesByMuscleGroupQuery } from 'queries/retrieveExercisesByMuscleGroupsQuery';
 import { retrieveExercisesQuery } from 'queries/retrieveExercisesQuery';
 import { updateExerciseMutation } from 'queries/updateExerciseMutation';
 import muscleGroups from './muscle-groups';
 
 const router = Router();
 
-// Retrieve all exercises -------------- /
-// Search exercises -------------------- /?q=barbell
-// Select exercises from array of IDS -- /?ids=1,2,3
+// Retrieve all exercises ---------------------- /
+// Search exercises ---------------------------- /?q=barbell
+// Select exercises from array of IDS -----------/?ids=1,2,3
+// Retrieve related exercises by muscle-group -- /?mgIds=1,2,3
 router.get('/', authenticate, async (req, res) => {
-  await retrieveExercisesQuery(req, res);
+  if (req.query.mgIds) {
+    await retrieveExercisesByMuscleGroupQuery(req, res);
+  } else {
+    await retrieveExercisesQuery(req, res);
+  }
 });
 
 // Retrieve exercise

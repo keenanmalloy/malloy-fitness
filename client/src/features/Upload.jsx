@@ -1,11 +1,20 @@
 import { useState, useRef } from 'react';
 import { IoMdClose } from 'react-icons/io';
+import { Button } from './common/Button';
+import Modal from './common/Modal';
 
-export default function Upload({ onChange, defaultSrc, hidePreview }) {
+export default function Upload({
+  onChange,
+  defaultSrc,
+  hidePreview,
+  title = 'Upload image or video',
+  accepts = 'image/*, video/*',
+}) {
   const [success, setIsSuccess] = useState(null);
   const [filetype, setFiletype] = useState(null);
   const [cleared, setCleared] = useState(null);
   const [key, setKey] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
 
   const ref = useRef();
 
@@ -53,17 +62,27 @@ export default function Upload({ onChange, defaultSrc, hidePreview }) {
     }
   };
 
+  const removeFileAndUnlink = async (e) => {
+    e.preventDefault();
+    setCleared(true);
+    setKey('');
+    onChange(null);
+    setIsSuccess(null);
+    reset();
+    setIsOpen(false);
+  };
+
   return (
     <section className="py-2 relative">
       <div className="flex flex-col">
-        <label className="">Upload image or video</label>
+        <label className="">{title}</label>
         <small className="text-xs text-gray-500">(max 5GB).</small>
       </div>
 
       <input
         onChange={uploadPhoto}
         type="file"
-        accept="image/*, video/*"
+        accept={accepts}
         ref={ref}
         className="
         block
@@ -81,18 +100,22 @@ export default function Upload({ onChange, defaultSrc, hidePreview }) {
       />
 
       <button
-        onClick={(e) => {
-          e.preventDefault();
-          setCleared(true);
-          setKey('');
-          onChange(null);
-          setIsSuccess(null);
-          reset();
-        }}
+        onClick={() => setIsOpen(true)}
         className="absolute top-0 right-0 mt-1 mr-1 hover:text-gray-600"
       >
         <IoMdClose />
       </button>
+      <Modal
+        title="Are you sure?"
+        description="This action will remove the file."
+        isOpen={isOpen}
+        closeModal={() => setIsOpen(false)}
+      >
+        <div className="pt-5 flex justify-between">
+          <Button onClick={() => setIsOpen(false)}>Cancel</Button>
+          <Button onClick={removeFileAndUnlink}>Confirm</Button>
+        </div>
+      </Modal>
 
       {!hidePreview && (
         <>
