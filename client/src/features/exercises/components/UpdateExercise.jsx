@@ -1,6 +1,7 @@
 import { Button } from 'features/common/Button';
 
 import React, { useState } from 'react';
+import { MdEdit } from 'react-icons/md';
 
 import Modal from 'features/common/Modal';
 import { UpdateExerciseForm } from 'features/exercises/components/UpdateExerciseForm';
@@ -20,7 +21,9 @@ export const UpdateExercise = ({ exercise, queryKey }) => {
 
   return (
     <>
-      <Button onClick={() => setIsOpen(!isOpen)}>Update Exercise</Button>
+      <Button onClick={() => setIsOpen(!isOpen)} className="px-0 py-0">
+        <MdEdit className="h-6 w-10" />
+      </Button>
 
       <Modal
         isOpen={isOpen}

@@ -20,7 +20,7 @@ export async function getStaticProps({ params }) {
 const ExercisePage = ({ exerciseId }) => {
   return (
     <Layout>
-      ExercisePage
+      <h1 className="text-2xl p-5">Exercise</h1>
       <GetSingleExercise id={exerciseId} />
     </Layout>
   );
