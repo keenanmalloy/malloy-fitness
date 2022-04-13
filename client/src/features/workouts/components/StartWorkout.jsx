@@ -1,8 +1,10 @@
 import { Button } from 'features/common/Button';
 import React from 'react';
 import { useRouter } from 'next/router';
+import { useQueryClient } from 'react-query';
 
 const StartWorkout = ({ workoutId, hasStarted, hasEnded }) => {
+  const queryClient = useQueryClient();
   const router = useRouter();
   const getSingleWorkout = async (id) => {
     const res = await fetch(
@@ -58,6 +60,7 @@ const StartWorkout = ({ workoutId, hasStarted, hasEnded }) => {
     if (json.status !== 'success') {
       return;
     }
+    queryClient.invalidateQueries('fetchWorkout', workoutId);
     router.push(
       `/workouts/${workoutId}/exercises/${firstExercise.exercise_id}`
     );
@@ -68,10 +71,7 @@ const StartWorkout = ({ workoutId, hasStarted, hasEnded }) => {
   }
   return (
     <div>
-      <Button onClick={() => startWorkout(workoutId)} className="w-full">
-        Start Workout
-      </Button>
-      <Button onClick={() => startWorkout(workoutId)}>
+      <Button className="w-full" onClick={() => startWorkout(workoutId)}>
         {hasStarted ? 'Continue Workout' : 'Start Workout'}
       </Button>
     </div>

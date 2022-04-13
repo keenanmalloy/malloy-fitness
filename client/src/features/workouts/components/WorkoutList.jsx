@@ -5,7 +5,6 @@ import Overview from 'features/workout-overview/Overview';
 import { Schedule } from 'features/Schedule';
 
 export const WorkoutList = ({ workouts }) => {
-  console.log({ workouts });
   return (
     <section className="divide-y-2 divide-gray-100">
       {workouts.map((workout) => (

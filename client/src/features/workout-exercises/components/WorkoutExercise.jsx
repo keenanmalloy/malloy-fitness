@@ -5,7 +5,8 @@ import WorkoutExerciseLog from './WorkoutExerciseLog';
 import { Button } from 'features/common/Button';
 import { useRouter } from 'next/router';
 import { GetExerciseSets } from 'features/sets/components/GetExerciseSets';
-import { isDisabled } from '@testing-library/user-event/dist/utils';
+import Modal from 'features/common/Modal';
+import { Input } from 'features/form/Input';
 
 export const WorkoutExercise = ({
   workoutId,
@@ -17,6 +18,8 @@ export const WorkoutExercise = ({
   const { data, isError, isLoading } = useWorkoutQuery(workoutId);
   const [repetitions, setRepetitions] = useState(0);
   const [weight, setWeight] = useState(0);
+  const [isOpen, setIsOpen] = useState(false);
+  const [notes, setNotes] = useState('');
 
   const router = useRouter();
 
@@ -36,6 +39,8 @@ export const WorkoutExercise = ({
     router.push(`/workouts/${workoutId}/end`);
   };
 
+  const handleNotes = () => {};
+
   return (
     <div>
       <OverviewRow
@@ -52,12 +57,20 @@ export const WorkoutExercise = ({
       <GetExerciseSets workoutId={workoutId} exerciseId={exerciseId} />
       <WorkoutExerciseLog workoutId={workoutId} exerciseId={exerciseId} />
       <div className="flex justify-around">
-        <Button>Notes</Button>
+        <Button onClick={() => setIsOpen(!isOpen)}>Notes</Button>
+        <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
+          <Input
+            onChange={(e) => setNotes(e.target.value)}
+            value={notes}
+            placeholder="Add all your notes here: execution, setup, goals, ideas etc."
+            isTextArea
+          />
+        </Modal>
       </div>
       <div className="flex justify-center py-1">
         <Button
           onClick={
-            !prevEx.order === null
+            prevEx.order !== null
               ? () =>
                   router.push(
                     `/workouts/${workoutId}/exercises/${prevEx.order.exercise_id}`

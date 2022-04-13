@@ -23,7 +23,6 @@ function useDebounce(value, delay = 500) {
 export const ExerciseList = ({ query }) => {
   const debouncedSearchQuery = useDebounce(query, 600);
   const { data, isError, isLoading } = useExercisesQuery(debouncedSearchQuery);
-
   if (isLoading) {
     return <p>loading...</p>;
   }
@@ -52,27 +51,12 @@ export const ExerciseList = ({ query }) => {
               <p>{exercise.movement}</p>
               <p>{exercise.range}</p>
               <p>{exercise.exercise_id}</p>
-
-              <div className="flex flex-shrink-0">
-                <div className="flex flex-shrink-0 text-sm items-center px-2 mb-2">
-                  <div className="bg-gray-400 text-gray-600 px-2 py-1 rounded-l-md">
-                    Type
-                  </div>
-                  <div className="bg-blue-500 text-green-100 px-2 py-1 rounded-r-md">
-                    Primary
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-shrink-0">
-                <div className="flex flex-shrink-0 text-sm items-center px-2 mb-2">
-                  <div className="bg-gray-400 text-gray-600 px-2 py-1 rounded-l-md">
-                    Type
-                  </div>
-                  <div className="bg-red-400 text-green-100 px-2 py-1 rounded-r-md">
-                    Secondary
-                  </div>
-                </div>
-              </div>
+              {exercise.primary.map((mg) => {
+                return <p key={mg.muscle_group_id}>{mg.name}</p>;
+              })}
+              {exercise.secondary.map((mg) => {
+                return <p key={mg.muscle_group_id}>{mg.name}</p>;
+              })}
             </div>
           </Link>
           {exercise.view === 'private' && (
