@@ -3,6 +3,7 @@ import Modal from 'features/common/Modal';
 import React, { useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useDeleteExerciseMutation } from 'features/exercises/api/useDeleteExerciseMutation';
+import { MdDelete } from 'react-icons/md';
 
 export const DeleteExercise = ({ exerciseId }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -30,7 +31,9 @@ export const DeleteExercise = ({ exerciseId }) => {
 
   return (
     <>
-      <Button onClick={openModal}>Delete exercise</Button>
+      <Button onClick={openModal} className="px-0 py-0">
+        <MdDelete className="h-6 w-10" />
+      </Button>
       <Modal isOpen={isOpen} closeModal={closeModal}>
         <div className="flex flex-col">
           <h2 className="text-3xl font-bold">Are you sure?</h2>

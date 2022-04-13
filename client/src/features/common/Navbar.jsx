@@ -18,18 +18,6 @@ const navigation = [
     ),
   },
   {
-    name: 'Exercises',
-    href: '/exercises',
-    icon: (
-      <IoBarbell
-        style={{
-          width: 20,
-          height: 20,
-        }}
-      />
-    ),
-  },
-  {
     name: 'Workouts',
     href: '/workouts',
     icon: (
@@ -41,6 +29,19 @@ const navigation = [
       />
     ),
   },
+  {
+    name: 'Exercises',
+    href: '/exercises',
+    icon: (
+      <IoBarbell
+        style={{
+          width: 20,
+          height: 20,
+        }}
+      />
+    ),
+  },
+
   {
     name: 'Muscles',
     href: '/muscle-groups',

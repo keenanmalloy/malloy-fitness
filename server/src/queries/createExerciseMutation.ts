@@ -96,7 +96,9 @@ export const createExerciseMutation = async (
       WITH 
         data(name, description, category, video, profile, created_by) AS (
           VALUES                           
-              ('${name}', '${description}', '${category}','${video}', '${profile}', ${createdBy})
+              ('${name}', '${description}', '${category}', ${
+      video ?? null
+    }, '${profile}', ${createdBy})
           )
         INSERT INTO exercises (name, description, category, video, profile, created_by)
           SELECT name, description, category, video, profile, created_by

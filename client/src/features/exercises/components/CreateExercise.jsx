@@ -19,7 +19,7 @@ export const CreateExercise = () => {
   return (
     <>
       <Button onClick={() => setIsOpen(true)} className="w-full">
-        Create
+        Create Exercise
       </Button>
       <Modal
         isOpen={isOpen}
@@ -27,7 +27,10 @@ export const CreateExercise = () => {
         description="A form to create an exercise"
         closeModal={() => setIsOpen(false)}
       >
-        <CreateExerciseForm muscleGroups={data.muscleGroups} />
+        <CreateExerciseForm
+          muscleGroups={data.muscleGroups}
+          setIsOpen={setIsOpen}
+        />
       </Modal>
     </>
   );
