@@ -12,9 +12,6 @@ export const OverviewRow = ({
   workoutId,
 }) => {
   const { data, isError, isLoading } = useWorkoutQuery(workoutId);
-  const handleSwap = () => {
-    console.log('swap');
-  };
 
   if (isLoading) {
     return <p>loading...</p>;
