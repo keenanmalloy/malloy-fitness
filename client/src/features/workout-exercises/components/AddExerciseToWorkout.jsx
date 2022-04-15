@@ -5,6 +5,7 @@ import Select from 'react-select';
 import Modal from 'features/common/Modal';
 import { useExercisesQuery } from 'features/exercises/api/useExercisesQuery';
 import { useAddExerciseToWorkoutMutation } from 'features/workout-exercises/api/useAddExerciseToWorkoutMutation';
+import { AiOutlinePlus } from 'react-icons/ai';
 
 const AddExerciseToWorkout = ({ workout }) => {
   const [exercise, setExercise] = useState(null);
@@ -68,9 +69,13 @@ const AddExerciseToWorkout = ({ workout }) => {
     return <p>none available...</p>;
   }
 
+  console.log({ data });
+
   return (
     <Fragment>
-      <Button onClick={openModal}>Add Exercise</Button>
+      <Button onClick={openModal} className="px-0 py-2">
+        <AiOutlinePlus className="h-6 w-10" />
+      </Button>
       <Modal isOpen={isOpen} closeModal={closeModal}>
         <div className="flex flex-col">
           <div className="flex flex-col">

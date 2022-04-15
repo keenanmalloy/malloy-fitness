@@ -116,7 +116,7 @@ const ScheduledWorkouts = ({ workouts }) => {
           <div className="flex items-center justify-between gap-4 mt-2">
             <Button
               type="button"
-              className="w-full"
+              className="w-36"
               onClick={() => startWorkout(w.workout_id)}
             >
               Start
@@ -126,7 +126,7 @@ const ScheduledWorkouts = ({ workouts }) => {
           <div className="flex items-center justify-between gap-4 mt-2">
             <Button
               type="button"
-              className="w-full disabled:border-none disabled:opacity-30"
+              className="disabled:border-none disabled:opacity-30 px-10"
               isDisabled
             >
               Scheduled for{' '}

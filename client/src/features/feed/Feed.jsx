@@ -5,7 +5,7 @@ import { getFutureDate, isToday } from './utils';
 
 export const Feed = ({ workouts }) => {
   return (
-    <div className="pb-10 w-full">
+    <div className="px-3 pb-10 w-full">
       {Array.of(0, 1, 2, 3, 4, 5, 6).map((day) => {
         if (day === 0) {
           return (

@@ -5,13 +5,16 @@ import { useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useUpdateWorkoutMutation } from 'features/workouts/api/useUpdateWorkoutMutation';
 import Modal from 'features/common/Modal';
-import { Select } from 'features/form/Select';
+import { MdEdit } from 'react-icons/md';
+import { WORKOUT_CATEGORIES } from 'features/environment';
+import Select from 'react-select';
 
-export const UpdateWorkout = ({ workout }) => {
+export const UpdateWorkout = ({ workout, queryKey }) => {
   const [name, setName] = useState(workout.name);
   const [description, setDescription] = useState(workout.description);
   const [category, setCategory] = useState(workout.category);
   const [isOpen, setIsOpen] = useState(false);
+  const [isCategoryError, setIsCategoryError] = useState(false);
 
   const queryClient = useQueryClient();
 
@@ -32,7 +35,7 @@ export const UpdateWorkout = ({ workout }) => {
       { workout },
       {
         onSuccess: () => {
-          queryClient.refetchQueries('fetchWorkout');
+          queryClient.refetchQueries(queryKey);
           setIsOpen(false);
         },
       }
@@ -41,7 +44,9 @@ export const UpdateWorkout = ({ workout }) => {
 
   return (
     <>
-      <Button onClick={() => setIsOpen(!isOpen)}>Update Workout</Button>
+      <Button onClick={() => setIsOpen(!isOpen)} className="px-0 py-2">
+        <MdEdit className="h-6 w-10" />
+      </Button>
 
       <Modal
         isOpen={isOpen}
@@ -63,18 +68,34 @@ export const UpdateWorkout = ({ workout }) => {
             isTextArea
           />
 
-          <Select
-            onChange={(e) => setCategory(e.target.value)}
-            value={category}
-            label="category"
-            isRequired
-            options={['chest', 'arms', 'back', 'legs', 'shoulders']}
-            defaultOption={[]}
-          />
+          <div className="py-2">
+            <label>Category</label>
+            <Select
+              onChange={(data) => {
+                setCategory(data.value);
+                setIsCategoryError(false);
+              }}
+              value={{
+                value: category,
+                label: category,
+              }}
+              name="category"
+              styles={{
+                control: (base) => ({
+                  ...base,
+                  ...(isCategoryError
+                    ? {
+                        borderColor: 'red-500',
+                        boxShadow: '0 0 0 1px red inset',
+                      }
+                    : {}),
+                }),
+              }}
+              options={WORKOUT_CATEGORIES}
+            />
+          </div>
 
-          <Upload />
-
-          <Button disabled={isLoading}>
+          <Button disabled={isLoading} className="w-full">
             {isLoading ? 'Updating...' : 'Update'}
           </Button>
 
