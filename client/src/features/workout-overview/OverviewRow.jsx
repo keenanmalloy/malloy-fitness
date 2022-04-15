@@ -33,9 +33,6 @@ export const OverviewRow = ({
       <div className="px-1 w-full">
         <div className="flex justify-between">
           <h3>{name}</h3>
-          <button>
-            <GrPowerCycle onClick={handleSwap} />
-          </button>
         </div>
         <ul
           style={{
