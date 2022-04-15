@@ -1,6 +1,5 @@
 import { useWorkoutQuery } from 'features/workouts/api/useWorkoutQuery';
 import React from 'react';
-import { VscArrowSwap } from 'react-icons/vsc';
 
 export const OverviewRow = ({
   order,
@@ -12,9 +11,6 @@ export const OverviewRow = ({
   workoutId,
 }) => {
   const { data, isError, isLoading } = useWorkoutQuery(workoutId);
-  const handleSwap = () => {
-    console.log('swap');
-  };
 
   if (isLoading) {
     return <p>loading...</p>;
@@ -34,7 +30,6 @@ export const OverviewRow = ({
       <div className="px-1 w-full">
         <div className="flex justify-between">
           <h3>{name}</h3>
-          <VscArrowSwap onClick={handleSwap} />
         </div>
         <ul className="flex justify-between text-xs">
           <li className="uppercase">{sets}</li>

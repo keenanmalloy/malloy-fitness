@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router';
 import React from 'react';
-import { Button } from 'features/common/Button';
 
 const Login = () => {
   const router = useRouter();
@@ -12,7 +11,9 @@ const Login = () => {
 
   return (
     <div>
-      <Button onClick={handleSubmit}>Login</Button>
+      <button className="flex drop-shadow-md" onClick={handleSubmit}>
+        <img src="googleSignin.png" />
+      </button>
     </div>
   );
 };
