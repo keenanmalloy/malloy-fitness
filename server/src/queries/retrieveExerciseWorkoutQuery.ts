@@ -78,7 +78,8 @@ const queryMainExercise = async (workoutId: string, exerciseId: string) => {
     view,
     workout_id,
     priority,
-    "order"
+    "order",
+    notes
   FROM exercises
   JOIN workout_exercises
      ON exercises.exercise_id = workout_exercises.exercise_id

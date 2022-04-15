@@ -33,7 +33,7 @@ const WorkoutExercisePage = ({ exerciseId, workoutId }) => {
   }
 
   return (
-    <div>
+    <>
       <WorkoutExerciseHeader workoutId={workoutId} />
       <WorkoutExercise
         exercise={data.exercise}
@@ -42,7 +42,7 @@ const WorkoutExercisePage = ({ exerciseId, workoutId }) => {
         workoutId={workoutId}
         exerciseId={exerciseId}
       />
-    </div>
+    </>
   );
 };
 

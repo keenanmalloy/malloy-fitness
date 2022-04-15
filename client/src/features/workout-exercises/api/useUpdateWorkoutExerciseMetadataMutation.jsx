@@ -5,7 +5,6 @@ const updateWorkoutExerciseMetadata = async ({
   exerciseId,
   body,
 }) => {
-  console.log({ body });
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/workouts/${workoutId}/exercises/${exerciseId}`,
     {

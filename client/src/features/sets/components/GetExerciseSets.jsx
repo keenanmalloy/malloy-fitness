@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSetsByExerciseQuery } from 'features/sets/api/useSetsByExerciseQuery';
 import { Button } from 'features/common/Button';
-import WorkoutExerciseLogRow from 'features/workout-exercises/components/WorkoutExerciseLogRow';
+import { Set } from 'features/sets/components/Set';
 import { v4 as uuidv4 } from 'uuid';
 
 export const GetExerciseSets = ({ workoutId, exerciseId }) => {
@@ -17,18 +17,19 @@ export const GetExerciseSets = ({ workoutId, exerciseId }) => {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  return (
-    <div>
-      <SetsList sets={data.sets} />
-    </div>
-  );
+
+  return <SetsList sets={data.sets} workoutId={workoutId} />;
 };
 
-const SetsList = () => {
-  const [sets, setSets] = useState([
-    { repetitions: 0, weight: 0, set_id: uuidv4(), isDefault: true },
-    { repetitions: 0, weight: 0, set_id: uuidv4(), isDefault: true },
-  ]);
+const SetsList = (props) => {
+  const [sets, setSets] = useState(
+    props.sets.length
+      ? props.sets
+      : [
+          { repetitions: 0, weight: 0, set_id: uuidv4(), isDefault: true },
+          { repetitions: 0, weight: 0, set_id: uuidv4(), isDefault: true },
+        ]
+  );
 
   const addSet = () => {
     const set = {
@@ -46,13 +47,23 @@ const SetsList = () => {
   };
 
   return (
-    <div>
-      <div>
-        {sets.map((set) => {
-          return <WorkoutExerciseLogRow set={set} removeSet={removeSet} />;
+    <section className="px-3">
+      <ul>
+        {sets.map((set, key) => {
+          return (
+            <Set
+              set={set}
+              removeSet={removeSet}
+              key={set.set_id}
+              setNumber={`0${key + 1}`}
+              workoutId={props.workoutId}
+            />
+          );
         })}
+      </ul>
+      <div className="flex justify-end py-5">
+        <Button onClick={addSet}>+ Add Set</Button>
       </div>
-      <Button onClick={addSet}>+ Add Set</Button>
-    </div>
+    </section>
   );
 };

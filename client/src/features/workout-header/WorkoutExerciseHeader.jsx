@@ -26,13 +26,11 @@ const WorkoutExerciseHeader = ({ workoutId }) => {
   };
 
   return (
-    <div className="flex w-auto h-8 justify-around border-b-4 border-black p-2">
-      <div>
-        <BiArrowBack onClick={goBack} />
-      </div>
-      <div>
-        <h2>{data.workout.name}</h2>
-      </div>
+    <div className="flex w-auto h-8 justify-around items-center py-5 bg-gray-50">
+      <BiArrowBack onClick={goBack} />
+
+      <h2>{data.workout.name}</h2>
+
       <div className="flex">
         <RiTimerFill />
         <div>
