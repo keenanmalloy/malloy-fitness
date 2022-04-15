@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useExercisesQuery } from 'features/exercises/api/useExercisesQuery';
 import { UpdateExercise } from 'features/exercises/components/UpdateExercise';
+import { Skeleton } from 'features/common/Skeleton';
+import { DeleteExercise } from './DeleteExercise';
 
 function useDebounce(value, delay = 500) {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -23,63 +25,68 @@ function useDebounce(value, delay = 500) {
 export const ExerciseList = ({ query }) => {
   const debouncedSearchQuery = useDebounce(query, 600);
   const { data, isError, isLoading } = useExercisesQuery(debouncedSearchQuery);
-
   if (isLoading) {
-    return <p>loading...</p>;
+    return (
+      <section>
+        <Skeleton className="h-28 w-full mt-2" />
+        <Skeleton className="h-28 w-full mt-2" />
+        <Skeleton className="h-28 w-full mt-2" />
+        <Skeleton className="h-28 w-full mt-2" />
+        <Skeleton className="h-28 w-full mt-2" />
+      </section>
+    );
   }
 
   if (isError) {
-    return <p style={{ color: 'red' }}>fetching error...</p>;
+    return (
+      <section className="relative p-5">
+        {/* <SearchMuscleGroups query={query} setQuery={setQuery} /> */}
+        <ul className="flex flex-col divide-y-2 divide-gray-100">
+          {/* @@TODO add error alert component here */}
+          <p style={{ color: 'red' }}>fetching error...</p>{' '}
+        </ul>
+      </section>
+    );
   }
 
   if (!data.exercises) {
-    return <p>none available...</p>;
+    return (
+      <section className="relative p-5">
+        {/* <SearchMuscleGroups query={query} setQuery={setQuery} /> */}
+        <ul className="flex flex-col divide-y-2 divide-gray-100">
+          {/* @@TODO add success alert component here */}
+          <p>no exercises fetched</p>{' '}
+        </ul>
+      </section>
+    );
   }
 
   return (
-    <div>
+    <ul className="flex flex-col divide-y-2 divide-gray-100">
       {data.exercises.map((exercise) => (
-        <div
-          className="flex flex-col text-center hover:bg-slate-200"
-          key={exercise.exercise_id}
-        >
-          <hr />
-          <Link href={`/exercises/${exercise.exercise_id}`}>
-            <div>
-              <h2 className="text-3xl font-bold">{exercise.name}</h2>
-              <p>{exercise.category}</p>
-              <p>{exercise.description}</p>
-              <p>{exercise.movement}</p>
-              <p>{exercise.range}</p>
-              <p>{exercise.exercise_id}</p>
+        <li className="border-solid py-6" key={exercise.exercise_id}>
+          <div className="flex justify-between">
+            <h3 className="text-lg">{exercise.name}</h3>
+            <span className="bg-blue-300 flex items-center text-white px-4 rounded-md max-h-7">
+              {exercise.category}
+            </span>
+          </div>
+          <p className="text-xs">{exercise.description}</p>
 
-              <div className="flex flex-shrink-0">
-                <div className="flex flex-shrink-0 text-sm items-center px-2 mb-2">
-                  <div className="bg-gray-400 text-gray-600 px-2 py-1 rounded-l-md">
-                    Type
-                  </div>
-                  <div className="bg-blue-500 text-green-100 px-2 py-1 rounded-r-md">
-                    Primary
-                  </div>
-                </div>
-              </div>
-              <div className="flex flex-shrink-0">
-                <div className="flex flex-shrink-0 text-sm items-center px-2 mb-2">
-                  <div className="bg-gray-400 text-gray-600 px-2 py-1 rounded-l-md">
-                    Type
-                  </div>
-                  <div className="bg-red-400 text-green-100 px-2 py-1 rounded-r-md">
-                    Secondary
-                  </div>
-                </div>
-              </div>
+          <footer className="flex pt-2 justify-between justify-self-stretch place-content-stretch justify-items-stretch">
+            <Link href={`/exercises/${exercise.exercise_id}`}>
+              <button className="bg-white mt-2 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-32">
+                Visit
+              </button>
+            </Link>
+            <div className="flex">
+              <DeleteExercise exerciseId={exercise.exercise_id} />
+              <div className="w-1" />
+              <UpdateExercise exercise={exercise} queryKey="fetchExercises" />
             </div>
-          </Link>
-          {exercise.view === 'private' && (
-            <UpdateExercise exercise={exercise} queryKey="fetchExercises" />
-          )}
-        </div>
+          </footer>
+        </li>
       ))}
-    </div>
+    </ul>
   );
 };

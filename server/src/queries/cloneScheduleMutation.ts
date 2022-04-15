@@ -1,14 +1,16 @@
 import { db } from 'config/db';
 import { Response } from 'express';
 
-export const cloneWorkoutMutation = async (
+export const cloneScheduleWorkoutMutation = async (
   res: Response,
-  workoutId: string
+  workoutId: string,
+  date: string
 ) => {
   const accountId = res.locals.state.account.account_id;
 
   try {
     const workout = await retrieveWorkoutQuery(workoutId, accountId);
+
     if (!workout) {
       return res.status(404).json({
         message: 'Failed',
@@ -16,13 +18,30 @@ export const cloneWorkoutMutation = async (
       });
     }
 
+    const distinguishDate = () => {
+      switch (date) {
+        case 'today':
+          return 'CURRENT_DATE';
+        case 'tomorrow':
+          return "CURRENT_DATE + INTERVAL '1 day'";
+        default:
+          return `TO_TIMESTAMP('${date}', 'YYYY-MM-DD')`;
+      }
+    };
+
     const workoutQuery = `
       WITH
-        workoutdata(name, description, category, created_by) AS (
+        workoutdata(name, description, category, created_by, workout_dt) AS (
           VALUES
-              ('${workout.name}', '${workout.description}', '${workout.category}', ${accountId})
-          )
-        INSERT INTO workouts (name, description, category, created_by)
+            (
+                '${workout.name}', 
+                '${workout.description}', 
+                '${workout.category}', 
+                ${accountId}, 
+                ${distinguishDate()}
+            )
+        )
+        INSERT INTO workouts (name, description, category, created_by, workout_dt)
           SELECT *
             FROM workoutdata
           RETURNING *
@@ -39,11 +58,11 @@ export const cloneWorkoutMutation = async (
               ${we.exerciseId}, 
               ${we.priority}, 
               ${we.order}, 
-              ${we.notes}, 
-              ${we.sets}, 
-              ${we.repetitions}, 
-              ${we.reps_in_reserve}, 
-              ${we.rest_period})`
+              ${we.notes ?? null}, 
+              ${we.sets ?? null}, 
+              ${we.repetitions ?? null}, 
+              ${we.reps_in_reserve ?? null}, 
+              ${we.rest_period ?? null})`
         )
         .join(',');
     };

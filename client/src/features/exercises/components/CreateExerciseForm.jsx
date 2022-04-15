@@ -7,7 +7,7 @@ import Select from 'react-select';
 import { useQueryClient } from 'react-query';
 import { EXERCISE_CATEGORIES } from 'features/environment';
 
-export const CreateExerciseForm = ({ muscleGroups }) => {
+export const CreateExerciseForm = ({ muscleGroups, setIsOpen }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
@@ -53,6 +53,7 @@ export const CreateExerciseForm = ({ muscleGroups }) => {
           setPrimary([]);
           setSecondary([]);
           queryClient.refetchQueries('fetchExercises');
+          setIsOpen(false);
         },
         onError: (e) => {
           console.log('error', e.message);
