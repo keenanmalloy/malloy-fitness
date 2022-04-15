@@ -22,3 +22,38 @@ export const EXERCISE_CATEGORIES = [
     value: 'shoulders',
   },
 ];
+
+export const WORKOUT_CATEGORIES = [
+  {
+    label: 'full body',
+    value: 'full body',
+  },
+  {
+    label: 'pull',
+    value: 'pull',
+  },
+  {
+    label: 'push',
+    value: 'push',
+  },
+  {
+    label: 'chest',
+    value: 'chest',
+  },
+  {
+    label: 'arms',
+    value: 'arms',
+  },
+  {
+    label: 'back',
+    value: 'back',
+  },
+  {
+    label: 'legs',
+    value: 'legs',
+  },
+  {
+    label: 'shoulders',
+    value: 'shoulders',
+  },
+];

@@ -3,9 +3,10 @@ import { Input } from 'features/form/Input';
 import { useCreateWorkoutMutation } from 'features/workout-creation/useCreateWorkoutMutation';
 import { ChooseWorkoutExercises } from 'features/workout-creation/ChooseWorkoutExercises';
 import Select from 'react-select';
-import { EXERCISE_CATEGORIES } from 'features/environment';
+import { WORKOUT_CATEGORIES } from 'features/environment';
 import { WorkoutExercisesPreview } from 'features/workout-creation/WorkoutExercisesPreview';
 import { Button } from 'features/common/Button';
+import { useRouter } from 'next/router';
 
 export const CreateWorkout = () => {
   const [name, setName] = useState('');
@@ -14,6 +15,8 @@ export const CreateWorkout = () => {
   const { mutate, isLoading, isError } = useCreateWorkoutMutation();
   const [exercises, setExercises] = useState([]);
   const [isCategoryError, setIsCategoryError] = useState(false);
+
+  const router = useRouter();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -34,11 +37,19 @@ export const CreateWorkout = () => {
       }),
     };
 
-    mutate({ workout });
+    mutate(
+      { workout },
+      {
+        onSuccess: () => {
+          router.push('/workouts');
+        },
+      }
+    );
   };
 
   return (
     <form onSubmit={handleSubmit} className="p-2">
+      <h1 className="py-5 text-xl">Create a new workout</h1>
       <Input
         onChange={(e) => setName(e.target.value)}
         value={name}
@@ -73,7 +84,7 @@ export const CreateWorkout = () => {
                 : {}),
             }),
           }}
-          options={EXERCISE_CATEGORIES}
+          options={WORKOUT_CATEGORIES}
         />
         {isCategoryError && (
           <div className="text-red-500 text-xs italic text-right">

@@ -1,9 +1,10 @@
 import { Button } from 'features/common/Button';
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
 
 const StartWorkout = ({ workoutId, hasStarted, hasEnded }) => {
+  const [isLoading, setIsLoading] = useState(false);
   const queryClient = useQueryClient();
   const router = useRouter();
   const getSingleWorkout = async (id) => {
@@ -29,7 +30,8 @@ const StartWorkout = ({ workoutId, hasStarted, hasEnded }) => {
     return json;
   };
 
-  const startWorkout = async (workoutId) => {
+  const startOrContinueWorkout = async (workoutId) => {
+    setIsLoading(true);
     const workoutRes = await getSingleWorkout(workoutId);
     if (workoutRes.status !== 'success') {
       return;
@@ -69,12 +71,25 @@ const StartWorkout = ({ workoutId, hasStarted, hasEnded }) => {
   if (hasEnded) {
     return null;
   }
-  return (
-    <div>
-      <Button className="w-full" onClick={() => startWorkout(workoutId)}>
-        {hasStarted ? 'Continue Workout' : 'Start Workout'}
+
+  if (hasStarted) {
+    return (
+      <Button
+        className="w-full"
+        onClick={() => startOrContinueWorkout(workoutId)}
+      >
+        {isLoading ? 'Continuing...' : 'Continue'}
       </Button>
-    </div>
+    );
+  }
+
+  return (
+    <Button
+      className="w-full"
+      onClick={() => startOrContinueWorkout(workoutId)}
+    >
+      {isLoading ? 'Starting...' : 'Start'}
+    </Button>
   );
 };
 

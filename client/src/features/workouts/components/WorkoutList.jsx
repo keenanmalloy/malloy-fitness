@@ -1,37 +1,41 @@
 import React from 'react';
 import Link from 'next/link';
-import { DeleteWorkout } from 'features/workouts/components/DeleteWorkout';
 import Overview from 'features/workout-overview/Overview';
 import { Schedule } from 'features/Schedule';
+import { WorkoutHeader } from './WorkoutHeader';
 
 export const WorkoutList = ({ workouts }) => {
   return (
-    <section className="divide-y-2 divide-gray-100">
+    <ul className="flex flex-col divide-y-2 divide-gray-100">
       {workouts.map((workout) => (
-        <article
-          className="flex flex-col py-2 border-solid"
-          key={workout.workout_id}
-        >
+        <li className="border-solid py-6" key={workout.workout_id}>
+          <WorkoutHeader
+            hasEnded={!!workout.ended_at}
+            hasStarted={!!workout.started_at}
+            scheduledAt={workout.workout_dt}
+          />
+
           <Link href={`/workouts/${workout.workout_id}`}>
-            <div>
-              <h2 className="text-3xl font-bold">{workout.name}</h2>
-              <p>{workout.category}</p>
-              <p>{workout.description}</p>
-              <p>{workout.workout_id}</p>
-              <p>
-                {workout.workout_dt &&
-                  new Intl.DateTimeFormat('en-US', {
-                    month: 'short',
-                    day: '2-digit',
-                  }).format(new Date(workout.workout_dt))}
-              </p>
-            </div>
+            <main>
+              <div className="flex justify-between">
+                <div>
+                  <h1 className="text-xl">{workout.name}</h1>
+                  <p className="text-xs">{workout.description}</p>
+                </div>
+
+                <span className="bg-blue-300 flex items-center text-white px-4 rounded-md max-h-7 h-7">
+                  {workout.category}
+                </span>
+              </div>
+            </main>
           </Link>
-          <DeleteWorkout workoutId={workout.workout_id} />
-          <Overview workout={workout} workoutId={workout.workout_id} />
-          <Schedule workoutId={workout.workout_id} />
-        </article>
+
+          <footer className="flex pt-2 justify-between justify-self-stretch place-content-stretch justify-items-stretch">
+            <Schedule workoutId={workout.workout_id} />
+            <Overview workout={workout} workoutId={workout.workout_id} />
+          </footer>
+        </li>
       ))}
-    </section>
+    </ul>
   );
 };

@@ -35,18 +35,6 @@ export const EditWorkoutExerciseMetadataPreview = ({
     })[0].restPeriod ?? ''
   );
 
-  const [order, setOrder] = useState(
-    exercises.filter((ex) => {
-      return ex.id === exerciseId;
-    })[0].order ?? ''
-  );
-
-  const [priority, setPriority] = useState(
-    exercises.filter((ex) => {
-      return ex.id === exerciseId;
-    })[0].priority ?? ''
-  );
-
   const handleSubmit = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -105,16 +93,6 @@ export const EditWorkoutExerciseMetadataPreview = ({
             onChange={(e) => setRest(e.target.value)}
             value={rest}
             label="rest period"
-          />
-          <Input
-            onChange={(e) => setOrder(e.target.value)}
-            value={order}
-            label="order"
-          />
-          <Input
-            onChange={(e) => setPriority(e.target.value)}
-            value={priority}
-            label="priority"
           />
           <Button className="w-full" onClick={() => setIsOpen(false)}>
             Save

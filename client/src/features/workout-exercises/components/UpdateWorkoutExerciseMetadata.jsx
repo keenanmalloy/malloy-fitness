@@ -35,7 +35,7 @@ const UpdateWorkoutExerciseMetadata = (props) => {
   };
   return (
     <div>
-      <Button onClick={() => setIsOpen(true)}>Update Exercise Metadata</Button>
+      <Button onClick={() => setIsOpen(true)}>Update</Button>
 
       <Modal
         isOpen={isOpen}
