@@ -25,7 +25,7 @@ export const OverviewExercises = ({ workoutId }) => {
 
   return (
     <div>
-      <ul>
+      <ul className="py-5">
         {data.workout.exercises.map((ex, key) => {
           return (
             <OverviewRow

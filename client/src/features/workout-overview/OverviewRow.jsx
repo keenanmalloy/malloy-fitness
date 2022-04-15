@@ -1,6 +1,6 @@
 import { useWorkoutQuery } from 'features/workouts/api/useWorkoutQuery';
 import React from 'react';
-import { VscArrowSwap } from 'react-icons/vsc';
+import { GrPowerCycle } from 'react-icons/gr';
 
 export const OverviewRow = ({
   order,
@@ -30,17 +30,26 @@ export const OverviewRow = ({
 
   return (
     <li className="flex py-1">
-      <div className="bg-cyan-700 text-white p-2 rounded-md">{order}</div>
+      <div className="bg-cyan-700 text-white p-2 rounded-md max-h-8">
+        {order}
+      </div>
       <div className="px-1 w-full">
         <div className="flex justify-between">
           <h3>{name}</h3>
-          <VscArrowSwap onClick={handleSwap} />
+          <button>
+            <GrPowerCycle onClick={handleSwap} />
+          </button>
         </div>
-        <ul className="flex justify-between text-xs">
+        <ul
+          style={{
+            fontSize: '0.57rem',
+          }}
+          className="flex justify-between pt-0.5"
+        >
           <li className="uppercase">{sets}</li>
           <li className="uppercase">{reps}</li>
           <li className="uppercase">{rir}</li>
-          <li>{rest}</li>
+          <li className="">{rest}</li>
         </ul>
       </div>
     </li>

@@ -66,7 +66,7 @@ export const Schedule = ({ workoutId }) => {
         />
 
         <Button className="w-full mt-2" onClick={handleScheduling}>
-          Schedule
+          {isLoading ? 'Scheduling...' : 'Schedule'}
         </Button>
       </Modal>
     </>

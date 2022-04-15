@@ -2,6 +2,7 @@ import { Button } from 'features/common/Button';
 import React from 'react';
 import { useQueryClient } from 'react-query';
 import { useUpdateWorkoutExerciseMutation } from 'features/workout-exercises/api/useUpdateWorkoutExerciseMutation';
+import { AiOutlineCaretDown, AiOutlineCaretUp } from 'react-icons/ai';
 
 const WorkoutOrder = ({ exercise, workoutId }) => {
   const { isLoading, mutate, isError } = useUpdateWorkoutExerciseMutation(
@@ -38,13 +39,12 @@ const WorkoutOrder = ({ exercise, workoutId }) => {
   };
 
   return (
-    <div>
-      <p>order: {exercise.order}</p>
-      <p>priority: {exercise.priority}</p>
-
-      <Button onClick={incrementOrder}>Order Up</Button>
+    <div className="flex flex-col w-12">
       <Button isDisabled={exercise.order === 1} onClick={decrementOrder}>
-        Order Down
+        <AiOutlineCaretUp />
+      </Button>
+      <Button onClick={incrementOrder}>
+        <AiOutlineCaretDown />
       </Button>
     </div>
   );

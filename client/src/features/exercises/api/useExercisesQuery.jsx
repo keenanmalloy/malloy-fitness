@@ -4,7 +4,7 @@ const fetchExercises = async (query) => {
   // fetch the data, the fetch call returns a promise of a response.
   // we await for the promise to resolve with the await keyword.
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/exercises/?q=${query}`,
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/exercises/?q=${query ?? ''}`,
     {
       credentials: 'include',
     }
