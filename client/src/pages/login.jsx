@@ -5,7 +5,10 @@ import Layout from 'features/common/Layout';
 const LoginPage = () => {
   return (
     <Layout>
-      <Login />
+      <div className="flex h-screen justify-center items-center flex-col">
+        <h1 className="text-3xl p-5">Welcome to tracked</h1>
+        <Login />
+      </div>
     </Layout>
   );
 };
