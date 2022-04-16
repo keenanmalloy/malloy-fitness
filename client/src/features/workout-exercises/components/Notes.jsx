@@ -3,9 +3,13 @@ import { Input } from 'features/form/Input';
 import React, { useEffect, useState } from 'react';
 import { useUpdateWorkoutExerciseMetadataMutation } from '../api/useUpdateWorkoutExerciseMetadataMutation';
 
-export const Notes = ({ exercise, workoutId, exerciseId }) => {
+export const Notes = ({ exercise, workoutId, exerciseId, exNotes }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [notes, setNotes] = useState(exercise.notes);
+  const [notes, setNotes] = useState('');
+
+  useEffect(() => {
+    setNotes(exNotes);
+  }, [exNotes]);
 
   return (
     <div className="p-5">
@@ -25,7 +29,6 @@ export const Notes = ({ exercise, workoutId, exerciseId }) => {
         closeModal={() => setIsOpen(false)}
       >
         <SaveNotes
-          exercise={exercise}
           notes={notes}
           setNotes={setNotes}
           workoutId={workoutId}
@@ -53,7 +56,7 @@ function useDebounce(value, delay = 500) {
   return debouncedValue;
 }
 
-const SaveNotes = ({ exercise, notes, setNotes, workoutId, exerciseId }) => {
+const SaveNotes = ({ exNotes, notes, setNotes, workoutId, exerciseId }) => {
   const debouncedNotes = useDebounce(notes, 600);
   const { mutate, isLoading } = useUpdateWorkoutExerciseMetadataMutation({
     workoutId,
@@ -61,7 +64,7 @@ const SaveNotes = ({ exercise, notes, setNotes, workoutId, exerciseId }) => {
   });
 
   useEffect(() => {
-    if (debouncedNotes && exercise.notes !== debouncedNotes) {
+    if (debouncedNotes && exNotes !== debouncedNotes) {
       mutate({
         notes: debouncedNotes,
       });

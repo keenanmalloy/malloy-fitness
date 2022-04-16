@@ -3,8 +3,13 @@ import { WorkoutList } from 'features/workouts/components/WorkoutList';
 import { useWorkoutsQuery } from 'features/workouts/api/useWorkoutsQuery';
 import { Skeleton } from 'features/common/Skeleton';
 
-export const GetAllWorkouts = () => {
-  const { data, isError, isLoading } = useWorkoutsQuery();
+export const GetAllWorkouts = ({ activity, type, category, sortBy }) => {
+  const { data, isError, isLoading } = useWorkoutsQuery({
+    activity,
+    type,
+    category,
+    sortBy,
+  });
 
   if (isLoading) {
     return (

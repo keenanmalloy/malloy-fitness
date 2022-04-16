@@ -19,6 +19,7 @@ export async function getStaticProps({ params }) {
     props: { exerciseId, workoutId },
   };
 }
+
 const WorkoutExercisePage = ({ exerciseId, workoutId }) => {
   const { data, isError, isLoading } = useWorkoutExerciseQuery(
     exerciseId,
