@@ -14,7 +14,7 @@ export const WorkoutExercise = ({
   exercise,
 }) => {
   return (
-    <main>
+    <main className="pb-20">
       <div className="px-3 py-5 bg-gray-50">
         <OverviewRow
           order="A1"

@@ -10,9 +10,12 @@ export const Notes = ({ exercise, workoutId, exerciseId }) => {
 
   return (
     <div className="flex justify-around p-5">
-      <Button onClick={() => setIsOpen(!isOpen)} className="w-full">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="bg-white mt-2 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-full"
+      >
         Notes
-      </Button>
+      </button>
       <FullPageModal
         isOpen={isOpen}
         title={`Notes for ${exercise.name}`}
