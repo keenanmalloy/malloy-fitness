@@ -1,4 +1,3 @@
-import { Button } from 'features/common/Button';
 import FullPageModal from 'features/common/FullPageModal';
 import { Input } from 'features/form/Input';
 import React, { useEffect, useState } from 'react';
@@ -9,7 +8,10 @@ export const Notes = ({ exercise, workoutId, exerciseId }) => {
   const [notes, setNotes] = useState(exercise.notes);
 
   return (
-    <div className="flex justify-around p-5">
+    <div className="p-5">
+      <section>
+        <h3 className="text-sm">{notes}</h3>
+      </section>
       <button
         onClick={() => setIsOpen(!isOpen)}
         className="bg-white mt-2 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-full"
