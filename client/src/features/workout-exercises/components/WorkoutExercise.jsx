@@ -40,6 +40,7 @@ export const WorkoutExercise = ({
 
       <Notes
         exercise={exercise}
+        exNotes={exercise.notes}
         workoutId={workoutId}
         exerciseId={exerciseId}
       />
