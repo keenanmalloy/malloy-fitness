@@ -1,58 +1,78 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useSetsByExerciseQuery } from 'features/sets/api/useSetsByExerciseQuery';
 import { Button } from 'features/common/Button';
-import WorkoutExerciseLogRow from 'features/workout-exercises/components/WorkoutExerciseLogRow';
-import { v4 as uuidv4 } from 'uuid';
+import { Set } from 'features/sets/components/Set';
+import { useCreateSetMutation } from '../api/useCreateSetMutation';
+import { Skeleton } from 'features/common/Skeleton';
 
 export const GetExerciseSets = ({ workoutId, exerciseId }) => {
-  const { data, isError, isLoading } = useSetsByExerciseQuery(
+  const { data, isError, isLoading } = useSetsByExerciseQuery({
     workoutId,
-    exerciseId
-  );
+    exerciseId,
+  });
 
   if (isError) {
     return <div>Error!</div>;
   }
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <div className="flex w-full items-stretch pt-2">
+          <div className="flex w-full pl-5">
+            <Skeleton className="h-10 rounded-md w-full items-stretch" />
+          </div>
+          <div className="flex w-full pr-5">
+            <Skeleton className="h-10 rounded-md w-full items-stretch" />
+          </div>
+        </div>
+        <div className="flex w-full items-stretch pt-2">
+          <div className="flex w-full pl-5">
+            <Skeleton className="h-10 rounded-md w-full items-stretch" />
+          </div>
+          <div className="flex w-full pr-5">
+            <Skeleton className="h-10 rounded-md w-full items-stretch" />
+          </div>
+        </div>
+      </div>
+    );
   }
+
   return (
-    <div>
-      <SetsList sets={data.sets} />
-    </div>
+    <SetsList sets={data.sets} workoutId={workoutId} exerciseId={exerciseId} />
   );
 };
 
-const SetsList = () => {
-  const [sets, setSets] = useState([
-    { repetitions: 0, weight: 0, set_id: uuidv4(), isDefault: true },
-    { repetitions: 0, weight: 0, set_id: uuidv4(), isDefault: true },
-  ]);
-
-  const addSet = () => {
-    const set = {
-      repetitions: 0,
-      weight: 0,
-      set_id: uuidv4(),
-      isDefault: true,
-    };
-    setSets([...sets, set]);
-  };
-
-  const removeSet = (setId) => {
-    const newSets = sets.filter((set) => set.set_id !== setId);
-    setSets(newSets);
-  };
+const SetsList = ({ sets, workoutId, exerciseId }) => {
+  const { isLoading, mutate, isError } = useCreateSetMutation({ workoutId });
 
   return (
-    <div>
-      <div>
-        {sets.map((set) => {
-          return <WorkoutExerciseLogRow set={set} removeSet={removeSet} />;
+    <section className="px-3">
+      <ul>
+        {sets.map((set, key) => {
+          return (
+            <Set
+              set={set}
+              key={set.set_id}
+              setNumber={`0${key + 1}`}
+              workoutId={workoutId}
+              exerciseId={exerciseId}
+            />
+          );
         })}
+      </ul>
+      <div className="flex justify-end py-5">
+        <Button
+          onClick={() =>
+            mutate({
+              exercise_id: exerciseId,
+            })
+          }
+          className="w-full mx-2"
+        >
+          + Add Set
+        </Button>
       </div>
-      <Button onClick={addSet}>+ Add Set</Button>
-    </div>
+    </section>
   );
 };

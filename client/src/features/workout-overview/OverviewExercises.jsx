@@ -4,9 +4,9 @@ import { OverviewRow } from 'features/workout-overview/OverviewRow';
 import StartWorkout from 'features/workouts/components/StartWorkout';
 
 export const OverviewExercises = ({ workoutId }) => {
-  const { data, isError, isLoading } = useWorkoutQuery(workoutId);
+  const { data, isError, isFetching } = useWorkoutQuery(workoutId);
 
-  if (isLoading) {
+  if (isFetching) {
     return <p>loading...</p>;
   }
 
