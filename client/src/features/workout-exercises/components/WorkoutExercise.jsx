@@ -13,11 +13,6 @@ export const WorkoutExercise = ({
   prevEx,
   exercise,
 }) => {
-  const router = useRouter();
-  const finishWorkout = () => {
-    router.push(`/workouts/${workoutId}/end`);
-  };
-
   return (
     <main>
       <div className="px-3 py-5 bg-gray-50">
@@ -32,7 +27,7 @@ export const WorkoutExercise = ({
       </div>
 
       {!!exercise.video && (
-        <div className="py-5">
+        <div className="pb-5">
           <video controls src={`https://cdn.trckd.ca/${exercise.video}`} />
         </div>
       )}
@@ -49,38 +44,50 @@ export const WorkoutExercise = ({
         exerciseId={exerciseId}
       />
 
-      <Footer nextEx={nextEx} prevEx={prevEx} />
+      <Footer nextEx={nextEx} prevEx={prevEx} workoutId={workoutId} />
     </main>
   );
 };
 
-const Footer = ({ prevEx, nextEx }) => {
+const Footer = ({ prevEx, nextEx, workoutId }) => {
+  const router = useRouter();
+
   return (
-    <div className="flex justify-between py-3 fixed bottom-0 bg-white left-3 right-3 ">
-      <Button
-        onClick={
-          prevEx.order !== null
-            ? () =>
-                router.push(
-                  `/workouts/${workoutId}/exercises/${prevEx.order.exercise_id}`
-                )
-            : null
-        }
-      >
-        Previous Exercise
-      </Button>
-      <Button
-        onClick={
-          nextEx.order !== null
-            ? () =>
-                router.push(
-                  `/workouts/${workoutId}/exercises/${nextEx.order.exercise_id}`
-                )
-            : finishWorkout
-        }
-      >
-        {nextEx.order === null ? 'Finish Workout' : 'Next Exercise'}
-      </Button>
+    <div className="flex justify-between py-3 px-3 fixed bottom-0 bg-white left-0 right-0 ">
+      {!!prevEx.order && (
+        <Button
+          className="w-full"
+          onClick={() =>
+            router.push(
+              `/workouts/${workoutId}/exercises/${prevEx.order.exercise_id}`
+            )
+          }
+        >
+          Previous
+        </Button>
+      )}
+
+      {!!nextEx.order && (
+        <Button
+          className="w-full"
+          onClick={() =>
+            router.push(
+              `/workouts/${workoutId}/exercises/${nextEx.order.exercise_id}`
+            )
+          }
+        >
+          Next
+        </Button>
+      )}
+
+      {!nextEx.order && (
+        <Button
+          className="w-full"
+          onClick={() => router.push(`/workouts/${workoutId}/end`)}
+        >
+          Finish Workout
+        </Button>
+      )}
     </div>
   );
 };

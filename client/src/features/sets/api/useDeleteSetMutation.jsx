@@ -1,12 +1,11 @@
 import { useMutation, useQueryClient } from 'react-query';
 
-const updateSet = async ({ workoutId, body, setId }) => {
+const deleteSet = async ({ setId, workoutId }) => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/workouts/${workoutId}/sets/${setId}`,
     {
-      method: 'PUT',
+      method: 'DELETE',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
       credentials: 'include',
     }
   );
@@ -14,11 +13,16 @@ const updateSet = async ({ workoutId, body, setId }) => {
   return json;
 };
 
-export const useUpdateSetMutation = ({ workoutId, setId }) => {
+export const useDeleteSetMutation = ({ setId, workoutId }) => {
   const queryClient = useQueryClient();
-  return useMutation((body) => updateSet({ workoutId, body, setId }), {
-    onSuccess: () => {
-      queryClient.invalidateQueries('fetchSetsByExercise');
+  return useMutation(
+    () => {
+      return deleteSet({ setId, workoutId });
     },
-  });
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('fetchSetsByExercise');
+      },
+    }
+  );
 };

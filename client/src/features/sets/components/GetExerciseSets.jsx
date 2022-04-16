@@ -5,7 +5,7 @@ import { Set } from 'features/sets/components/Set';
 import { v4 as uuidv4 } from 'uuid';
 
 export const GetExerciseSets = ({ workoutId, exerciseId }) => {
-  const { data, isError, isLoading } = useSetsByExerciseQuery(
+  const { data, isError, isLoading, isFetching } = useSetsByExerciseQuery(
     workoutId,
     exerciseId
   );
@@ -18,7 +18,9 @@ export const GetExerciseSets = ({ workoutId, exerciseId }) => {
     return <div>Loading...</div>;
   }
 
-  return <SetsList sets={data.sets} workoutId={workoutId} />;
+  return (
+    <SetsList sets={data.sets} workoutId={workoutId} exerciseId={exerciseId} />
+  );
 };
 
 const SetsList = (props) => {
@@ -57,6 +59,7 @@ const SetsList = (props) => {
               key={set.set_id}
               setNumber={`0${key + 1}`}
               workoutId={props.workoutId}
+              exerciseId={props.exerciseId}
             />
           );
         })}

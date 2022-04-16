@@ -1,4 +1,4 @@
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 
 const createSet = async ({ body, workoutId }) => {
   const res = await fetch(
@@ -15,5 +15,10 @@ const createSet = async ({ body, workoutId }) => {
 };
 
 export const useCreateSetMutation = ({ workoutId }) => {
-  return useMutation((body) => createSet({ workoutId, body }));
+  const queryClient = useQueryClient();
+  return useMutation((body) => createSet({ workoutId, body }), {
+    onSuccess: () => {
+      queryClient.invalidateQueries('fetchSetsByExercise');
+    },
+  });
 };
