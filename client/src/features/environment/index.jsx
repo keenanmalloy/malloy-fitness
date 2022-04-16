@@ -57,3 +57,26 @@ export const WORKOUT_CATEGORIES = [
     value: 'shoulders',
   },
 ];
+
+export const WORKOUT_TYPES = [
+  {
+    label: 'strength',
+    value: 'strength',
+  },
+  {
+    label: 'rest',
+    value: 'rest',
+  },
+  {
+    label: 'deload',
+    value: 'deload',
+  },
+  {
+    label: 'cardio',
+    value: 'cardio',
+  },
+  {
+    label: 'therapy',
+    value: 'therapy',
+  },
+];

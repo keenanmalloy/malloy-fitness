@@ -1,5 +1,6 @@
 import { db } from 'config/db';
 import Joi from 'joi';
+import { Response } from 'express';
 
 type Exercises = {
   id: string | number;
@@ -13,13 +14,6 @@ interface createWorkout {
   category: string;
   created_by: string | number;
   exercises: Exercises;
-}
-
-interface Response {
-  status: string;
-  message: string;
-  workout: any;
-  error?: any;
 }
 
 const createWorkoutSchema = Joi.object({
@@ -70,10 +64,10 @@ const createWorkoutExercisesLink = async (
   return data.rows;
 };
 
-export const createWorkoutMutation = async (
-  res: any,
+export const createDeloadWorkoutMutation = async (
+  res: Response,
   data: createWorkout
-): Promise<Response> => {
+) => {
   if (!data.exercises) {
     return res.status(422).json({
       status: 'error',
@@ -122,12 +116,12 @@ export const createWorkoutMutation = async (
 
     const query = `
       WITH 
-        data(name, description, category, created_by) AS (
+        data(name, description, category, created_by, type) AS (
           VALUES                           
-              ('${name}', '${description}', '${category}', ${accountId})
+              ('${name}', '${description}', '${category}', ${accountId}, 'deload')
           )
-        INSERT INTO workouts (name, description, category, created_by)
-          SELECT name, description, category, created_by
+        INSERT INTO workouts (name, description, category, created_by, type)
+          SELECT name, description, category, created_by, type
             FROM data
           RETURNING *
       `;
