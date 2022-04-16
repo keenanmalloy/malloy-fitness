@@ -125,7 +125,7 @@ const queryExerciseByPrevOrder = async (workoutId: string, order: number) => {
         WHERE
             workout_id = ${workoutId}
         AND workout_exercises.order < ${order}
-          ORDER BY workout_exercises.order ASC, workout_exercises.priority ASC
+          ORDER BY workout_exercises.order DESC, workout_exercises.priority ASC
         LIMIT 1
     `;
 

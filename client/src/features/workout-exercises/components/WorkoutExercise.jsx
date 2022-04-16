@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
-import { useWorkoutQuery } from 'features/workouts/api/useWorkoutQuery';
+import React from 'react';
 import { OverviewRow } from 'features/workout-overview/OverviewRow';
 import { Button } from 'features/common/Button';
 import { useRouter } from 'next/router';
 import { GetExerciseSets } from 'features/sets/components/GetExerciseSets';
 import { Notes } from './Notes';
+import Link from 'next/link';
 
 export const WorkoutExercise = ({
   workoutId,
@@ -50,43 +50,28 @@ export const WorkoutExercise = ({
 };
 
 const Footer = ({ prevEx, nextEx, workoutId }) => {
-  const router = useRouter();
-
   return (
     <div className="flex justify-between py-3 px-3 fixed bottom-0 bg-white left-0 right-0 ">
       {!!prevEx.order && (
-        <Button
-          className="w-full"
-          onClick={() =>
-            router.push(
-              `/workouts/${workoutId}/exercises/${prevEx.order.exercise_id}`
-            )
-          }
+        <Link
+          href={`/workouts/${workoutId}/exercises/${prevEx.order.exercise_id}`}
         >
-          Previous
-        </Button>
+          <Button className="w-full">Previous</Button>
+        </Link>
       )}
 
       {!!nextEx.order && (
-        <Button
-          className="w-full"
-          onClick={() =>
-            router.push(
-              `/workouts/${workoutId}/exercises/${nextEx.order.exercise_id}`
-            )
-          }
+        <Link
+          href={`/workouts/${workoutId}/exercises/${nextEx.order.exercise_id}`}
         >
-          Next
-        </Button>
+          <Button className="w-full">Next</Button>
+        </Link>
       )}
 
       {!nextEx.order && (
-        <Button
-          className="w-full"
-          onClick={() => router.push(`/workouts/${workoutId}/end`)}
-        >
-          Finish Workout
-        </Button>
+        <Link href={`/workouts/${workoutId}/end`}>
+          <Button className="w-full">Finish Workout</Button>
+        </Link>
       )}
     </div>
   );

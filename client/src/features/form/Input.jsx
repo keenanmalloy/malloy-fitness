@@ -50,7 +50,7 @@ export const Input = ({
         placeholder={placeholder}
       />
       {isLoading && (
-        <CgSpinner className="w-6 h-6 animate-spin absolute top-6 right-1 text-gray-300" />
+        <CgSpinner className="w-6 h-6 animate-spin absolute top-4 right-1 text-blue-50" />
       )}
     </div>
   );
