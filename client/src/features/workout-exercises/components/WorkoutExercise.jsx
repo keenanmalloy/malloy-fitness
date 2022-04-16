@@ -1,12 +1,10 @@
-import React, { useState } from 'react';
-import { useWorkoutQuery } from 'features/workouts/api/useWorkoutQuery';
+import React from 'react';
 import { OverviewRow } from 'features/workout-overview/OverviewRow';
-import WorkoutExerciseLog from './WorkoutExerciseLog';
 import { Button } from 'features/common/Button';
 import { useRouter } from 'next/router';
 import { GetExerciseSets } from 'features/sets/components/GetExerciseSets';
-import Modal from 'features/common/Modal';
-import { Input } from 'features/form/Input';
+import { Notes } from './Notes';
+import Link from 'next/link';
 
 export const WorkoutExercise = ({
   workoutId,
@@ -15,84 +13,66 @@ export const WorkoutExercise = ({
   prevEx,
   exercise,
 }) => {
-  const { data, isError, isLoading } = useWorkoutQuery(workoutId);
-  const [repetitions, setRepetitions] = useState(0);
-  const [weight, setWeight] = useState(0);
-  const [isOpen, setIsOpen] = useState(false);
-  const [notes, setNotes] = useState('');
-
-  const router = useRouter();
-
-  if (isLoading) {
-    return <p>loading...</p>;
-  }
-
-  if (isError) {
-    return <p style={{ color: 'red' }}>fetching error...</p>;
-  }
-
-  if (!data.workout) {
-    return <p>none available...</p>;
-  }
-
-  const finishWorkout = () => {
-    router.push(`/workouts/${workoutId}/end`);
-  };
-
-  const handleNotes = () => {};
-
   return (
-    <div>
-      <OverviewRow
-        order="A1"
-        name={exercise.name}
-        sets="sets 3"
-        reps="reps 10-12"
-        rir="rir 1"
-        rest="REST 90 seconds"
-      />
-      <div className="box-border h-32 text-center w-auto">
-        {data.workout.exercises[0].video}
+    <main className="pb-20">
+      <div className="px-3 py-5 bg-gray-50">
+        <OverviewRow
+          order="A1"
+          name={exercise.name}
+          sets="sets 3"
+          reps="reps 10-12"
+          rir="rir 1"
+          rest="REST 90 seconds"
+        />
+      </div>
+
+      {!!exercise.video && (
+        <div className="pb-5">
+          <video controls src={`https://cdn.trckd.ca/${exercise.video}`} />
+        </div>
+      )}
+
+      <div className="flex justify-evenly pt-5">
+        <p>Reps</p>
+        <p>Weight (LBS)</p>
       </div>
       <GetExerciseSets workoutId={workoutId} exerciseId={exerciseId} />
-      <WorkoutExerciseLog workoutId={workoutId} exerciseId={exerciseId} />
-      <div className="flex justify-around">
-        <Button onClick={() => setIsOpen(!isOpen)}>Notes</Button>
-        <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
-          <Input
-            onChange={(e) => setNotes(e.target.value)}
-            value={notes}
-            placeholder="Add all your notes here: execution, setup, goals, ideas etc."
-            isTextArea
-          />
-        </Modal>
-      </div>
-      <div className="flex justify-center py-1">
-        <Button
-          onClick={
-            prevEx.order !== null
-              ? () =>
-                  router.push(
-                    `/workouts/${workoutId}/exercises/${prevEx.order.exercise_id}`
-                  )
-              : null
-          }
+
+      <Notes
+        exercise={exercise}
+        workoutId={workoutId}
+        exerciseId={exerciseId}
+      />
+
+      <Footer nextEx={nextEx} prevEx={prevEx} workoutId={workoutId} />
+    </main>
+  );
+};
+
+const Footer = ({ prevEx, nextEx, workoutId }) => {
+  return (
+    <div className="flex justify-between py-3 px-3 fixed bottom-0 bg-white left-0 right-0 ">
+      {!!prevEx.order && (
+        <Link
+          href={`/workouts/${workoutId}/exercises/${prevEx.order.exercise_id}`}
         >
-          Previous Exercise
-        </Button>
-        <Button
-          onClick={
-            nextEx.order !== null
-              ? () =>
-                  router.push(
-                    `/workouts/${workoutId}/exercises/${nextEx.order.exercise_id}`
-                  )
-              : finishWorkout
-          }
+          <Button className="w-full">Previous</Button>
+        </Link>
+      )}
+
+      {!!nextEx.order && (
+        <Link
+          href={`/workouts/${workoutId}/exercises/${nextEx.order.exercise_id}`}
         >
-          {nextEx.order === null ? 'Finish Workout' : 'Next Exercise'}
-        </Button>
-      </div>
+          <Button className="w-full">Next</Button>
+        </Link>
+      )}
+
+      {!nextEx.order && (
+        <Link href={`/workouts/${workoutId}/end`}>
+          <Button className="w-full">Finish Workout</Button>
+        </Link>
+      )}
     </div>
   );
 };
