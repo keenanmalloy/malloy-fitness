@@ -1,4 +1,3 @@
-import { Button } from 'features/common/Button';
 import FullPageModal from 'features/common/FullPageModal';
 import { Input } from 'features/form/Input';
 import React, { useEffect, useState } from 'react';
