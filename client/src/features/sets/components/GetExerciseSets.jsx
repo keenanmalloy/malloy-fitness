@@ -3,6 +3,7 @@ import { useSetsByExerciseQuery } from 'features/sets/api/useSetsByExerciseQuery
 import { Button } from 'features/common/Button';
 import { Set } from 'features/sets/components/Set';
 import { useCreateSetMutation } from '../api/useCreateSetMutation';
+import { Skeleton } from 'features/common/Skeleton';
 
 export const GetExerciseSets = ({ workoutId, exerciseId }) => {
   const { data, isError, isLoading } = useSetsByExerciseQuery({
@@ -15,7 +16,26 @@ export const GetExerciseSets = ({ workoutId, exerciseId }) => {
   }
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <div className="flex w-full items-stretch pt-2">
+          <div className="flex w-full pl-5">
+            <Skeleton className="h-10 rounded-md w-full items-stretch" />
+          </div>
+          <div className="flex w-full pr-5">
+            <Skeleton className="h-10 rounded-md w-full items-stretch" />
+          </div>
+        </div>
+        <div className="flex w-full items-stretch pt-2">
+          <div className="flex w-full pl-5">
+            <Skeleton className="h-10 rounded-md w-full items-stretch" />
+          </div>
+          <div className="flex w-full pr-5">
+            <Skeleton className="h-10 rounded-md w-full items-stretch" />
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return (
@@ -48,6 +68,7 @@ const SetsList = ({ sets, workoutId, exerciseId }) => {
               exercise_id: exerciseId,
             })
           }
+          className="w-full mx-2"
         >
           + Add Set
         </Button>
