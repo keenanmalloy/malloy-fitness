@@ -64,11 +64,13 @@ export const GetSingleExercise = ({ id }) => {
             Back
           </button>
         </Link>
-        <UpdateExercise
-          exercise={data.exercise}
-          muscleGroups={mgData.muscleGroups}
-          queryKey="fetchExercise"
-        />
+        {(data.role === 'developer' || exercise.view === 'private') && (
+          <UpdateExercise
+            exercise={data.exercise}
+            muscleGroups={mgData.muscleGroups}
+            queryKey="fetchExercise"
+          />
+        )}
       </header>
 
       <main className="pt-5">
@@ -89,27 +91,29 @@ export const GetSingleExercise = ({ id }) => {
           </div>
         )}
 
-        <div className="pt-5">
-          <Upload
-            title="Upload a video"
-            accepts="video/*"
-            onChange={(url) => {
-              mutate(
-                {
-                  exercise: {
-                    video: url,
+        {(data.role === 'developer' || exercise.view === 'private') && (
+          <div className="pt-5">
+            <Upload
+              title="Upload a video"
+              accepts="video/*"
+              onChange={(url) => {
+                mutate(
+                  {
+                    exercise: {
+                      video: url,
+                    },
                   },
-                },
-                {
-                  onSuccess: () => {
-                    queryClient.refetchQueries('fetchExercise');
-                  },
-                }
-              );
-            }}
-            hidePreview
-          />
-        </div>
+                  {
+                    onSuccess: () => {
+                      queryClient.refetchQueries('fetchExercise');
+                    },
+                  }
+                );
+              }}
+              hidePreview
+            />
+          </div>
+        )}
 
         <div className="mt-5">
           <h2 className="text-lg">Profile</h2>

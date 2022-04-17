@@ -22,9 +22,15 @@ function useDebounce(value, delay = 500) {
   return debouncedValue;
 }
 
-export const ExerciseList = ({ query }) => {
+export const ExerciseList = ({ query, category, view, profile, sortBy }) => {
   const debouncedSearchQuery = useDebounce(query, 600);
-  const { data, isError, isLoading } = useExercisesQuery(debouncedSearchQuery);
+  const { data, isError, isLoading } = useExercisesQuery({
+    query: debouncedSearchQuery,
+    category,
+    view,
+    profile,
+    sortBy,
+  });
   if (isLoading) {
     return (
       <section>
@@ -65,6 +71,15 @@ export const ExerciseList = ({ query }) => {
     <ul className="flex flex-col divide-y-2 divide-gray-100">
       {data.exercises.map((exercise) => (
         <li className="border-solid py-6" key={exercise.exercise_id}>
+          {!!exercise.video && (
+            <div className="py-5">
+              <video
+                preload="metadata"
+                src={`https://cdn.trckd.ca/${exercise.video}#t=10`}
+              />
+            </div>
+          )}
+
           <div className="flex justify-between">
             <h3 className="text-lg">{exercise.name}</h3>
             <span className="bg-blue-300 flex items-center text-white px-4 rounded-md max-h-7">
@@ -79,11 +94,13 @@ export const ExerciseList = ({ query }) => {
                 Visit
               </button>
             </Link>
-            <div className="flex">
-              <DeleteExercise exerciseId={exercise.exercise_id} />
-              <div className="w-1" />
-              <UpdateExercise exercise={exercise} queryKey="fetchExercises" />
-            </div>
+            {(data.role === 'developer' || exercise.view === 'private') && (
+              <div className="flex">
+                <DeleteExercise exerciseId={exercise.exercise_id} />
+                <div className="w-1" />
+                <UpdateExercise exercise={exercise} queryKey="fetchExercises" />
+              </div>
+            )}
           </footer>
         </li>
       ))}

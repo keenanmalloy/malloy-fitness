@@ -15,6 +15,10 @@ const router = Router();
 // Search exercises ---------------------------- /?q=barbell
 // Select exercises from array of IDS -----------/?ids=1,2,3
 // Retrieve related exercises by muscle-group -- /?mgIds=1,2,3
+// category
+// view
+// profile
+// sortBy
 router.get('/', authenticate, async (req, res) => {
   if (req.query.mgIds) {
     await retrieveExercisesByMuscleGroupQuery(req, res);
