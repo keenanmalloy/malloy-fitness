@@ -25,15 +25,15 @@ export const authenticate = async (
       };
       return next();
     }
-    return res
-      .status(401)
-      .json({ message: 'Unauthorized', error: 'Please login' });
+    return res.status(401).json({
+      message: 'Unauthorized',
+      error: 'Please login',
+    });
   } catch (error) {
-    return (
-      res
-        .status(401)
-        // @ts-ignore
-        .json({ message: 'Unauthorized', error: error.message })
-    );
+    return res.status(401).json({
+      message: 'Unauthorized',
+      // @ts-ignore
+      error: error.message,
+    });
   }
 };

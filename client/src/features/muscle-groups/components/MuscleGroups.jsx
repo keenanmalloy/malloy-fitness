@@ -28,7 +28,11 @@ export const MuscleGroups = () => {
   if (isError) {
     return (
       <section className="relative p-5">
-        <SearchMuscleGroups query={query} setQuery={setQuery} />
+        <SearchMuscleGroups
+          query={query}
+          setQuery={setQuery}
+          role={data?.role}
+        />
         <ul className="flex flex-col divide-y-2 divide-gray-100">
           {/* @@TODO add error alert component here */}
           <p style={{ color: 'red' }}>fetching error...</p>{' '}
@@ -40,7 +44,11 @@ export const MuscleGroups = () => {
   if (!data.muscleGroups) {
     return (
       <section className="relative p-5">
-        <SearchMuscleGroups query={query} setQuery={setQuery} />
+        <SearchMuscleGroups
+          query={query}
+          setQuery={setQuery}
+          role={data?.role}
+        />
         <ul className="flex flex-col divide-y-2 divide-gray-100">
           {/* @@TODO add success alert component here */}
           <p>no muscle-groups fetched</p>{' '}
@@ -51,7 +59,7 @@ export const MuscleGroups = () => {
 
   return (
     <section className="relative p-5">
-      <SearchMuscleGroups query={query} setQuery={setQuery} />
+      <SearchMuscleGroups query={query} setQuery={setQuery} role={data?.role} />
       <ul className="flex flex-col divide-y-2 divide-gray-100">
         {
           /* Results with search */
@@ -76,17 +84,19 @@ export const MuscleGroups = () => {
                             Visit
                           </button>
                         </Link>
-                        <div className="flex">
-                          <DeleteMuscleGroup id={mg.muscle_group_id} />
-                          <div className="w-1" />
-                          <EditMuscleGroup
-                            name={mg.name}
-                            description={mg.description}
-                            image={mg.image}
-                            refetchMuscleGroup="fetchMuscleGroups"
-                            id={mg.muscle_group_id}
-                          />
-                        </div>
+                        {data.role === 'developer' && (
+                          <div className="flex">
+                            <DeleteMuscleGroup id={mg.muscle_group_id} />
+                            <div className="w-1" />
+                            <EditMuscleGroup
+                              name={mg.name}
+                              description={mg.description}
+                              image={mg.image}
+                              refetchMuscleGroup="fetchMuscleGroups"
+                              id={mg.muscle_group_id}
+                            />
+                          </div>
+                        )}
                       </footer>
                     </li>
                   );
@@ -110,17 +120,19 @@ export const MuscleGroups = () => {
                             Visit
                           </button>
                         </Link>
-                        <div className="flex">
-                          <DeleteMuscleGroup id={mg.muscle_group_id} />
-                          <div className="w-1" />
-                          <EditMuscleGroup
-                            name={mg.name}
-                            description={mg.description}
-                            image={mg.image}
-                            refetchMuscleGroup="fetchMuscleGroups"
-                            id={mg.muscle_group_id}
-                          />
-                        </div>
+                        {data.role === 'developer' && (
+                          <div className="flex">
+                            <DeleteMuscleGroup id={mg.muscle_group_id} />
+                            <div className="w-1" />
+                            <EditMuscleGroup
+                              name={mg.name}
+                              description={mg.description}
+                              image={mg.image}
+                              refetchMuscleGroup="fetchMuscleGroups"
+                              id={mg.muscle_group_id}
+                            />
+                          </div>
+                        )}
                       </footer>
                     </li>
                   );

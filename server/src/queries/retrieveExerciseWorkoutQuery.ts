@@ -46,6 +46,7 @@ export const retrieveExerciseWorkoutQuery = async (
       )[0] ?? null;
 
     return res.status(200).json({
+      role: res.locals.state.account.role,
       message: 'Exercise fetched successfully',
       status: 'success',
       exercise: mainExercise,

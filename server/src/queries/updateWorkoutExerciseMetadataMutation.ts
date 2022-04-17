@@ -20,6 +20,7 @@ export const updateWorkoutExerciseMetadataMutation = async (
   const { error, value, warning } = updateWorkoutExerciseSchema.validate(data);
   if (error) {
     return res.status(422).json({
+      role: res.locals.state.account.role,
       status: 'error',
       message: 'Invalid request data',
       exercise: value,
@@ -39,12 +40,14 @@ export const updateWorkoutExerciseMetadataMutation = async (
       const data = await db.query(query, params);
       if (!data.rowCount) {
         return res.status(404).json({
+          role: res.locals.state.account.role,
           status: 'error',
           message: 'Exercise does not exist',
         });
       }
 
       return res.status(200).json({
+        role: res.locals.state.account.role,
         status: 'success',
         message: 'Exercise updated successfully',
       });

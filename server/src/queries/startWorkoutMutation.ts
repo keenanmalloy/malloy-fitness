@@ -16,6 +16,7 @@ export const startWorkoutMutation = async (res: Response, id: string) => {
     const data = await db.query(query, params);
     if (!data.rowCount) {
       return res.status(404).json({
+        role: res.locals.state.account.role,
         status: 'error',
         message: 'Workout does not exist',
         workout: null,
@@ -23,6 +24,7 @@ export const startWorkoutMutation = async (res: Response, id: string) => {
     }
 
     return res.status(200).json({
+      role: res.locals.state.account.role,
       status: 'success',
       message: 'Workout updated successfully',
       workout: data.rows[0],

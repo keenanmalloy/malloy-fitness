@@ -62,8 +62,8 @@ export const createAccountWithProviderMutation = async (
 
   const query = `
         WITH ins1 AS (
-            INSERT INTO accounts(name, avatar_url, email, family_name, given_name, locale)
-            VALUES ('${name}', '${avatarUrl}', '${email}', '${familyName}', '${givenName}', '${locale}')
+            INSERT INTO accounts(name, avatar_url, email, family_name, given_name, locale, role)
+            VALUES ('${name}', '${avatarUrl}', '${email}', '${familyName}', '${givenName}', '${locale}', 'user')
             RETURNING account_id
         )
         INSERT INTO account_providers (account_id, auth_provider, auth_provider_unique_id)

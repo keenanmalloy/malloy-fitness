@@ -25,6 +25,7 @@ export const updateExerciseMutation = async (
   const { error, value, warning } = updateExerciseSchema.validate(data);
   if (error) {
     return res.status(422).json({
+      role: res.locals.state.account.role,
       status: 'error',
       message: 'Invalid request data',
       exercise: value,
@@ -43,6 +44,7 @@ export const updateExerciseMutation = async (
       const data = await db.query(query, params);
       if (!data.rowCount) {
         return res.status(404).json({
+          role: res.locals.state.account.role,
           status: 'error',
           message: 'Exercise does not exist',
           exercise: null,
@@ -50,6 +52,7 @@ export const updateExerciseMutation = async (
       }
 
       return res.status(200).json({
+        role: res.locals.state.account.role,
         status: 'success',
         message: 'Exercise updated successfully',
         exercise: data.rows[0],

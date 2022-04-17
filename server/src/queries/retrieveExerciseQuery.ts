@@ -34,6 +34,7 @@ export const retrieveExerciseQuery = async (
     const data = await db.query(query, params);
     if (!data.rows.length) {
       return res.status(404).json({
+        role: res.locals.state.account.role,
         status: 'error',
         message: 'Exercise does not exist',
         exercise: null,
@@ -68,6 +69,7 @@ export const retrieveExerciseQuery = async (
     };
 
     return res.status(200).json({
+      role: res.locals.state.account.role,
       status: 'success',
       message: 'Exercise fetched successfully',
       exercise,

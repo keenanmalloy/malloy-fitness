@@ -1,5 +1,5 @@
-import { db } from "config/db";
-import { Response } from "express";
+import { db } from 'config/db';
+import { Response } from 'express';
 
 export const authorizeAdminQuery = async (
   res: Response
