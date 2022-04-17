@@ -68,6 +68,7 @@ export const retrieveMeQuery = async (req: Request, res: Response) => {
     );
 
     return res.status(200).json({
+      role: res.locals.state.account.role,
       status: 'success',
       message: 'User logged in',
       account: data.rows[0],

@@ -10,6 +10,7 @@ export const deleteMuscleGroupMutation = async (res: Response, id: string) => {
 
     if (!data.rowCount) {
       return res.status(404).json({
+        role: res.locals.state.account.role,
         status: 'error',
         message: 'muscle-group does not exist',
         muscleGroup: null,
@@ -17,6 +18,7 @@ export const deleteMuscleGroupMutation = async (res: Response, id: string) => {
     }
 
     return res.status(200).json({
+      role: res.locals.state.account.role,
       status: 'success',
       message: 'muscle-group deleted successfully',
       muscleGroup: data.rows[0],

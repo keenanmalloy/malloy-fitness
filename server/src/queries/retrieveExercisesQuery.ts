@@ -16,6 +16,7 @@ export const retrieveExercisesQuery = async (req: Request, res: Response) => {
     if (q) {
       const exercises = await searchExercisesByQuery(req, res);
       return res.status(200).json({
+        role: res.locals.state.account.role,
         message: 'Exercises fetched successfully',
         status: 'success',
         exercises: exercises,
@@ -25,6 +26,7 @@ export const retrieveExercisesQuery = async (req: Request, res: Response) => {
     if (ids) {
       const exercises = await getExercisesByIds(req, res);
       return res.status(200).json({
+        role: res.locals.state.account.role,
         message: 'Exercises fetched successfully',
         status: 'success',
         exercises: exercises,
@@ -33,6 +35,7 @@ export const retrieveExercisesQuery = async (req: Request, res: Response) => {
 
     const exercises = await retrieveFirst10Exercises(req, res);
     return res.status(200).json({
+      role: res.locals.state.account.role,
       message: 'Exercises fetched successfully',
       status: 'success',
       exercises,
@@ -57,7 +60,6 @@ const getExercisesByIds = async (req: Request, res: Response) => {
     exercises AS (
         SELECT * FROM exercises
         WHERE exercise_id IN(${preparedIds}) AND ( created_by = $1 OR view = 'public' )
-        LIMIT 20
     )
 
   SELECT
@@ -91,7 +93,6 @@ const retrieveFirst10Exercises = async (req: Request, res: Response) => {
     exercises AS (
         SELECT * FROM exercises
         WHERE created_by = $1 OR view = 'public'
-        LIMIT 10
     )
 
   SELECT
@@ -125,7 +126,6 @@ const searchExercisesByQuery = async (req: Request, res: Response) => {
   exercises AS (
       SELECT * FROM exercises
       WHERE created_by = $1 OR view = 'public'
-      LIMIT 10
   )
 
   SELECT

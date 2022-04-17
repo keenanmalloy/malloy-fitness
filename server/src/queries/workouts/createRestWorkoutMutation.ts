@@ -21,6 +21,7 @@ export const createRestWorkoutMutation = async (res: Response) => {
     const workout = data.rows[0];
 
     return res.status(201).json({
+      role: res.locals.state.account.role,
       status: 'success',
       message: 'Rest created successfully',
       workout,

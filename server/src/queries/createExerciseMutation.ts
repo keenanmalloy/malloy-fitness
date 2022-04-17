@@ -66,6 +66,7 @@ export const createExerciseMutation = async (
 
   if (!data.primary.length) {
     return res.status(422).json({
+      role: res.locals.state.account.role,
       status: 'error',
       message: 'Invalid request data, missing primary muscle group id(s)',
       exercise: value,
@@ -75,6 +76,7 @@ export const createExerciseMutation = async (
 
   if (error) {
     return res.status(422).json({
+      role: res.locals.state.account.role,
       status: 'error',
       message: 'Invalid request data',
       exercise: value,
@@ -123,6 +125,7 @@ export const createExerciseMutation = async (
       };
 
       return res.status(201).json({
+        role: res.locals.state.account.role,
         status: 'success',
         message: 'Exercise created successfully',
         exercise,

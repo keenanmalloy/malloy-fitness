@@ -26,6 +26,7 @@ export const retrieveWorkoutsQuery = async (req: Request, res: Response) => {
     const data = await db.query(query);
 
     return res.status(200).json({
+      role: res.locals.state.account.role,
       message: 'Workouts fetched successfully',
       status: 'success',
       workouts: data.rows,

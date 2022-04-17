@@ -26,6 +26,7 @@ export const createSetMutation = async (
 
   if (error) {
     return res.status(422).json({
+      role: res.locals.state.account.role,
       status: 'error',
       message: 'Invalid request data',
       set: value,
@@ -39,6 +40,7 @@ export const createSetMutation = async (
       (typeof weight === 'number' && weight < 0)
     ) {
       return res.status(422).json({
+        role: res.locals.state.account.role,
         status: 'error',
         message: 'Only positive numbers allowed for weight and reps',
         set: null,
@@ -64,6 +66,7 @@ export const createSetMutation = async (
       const set = data.rows[0];
 
       return res.status(200).json({
+        role: res.locals.state.account.role,
         status: 'success',
         message: 'Set created successfully',
         set,

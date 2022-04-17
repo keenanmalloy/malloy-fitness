@@ -1,14 +1,14 @@
-import { db } from "config/db";
-import { Response } from "express";
-import Joi from "joi";
+import { db } from 'config/db';
+import { Response } from 'express';
+import Joi from 'joi';
 
 interface addMuscleGroup {
-  group: "primary" | "secondary";
+  group: 'primary' | 'secondary';
   muscleGroupId: number | string;
 }
 
 const addMuscleGroupSchema = Joi.object({
-  group: Joi.string().valid("primary", "secondary").optional(),
+  group: Joi.string().valid('primary', 'secondary').optional(),
   muscleGroupId: Joi.alternatives(Joi.string(), Joi.number()).required(),
 });
 
@@ -21,8 +21,9 @@ export const addMuscleGroupToExercise = async (
 
   if (error) {
     return res.status(422).json({
-      status: "error",
-      message: "Invalid request data",
+      role: res.locals.state.account.role,
+      status: 'error',
+      message: 'Invalid request data',
       muscleGroup: value,
       error: error,
     });
@@ -31,9 +32,10 @@ export const addMuscleGroupToExercise = async (
 
     if (Number.isNaN(parseInt(muscleGroupId.toString()))) {
       return res.status(422).json({
-        status: "error",
+        role: res.locals.state.account.role,
+        status: 'error',
         //@ts-ignore
-        message: "Invalid muscleGroup ID",
+        message: 'Invalid muscleGroup ID',
       });
     }
 
@@ -54,16 +56,17 @@ export const addMuscleGroupToExercise = async (
       const muscleGroup = data.rows[0];
 
       return res.status(201).json({
-        status: "success",
-        message: "Muscle-group added successfully",
+        role: res.locals.state.account.role,
+        status: 'success',
+        message: 'Muscle-group added successfully',
         muscleGroup,
       });
     } catch (error) {
       console.log({ error });
       return res.status(500).json({
-        status: "error",
+        status: 'error',
         //@ts-ignore
-        message: error && error.message ? error.message : "Database error",
+        message: error && error.message ? error.message : 'Database error',
         muscleGroup: null,
       });
     }

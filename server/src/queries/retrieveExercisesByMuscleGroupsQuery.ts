@@ -17,6 +17,7 @@ export const retrieveExercisesByMuscleGroupQuery = async (
   try {
     const exercises = await retrieveExercisesByMgIds(req, res);
     return res.status(200).json({
+      role: res.locals.state.account.role,
       message: 'Exercises fetched successfully',
       status: 'success',
       exercises,

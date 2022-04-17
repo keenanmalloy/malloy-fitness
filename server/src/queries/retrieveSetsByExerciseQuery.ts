@@ -1,4 +1,4 @@
-import { db } from "config/db";
+import { db } from 'config/db';
 
 interface Response {
   status: string;
@@ -18,15 +18,16 @@ export const retrieveSetsByExerciseQuery = async (
     const data = await db.query(query, params);
 
     return res.status(200).json({
-      message: "Sets fetched successfully",
-      status: "success",
+      role: res.locals.state.account.role,
+      message: 'Sets fetched successfully',
+      status: 'success',
       sets: data.rows,
     });
   } catch (error) {
     console.log({ error });
     return res.status(500).json({
-      status: "error",
-      message: "Database error",
+      status: 'error',
+      message: 'Database error',
       exercise: null,
     });
   }
