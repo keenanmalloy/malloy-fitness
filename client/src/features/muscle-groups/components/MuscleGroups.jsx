@@ -9,6 +9,7 @@ import { Skeleton } from 'features/common/Skeleton';
 export const MuscleGroups = () => {
   const { data, isError, isLoading } = useMuscleGroupsQuery();
   const [query, setQuery] = useState('');
+  const [sortBy, setSortBy] = useState('');
 
   if (isLoading) {
     return (
@@ -29,6 +30,7 @@ export const MuscleGroups = () => {
     return (
       <section className="relative p-5">
         <SearchMuscleGroups
+          setSortBy={setSortBy}
           query={query}
           setQuery={setQuery}
           role={data?.role}
@@ -45,6 +47,7 @@ export const MuscleGroups = () => {
     return (
       <section className="relative p-5">
         <SearchMuscleGroups
+          setSortBy={setSortBy}
           query={query}
           setQuery={setQuery}
           role={data?.role}
@@ -59,19 +62,46 @@ export const MuscleGroups = () => {
 
   return (
     <section className="relative p-5">
-      <SearchMuscleGroups query={query} setQuery={setQuery} role={data?.role} />
+      <SearchMuscleGroups
+        setSortBy={setSortBy}
+        query={query}
+        setQuery={setQuery}
+        role={data?.role}
+      />
       <ul className="flex flex-col divide-y-2 divide-gray-100">
         {
           /* Results with search */
           query ? (
             <>
               {data.muscleGroups
+                .sort((a, b) => {
+                  if (sortBy === 'A-Z') {
+                    if (a.name < b.name) {
+                      return -1;
+                    }
+                    if (a.name > b.name) {
+                      return 1;
+                    }
+                    return 0;
+                  }
+                  if (sortBy === 'Z-A') {
+                    if (a.name > b.name) {
+                      return -1;
+                    }
+                    if (a.name < b.name) {
+                      return 1;
+                    }
+                    return 0;
+                  }
+
+                  return a.muscle_group_id - b.muscle_group_id;
+                })
                 .filter(
                   (mg) =>
                     mg.name.toLowerCase().includes(query.toLowerCase()) ||
                     mg?.description?.toLowerCase().includes(query.toLowerCase())
                 )
-                .sort((a, b) => b.muscle_group_id - a.muscle_group_id)
+
                 .map((mg) => {
                   return (
                     <li key={mg.muscle_group_id} className="border-solid py-6">
@@ -107,7 +137,28 @@ export const MuscleGroups = () => {
 
             <>
               {data.muscleGroups
-                .sort((a, b) => b.muscle_group_id - a.muscle_group_id)
+                .sort((a, b) => {
+                  if (sortBy === 'A-Z') {
+                    if (a.name < b.name) {
+                      return -1;
+                    }
+                    if (a.name > b.name) {
+                      return 1;
+                    }
+                    return 0;
+                  }
+                  if (sortBy === 'Z-A') {
+                    if (a.name > b.name) {
+                      return -1;
+                    }
+                    if (a.name < b.name) {
+                      return 1;
+                    }
+                    return 0;
+                  }
+
+                  return a.muscle_group_id - b.muscle_group_id;
+                })
                 .map((mg) => {
                   return (
                     <li key={mg.muscle_group_id} className="border-solid py-6">
