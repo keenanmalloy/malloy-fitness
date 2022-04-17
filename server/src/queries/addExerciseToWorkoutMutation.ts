@@ -29,6 +29,7 @@ export const addExerciseToWorkoutMutation = async (
 
   if (error) {
     return res.status(422).json({
+      role: res.locals.state.account.role,
       status: 'error',
       message: 'Invalid request data',
       exercise: value,
@@ -39,6 +40,7 @@ export const addExerciseToWorkoutMutation = async (
 
     if (Number.isNaN(parseInt(exerciseId.toString()))) {
       return res.status(422).json({
+        role: res.locals.state.account.role,
         status: 'error',
         //@ts-ignore
         message: 'Invalid exercise ID',
@@ -62,6 +64,7 @@ export const addExerciseToWorkoutMutation = async (
       const exercise = data.rows[0];
 
       return res.status(201).json({
+        role: res.locals.state.account.role,
         status: 'success',
         message: 'Exercise added successfully',
         exercise,

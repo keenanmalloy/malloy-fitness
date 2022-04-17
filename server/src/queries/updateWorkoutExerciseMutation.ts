@@ -22,6 +22,7 @@ export const updateWorkoutExerciseMutation = async (
   const { error, value, warning } = updateWorkoutExerciseSchema.validate(data);
   if (error) {
     return res.status(422).json({
+      role: res.locals.state.account.role,
       status: 'error',
       message: 'Invalid request data',
       exercise: value,
@@ -35,6 +36,7 @@ export const updateWorkoutExerciseMutation = async (
       (typeof priority === 'number' && priority < 0)
     ) {
       return res.status(422).json({
+        role: res.locals.state.account.role,
         status: 'error',
         message: 'Only positive numbers allowed for weight and reps',
         exercise: null,
@@ -43,6 +45,7 @@ export const updateWorkoutExerciseMutation = async (
 
     if (!order && !priority) {
       return res.status(422).json({
+        role: res.locals.state.account.role,
         status: 'error',
         message:
           'Both order and priority were missing or were coerced to false. One of order or priority is required to update the exercise within the workout.',
@@ -77,6 +80,7 @@ export const updateWorkoutExerciseMutation = async (
       const data = await db.query(query, params);
       if (!data.rowCount) {
         return res.status(404).json({
+          role: res.locals.state.account.role,
           status: 'error',
           message: 'Exercise does not exist',
           exercise: null,
@@ -84,6 +88,7 @@ export const updateWorkoutExerciseMutation = async (
       }
 
       return res.status(200).json({
+        role: res.locals.state.account.role,
         status: 'success',
         message: 'Exercise updated successfully',
         exercise: data.rows[0],

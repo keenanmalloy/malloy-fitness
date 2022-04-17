@@ -1,4 +1,4 @@
-import { db } from "config/db";
+import { db } from 'config/db';
 
 interface Response {
   status: string;
@@ -20,22 +20,24 @@ export const deleteSetsByExerciseMutation = async (
 
     if (!data.rowCount) {
       return res.status(404).json({
-        status: "error",
-        message: "Sets do not exist",
+        role: res.locals.state.account.role,
+        status: 'error',
+        message: 'Sets do not exist',
         set: null,
       });
     }
 
     return res.status(200).json({
-      status: "success",
-      message: "Sets deleted successfully",
+      role: res.locals.state.account.role,
+      status: 'success',
+      message: 'Sets deleted successfully',
       sets: data.rows,
     });
   } catch (error) {
     console.log({ error });
     return res.status(500).json({
-      status: "error",
-      message: "Database error",
+      status: 'error',
+      message: 'Database error',
       set: null,
     });
   }

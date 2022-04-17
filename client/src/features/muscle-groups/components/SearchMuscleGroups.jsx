@@ -2,7 +2,7 @@ import { Input } from 'features/form/Input';
 import React from 'react';
 import { CreateMuscleGroup } from 'features/muscle-groups/components/CreateMuscleGroup';
 
-export const SearchMuscleGroups = ({ query, setQuery }) => {
+export const SearchMuscleGroups = ({ query, setQuery, role }) => {
   return (
     <div className="sticky top-10 bg-white">
       <Input
@@ -12,9 +12,11 @@ export const SearchMuscleGroups = ({ query, setQuery }) => {
         isRequired
         type="search"
       />
-      <div className="pb-2 w-full">
-        <CreateMuscleGroup />
-      </div>
+      {role === 'developer' && (
+        <div className="pb-2 w-full">
+          <CreateMuscleGroup />
+        </div>
+      )}
     </div>
   );
 };

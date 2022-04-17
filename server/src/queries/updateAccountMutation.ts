@@ -19,6 +19,7 @@ export const updateAccountMutation = async (
   // if object is empty, respond with error
   if (Object.keys(data).length === 0) {
     return res.status(422).json({
+      role: res.locals.state.account.role,
       status: 'error',
       message: 'Missing request data',
     });
@@ -27,6 +28,7 @@ export const updateAccountMutation = async (
   const { error, value, warning } = updateMuscleGroupSchema.validate(data);
   if (error) {
     return res.status(422).json({
+      role: res.locals.state.account.role,
       status: 'error',
       message: 'Invalid request data',
       field: value,
@@ -45,12 +47,14 @@ export const updateAccountMutation = async (
       const data = await db.query(query, params);
       if (!data.rowCount) {
         return res.status(404).json({
+          role: res.locals.state.account.role,
           status: 'error',
           message: 'Field does not exist',
         });
       }
 
       return res.status(200).json({
+        role: res.locals.state.account.role,
         status: 'success',
         message: 'Field updated successfully',
       });

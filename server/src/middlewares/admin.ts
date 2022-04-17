@@ -1,5 +1,5 @@
-import { NextFunction, Response, Request } from "express";
-import { authorizeAdminQuery } from "queries/authorizeAdminQuery";
+import { NextFunction, Response, Request } from 'express';
+import { authorizeAdminQuery } from 'queries/authorizeAdminQuery';
 
 /**
  * Checks the DB for role to authorize resource.
@@ -14,5 +14,8 @@ export const admin = async (
   if (isAdmin) {
     return next();
   }
-  return res.status(403).json({ message: "Unauthorized" });
+  return res.status(403).json({
+    role: res.locals.state.account.role,
+    message: 'Unauthorized',
+  });
 };

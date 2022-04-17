@@ -21,6 +21,7 @@ export const createCardioWorkoutMutation = async (res: Response) => {
     const workout = data.rows[0];
 
     return res.status(201).json({
+      role: res.locals.state.account.role,
       status: 'success',
       message: 'Cardio workout created successfully',
       workout,

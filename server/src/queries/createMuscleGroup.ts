@@ -22,6 +22,7 @@ export const createMuscleGroupMutation = async (
 
   if (error) {
     return res.status(422).json({
+      role: res.locals.state.account.role,
       status: 'error',
       message: 'Invalid request data',
       muscleGroup: value,
@@ -46,6 +47,7 @@ export const createMuscleGroupMutation = async (
       const data = await db.query(query);
 
       return res.status(201).json({
+        role: res.locals.state.account.role,
         status: 'success',
         message: 'Muscle-group created successfully',
         muscleGroup: data.rows[0],

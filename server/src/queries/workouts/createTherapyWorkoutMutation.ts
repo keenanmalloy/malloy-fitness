@@ -70,6 +70,7 @@ export const createTherapyWorkoutMutation = async (
 ) => {
   if (!data.exercises) {
     return res.status(422).json({
+      role: res.locals.state.account.role,
       status: 'error',
       message: `Invalid request data, missing exercises.`,
       workout: null,
@@ -92,6 +93,7 @@ export const createTherapyWorkoutMutation = async (
 
   if (error) {
     return res.status(422).json({
+      role: res.locals.state.account.role,
       status: 'error',
       message: 'Invalid request data',
       workout: value,
@@ -107,6 +109,7 @@ export const createTherapyWorkoutMutation = async (
 
     if (validateExercises(exercises)) {
       return res.status(400).json({
+        role: res.locals.state.account.role,
         status: 'error',
         message: 'Invalid exercise ID',
         exercises: exercises,
@@ -134,6 +137,7 @@ export const createTherapyWorkoutMutation = async (
       const workout = data.rows[0];
 
       return res.status(201).json({
+        role: res.locals.state.account.role,
         status: 'success',
         message: 'Workout created successfully',
         workout,

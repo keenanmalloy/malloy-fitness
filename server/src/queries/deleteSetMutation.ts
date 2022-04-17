@@ -1,4 +1,4 @@
-import { db } from "config/db";
+import { db } from 'config/db';
 
 interface Response {
   status: string;
@@ -19,22 +19,24 @@ export const deleteSetMutation = async (
 
     if (!data.rowCount) {
       return res.status(404).json({
-        status: "error",
-        message: "Set does not exist",
+        role: res.locals.state.account.role,
+        status: 'error',
+        message: 'Set does not exist',
         set: null,
       });
     }
 
     return res.status(200).json({
-      status: "success",
-      message: "Set deleted successfully",
+      role: res.locals.state.account.role,
+      status: 'success',
+      message: 'Set deleted successfully',
       set: data.rows[0],
     });
   } catch (error) {
     console.log({ error });
     return res.status(500).json({
-      status: "error",
-      message: "Database error",
+      status: 'error',
+      message: 'Database error',
       set: null,
     });
   }

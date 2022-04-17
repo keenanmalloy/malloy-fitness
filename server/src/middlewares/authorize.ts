@@ -20,7 +20,10 @@ export const authorize = async (
     if (isAuthorized) {
       return next();
     }
-    return res.status(403).json({ message: 'Unauthorized' });
+    return res.status(403).json({
+      role: res.locals.state.account.role,
+      message: 'Unauthorized',
+    });
   }
 
   if (!!exerciseId) {
@@ -28,7 +31,10 @@ export const authorize = async (
     if (isAuthorized) {
       return next();
     }
-    return res.status(403).json({ message: 'Unauthorized' });
+    return res.status(403).json({
+      role: res.locals.state.account.role,
+      message: 'Unauthorized',
+    });
   }
 
   return next();

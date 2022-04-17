@@ -13,6 +13,7 @@ export const cloneScheduleWorkoutMutation = async (
 
     if (!workout) {
       return res.status(404).json({
+        role: res.locals.state.account.role,
         message: 'Failed',
         error: 'Workout failed to fetch, does it exist?',
       });
@@ -68,7 +69,10 @@ export const cloneScheduleWorkoutMutation = async (
     };
 
     if (!workout.workoutExercises.length) {
-      return res.status(201).json({ message: 'Workout Successfully Cloned' });
+      return res.status(201).json({
+        role: res.locals.state.account.role,
+        message: 'Workout Successfully Cloned',
+      });
     }
 
     const weQuery = `
@@ -85,7 +89,10 @@ export const cloneScheduleWorkoutMutation = async (
 
     await db.query(weQuery);
 
-    return res.status(201).json({ message: 'Workout Successfully Cloned' });
+    return res.status(201).json({
+      role: res.locals.state.account.role,
+      message: 'Workout Successfully Cloned',
+    });
   } catch (error) {
     console.log({ error });
     return res.status(500).json({

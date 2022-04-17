@@ -17,6 +17,7 @@ export const updateMuscleGroupMutation = async (
   const { error, value, warning } = updateMuscleGroupSchema.validate(data);
   if (error) {
     return res.status(422).json({
+      role: res.locals.state.account.role,
       status: 'error',
       message: 'Invalid request data',
       muscleGroup: value,
@@ -35,6 +36,7 @@ export const updateMuscleGroupMutation = async (
       const data = await db.query(query, params);
       if (!data.rowCount) {
         return res.status(404).json({
+          role: res.locals.state.account.role,
           status: 'error',
           message: 'Muscle-group does not exist',
           muscleGroup: null,
@@ -42,6 +44,7 @@ export const updateMuscleGroupMutation = async (
       }
 
       return res.status(200).json({
+        role: res.locals.state.account.role,
         status: 'success',
         message: 'Muscle-group updated successfully',
         muscleGroup: data.rows[0],
