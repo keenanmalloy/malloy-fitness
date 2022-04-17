@@ -46,13 +46,15 @@ export const MuscleGroup = ({ muscleGroupId }) => {
             Back
           </button>
         </Link>
-        <EditMuscleGroup
-          name={data.muscleGroup.name}
-          description={data.muscleGroup.description}
-          image={data.muscleGroup.image}
-          id={data.muscleGroup.muscle_group_id}
-          refetchKey="fetchMuscleGroup"
-        />
+        {data.role === 'developer' && (
+          <EditMuscleGroup
+            name={data.muscleGroup.name}
+            description={data.muscleGroup.description}
+            image={data.muscleGroup.image}
+            id={data.muscleGroup.muscle_group_id}
+            refetchKey="fetchMuscleGroup"
+          />
+        )}
       </header>
 
       <main className="pt-5">

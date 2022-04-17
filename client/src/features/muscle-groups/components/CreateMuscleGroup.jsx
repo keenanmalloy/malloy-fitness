@@ -22,7 +22,7 @@ export const CreateMuscleGroup = () => {
     const muscleGroup = {
       name,
       description,
-      image,
+      image: image ?? undefined,
     };
 
     mutate(

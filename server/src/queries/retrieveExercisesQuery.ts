@@ -13,8 +13,9 @@ function getUniqueListBy(arr: any, key: string) {
 export const retrieveExercisesQuery = async (req: Request, res: Response) => {
   try {
     const { q, ids } = req.query;
+
     if (q) {
-      const exercises = await searchExercisesByQuery(req, res);
+      const exercises = await searchExercises(req, res);
       return res.status(200).json({
         role: res.locals.state.account.role,
         message: 'Exercises fetched successfully',
@@ -33,7 +34,7 @@ export const retrieveExercisesQuery = async (req: Request, res: Response) => {
       });
     }
 
-    const exercises = await retrieveFirst10Exercises(req, res);
+    const exercises = await retrieveExercises(req, res);
     return res.status(200).json({
       role: res.locals.state.account.role,
       message: 'Exercises fetched successfully',
@@ -69,6 +70,7 @@ const getExercisesByIds = async (req: Request, res: Response) => {
       e.category,
       e.created_by,
       e.description,
+      e.video,
       e.view,
       mg.muscle_group_id,
       mg.name AS muscle_group_name,
@@ -87,7 +89,12 @@ const getExercisesByIds = async (req: Request, res: Response) => {
   return exercises;
 };
 
-const retrieveFirst10Exercises = async (req: Request, res: Response) => {
+const retrieveExercises = async (req: Request, res: Response) => {
+  const categoryQuery = req.query.category as string;
+  const viewQuery = req.query.view as string;
+  const profileQuery = req.query.profile as string;
+  const sortByQuery = req.query.sortBy as string;
+
   const query = `
   WITH
     exercises AS (
@@ -102,6 +109,7 @@ const retrieveFirst10Exercises = async (req: Request, res: Response) => {
       e.category,
       e.created_by,
       e.description,
+      e.video,
       e.view,
       mg.muscle_group_id,
       mg.name AS muscle_group_name,
@@ -111,7 +119,14 @@ const retrieveFirst10Exercises = async (req: Request, res: Response) => {
   FROM exercises e
       LEFT OUTER JOIN exercise_muscle_groups emg
             on emg.exercise_id = e.exercise_id
-              LEFT OUTER JOIN muscle_groups mg on mg.muscle_group_id = emg.muscle_group_id`;
+              LEFT OUTER JOIN muscle_groups mg on mg.muscle_group_id = emg.muscle_group_id
+
+  WHERE e.exercise_id IS NOT null
+  ${generateCategoryFilter(categoryQuery)} 
+  ${generateProfileFilter(profileQuery)}
+  ${generateViewFilter(viewQuery)}
+  ${generateSortByFilter(sortByQuery)}     
+  `;
 
   const accountId = res.locals.state.account.account_id;
   const params = [accountId];
@@ -120,7 +135,12 @@ const retrieveFirst10Exercises = async (req: Request, res: Response) => {
   return exercises;
 };
 
-const searchExercisesByQuery = async (req: Request, res: Response) => {
+const searchExercises = async (req: Request, res: Response) => {
+  const categoryQuery = req.query.category as string;
+  const viewQuery = req.query.view as string;
+  const profileQuery = req.query.profile as string;
+  const sortByQuery = req.query.sortBy as string;
+
   const query = `
   WITH
   exercises AS (
@@ -135,6 +155,7 @@ const searchExercisesByQuery = async (req: Request, res: Response) => {
       e.category,
       e.created_by,
       e.description,
+      e.video,
       e.view,
       mg.muscle_group_id,
       mg.name AS muscle_group_name,
@@ -147,10 +168,14 @@ const searchExercisesByQuery = async (req: Request, res: Response) => {
               LEFT OUTER JOIN muscle_groups mg on mg.muscle_group_id = emg.muscle_group_id
   
   WHERE 
-    e.name LIKE '%${req.query.q}%' 
-    OR e.description LIKE '%${req.query.q}%' 
-    OR mg.name LIKE '%${req.query.q}%' 
-    OR mg.description LIKE '%${req.query.q}%'
+    (e.name ILIKE '%${req.query.q}%' 
+    OR e.description ILIKE '%${req.query.q}%' 
+    OR mg.name ILIKE '%${req.query.q}%' 
+    OR mg.description ILIKE '%${req.query.q}%')
+    ${generateCategoryFilter(categoryQuery)} 
+    ${generateProfileFilter(profileQuery)}
+    ${generateViewFilter(viewQuery)}
+    ${generateSortByFilter(sortByQuery)}   
 `;
 
   const accountId = res.locals.state.account.account_id;
@@ -166,6 +191,7 @@ const formatExerciseResponse = (data: any[]) => {
     data.map(
       ({
         name,
+        video,
         exercise_id,
         profile,
         category,
@@ -175,6 +201,7 @@ const formatExerciseResponse = (data: any[]) => {
       }) => {
         return {
           name,
+          video,
           exercise_id,
           profile,
           category,
@@ -212,4 +239,44 @@ const formatExerciseResponse = (data: any[]) => {
     ),
     'exercise_id'
   );
+};
+
+const generateCategoryFilter = (categoryQuery: string | undefined) => {
+  if (!!categoryQuery) {
+    return `AND category = '${categoryQuery}'`;
+  }
+
+  return ``;
+};
+
+const generateProfileFilter = (profileQuery: string | undefined) => {
+  if (!!profileQuery) {
+    return `AND profile = '${profileQuery}'`;
+  }
+
+  return ``;
+};
+
+const generateViewFilter = (viewQuery: string | undefined) => {
+  if (!!viewQuery) {
+    return `AND view = '${viewQuery}'`;
+  }
+
+  return ``;
+};
+
+type SortBy = 'created-asc' | 'created-desc' | 'updated-asc' | 'updated-desc';
+const generateSortByFilter = (sortByQuery: string | undefined) => {
+  switch (sortByQuery as SortBy) {
+    case 'created-asc':
+      return `ORDER BY created_at ASC`;
+    case 'created-desc':
+      return `ORDER BY created_at DESC`;
+    case 'updated-asc':
+      return `ORDER BY updated_at ASC`;
+    case 'updated-desc':
+      return `ORDER BY updated_at DESC`;
+    default:
+      return ``;
+  }
 };
