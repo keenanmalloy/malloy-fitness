@@ -4,6 +4,7 @@ import { useExercisesQuery } from 'features/exercises/api/useExercisesQuery';
 import { UpdateExercise } from 'features/exercises/components/UpdateExercise';
 import { Skeleton } from 'features/common/Skeleton';
 import { DeleteExercise } from './DeleteExercise';
+import Image from 'next/image';
 
 function useDebounce(value, delay = 500) {
   const [debouncedValue, setDebouncedValue] = useState(value);
@@ -72,12 +73,15 @@ export const ExerciseList = ({ query, category, view, profile, sortBy }) => {
       {data.exercises.map((exercise) => (
         <li className="border-solid py-6" key={exercise.exercise_id}>
           {!!exercise.video && (
-            <div className="py-5">
-              <video
-                preload="metadata"
-                src={`https://cdn.trckd.ca/${exercise.video}#t=10`}
-              />
-            </div>
+            <Link href={`/exercises/${exercise.exercise_id}`}>
+              <div className="mb-5 w-full aspect-video relative">
+                <Image
+                  src={`https://thumbnails.trckd.ca/${exercise.video}-0.jpg`}
+                  layout="fill"
+                  className="-z-10"
+                />
+              </div>
+            </Link>
           )}
 
           <div className="flex justify-between">
