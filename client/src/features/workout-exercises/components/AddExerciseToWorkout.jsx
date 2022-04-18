@@ -13,7 +13,7 @@ const AddExerciseToWorkout = ({ workout }) => {
   const [priority, setPriority] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  const { data, isError, isLoading } = useExercisesQuery();
+  const { data, isError, isLoading } = useExercisesQuery({});
   const { mutate } = useAddExerciseToWorkoutMutation();
 
   function closeModal() {

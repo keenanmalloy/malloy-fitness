@@ -86,6 +86,7 @@ export const GetSingleExercise = ({ id }) => {
           <div className="py-5">
             <video
               controls
+              className="w-full"
               src={`https://cdn.trckd.ca/${data.exercise.video}`}
             />
           </div>

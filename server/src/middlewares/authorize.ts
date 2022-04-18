@@ -15,6 +15,11 @@ export const authorize = async (
   const workoutId = res.locals.state.workoutId;
   const exerciseId = res.locals.state.exerciseId;
 
+  const isDeveloper = res.locals.state.account.role === 'developer';
+  if (isDeveloper) {
+    return next();
+  }
+
   if (!!workoutId) {
     const { isAuthorized } = await authorizeWorkoutQuery(res, workoutId);
     if (isAuthorized) {

@@ -33,7 +33,7 @@ router.get('/:exerciseId', authenticate, async (req, res) => {
 });
 
 // Create new exercise
-router.post('/', authenticate, authorize, async (req, res) => {
+router.post('/', authenticate, async (req, res) => {
   await createExerciseMutation(res, req.body);
 });
 
