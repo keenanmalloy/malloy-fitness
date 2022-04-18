@@ -1,6 +1,5 @@
 import { useWorkoutQuery } from 'features/workouts/api/useWorkoutQuery';
 import React from 'react';
-import { GrPowerCycle } from 'react-icons/gr';
 
 export const OverviewRow = ({
   order,
