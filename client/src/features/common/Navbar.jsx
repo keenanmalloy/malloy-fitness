@@ -1,7 +1,8 @@
 import { useRouter } from 'next/router';
 import { RiHome5Fill } from 'react-icons/ri';
 import { IoBarbell } from 'react-icons/io5';
-import { GiMuscleUp, GiWeightLiftingUp } from 'react-icons/gi';
+import { GiMuscleUp, GiWeightLiftingUp, GiKnifeFork } from 'react-icons/gi';
+import { FaChalkboardTeacher } from 'react-icons/fa';
 import { BiLibrary } from 'react-icons/bi';
 import Link from 'next/link';
 import { useState } from 'react';
@@ -24,6 +25,30 @@ const navigation = [
     href: '/workouts',
     icon: (
       <GiWeightLiftingUp
+        style={{
+          width: 20,
+          height: 20,
+        }}
+      />
+    ),
+  },
+  {
+    name: 'Diet',
+    href: '/diet',
+    icon: (
+      <GiKnifeFork
+        style={{
+          width: 20,
+          height: 20,
+        }}
+      />
+    ),
+  },
+  {
+    name: 'CheckIn',
+    href: '/checkin',
+    icon: (
+      <FaChalkboardTeacher
         style={{
           width: 20,
           height: 20,
