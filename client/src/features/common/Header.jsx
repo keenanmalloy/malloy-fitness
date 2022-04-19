@@ -1,6 +1,12 @@
 import React from 'react';
 import { RiUser3Line, RiSearchLine } from 'react-icons/ri';
 import Link from 'next/link';
+import dynamic from 'next/dynamic';
+
+const ScrollDatePicker = dynamic(
+  import('./ScrollDatePicker').then((mod) => mod.ScrollDatePicker),
+  { ssr: false }
+);
 
 export const Header = () => {
   return (
@@ -40,6 +46,8 @@ export const Header = () => {
           </Link>
         </div>
       </div>
+
+      <ScrollDatePicker />
     </nav>
   );
 };
