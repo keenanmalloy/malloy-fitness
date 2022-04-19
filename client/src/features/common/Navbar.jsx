@@ -34,7 +34,7 @@ const navigation = [
   },
   {
     name: 'Diet',
-    href: '/diet',
+    href: '/workouts',
     icon: (
       <GiKnifeFork
         style={{
@@ -46,7 +46,7 @@ const navigation = [
   },
   {
     name: 'CheckIn',
-    href: '/checkin',
+    href: '/workouts',
     icon: (
       <FaChalkboardTeacher
         style={{
@@ -89,6 +89,18 @@ const libraryNavigation = [
     href: '/muscle-groups',
     icon: (
       <GiMuscleUp
+        style={{
+          width: 20,
+          height: 20,
+        }}
+      />
+    ),
+  },
+  {
+    name: 'Workouts',
+    href: '/workouts',
+    icon: (
+      <GiWeightLiftingUp
         style={{
           width: 20,
           height: 20,
