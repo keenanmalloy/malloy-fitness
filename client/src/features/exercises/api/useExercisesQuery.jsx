@@ -6,7 +6,9 @@ const fetchExercises = async ({ query, category, view, profile, sortBy }) => {
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_API_ENDPOINT}/exercises/?q=${
       query ?? ''
-    }&category=${category}&view=${view}&profile=${profile}&sortBy=${sortBy}`,
+    }&category=${category ?? ''}&view=${view ?? ''}&profile=${
+      profile ?? ''
+    }&sortBy=${sortBy ?? ''}`,
     {
       credentials: 'include',
     }
