@@ -50,8 +50,6 @@ const AddExerciseToWorkout = ({ workout }) => {
       priority: priority?.value ?? null,
     };
 
-    console.log({ payload });
-
     mutate({ workoutId: workout.workout_id, payload });
 
     closeModal();
@@ -68,8 +66,6 @@ const AddExerciseToWorkout = ({ workout }) => {
   if (!data.exercises) {
     return <p>none available...</p>;
   }
-
-  console.log({ data });
 
   return (
     <Fragment>

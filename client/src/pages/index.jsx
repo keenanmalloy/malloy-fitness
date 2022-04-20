@@ -40,7 +40,7 @@ function HomePage() {
         <div className="h-32 flex justify-center pt-4"></div>
         <div className="flex justify-center border-b-2 border-solid rounded-sm border-slate-400 mx-3 pb-4">
           <div className="flex flex-col text-center text-slate-600">
-            Today's session
+            No training tracked for today
           </div>
         </div>
       </div>
