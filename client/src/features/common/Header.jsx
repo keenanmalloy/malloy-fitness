@@ -4,7 +4,7 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 
 const ScrollDatePicker = dynamic(
-  import('./ScrollDatePicker').then((mod) => mod.ScrollDatePicker),
+  import('../date-scroll/ScrollDatePicker').then((mod) => mod.ScrollDatePicker),
   { ssr: false }
 );
 
