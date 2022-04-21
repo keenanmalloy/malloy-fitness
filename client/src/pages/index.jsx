@@ -4,7 +4,7 @@ import Layout from 'features/common/Layout';
 function HomePage() {
   return (
     <Layout>
-      <div className="border-b border-slate-400">
+      {/* <div className="border-b border-slate-400">
         <div className="h-32 flex justify-center pt-4">
           <div className="w-24 h-24 rounded-full flex flex-col justify-center items-center bg-slate-900 text-slate-400">
             <div className="text-white py-1">0</div>
@@ -70,7 +70,7 @@ function HomePage() {
             No steps tracked for today
           </div>
         </div>
-      </div>
+      </div> */}
     </Layout>
   );
 }
