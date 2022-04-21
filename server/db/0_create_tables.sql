@@ -80,6 +80,7 @@ CREATE TABLE IF NOT EXISTS rest_periods (
     ended_at timestamp with time zone
 );
 
+
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE IF NOT EXISTS accounts (
     account_id bigserial PRIMARY KEY,
@@ -98,6 +99,18 @@ CREATE TABLE IF NOT EXISTS accounts (
     phone text,
     locale VARCHAR(5) DEFAULT 'en-CA'
 );
+
+CREATE TABLE IF NOT EXISTS sleep (
+    sleep_id bigserial PRIMARY KEY,
+    account_id bigint,
+    duration int,
+    rating int,
+    quality int,
+    logged_at timestamp with time zone DEFAULT now() NOT NULL,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL
+);
+
 
 CREATE TABLE IF NOT EXISTS account_providers (
     account_provider_id bigserial PRIMARY KEY,
