@@ -17,6 +17,7 @@ import { createRestWorkoutMutation } from 'queries/workouts/createRestWorkoutMut
 import { createDeloadWorkoutMutation } from 'queries/workouts/createDeloadWorkoutMutation';
 import { createCardioWorkoutMutation } from 'queries/workouts/createCardioWorkoutMutation';
 import { createTherapyWorkoutMutation } from 'queries/workouts/createTherapyWorkoutMutation';
+import { retrievePreviewWorkoutsQuery } from 'queries/workouts/retrievePreviewWorkoutsQuery';
 
 const router = Router();
 
@@ -34,6 +35,10 @@ const router = Router();
 // Retrieve workout(s) sorted by ----------- /?sortBy=created-asc (created-asc, created-desc, updated-asc, updated-descm scheduled-asc, scheduled-desc)
 router.get('/', authenticate, async (req, res) => {
   await retrieveWorkoutsQuery(req, res);
+});
+
+router.get('/preview', authenticate, async (req, res) => {
+  await retrievePreviewWorkoutsQuery(req, res);
 });
 
 // Retrieve workout

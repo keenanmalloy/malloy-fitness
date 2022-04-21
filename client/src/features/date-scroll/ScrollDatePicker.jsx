@@ -8,14 +8,19 @@ import useDrag from './useDrag';
 import { CalendarComponent } from 'features/date-scroll/Calendar';
 import { generateCalendarState } from './generateCalendarState';
 
-export const ScrollDatePicker = () => {
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [items, setItems] = useState(generateCalendarState(selectedDate));
-  const [selected, setSelected] = useState({});
+export const ScrollDatePicker = ({
+  selectedDate,
+  setSelectedDate,
+  items,
+  setItems,
+  selected,
+  setSelected,
+  data,
+  isError,
+  isLoading,
+}) => {
   const { dragStart, dragStop, dragMove, dragging } = useDrag();
-
   const [hasMounted, setHasMounted] = useState(false);
-
   const apiRef = useRef();
 
   const reset = () => {
@@ -38,8 +43,8 @@ export const ScrollDatePicker = () => {
         item.month === new Date().getMonth() + 1
     )[0].id;
 
-    apiRef.current.scrollToItem(
-      apiRef.current.getItemElementById(currentId),
+    apiRef?.current?.scrollToItem(
+      apiRef?.current?.getItemElementById(currentId),
       'smooth',
       'center'
     );
@@ -141,6 +146,7 @@ export const ScrollDatePicker = () => {
                 itemId={state.id}
                 key={key}
                 selected={state.id === selected.id}
+                highlight={handleHighlight(state, data)}
               />
             );
           })}
@@ -150,12 +156,12 @@ export const ScrollDatePicker = () => {
   );
 };
 
-const ButtonDate = ({ onClick, selected, state, itemId }) => {
+const ButtonDate = ({ onClick, selected, state, itemId, highlight }) => {
   const visibility = React.useContext(VisibilityContext);
   const visible = visibility.isItemVisible(itemId);
 
   return (
-    <li>
+    <li className="flex justify-center items-center flex-col">
       <button
         className={`${
           selected ? 'text-white' : visible ? 'text-gray-400' : 'text-gray-600'
@@ -164,6 +170,67 @@ const ButtonDate = ({ onClick, selected, state, itemId }) => {
       >
         {state.day}
       </button>
+
+      {highlight.isPresent && (
+        <div className="flex space-x-0.5">
+          {highlight.sessions.map((item, key) => {
+            return <span key={key} className={`${item.color} w-0.5 h-0.5 `} />;
+          })}
+        </div>
+      )}
     </li>
   );
+};
+
+const handleHighlight = (state, group) => {
+  const data =
+    group &&
+    group.workouts.length &&
+    group.workouts.map((item) => {
+      return {
+        month: new Date(item.workout_dt).getMonth() + 1,
+        day: new Date(item.workout_dt).getDate(),
+        year: new Date(item.workout_dt).getFullYear(),
+        type: item.type,
+      };
+    });
+
+  const matchedStates =
+    data &&
+    data?.filter((s) => {
+      return (
+        s.day === state.day && s.month === state.month && s.year === state.year
+      );
+    });
+
+  if (matchedStates && !!matchedStates.length) {
+    return {
+      isPresent: true,
+      sessions: matchedStates.map((state) => {
+        return {
+          isCompleted: true,
+          color: getHighlightColor(state.type),
+        };
+      }),
+    };
+  }
+
+  return {
+    isPresent: false,
+  };
+};
+
+const getHighlightColor = (type) => {
+  switch (type) {
+    case 'cardio':
+      return 'bg-yellow-300';
+    case 'strength':
+      return 'bg-green-300';
+    case 'therapy':
+      return 'bg-pink-400';
+    case 'deload':
+      return 'bg-red-500';
+    default:
+      return 'bg-green-300';
+  }
 };
