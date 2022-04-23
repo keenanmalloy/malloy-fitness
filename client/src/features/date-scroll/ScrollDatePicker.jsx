@@ -193,13 +193,13 @@ const ButtonDate = ({ onClick, selected, state, itemId, highlight }) => {
 const handleHighlight = (state, group) => {
   const data =
     group &&
-    group.workouts &&
-    group.workouts.length &&
-    group.workouts.map((item) => {
+    group.sessions &&
+    group.sessions.length &&
+    group.sessions.map((item) => {
       return {
-        month: new Date(item.workout_dt).getMonth() + 1,
-        day: new Date(item.workout_dt).getDate(),
-        year: new Date(item.workout_dt).getFullYear(),
+        month: new Date(item.session_dt).getMonth() + 1,
+        day: new Date(item.session_dt).getDate(),
+        year: new Date(item.session_dt).getFullYear(),
         type: item.type,
       };
     });

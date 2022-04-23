@@ -1,7 +1,7 @@
 import { db } from 'config/db';
 import { Request, Response } from 'express';
 
-export const retrievePreviewWorkoutsQuery = async (
+export const retrievePreviewSessionsQuery = async (
   req: Request,
   res: Response
 ) => {
@@ -10,9 +10,11 @@ export const retrievePreviewWorkoutsQuery = async (
 
   const accountId = res.locals.state.account.account_id;
   const query = `
-    SELECT workout_id, workout_dt, type FROM workouts 
-    WHERE created_by = ${accountId} AND 
-    DATE_TRUNC('month', workout_dt) 
+    SELECT session_id, session_dt, workouts.type FROM sessions
+    LEFT JOIN workouts 
+      ON workouts.workout_id = sessions.workout_id
+    WHERE workouts.created_by = ${accountId} AND 
+    DATE_TRUNC('month', session_dt) 
         BETWEEN TIMESTAMP '${selectedDateQuery}' - INTERVAL '2 month' AND TIMESTAMP '${selectedDateQuery}' + INTERVAL '1 month'
   `;
 
@@ -21,16 +23,16 @@ export const retrievePreviewWorkoutsQuery = async (
 
     return res.status(200).json({
       role: res.locals.state.account.role,
-      message: 'Workouts fetched successfully',
+      message: 'Sessions fetched successfully',
       status: 'success',
-      workouts: data.rows,
+      sessions: data.rows,
     });
   } catch (error) {
     console.log({ error });
     return res.status(500).json({
       status: 'error',
       message: 'Database error',
-      workouts: null,
+      sessions: null,
     });
   }
 };

@@ -64,7 +64,7 @@ export const GetSingleExercise = ({ id }) => {
             Back
           </button>
         </Link>
-        {(data.role === 'developer' || exercise.view === 'private') && (
+        {(data.role === 'developer' || data.exercise.view === 'private') && (
           <UpdateExercise
             exercise={data.exercise}
             muscleGroups={mgData.muscleGroups}
@@ -92,7 +92,7 @@ export const GetSingleExercise = ({ id }) => {
           </div>
         )}
 
-        {(data.role === 'developer' || exercise.view === 'private') && (
+        {(data.role === 'developer' || data.exercise.view === 'private') && (
           <div className="pt-5">
             <Upload
               title="Upload a video"

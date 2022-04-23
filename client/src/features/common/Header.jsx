@@ -1,38 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { RiUser3Line, RiSearchLine } from 'react-icons/ri';
 import Link from 'next/link';
-import dynamic from 'next/dynamic';
-import { usePreviewWorkoutsQuery } from 'features/workouts/api/useWorkoutsQuery';
-import { generateCalendarState } from 'features/date-scroll/generateCalendarState';
-
-const ScrollDatePicker = dynamic(
-  import('../date-scroll/ScrollDatePicker').then((mod) => mod.ScrollDatePicker),
-  { ssr: false }
-);
 
 export const Header = () => {
-  // state used to generate the array of calendar dates (+1 / -1 months)
-  const [selectedDate, setSelectedDate] = useState(new Date());
-  const [items, setItems] = useState(generateCalendarState(selectedDate));
-
-  // the day selected by the user
-  const [selected, setSelected] = useState({});
-
-  const { data, isError, isLoading } = usePreviewWorkoutsQuery({
-    items,
-    date: new Date(
-      new Intl.DateTimeFormat('en-CA', {
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric',
-      }).format(
-        selected.id
-          ? new Date(selected.year, selected.month - 1, selected.day)
-          : new Date()
-      )
-    ).toISOString(),
-  });
-
   return (
     <nav className="dark:bg-gray-900 p-2 bg-white shadow md:flex md:items-center md:justify-between md:p-6 fixed top-0 left-0 w-full z-10">
       <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 text-gray-300">
@@ -70,18 +40,6 @@ export const Header = () => {
           </Link>
         </div>
       </div>
-
-      <ScrollDatePicker
-        selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate}
-        items={items}
-        setItems={setItems}
-        selected={selected}
-        setSelected={setSelected}
-        data={data}
-        isError={isError}
-        isLoading={isLoading}
-      />
     </nav>
   );
 };

@@ -4,12 +4,14 @@ import React, { useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useDeleteWorkoutMutation } from 'features/workouts/api/useDeleteWorkoutMutation';
 import { MdDelete } from 'react-icons/md';
+import { useRouter } from 'next/router';
 
 export const DeleteWorkout = ({ workoutId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const { mutate, isLoading, isError } = useDeleteWorkoutMutation(workoutId);
 
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   function closeModal() {
     setIsOpen(false);
@@ -25,7 +27,7 @@ export const DeleteWorkout = ({ workoutId }) => {
       {
         onSuccess: () => {
           queryClient.refetchQueries('fetchWorkouts');
-          setIsOpen(false);
+          router.push('/workouts');
         },
       }
     );

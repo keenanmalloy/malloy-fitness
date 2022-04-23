@@ -1,0 +1,24 @@
+version: '3.9'
+
+services:
+  postgres:
+    container_name: postgres
+    env_file:
+      - ./development.env
+    build:
+      context: ./db
+    ports:
+      - 45432:5432
+  api.trckd:
+    container_name: api.trckd
+    build:
+      context: ./
+      dockerfile: dev.Dockerfile
+    env_file:
+      - ./development.env
+    depends_on:
+      - 'postgres'
+    ports:
+      - '4000:4000'
+    volumes:
+      - ./src:/app/src

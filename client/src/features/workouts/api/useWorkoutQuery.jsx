@@ -18,7 +18,7 @@ const fetchWorkout = async ({ id }) => {
 };
 
 export const useWorkoutQuery = (id) => {
-  return useQuery('fetchWorkout', () => fetchWorkout({ id }), {
+  return useQuery(['fetchWorkout', id], () => fetchWorkout({ id }), {
     enabled: !!id,
   });
 };
