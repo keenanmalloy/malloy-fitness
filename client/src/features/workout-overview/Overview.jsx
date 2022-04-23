@@ -8,7 +8,7 @@ const Overview = ({ workoutId }) => {
 
   return (
     <>
-      <Button onClick={() => setIsOpen(true)}>Details</Button>
+      <Button onClick={() => setIsOpen(true)}>Overview</Button>
 
       <Modal
         isOpen={isOpen}

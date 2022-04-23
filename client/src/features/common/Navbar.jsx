@@ -22,7 +22,7 @@ const navigation = [
   },
   {
     name: 'Training',
-    href: '/workouts',
+    href: '/training',
     icon: (
       <GiWeightLiftingUp
         style={{
@@ -34,7 +34,7 @@ const navigation = [
   },
   {
     name: 'Diet',
-    href: '/workouts',
+    href: '/diet',
     icon: (
       <GiKnifeFork
         style={{
@@ -46,7 +46,7 @@ const navigation = [
   },
   {
     name: 'CheckIn',
-    href: '/workouts',
+    href: '/check-in',
     icon: (
       <FaChalkboardTeacher
         style={{
@@ -72,6 +72,18 @@ const navigation = [
 
 const libraryNavigation = [
   {
+    name: 'Workouts',
+    href: '/workouts',
+    icon: (
+      <GiWeightLiftingUp
+        style={{
+          width: 20,
+          height: 20,
+        }}
+      />
+    ),
+  },
+  {
     name: 'Exercises',
     href: '/exercises',
     icon: (
@@ -89,18 +101,6 @@ const libraryNavigation = [
     href: '/muscle-groups',
     icon: (
       <GiMuscleUp
-        style={{
-          width: 20,
-          height: 20,
-        }}
-      />
-    ),
-  },
-  {
-    name: 'Workouts',
-    href: '/workouts',
-    icon: (
-      <GiWeightLiftingUp
         style={{
           width: 20,
           height: 20,

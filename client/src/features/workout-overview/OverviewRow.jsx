@@ -20,10 +20,6 @@ export const OverviewRow = ({
     return <p style={{ color: 'red' }}>fetching error...</p>;
   }
 
-  if (!data) {
-    return <p>none available...</p>;
-  }
-
   return (
     <li className="flex py-1">
       <div className="bg-cyan-700 text-white p-2 rounded-md max-h-8">

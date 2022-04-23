@@ -1,8 +1,7 @@
 import React from 'react';
-import Link from 'next/link';
-import Overview from 'features/workout-overview/Overview';
 import { Schedule } from 'features/Schedule';
 import { WorkoutHeader } from './WorkoutHeader';
+import { Button } from 'features/common/Button';
 
 export const WorkoutList = ({ workouts }) => {
   return (
@@ -15,24 +14,22 @@ export const WorkoutList = ({ workouts }) => {
             scheduledAt={workout.workout_dt}
           />
 
-          <Link href={`/workouts/${workout.workout_id}`}>
-            <main>
-              <div className="flex justify-between">
-                <div>
-                  <h1 className="text-xl">{workout.name}</h1>
-                  <p className="text-xs">{workout.description}</p>
-                </div>
-
-                <span className="bg-blue-300 flex items-center text-white px-4 rounded-md max-h-7 h-7">
-                  {workout.category}
-                </span>
+          <main>
+            <div className="flex justify-between">
+              <div>
+                <h1 className="text-xl">{workout.name}</h1>
+                <p className="text-xs">{workout.description}</p>
               </div>
-            </main>
-          </Link>
+
+              <span className="bg-blue-300 flex items-center text-white px-4 rounded-md max-h-7 h-7">
+                {workout.category}
+              </span>
+            </div>
+          </main>
 
           <footer className="flex pt-2 justify-between justify-self-stretch place-content-stretch justify-items-stretch">
             <Schedule workoutId={workout.workout_id} />
-            <Overview workout={workout} workoutId={workout.workout_id} />
+            <Button href={`/workouts/${workout.workout_id}`}>Edit</Button>
           </footer>
         </li>
       ))}

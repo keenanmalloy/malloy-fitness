@@ -16,11 +16,7 @@ export const retrieveWorkoutQuery = async (
   workouts.category as workout_category,
   workouts.created_by as workout_created_by,
   workouts.workout_id,
-  workouts.started_at,
-  workouts.ended_at,
   workouts.type,
-  workouts.workout_dt,
-  workouts.completed,
   e.name,
   e.description,
   e.category,
@@ -73,6 +69,8 @@ WHERE workouts.workout_id = $1`;
           };
         });
 
+    const hasSessions = await doesWorkoutHaveSessions(id);
+
     const workout = {
       name: data.rows[0].workout_name,
       description: data.rows[0].workout_description,
@@ -84,6 +82,7 @@ WHERE workouts.workout_id = $1`;
       type: data.rows[0].type,
       completed: data.rows[0].completed,
       exercises,
+      hasSessions,
     };
 
     return res.status(200).json({
@@ -100,4 +99,12 @@ WHERE workouts.workout_id = $1`;
       workout: null,
     });
   }
+};
+
+const doesWorkoutHaveSessions = async (workoutId: string) => {
+  const query = `SELECT * FROM sessions WHERE workout_id = $1`;
+  const params = [workoutId];
+  const data = await db.query(query, params);
+  if (!data) return false;
+  return !!data.rows.length;
 };

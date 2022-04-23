@@ -17,13 +17,29 @@ export const cloneWorkoutMutation = async (
       });
     }
 
+    const inferIteratedWorkoutName = (name: string) => {
+      const nameParts = name.split(' ');
+      const lastNamePart = nameParts[nameParts.length - 1];
+      const lastNamePartNumber = parseInt(lastNamePart, 10);
+      if (isNaN(lastNamePartNumber)) {
+        return `${name} (copy)`;
+      }
+      const newName = nameParts
+        .slice(0, nameParts.length - 1)
+        .join(' ')
+        .concat(` (copy ${lastNamePartNumber + 1})`);
+      return newName;
+    };
+
     const workoutQuery = `
       WITH
-        workoutdata(name, description, category, created_by) AS (
+        workoutdata(name, description, category, created_by, type) AS (
           VALUES
-              ('${workout.name}', '${workout.description}', '${workout.category}', ${accountId})
+              ('${inferIteratedWorkoutName(workout.name)}', '${
+      workout.description
+    }', '${workout.category}', ${accountId}, '${workout.type}')
           )
-        INSERT INTO workouts (name, description, category, created_by)
+        INSERT INTO workouts (name, description, category, created_by, type)
           SELECT *
             FROM workoutdata
           RETURNING *
@@ -40,11 +56,11 @@ export const cloneWorkoutMutation = async (
               ${we.exerciseId}, 
               ${we.priority}, 
               ${we.order}, 
-              ${we.notes}, 
-              ${we.sets}, 
-              ${we.repetitions}, 
-              ${we.reps_in_reserve}, 
-              ${we.rest_period})`
+              ${we.notes ?? null}, 
+              ${we.sets ?? null}, 
+              ${we.repetitions ?? null}, 
+              ${we.reps_in_reserve ?? null}, 
+              ${we.rest_period ?? null})`
         )
         .join(',');
     };
@@ -53,6 +69,7 @@ export const cloneWorkoutMutation = async (
       return res.status(201).json({
         role: res.locals.state.account.role,
         message: 'Workout Successfully Cloned',
+        workoutId: createdWorkoutId,
       });
     }
 
@@ -73,6 +90,7 @@ export const cloneWorkoutMutation = async (
     return res.status(201).json({
       role: res.locals.state.account.role,
       message: 'Workout Successfully Cloned',
+      workoutId: createdWorkoutId,
     });
   } catch (error) {
     console.log({ error });
@@ -89,6 +107,7 @@ const retrieveWorkoutQuery = async (workoutId: string, accountId: string) => {
   workouts.description as description,
   workouts.category as category,
   workouts.workout_id,
+  workouts.type,
   workouts.created_by,
   we.priority,
   we.order,
@@ -126,6 +145,7 @@ WHERE workouts.workout_id = $1`;
       description: data.rows[0].description,
       category: data.rows[0].category,
       workout_id: data.rows[0].workout_id,
+      type: data.rows[0].type,
       workoutExercises,
     };
 
