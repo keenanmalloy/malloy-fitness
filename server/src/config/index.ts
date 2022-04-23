@@ -1,9 +1,14 @@
 // ! Keep dotent.config at the very beginning of the file!!!
-import dotenv from "dotenv";
+import dotenv from 'dotenv';
 
-const envFile = process.env.NODE_ENV === "test" ? `test.env` : ".env";
+const envFile =
+  process.env.NODE_ENV === 'test'
+    ? `test.env`
+    : process.env.NODE_ENV === 'development'
+    ? 'development.env'
+    : 'production.env';
 dotenv.config({ path: envFile });
 
-export * from "./application";
-export * from "./providers";
-export * from "./db";
+export * from './application';
+export * from './providers';
+export * from './db';

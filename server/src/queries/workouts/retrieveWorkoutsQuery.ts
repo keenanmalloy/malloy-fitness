@@ -7,7 +7,7 @@ export const retrieveWorkoutsQuery = async (req: Request, res: Response) => {
   const categoryQuery = req.query.category as string | undefined;
   const completedQuery = req.query.completed as string | undefined;
   const typeQuery = req.query.type as string | undefined;
-  const activityQuery = req.query.activity as string | undefined;
+  const viewQuery = req.query.view as string | undefined;
   const sortByQuery = req.query.sortBy as string | undefined;
 
   const accountId = res.locals.state.account.account_id;
@@ -18,7 +18,7 @@ export const retrieveWorkoutsQuery = async (req: Request, res: Response) => {
   ${generateCategoryFilter(categoryQuery)}
   ${generateCompletedFilter(completedQuery)}
   ${generateTypeFilter(typeQuery)}
-  ${generateActivityFilter(activityQuery)}
+  ${generateViewFilter(viewQuery)}
   ${generateSortByFilter(sortByQuery)}
   LIMIT 20`;
 
@@ -127,20 +127,12 @@ const generateTypeFilter = (typeQuery: string | undefined) => {
   return ``;
 };
 
-type Activity = 'in-progress' | 'completed' | 'scheduled' | 'default';
-const generateActivityFilter = (activityQuery: string | undefined) => {
-  switch (activityQuery as Activity) {
-    case 'in-progress':
-      return `AND started_at IS NOT NULL AND ended_at IS NULL`;
-    case 'completed':
-      return `AND completed = true`;
-    case 'scheduled':
-      return `AND workout_dt IS NOT NULL AND started_at IS NULL`;
-    case 'default':
-      return `AND workout_dt IS NULL AND started_at IS NULL`;
-    default:
-      return ``;
+const generateViewFilter = (viewQuery: string | undefined) => {
+  if (!!viewQuery) {
+    return `AND view = '${viewQuery}'`;
   }
+
+  return ``;
 };
 
 // created-asc, created-desc, updated-asc, updated-descm scheduled-asc, scheduled-desc

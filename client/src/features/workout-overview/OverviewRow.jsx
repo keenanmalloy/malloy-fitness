@@ -1,6 +1,5 @@
 import { useWorkoutQuery } from 'features/workouts/api/useWorkoutQuery';
 import React from 'react';
-import { GrPowerCycle } from 'react-icons/gr';
 
 export const OverviewRow = ({
   order,
@@ -19,10 +18,6 @@ export const OverviewRow = ({
 
   if (isError) {
     return <p style={{ color: 'red' }}>fetching error...</p>;
-  }
-
-  if (!data) {
-    return <p>none available...</p>;
   }
 
   return (

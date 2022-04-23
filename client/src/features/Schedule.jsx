@@ -2,23 +2,21 @@ import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import Modal from 'features/common/Modal';
 import { Button } from 'features/common/Button';
-import { useScheduleNewWorkoutMutation } from './workouts/api/useScheduleNewWorkoutMutation';
+import { useScheduleSessionMutation } from './sessions/useScheduleSessionMutation';
 
 export const Schedule = ({ workoutId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [value, onChange] = useState(new Date());
 
   const { data, isError, isLoading, mutate } =
-    useScheduleNewWorkoutMutation(workoutId);
+    useScheduleSessionMutation(workoutId);
 
   const currentDate = new Date();
 
   const handleScheduling = () => {
-    // format date YYYY-MM-DD
-    const date = value.toISOString().split('T')[0];
     mutate(
       {
-        date,
+        date: value,
       },
       {
         onSuccess: () => {

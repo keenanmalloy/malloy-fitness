@@ -9,7 +9,7 @@ const WorkoutsPage = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [category, setCategory] = useState('');
   const [type, setType] = useState('');
-  const [activity, setActivity] = useState('');
+  const [view, setView] = useState('');
   const [sortBy, setSortBy] = useState('');
 
   return (
@@ -31,7 +31,7 @@ const WorkoutsPage = () => {
               <FilterWorkouts
                 setCategory={setCategory}
                 setType={setType}
-                setActivity={setActivity}
+                setView={setView}
                 setSortBy={setSortBy}
               />
             )}
@@ -45,7 +45,7 @@ const WorkoutsPage = () => {
         <GetAllWorkouts
           category={category}
           type={type}
-          activity={activity}
+          view={view}
           sortBy={sortBy}
         />
       </section>

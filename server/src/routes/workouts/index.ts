@@ -1,18 +1,17 @@
 import { Router } from 'express';
 import { authenticate } from 'middlewares/authenticate';
 import { authorize } from 'middlewares/authorize';
-import { cloneWorkoutMutation } from 'queries/cloneWorkoutMutation';
+import { cloneWorkoutMutation } from 'queries/workouts/cloneWorkoutMutation';
 import { createStrengthWorkoutMutation } from 'queries/workouts/createStrengthWorkoutMutation';
-import { deleteWorkoutMutation } from 'queries/deleteWorkoutMutation';
-import { retrieveWorkoutQuery } from 'queries/retrieveWorkoutQuery';
-import { retrieveWorkoutsQuery } from 'queries/retrieveWorkoutsQuery';
-import { updateWorkoutMutation } from 'queries/updateWorkoutMutation';
+import { deleteWorkoutMutation } from 'queries/workouts/deleteWorkoutMutation';
+import { retrieveWorkoutQuery } from 'queries/workouts/retrieveWorkoutQuery';
+import { retrieveWorkoutsQuery } from 'queries/workouts/retrieveWorkoutsQuery';
+import { updateWorkoutMutation } from 'queries/workouts/updateWorkoutMutation';
 
 import setsRouter from './sets';
 import exercisesRouter from './exercises';
-import startWorkoutRouter from './start';
-import endWorkoutRouter from './end';
-import { cloneScheduleWorkoutMutation } from 'queries/cloneScheduleMutation';
+
+import { cloneScheduleWorkoutMutation } from 'queries/workouts/cloneScheduleMutation';
 import { createRestWorkoutMutation } from 'queries/workouts/createRestWorkoutMutation';
 import { createDeloadWorkoutMutation } from 'queries/workouts/createDeloadWorkoutMutation';
 import { createCardioWorkoutMutation } from 'queries/workouts/createCardioWorkoutMutation';
@@ -28,7 +27,7 @@ const router = Router();
 // Retrieve workout(s) at a specific date -- /?date=YYYY-MM-DD
 // Retrieve workout(s) by category --------- /?category=legs
 // Retrieve workout(s) by type ------------- /?type=strength
-// Retrieve workout(s) by activtiy --------- /?activity=in-progress (in-progress, completed, scheduled, default)
+// Retrieve workout(s) by view ------------- /?view=public
 // Retrieve workout(s) by completed true --- /?complete=1
 // Retrieve workout(s) by completed false -- /?complete=0
 // Retrieve workout(s) sorted by ----------- /?sortBy=created-asc (created-asc, created-desc, updated-asc, updated-descm scheduled-asc, scheduled-desc)
@@ -88,8 +87,6 @@ router.put('/:workoutId', authenticate, authorize, async (req, res) => {
 
 setsRouter(router);
 exercisesRouter(router);
-startWorkoutRouter(router);
-endWorkoutRouter(router);
 
 export default (parentRouter: Router) => {
   parentRouter.use('/workouts', router);
