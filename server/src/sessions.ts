@@ -51,3 +51,39 @@ export async function getLoginSession(req: Request): Promise<Session | null> {
 
   return session;
 }
+
+interface GoogleFitSession {
+  access_token: string;
+  refresh_token: string;
+  scope: string;
+  token_type: 'Bearer';
+  expiry_date: number;
+}
+
+export async function setGoogleFitSession(
+  res: Response,
+  session: any
+): Promise<void> {
+  const createdAt = new Date();
+  const obj = { ...session, createdAt, maxAge: MAX_AGE };
+  const token = await generateAuthToken(obj);
+  setTokenCookie(res, token, 'googleFitToken');
+}
+
+export async function getGoogleFitSession(
+  req: Request
+): Promise<GoogleFitSession> {
+  const token = getTokenCookie(req, 'googleFitToken');
+  if (!token) throw new Error('Missing token from session');
+
+  const session = await Iron.unseal(token, TOKEN_SECRET, Iron.defaults);
+
+  const expiresAt = toUnix(new Date(session.createdAt)) + session.maxAge * 1000;
+
+  // Validate the expiration date of the session.
+  if (new Date() > toTimestampz(expiresAt)) {
+    throw new Error('Session expired');
+  }
+
+  return session;
+}

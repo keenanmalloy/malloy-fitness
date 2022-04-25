@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { HomeHeader } from 'features/common/HomeHeader';
 import Navbar from 'features/common/Navbar';
 import { Overview } from 'features/common/Overview';
+import { Steps } from 'features/google-fit/Steps';
 
 function HomePage() {
   // the day selected by the user
@@ -17,6 +18,7 @@ function HomePage() {
       <section className="flex w-100 items-center justify-center">
         <div className="max-w-xl flex-1">
           <Overview selected={selected} />
+          <Steps selected={selected} />
         </div>
       </section>
 
