@@ -1,6 +1,6 @@
-import { Router } from "express";
-import { initProvider } from "./initProvider";
-import { PROVIDERS } from "config/providers";
+import { Router } from 'express';
+import { initProvider } from '../initProvider';
+import { PROVIDERS } from 'config/providers';
 
 export default (router: Router): void => {
   const options = PROVIDERS.GOOGLE;
