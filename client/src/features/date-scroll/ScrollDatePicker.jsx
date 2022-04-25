@@ -185,7 +185,7 @@ const ButtonDate = ({ onClick, selected, state, itemId, highlight }) => {
 const handleHighlight = (state, group) => {
   const data =
     group &&
-    group.workouts.length &&
+    group.workouts?.length &&
     group.workouts.map((item) => {
       return {
         month: new Date(item.workout_dt).getMonth() + 1,
