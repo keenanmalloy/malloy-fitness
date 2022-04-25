@@ -5,8 +5,12 @@ const TOKEN_NAME = 'token';
 
 export const MAX_AGE = 60 * 60 * 24 * 30; // 30 days
 
-export function setTokenCookie(res: Response, token: string) {
-  const cookie = serialize(TOKEN_NAME, token, {
+export function setTokenCookie(
+  res: Response,
+  token: string,
+  tokenName: string = TOKEN_NAME
+) {
+  const cookie = serialize(tokenName, token, {
     maxAge: MAX_AGE,
     expires: new Date(Date.now() + MAX_AGE * 1000),
     httpOnly: true,
@@ -22,8 +26,11 @@ export function setTokenCookie(res: Response, token: string) {
   res.setHeader('Set-Cookie', cookie);
 }
 
-export function removeTokenCookie(res: Response) {
-  const cookie = serialize(TOKEN_NAME, '', {
+export function removeTokenCookie(
+  res: Response,
+  tokenName: string = TOKEN_NAME
+) {
+  const cookie = serialize(tokenName, '', {
     maxAge: -1,
     path: '/',
   });
@@ -40,7 +47,7 @@ export function parseCookies(req: Request) {
   return parse(cookie || '');
 }
 
-export function getTokenCookie(req: Request) {
+export function getTokenCookie(req: Request, tokenName: string = TOKEN_NAME) {
   const cookies = parseCookies(req);
-  return cookies[TOKEN_NAME];
+  return cookies[tokenName];
 }

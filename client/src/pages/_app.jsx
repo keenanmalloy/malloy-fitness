@@ -1,4 +1,3 @@
-import Layout from '../features/common/Layout';
 import '../styles/globals.css';
 import '../styles/calendar.css';
 
@@ -8,10 +7,9 @@ import Router from 'next/router';
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
-      onSettled: (data) => {
-        if (data.status !== 'success') {
-          Router.push('/login');
-        }
+      onError: (error) => {
+        console.log({ error });
+        Router.push('/login');
       },
     },
   },
