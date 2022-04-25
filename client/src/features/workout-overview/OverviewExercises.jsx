@@ -6,16 +6,14 @@ import StartWorkout from 'features/workouts/components/StartWorkout';
 export const OverviewExercises = ({ workoutId }) => {
   const { data, isError, isLoading } = useWorkoutQuery(workoutId);
 
+  console.log({ data });
+
   if (isLoading) {
     return <p>loading...</p>;
   }
 
   if (isError) {
     return <p style={{ color: 'red' }}>fetching error...</p>;
-  }
-
-  if (!data.workout) {
-    return <p>none available...</p>;
   }
 
   const getLetter = (index) => {

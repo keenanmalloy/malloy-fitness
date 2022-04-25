@@ -174,7 +174,15 @@ const ButtonDate = ({ onClick, selected, state, itemId, highlight }) => {
       {highlight.isPresent && (
         <div className="flex space-x-0.5">
           {highlight.sessions.map((item, key) => {
-            return <span key={key} className={`${item.color} w-0.5 h-0.5 `} />;
+            return (
+              <span
+                key={key}
+                className={`${item.color}`}
+                style={{ fontSize: '0.5rem' }}
+              >
+                {item.type[0].toUpperCase()}
+              </span>
+            );
           })}
         </div>
       )}
@@ -185,12 +193,13 @@ const ButtonDate = ({ onClick, selected, state, itemId, highlight }) => {
 const handleHighlight = (state, group) => {
   const data =
     group &&
-    group.workouts?.length &&
-    group.workouts.map((item) => {
+    group.sessions &&
+    group.sessions.length &&
+    group.sessions.map((item) => {
       return {
-        month: new Date(item.workout_dt).getMonth() + 1,
-        day: new Date(item.workout_dt).getDate(),
-        year: new Date(item.workout_dt).getFullYear(),
+        month: new Date(item.session_dt).getMonth() + 1,
+        day: new Date(item.session_dt).getDate(),
+        year: new Date(item.session_dt).getFullYear(),
         type: item.type,
       };
     });
@@ -210,6 +219,7 @@ const handleHighlight = (state, group) => {
         return {
           isCompleted: true,
           color: getHighlightColor(state.type),
+          type: state.type,
         };
       }),
     };
@@ -223,14 +233,14 @@ const handleHighlight = (state, group) => {
 const getHighlightColor = (type) => {
   switch (type) {
     case 'cardio':
-      return 'bg-yellow-300';
+      return 'text-yellow-300';
     case 'strength':
-      return 'bg-green-300';
+      return 'text-green-300';
     case 'therapy':
-      return 'bg-pink-400';
+      return 'text-pink-400';
     case 'deload':
-      return 'bg-red-500';
+      return 'text-red-500';
     default:
-      return 'bg-green-300';
+      return 'text-green-300';
   }
 };

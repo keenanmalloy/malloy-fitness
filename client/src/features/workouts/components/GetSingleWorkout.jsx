@@ -9,6 +9,7 @@ import Link from 'next/link';
 import { WorkoutHeader } from './WorkoutHeader';
 import { Schedule } from 'features/Schedule';
 import Overview from 'features/workout-overview/Overview';
+import { CloneWorkout } from './CloneWorkout';
 
 export const GetSingleWorkout = ({ workoutId }) => {
   const { data, isError, isLoading } = useWorkoutQuery(workoutId);
@@ -46,6 +47,10 @@ export const GetSingleWorkout = ({ workoutId }) => {
 
   return (
     <section className="p-5 relative flex flex-col justify-between flex-1">
+      <CloneWorkout
+        workoutId={workoutId}
+        hasSessions={data.workout.hasSessions}
+      />
       <WorkoutHeader
         hasEnded={!!data.workout.ended_at}
         hasStarted={!!data.workout.started_at}

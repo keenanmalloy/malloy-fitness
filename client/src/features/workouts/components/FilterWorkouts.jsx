@@ -5,7 +5,7 @@ import { WORKOUT_CATEGORIES, WORKOUT_TYPES } from 'features/environment';
 export const FilterWorkouts = ({
   setCategory,
   setType,
-  setActivity,
+  setView,
   setSortBy,
 }) => {
   return (
@@ -35,9 +35,9 @@ export const FilterWorkouts = ({
 
       <div className="flex flex-1 w-full">
         <div className="pb-2 flex-1 w-full">
-          <label>Activity</label>
+          <label>View</label>
           <Select
-            onChange={(data) => setActivity(data.value)}
+            onChange={(data) => setView(data.value)}
             name="activity"
             placeholder="Select"
             isSearchable={false}
@@ -47,20 +47,12 @@ export const FilterWorkouts = ({
                 value: '',
               },
               {
-                label: 'in-progress',
-                value: 'in-progress',
+                label: 'public',
+                value: 'public',
               },
               {
-                label: 'completed',
-                value: 'completed',
-              },
-              {
-                label: 'scheduled',
-                value: 'scheduled',
-              },
-              {
-                label: 'default',
-                value: 'default',
+                label: 'private',
+                value: 'private',
               },
             ]}
           />
@@ -76,12 +68,8 @@ export const FilterWorkouts = ({
               { label: 'default', value: '' },
               { label: 'created asc', value: 'created-asc' },
               { label: 'created desc', value: 'created-desc' },
-              { label: 'started asc', value: 'started-asc' },
-              { label: 'started desc', value: 'started-desc' },
               { label: 'updated asc', value: 'updated-asc' },
               { label: 'updated desc', value: 'updated-desc' },
-              { label: 'scheduled asc', value: 'scheduled-asc' },
-              { label: 'scheduled desc', value: 'scheduled-desc' },
             ]}
           />
         </div>

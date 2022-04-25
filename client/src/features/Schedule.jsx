@@ -2,23 +2,24 @@ import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import Modal from 'features/common/Modal';
 import { Button } from 'features/common/Button';
-import { useScheduleNewWorkoutMutation } from './workouts/api/useScheduleNewWorkoutMutation';
+import { useScheduleSessionMutation } from './sessions/useScheduleSessionMutation';
 
 export const Schedule = ({ workoutId }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [value, onChange] = useState(new Date());
+  const currentDate = new Date(
+    new Date().getFullYear(),
+    new Date().getMonth(),
+    new Date().getDate()
+  );
 
+  const [value, onChange] = useState(currentDate);
   const { data, isError, isLoading, mutate } =
-    useScheduleNewWorkoutMutation(workoutId);
-
-  const currentDate = new Date();
+    useScheduleSessionMutation(workoutId);
 
   const handleScheduling = () => {
-    // format date YYYY-MM-DD
-    const date = value.toISOString().split('T')[0];
     mutate(
       {
-        date,
+        date: value,
       },
       {
         onSuccess: () => {
@@ -51,8 +52,7 @@ export const Schedule = ({ workoutId }) => {
           value={value}
           maxDetail="month"
           minDetail="month"
-          maxDate={new Date(currentDate.setMonth(currentDate.getMonth() + 3))}
-          minDate={new Date()}
+          minDate={currentDate}
           next2Label=""
           prev2Label=""
           nextLabel=""
