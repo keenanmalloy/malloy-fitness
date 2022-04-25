@@ -24,19 +24,29 @@ export const OverviewExercises = ({ workoutId }) => {
   return (
     <div>
       <ul className="py-5">
-        {data.workout.exercises.map((ex, key) => {
-          return (
-            <OverviewRow
-              key={ex.exercise_id}
-              order={`${getLetter(key)}1`}
-              name={ex.name}
-              sets="sets 3"
-              reps="reps 10-12"
-              rir="rir 1"
-              rest="REST 90 seconds"
-            />
-          );
-        })}
+        {data.workout.exercises
+          .sort((a, b) => {
+            if (a.order < b.order) {
+              return -1;
+            }
+            if (a.order > b.order) {
+              return 1;
+            }
+            return 0;
+          })
+          .map((ex, key) => {
+            return (
+              <OverviewRow
+                key={ex.exercise_id}
+                order={`${getLetter(key)}1`}
+                name={ex.name}
+                sets="sets 3"
+                reps="reps 10-12"
+                rir="rir 1"
+                rest="REST 90 seconds"
+              />
+            );
+          })}
       </ul>
       <StartWorkout
         workoutId={workoutId}
