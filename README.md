@@ -23,19 +23,17 @@ Endpoints for viewing and manipulating workouts.
 - [Update an exercise order / priority in a workout](docs/workouts/exercises/put.md) : `PUT /workouts/:pk/exercises/:pk/`
 - [Update notes, sets, repetitions, reps_in_reserve, rest_period](docs/workouts/exercises/patch.md) : `PATCH /workouts/:pk/exercises/:pk`
 - [Remove an exercise from a workout](docs/workouts/delete.md) : `DELETE /workouts/:pk/exercises/:pk/`
-- [Clone a workout](docs/workouts/post.md) : `POST /workouts/:pk/copy`
+- [Clone a workout](docs/workouts/copy/post.md) : `POST /workouts/:pk/copy`
 
 ### Sessions
 
 Endpoints for viewing and manipulating sessions.
 
-- [Start session](docs/sessions/start/patch.md) : `PATCH /sessions/:pk/start`
-- [End session](docs/sessions/end/patch.md) : `PATCH /sessions/:pk/end`
 - [Get a list of sessions](docs/sessions/get.md) : `GET /sessions/`
 - [Get a preview list of sessions](docs/sessions/get.md) : `GET /sessions/preview/`
 - [Get a single session](docs/sessions/get.md) : `GET /sessions/:pk/`
 - [Create a session](docs/sessions/post.md) : `POST /sessions/`
-- [Update a session](docs/sessions/put.md) : `PATCH /sessions/:pk/`
+- [Update a session](docs/sessions/patch.md) : `PATCH /sessions/:pk/`
 - [Delete a session](docs/sessions/delete.md) : `DELETE /sessions/:pk/`
 - [Get a session's exercises](docs/sessions/exercises/get.md) : `GET /sessions/:pk/exercises/:pk/`
 
@@ -69,15 +67,15 @@ Endpoints for authentication.
 
 - [Register / logs in user via google oauth provider](docs/auth/get.md) : `GET /auth/providers/google/`
 - [Fetches active users session](docs/auth/get.md) : `GET /auth/me/`
-- [Logout user from session](docs/auth/logout/post.md) : `POST /auth/logout/`
+- [Logout user from session](docs/auth/post.md) : `POST /auth/logout/`
 
 ### Google Fit
 
 Endpoints that connect with Google Fit.
 
-- [Redirects to google auth page](docs/google-fit/get.md) : `GET /auth/providers/google/fit`
-- [Callback after OAuth](docs/google-fit/get.md) : `GET /auth/providers/google/fit/callback`
-- [Fetches step-data from google fit](docs/google-fit/get.md) : `GET /auth/providers/google/fit/steps`
+- [Redirects to google auth page](docs/auth/google-fit/get.md) : `GET /auth/providers/google/fit`
+- [Callback after OAuth](docs/auth/google-fit/get.md) : `GET /auth/providers/google/fit/callback`
+- [Fetches step-data from google fit](docs/auth/google-fit/get.md) : `GET /auth/providers/google/fit/steps`
 
 ### Storage
 
