@@ -193,9 +193,8 @@ const ButtonDate = ({ onClick, selected, state, itemId, highlight }) => {
 const handleHighlight = (state, group) => {
   const data =
     group &&
-    group.sessions &&
-    group.sessions.length &&
-    group.sessions.map((item) => {
+    group.workouts?.length &&
+    group.workouts.map((item) => {
       return {
         month: new Date(item.session_dt).getMonth() + 1,
         day: new Date(item.session_dt).getDate(),
