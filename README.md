@@ -16,7 +16,6 @@ Endpoints for viewing and manipulating workouts.
 
 - [Gets all workouts](docs/workouts/get.md) : `GET /workouts/`
 - [Get a single workout](docs/workouts/get.md) : `GET /workouts/:pk/`
-- [Get a single workout exercise](docs/workouts/exercises/get.md) : `GET /workouts/:pk/exercises/:pk/`
 - [Create a workout](docs/workouts/post.md) : `POST /workouts/`
 - [Update a workout](docs/workouts/put.md) : `PUT /workouts/:pk/`
 - [Delete a workout](docs/workouts/delete.md) : `DELETE /workouts/:pk/`
@@ -24,15 +23,25 @@ Endpoints for viewing and manipulating workouts.
 - [Update an exercise order / priority in a workout](docs/workouts/exercises/put.md) : `PUT /workouts/:pk/exercises/:pk/`
 - [Update notes, sets, repetitions, reps_in_reserve, rest_period](docs/workouts/exercises/patch.md) : `PATCH /workouts/:pk/exercises/:pk`
 - [Remove an exercise from a workout](docs/workouts/delete.md) : `DELETE /workouts/:pk/exercises/:pk/`
-- [Start workout](docs/workouts/start/patch.md) : `PATCH /workouts/:pk/start`
-- [End workout](docs/workouts/end/patch.md) : `PATCH /workouts/:pk/end`
-- [Clone a workout](docs/workouts/post.md) : `POST /workouts/:pk/copy`
+- [Clone a workout](docs/workouts/copy/post.md) : `POST /workouts/:pk/copy`
+
+### Sessions
+
+Endpoints for viewing and manipulating sessions.
+
+- [Get a list of sessions](docs/sessions/get.md) : `GET /sessions/`
+- [Get a preview list of sessions](docs/sessions/get.md) : `GET /sessions/preview/`
+- [Get a single session](docs/sessions/get.md) : `GET /sessions/:pk/`
+- [Create a session](docs/sessions/post.md) : `POST /sessions/`
+- [Update a session](docs/sessions/patch.md) : `PATCH /sessions/:pk/`
+- [Delete a session](docs/sessions/delete.md) : `DELETE /sessions/:pk/`
+- [Get a session's exercises](docs/sessions/exercises/get.md) : `GET /sessions/:pk/exercises/:pk/`
 
 ### Exercises
 
 Endpoints for viewing and manipulating exercises.
 
-- [Gets all exercises](docs/exercises/get.md) : `GET /exercises/`
+- [Get a list of exercises](docs/exercises/get.md) : `GET /exercises/`
 - [Get a single exercise](docs/exercises/get.md) : `GET /exercises/:pk/`
 - [Create an exercise](docs/exercises/post.md) : `POST /exercises/`
 - [Update an exercise](docs/exercises/put.md) : `PUT /exercises/:pk/`
@@ -45,12 +54,12 @@ Endpoints for viewing and manipulating exercises.
 
 Endpoints for viewing and manipulating sets.
 
-- [Get all sets in a workout](docs/sets/get.md) : `GET /workouts/:pk/sets/`
-- [Get sets in a workout by exercise](docs/sets/get.md) : `GET /workouts/:pk/exercise/:pk/sets/`
-- [Create a set](docs/sets/post.md) : `POST /workouts/:pk/sets/`
-- [Update a set](docs/sets/put.md) : `PUT /workouts/:pk/sets/:pk/`
-- [Delete a set in a workout](docs/sets/delete.md) : `DELETE /workouts/:pk/sets/:pk`
-- [Delete all sets in a workout by exercise](docs/sets/delete.md) : `DELETE /workouts/:pk/exercise/:pk/sets/`
+- [Get all sets in a session](docs/sets/get.md) : `GET /sessions/:pk/sets/`
+- [Get sets in a session by exercise](docs/sets/get.md) : `GET /sessions/:pk/exercise/:pk/sets/`
+- [Create a set](docs/sets/post.md) : `POST /sessions/:pk/sets/`
+- [Update a set](docs/sets/put.md) : `PUT /sessions/:pk/sets/:pk/`
+- [Delete a set in a session](docs/sets/delete.md) : `DELETE /sessions/:pk/sets/:pk`
+- [Delete all sets in a session by exercise](docs/sets/delete.md) : `DELETE /sessions/:pk/exercise/:pk/sets/`
 
 ### Auth
 
@@ -58,7 +67,15 @@ Endpoints for authentication.
 
 - [Register / logs in user via google oauth provider](docs/auth/get.md) : `GET /auth/providers/google/`
 - [Fetches active users session](docs/auth/get.md) : `GET /auth/me/`
-- [Logout user from session](docs/auth/logout/post.md) : `POST /auth/logout/`
+- [Logout user from session](docs/auth/post.md) : `POST /auth/logout/`
+
+### Google Fit
+
+Endpoints that connect with Google Fit.
+
+- [Redirects to google auth page](docs/auth/google-fit/get.md) : `GET /auth/providers/google/fit`
+- [Callback after OAuth](docs/auth/google-fit/get.md) : `GET /auth/providers/google/fit/callback`
+- [Fetches step-data from google fit](docs/auth/google-fit/get.md) : `GET /auth/providers/google/fit/steps`
 
 ### Storage
 
