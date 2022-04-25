@@ -1,9 +1,9 @@
-import { db } from "config/db";
-import { Response } from "express";
+import { db } from 'config/db';
+import { Response } from 'express';
 
-export const authorizeExerciseQuery = async (
+export const authorizeSessionQuery = async (
   res: Response,
-  exerciseId: string
+  sessionId: string
 ): Promise<{
   isAuthorized: boolean;
   createdBy: null | number;
@@ -12,17 +12,16 @@ export const authorizeExerciseQuery = async (
   const httpMethod = res.locals.state.httpMethod;
 
   const query = `SELECT 
-        name,
         created_by,
-        exercise_id
-    FROM exercises
+        session_id
+    FROM sessions
     WHERE 
-        exercise_id = $1 AND created_by = $2 OR 
-        exercise_id = $1 AND created_by IS NULL`;
-  const params = [exerciseId, accountId];
+        session_id = $1 AND created_by = $2`;
+  const params = [sessionId, accountId];
 
   try {
     const data = await db.query(query, params);
+
     if (!data.rows.length) {
       return {
         isAuthorized: false,
@@ -31,7 +30,7 @@ export const authorizeExerciseQuery = async (
     }
 
     return {
-      isAuthorized: !!data.rows[0].created_by || httpMethod === "GET",
+      isAuthorized: !!data.rows[0].created_by || httpMethod === 'GET',
       createdBy: data.rows[0].created_by,
     };
   } catch (error) {

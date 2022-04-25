@@ -1,18 +1,13 @@
 import { db } from 'config/db';
-
-interface Response {
-  status: string;
-  message: string;
-  sets: any;
-}
+import { Response } from 'express';
 
 export const retrieveSetsByExerciseQuery = async (
-  res: any,
-  workoutId: any,
+  res: Response,
+  sessionId: any,
   exerciseId: any
-): Promise<Response> => {
-  const query = `SELECT * FROM sets WHERE workout_id = $1 AND exercise_id = $2`;
-  const params = [workoutId, exerciseId];
+) => {
+  const query = `SELECT * FROM sets WHERE session_id = $1 AND exercise_id = $2`;
+  const params = [sessionId, exerciseId];
 
   try {
     const data = await db.query(query, params);

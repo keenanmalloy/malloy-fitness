@@ -22,7 +22,7 @@ export const TrainingPanel = ({ data }) => {
         <div className="flex flex-col text-center text-slate-600">
           {data.sessions.length} sessions tracked for today
           {data.sessions.map((session) => {
-            return <Overview workoutId={session.workout_id} />;
+            return <Overview sessionId={session.session_id} />;
           })}
         </div>
       </div>

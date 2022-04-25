@@ -4,7 +4,7 @@ import Modal from 'features/common/Modal';
 import { Button } from 'features/common/Button';
 import { useRouter } from 'next/router';
 
-const WorkoutTimer = ({ startedAt, workoutId, endedAt }) => {
+const SessionTimer = ({ startedAt, workoutId, endedAt }) => {
   const router = useRouter();
   const startTime = new Date(startedAt);
   const currentTime = new Date();
@@ -102,4 +102,4 @@ const WorkoutTimer = ({ startedAt, workoutId, endedAt }) => {
   );
 };
 
-export default WorkoutTimer;
+export default SessionTimer;

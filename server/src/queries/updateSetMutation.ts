@@ -1,13 +1,7 @@
 import { db } from 'config/db';
 import Joi from 'joi';
 import { update } from 'utils/update';
-
-interface Response {
-  status: string;
-  message: string;
-  set: any;
-  error?: any;
-}
+import { Response } from 'express';
 
 const updateSetSchema = Joi.object({
   weight: Joi.number().optional(),
@@ -15,10 +9,10 @@ const updateSetSchema = Joi.object({
 });
 
 export const updateSetMutation = async (
-  res: any,
+  res: Response,
   data: Record<string, string>,
   id: string
-): Promise<Response> => {
+) => {
   const { error, value, warning } = updateSetSchema.validate(data);
   if (error) {
     return res.status(422).json({

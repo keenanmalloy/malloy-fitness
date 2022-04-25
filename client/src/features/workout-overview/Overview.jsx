@@ -3,7 +3,7 @@ import Modal from 'features/common/Modal';
 import React, { useState } from 'react';
 import { OverviewExercises } from 'features/workout-overview/OverviewExercises';
 
-const Overview = ({ workoutId }) => {
+const Overview = ({ sessionId }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -15,7 +15,7 @@ const Overview = ({ workoutId }) => {
         title="Workout Details"
         closeModal={() => setIsOpen(false)}
       >
-        <OverviewExercises workoutId={workoutId} />
+        <OverviewExercises sessionId={sessionId} />
       </Modal>
     </>
   );
