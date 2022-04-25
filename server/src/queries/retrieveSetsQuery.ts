@@ -1,17 +1,12 @@
 import { db } from 'config/db';
-
-interface Response {
-  status: string;
-  message: string;
-  sets: any;
-}
+import { Response } from 'express';
 
 export const retrieveSetsQuery = async (
-  res: any,
-  workoutId: any
+  res: Response,
+  workoutId: string
 ): Promise<Response> => {
   const accountId = res.locals.state.account.account_id;
-  const query = `SELECT * FROM sets LEFT JOIN workouts ON workouts.workout_id = sets.workout_id WHERE workouts.workout_id = $1 AND workouts.created_by = $2`;
+  const query = `SELECT * FROM sets LEFT JOIN sessions ON sessions.session_id = sets.session_id WHERE sessions.session_id = $1 AND sessions.created_by = $2`;
   const params = [workoutId, accountId];
 
   try {

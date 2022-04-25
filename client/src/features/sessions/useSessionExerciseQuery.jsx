@@ -1,10 +1,10 @@
 import { useQuery } from 'react-query';
 
-const fetchSetsByExercise = async (exerciseId, sessionId) => {
+const fetchSessionExercise = async ({ exerciseId, sessionId }) => {
   // fetch the data, the fetch call returns a promise of a response.
   // we await for the promise to resolve with the await keyword.
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/sessions/${sessionId}/exercise/${exerciseId}/sets/`,
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/sessions/${sessionId}/exercises/${exerciseId}`,
     {
       credentials: 'include',
     }
@@ -17,8 +17,8 @@ const fetchSetsByExercise = async (exerciseId, sessionId) => {
   return json;
 };
 
-export const useSetsByExerciseQuery = ({ sessionId, exerciseId }) => {
-  return useQuery(['fetchSetsByExercise', exerciseId], () =>
-    fetchSetsByExercise(exerciseId, sessionId)
+export const useSessionExerciseQuery = (exerciseId, sessionId) => {
+  return useQuery(['fetchSessionExercise', exerciseId], () =>
+    fetchSessionExercise({ exerciseId, sessionId })
   );
 };

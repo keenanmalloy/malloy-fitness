@@ -10,33 +10,33 @@ import { authorize } from 'middlewares/authorize';
 
 const router = Router();
 
-// Retrieve all sets by workout
-router.get('/:workoutId/sets', authenticate, authorize, async (req, res) => {
-  await retrieveSetsQuery(res, req.params.workoutId);
+// Retrieve all sets by session
+router.get('/:sessionId/sets', authenticate, authorize, async (req, res) => {
+  await retrieveSetsQuery(res, req.params.sessionId);
 });
 
-// Retrieve all sets by workout by exercise
+// Retrieve all sets by session by exercise
 router.get(
-  '/:workoutId/exercise/:exerciseId/sets',
+  '/:sessionId/exercise/:exerciseId/sets',
   authenticate,
   authorize,
   async (req, res) => {
     await retrieveSetsByExerciseQuery(
       res,
-      req.params.workoutId,
+      req.params.sessionId,
       req.params.exerciseId
     );
   }
 );
 
 // Create new set
-router.post('/:workoutId/sets', authenticate, authorize, async (req, res) => {
-  await createSetMutation(res, req.body, req.params.workoutId);
+router.post('/:sessionId/sets', authenticate, authorize, async (req, res) => {
+  await createSetMutation(res, req.body, req.params.sessionId);
 });
 
 // Delete set
 router.delete(
-  '/:workoutId/sets/:setId',
+  '/:sessionId/sets/:setId',
   authenticate,
   authorize,
   async (req, res) => {
@@ -44,15 +44,15 @@ router.delete(
   }
 );
 
-// Delete sets by workout by exercise
+// Delete sets by session by exercise
 router.delete(
-  '/:workoutId/exercise/:exerciseId/sets',
+  '/:sessionId/exercise/:exerciseId/sets',
   authenticate,
   authorize,
   async (req, res) => {
     await deleteSetsByExerciseMutation(
       res,
-      req.params.workoutId,
+      req.params.sessionId,
       req.params.exerciseId
     );
   }
@@ -60,7 +60,7 @@ router.delete(
 
 // Update set
 router.put(
-  '/:workoutId/sets/:setId',
+  '/:sessionId/sets/:setId',
   authenticate,
   authorize,
   async (req, res) => {

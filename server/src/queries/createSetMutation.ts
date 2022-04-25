@@ -3,7 +3,7 @@ import Joi from 'joi';
 import { Response } from 'express';
 
 interface createSet {
-  workout_id: string | number;
+  session_id: string | number;
   exercise_id: string | number;
   repetitions?: number;
   weight?: number;
@@ -20,7 +20,7 @@ const createSetSchema = Joi.object({
 export const createSetMutation = async (
   res: Response,
   data: createSet,
-  workoutId: any
+  sessionId: string
 ) => {
   const { error, value, warning } = createSetSchema.validate(data);
 
@@ -49,14 +49,14 @@ export const createSetMutation = async (
 
     const query = `
       WITH 
-        data(exercise_id, repetitions, weight, workout_id, set_order) AS (
+        data(exercise_id, repetitions, weight, session_id, set_order) AS (
           VALUES                           
               (${exercise_id}, ${repetitions ?? 0}, ${
       weight ?? 0
-    }, ${workoutId}, ${set_order ?? 0})
+    }, ${sessionId}, ${set_order ?? 0})
           )
-        INSERT INTO sets (exercise_id, repetitions, weight, workout_id, set_order)
-          SELECT exercise_id, repetitions, weight, workout_id, set_order
+        INSERT INTO sets (exercise_id, repetitions, weight, session_id, set_order)
+          SELECT exercise_id, repetitions, weight, session_id, set_order
             FROM data
           RETURNING *
       `;

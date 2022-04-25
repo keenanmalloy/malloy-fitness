@@ -1,13 +1,13 @@
 import React from 'react';
 import { BiArrowBack } from 'react-icons/bi';
-import { useWorkoutQuery } from 'features/workouts/api/useWorkoutQuery';
+import { useSessionQuery } from 'features/sessions/useSessionQuery';
 import { RiTimerFill } from 'react-icons/ri';
-import WorkoutTimer from 'features/workout-header/WorkoutTimer';
+import SessionTimer from 'features/sessions/SessionTimer';
 import { useRouter } from 'next/router';
 
-const WorkoutExerciseHeader = ({ workoutId }) => {
+const SessionHeader = ({ sessionId }) => {
   const router = useRouter();
-  const { data, isError, isLoading } = useWorkoutQuery(workoutId);
+  const { data, isError, isLoading } = useSessionQuery(sessionId);
 
   if (isLoading) {
     return <p>loading...</p>;
@@ -21,23 +21,18 @@ const WorkoutExerciseHeader = ({ workoutId }) => {
     return <p>none available...</p>;
   }
 
-  const goBack = () => {
-    router.push('/workouts');
-  };
-
   return (
     <div className="flex w-auto h-8 justify-around items-center py-5 bg-gray-50">
-      <BiArrowBack onClick={goBack} />
+      <BiArrowBack onClick={() => router.push('/workouts')} />
 
-      <h2>{data.workout.name}</h2>
+      <h2>{data.session.name}</h2>
 
       <div className="flex">
         <RiTimerFill />
         <div>
-          <WorkoutTimer
-            endedAt={data.workout.ended_at}
-            startedAt={data.workout.started_at}
-            workoutId={workoutId}
+          <SessionTimer
+            endedAt={data.session.ended_at}
+            startedAt={data.session.started_at}
           />
         </div>
       </div>
@@ -45,4 +40,4 @@ const WorkoutExerciseHeader = ({ workoutId }) => {
   );
 };
 
-export default WorkoutExerciseHeader;
+export default SessionHeader;

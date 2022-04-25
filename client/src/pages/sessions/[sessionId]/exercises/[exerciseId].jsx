@@ -1,10 +1,11 @@
 import React from 'react';
-import { useWorkoutExerciseQuery } from 'features/workout-exercises/api/useWorkoutExerciseQuery';
-import { WorkoutExercise } from 'features/workout-exercises/components/WorkoutExercise';
-import WorkoutExerciseHeader from 'features/workout-header/WorkoutExerciseHeader';
+import { useSessionExerciseQuery } from 'features/sessions/useSessionExerciseQuery';
+import { SessionExercise } from 'features/sessions/SessionExercise';
+import SessionHeader from 'features/sessions/SessionHeader';
 import { Skeleton } from 'features/common/Skeleton';
 
 export async function getStaticPaths() {
+  arguments;
   return {
     paths: [],
     fallback: 'blocking',
@@ -13,17 +14,17 @@ export async function getStaticPaths() {
 
 export async function getStaticProps({ params }) {
   const exerciseId = params && params.exerciseId;
-  const workoutId = params && params.workoutId;
+  const sessionId = params && params.sessionId;
 
   return {
-    props: { exerciseId, workoutId },
+    props: { exerciseId, sessionId },
   };
 }
 
-const WorkoutExercisePage = ({ exerciseId, workoutId }) => {
-  const { data, isError, isLoading } = useWorkoutExerciseQuery(
+const SessionExercisePage = ({ exerciseId, sessionId }) => {
+  const { data, isError, isLoading } = useSessionExerciseQuery(
     exerciseId,
-    workoutId
+    sessionId
   );
 
   if (isLoading) {
@@ -47,18 +48,20 @@ const WorkoutExercisePage = ({ exerciseId, workoutId }) => {
     return <div>Error!</div>;
   }
 
+  console.log({ data });
+
   return (
     <>
-      <WorkoutExerciseHeader workoutId={workoutId} />
-      <WorkoutExercise
+      <SessionHeader sessionId={sessionId} />
+      <SessionExercise
         exercise={data.exercise}
         prevEx={data.prev}
         nextEx={data.next}
-        workoutId={workoutId}
+        sessionId={sessionId}
         exerciseId={exerciseId}
       />
     </>
   );
 };
 
-export default WorkoutExercisePage;
+export default SessionExercisePage;

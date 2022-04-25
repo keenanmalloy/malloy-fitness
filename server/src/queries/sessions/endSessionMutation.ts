@@ -1,10 +1,10 @@
 import { db } from 'config/db';
 
-export const endWorkoutMutation = async (res: any, id: string) => {
+export const endSessionMutation = async (res: any, id: string) => {
   const query = `
-    UPDATE workouts
+    UPDATE sessions
     SET ended_at = $1, completed = true
-    WHERE workout_id = $2 AND created_by = $3
+    WHERE session_id = $2 AND created_by = $3
     RETURNING *;
   `;
 
@@ -18,23 +18,23 @@ export const endWorkoutMutation = async (res: any, id: string) => {
       return res.status(404).json({
         role: res.locals.state.account.role,
         status: 'error',
-        message: 'Workout does not exist',
-        workout: null,
+        message: 'session does not exist',
+        session: null,
       });
     }
 
     return res.status(200).json({
       role: res.locals.state.account.role,
       status: 'success',
-      message: 'Workout updated successfully',
-      workout: data.rows[0],
+      message: 'session updated successfully',
+      session: data.rows[0],
     });
   } catch (error) {
     console.log({ error });
     return res.status(500).json({
       status: 'error',
       message: 'Database error',
-      workout: null,
+      session: null,
     });
   }
 };

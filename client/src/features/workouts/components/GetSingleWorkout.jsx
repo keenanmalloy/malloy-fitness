@@ -8,7 +8,6 @@ import { Skeleton } from 'features/common/Skeleton';
 import Link from 'next/link';
 import { WorkoutHeader } from './WorkoutHeader';
 import { Schedule } from 'features/Schedule';
-import Overview from 'features/workout-overview/Overview';
 import { CloneWorkout } from './CloneWorkout';
 
 export const GetSingleWorkout = ({ workoutId }) => {

@@ -1,11 +1,11 @@
 import { db } from 'config/db';
 import { Response } from 'express';
 
-export const startWorkoutMutation = async (res: Response, id: string) => {
+export const startSessionMutation = async (res: Response, id: string) => {
   const query = `
-    UPDATE workouts
-    SET started_at = CURRENT_TIMESTAMP, workout_dt = CURRENT_TIMESTAMP
-    WHERE workout_id = $1 AND created_by = $2
+    UPDATE sessions
+    SET started_at = CURRENT_TIMESTAMP, session_dt = CURRENT_TIMESTAMP
+    WHERE session_id = $1 AND created_by = $2
     RETURNING *;
   `;
 
@@ -18,23 +18,23 @@ export const startWorkoutMutation = async (res: Response, id: string) => {
       return res.status(404).json({
         role: res.locals.state.account.role,
         status: 'error',
-        message: 'Workout does not exist',
-        workout: null,
+        message: 'session does not exist',
+        session: null,
       });
     }
 
     return res.status(200).json({
       role: res.locals.state.account.role,
       status: 'success',
-      message: 'Workout updated successfully',
-      workout: data.rows[0],
+      message: 'session updated successfully',
+      session: data.rows[0],
     });
   } catch (error) {
     console.log({ error });
     return res.status(500).json({
       status: 'error',
       message: 'Database error',
-      workout: null,
+      session: null,
     });
   }
 };

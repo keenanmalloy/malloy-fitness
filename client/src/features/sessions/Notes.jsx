@@ -1,7 +1,7 @@
 import FullPageModal from 'features/common/FullPageModal';
 import { Input } from 'features/form/Input';
 import React, { useEffect, useState } from 'react';
-import { useUpdateWorkoutExerciseMetadataMutation } from '../api/useUpdateWorkoutExerciseMetadataMutation';
+import { useUpdateWorkoutExerciseMetadataMutation } from 'features/workout-exercises/api/useUpdateWorkoutExerciseMetadataMutation';
 
 export const Notes = ({ exercise, workoutId, exerciseId, exNotes }) => {
   const [isOpen, setIsOpen] = useState(false);

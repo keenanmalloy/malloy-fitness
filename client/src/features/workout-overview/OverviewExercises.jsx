@@ -2,11 +2,10 @@ import React from 'react';
 import { useWorkoutQuery } from 'features/workouts/api/useWorkoutQuery';
 import { OverviewRow } from 'features/workout-overview/OverviewRow';
 import StartWorkout from 'features/workouts/components/StartWorkout';
+import { useWorkoutSessionQuery } from './useWorkoutSessionQuery';
 
-export const OverviewExercises = ({ workoutId }) => {
-  const { data, isError, isLoading } = useWorkoutQuery(workoutId);
-
-  console.log({ data });
+export const OverviewExercises = ({ sessionId }) => {
+  const { data, isError, isLoading } = useWorkoutSessionQuery(sessionId);
 
   if (isLoading) {
     return <p>loading...</p>;
@@ -24,7 +23,7 @@ export const OverviewExercises = ({ workoutId }) => {
   return (
     <div>
       <ul className="py-5">
-        {data.workout.exercises
+        {data.session.exercises
           .sort((a, b) => {
             if (a.order < b.order) {
               return -1;
@@ -49,9 +48,9 @@ export const OverviewExercises = ({ workoutId }) => {
           })}
       </ul>
       <StartWorkout
-        workoutId={workoutId}
-        hasStarted={!!data.workout.started_at}
-        hasEnded={!!data.workout.ended_at}
+        sessionId={sessionId}
+        hasStarted={!!data.session.started_at}
+        hasEnded={!!data.session.ended_at}
       />
     </div>
   );

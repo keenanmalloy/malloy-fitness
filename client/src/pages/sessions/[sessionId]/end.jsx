@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { Button } from 'features/common/Button';
-import WorkoutExerciseHeader from 'features/workout-header/WorkoutExerciseHeader';
+import SessionHeader from 'features/sessions/SessionHeader';
 import Modal from 'features/common/Modal';
+import { useRouter } from 'next/router';
 
 export async function getStaticPaths() {
   return {
@@ -11,19 +12,20 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-  const workoutId = params && params.workoutId;
+  const sessionId = params && params.sessionId;
 
   return {
-    props: { workoutId },
+    props: { sessionId },
   };
 }
 
-const EndPage = ({ workoutId, endedAt }) => {
+const EndPage = ({ sessionId, endedAt }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState(false);
+  const router = useRouter();
   const endWorkout = async (id) => {
     const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/workouts/${id}/end`,
+      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/sessions/${id}/end`,
       {
         method: 'PATCH',
         credentials: 'include',
@@ -34,11 +36,12 @@ const EndPage = ({ workoutId, endedAt }) => {
   };
 
   const handleStop = () => {
-    endWorkout(workoutId)
+    endWorkout(sessionId)
       .then(() => {
         router.push('/');
       })
-      .catch(() => {
+      .catch((e) => {
+        console.log({ e });
         setError(true);
       });
   };
@@ -64,7 +67,7 @@ const EndPage = ({ workoutId, endedAt }) => {
   }
   return (
     <div>
-      <WorkoutExerciseHeader workoutId={workoutId} />
+      <SessionHeader sessionId={sessionId} />
       <div className="flex justify-center">
         <h1>Workout Completed!</h1>
       </div>

@@ -1,19 +1,13 @@
 import { db } from 'config/db';
-
-interface Response {
-  status: string;
-  message: string;
-  set: any;
-  error?: any;
-}
+import { Response } from 'express';
 
 export const deleteSetsByExerciseMutation = async (
-  res: any,
-  workoutId: string,
+  res: Response,
+  sessionId: string,
   exerciseId: string
 ): Promise<Response> => {
-  const query = `DELETE FROM sets WHERE workout_id = $1 AND exercise_id = $2 RETURNING *;`;
-  const params = [workoutId, exerciseId];
+  const query = `DELETE FROM sets WHERE session_id = $1 AND exercise_id = $2 RETURNING *;`;
+  const params = [sessionId, exerciseId];
 
   try {
     const data = await db.query(query, params);
