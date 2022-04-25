@@ -20,6 +20,7 @@ export const authenticate = async (
         account: session.account,
         requestUrl: `${req.baseUrl}${req.route.path}`,
         workoutId: req.params.workoutId,
+        sessionId: req.params.sessionId,
         exerciseId: req.params.exerciseId,
         httpMethod: req.method, // GET, PUT, POST, PATCH, DELETE, etc.
       };

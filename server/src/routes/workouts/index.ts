@@ -8,8 +8,8 @@ import { retrieveWorkoutQuery } from 'queries/workouts/retrieveWorkoutQuery';
 import { retrieveWorkoutsQuery } from 'queries/workouts/retrieveWorkoutsQuery';
 import { updateWorkoutMutation } from 'queries/workouts/updateWorkoutMutation';
 
-import setsRouter from './sets';
-import exercisesRouter from './exercises';
+import setsRouter from '../sessions/sets';
+import exercisesRouter from '../sessions/exercises';
 
 import { cloneScheduleWorkoutMutation } from 'queries/workouts/cloneScheduleMutation';
 import { createRestWorkoutMutation } from 'queries/workouts/createRestWorkoutMutation';

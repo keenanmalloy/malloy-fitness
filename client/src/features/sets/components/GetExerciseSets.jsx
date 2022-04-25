@@ -5,9 +5,9 @@ import { Set } from 'features/sets/components/Set';
 import { useCreateSetMutation } from '../api/useCreateSetMutation';
 import { Skeleton } from 'features/common/Skeleton';
 
-export const GetExerciseSets = ({ workoutId, exerciseId }) => {
+export const GetExerciseSets = ({ sessionId, exerciseId }) => {
   const { data, isError, isLoading } = useSetsByExerciseQuery({
-    workoutId,
+    sessionId,
     exerciseId,
   });
 
@@ -39,12 +39,12 @@ export const GetExerciseSets = ({ workoutId, exerciseId }) => {
   }
 
   return (
-    <SetsList sets={data.sets} workoutId={workoutId} exerciseId={exerciseId} />
+    <SetsList sets={data.sets} sessionId={sessionId} exerciseId={exerciseId} />
   );
 };
 
-const SetsList = ({ sets, workoutId, exerciseId }) => {
-  const { isLoading, mutate, isError } = useCreateSetMutation({ workoutId });
+const SetsList = ({ sets, sessionId, exerciseId }) => {
+  const { isLoading, mutate, isError } = useCreateSetMutation({ sessionId });
 
   return (
     <section className="px-3">
@@ -57,7 +57,7 @@ const SetsList = ({ sets, workoutId, exerciseId }) => {
                 set={set}
                 key={set.set_id}
                 setNumber={key + 1 > 9 ? `${key + 1}` : `0${key + 1}`}
-                workoutId={workoutId}
+                sessionId={sessionId}
                 exerciseId={exerciseId}
               />
             );

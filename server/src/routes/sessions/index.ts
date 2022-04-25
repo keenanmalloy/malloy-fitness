@@ -7,6 +7,10 @@ import { retrievePreviewSessionsQuery } from 'queries/sessions/retrievePreviewSe
 import { retrieveSessionQuery } from 'queries/sessions/retrieveSessionQuery';
 import { retrieveSessionsQuery } from 'queries/sessions/retrieveSessionsQuery';
 import { updateSessionMutation } from 'queries/sessions/updateSessionMutation';
+import startSessionRouter from './start';
+import endSessionRouter from './end';
+import exercisesRouter from './exercises';
+import setsRouter from './sets';
 
 const router = Router();
 
@@ -49,6 +53,11 @@ router.delete('/:sessionId', authenticate, authorize, async (req, res) => {
 router.patch('/:sessionId', authenticate, authorize, async (req, res) => {
   await updateSessionMutation(res, req.body, req.params.sessionId);
 });
+
+startSessionRouter(router);
+endSessionRouter(router);
+exercisesRouter(router);
+setsRouter(router);
 
 export default (parentRouter: Router) => {
   parentRouter.use('/sessions', router);

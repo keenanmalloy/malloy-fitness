@@ -1,6 +1,7 @@
 import { NextFunction, Response, Request } from 'express';
-import { authorizeExerciseQuery } from 'queries/authorizeExerciseQuery';
-import { authorizeWorkoutQuery } from 'queries/authorizeWorkoutQuery';
+import { authorizeSessionQuery } from 'queries/authorize/authorizeSessionQuery';
+import { authorizeExerciseQuery } from 'queries/authorize/authorizeExerciseQuery';
+import { authorizeWorkoutQuery } from 'queries/authorize/authorizeWorkoutQuery';
 
 /**
  * Checks the DB for authorization of resource.
@@ -14,10 +15,22 @@ export const authorize = async (
   const requestUrl = res.locals.state.requestUrl;
   const workoutId = res.locals.state.workoutId;
   const exerciseId = res.locals.state.exerciseId;
+  const sessionId = res.locals.state.sessionId;
 
   const isDeveloper = res.locals.state.account.role === 'developer';
   if (isDeveloper) {
     return next();
+  }
+
+  if (!!sessionId) {
+    const { isAuthorized } = await authorizeSessionQuery(res, sessionId);
+    if (isAuthorized) {
+      return next();
+    }
+    return res.status(403).json({
+      role: res.locals.state.account.role,
+      message: 'Unauthorized',
+    });
   }
 
   if (!!workoutId) {

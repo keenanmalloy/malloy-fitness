@@ -6,12 +6,15 @@ import { useScheduleSessionMutation } from './sessions/useScheduleSessionMutatio
 
 export const Schedule = ({ workoutId }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [value, onChange] = useState(new Date());
+  const currentDate = new Date(
+    new Date().getFullYear(),
+    new Date().getMonth(),
+    new Date().getDate()
+  );
 
+  const [value, onChange] = useState(currentDate);
   const { data, isError, isLoading, mutate } =
     useScheduleSessionMutation(workoutId);
-
-  const currentDate = new Date();
 
   const handleScheduling = () => {
     mutate(
@@ -49,8 +52,7 @@ export const Schedule = ({ workoutId }) => {
           value={value}
           maxDetail="month"
           minDetail="month"
-          maxDate={new Date(currentDate.setMonth(currentDate.getMonth() + 3))}
-          minDate={new Date()}
+          minDate={currentDate}
           next2Label=""
           prev2Label=""
           nextLabel=""

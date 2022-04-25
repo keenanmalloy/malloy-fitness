@@ -1,18 +1,17 @@
 import { Input } from 'features/form/Input';
-import { useCreateSetMutation } from 'features/sets/api/useCreateSetMutation';
 import React, { useEffect, useState } from 'react';
 import { IoClose } from 'react-icons/io5';
 import { useDeleteSetMutation } from '../api/useDeleteSetMutation';
 import { useUpdateSetMutation } from '../api/useUpdateSetMutation';
 
-export const Set = ({ set, setNumber, workoutId, exerciseId, isRemote }) => {
+export const Set = ({ set, setNumber, sessionId, exerciseId, isRemote }) => {
   const [repetitions, setRepetitions] = useState(set.repetitions);
   const [weight, setWeight] = useState(set.weight);
   const [setId, setSetId] = useState(set.set_id);
   const [hasSaved, setHasSaved] = useState(false);
 
   const { mutate, isLoading, isError } = useDeleteSetMutation({
-    workoutId,
+    sessionId,
     setId,
   });
 
@@ -24,7 +23,7 @@ export const Set = ({ set, setNumber, workoutId, exerciseId, isRemote }) => {
       <SavedInput
         set={set}
         exerciseId={exerciseId}
-        workoutId={workoutId}
+        sessionId={sessionId}
         onChange={(e) => setRepetitions(e.target.value)}
         value={repetitions}
         weight={weight}
@@ -40,7 +39,7 @@ export const Set = ({ set, setNumber, workoutId, exerciseId, isRemote }) => {
       <SavedInput
         set={set}
         exerciseId={exerciseId}
-        workoutId={workoutId}
+        sessionId={sessionId}
         onChange={(e) => setWeight(e.target.value)}
         value={weight}
         weight={weight}
@@ -87,12 +86,12 @@ const SavedInput = ({
   placeholder,
   name,
   id,
-  workoutId,
+  sessionId,
   exerciseId,
   setId,
 }) => {
   const { isLoading, mutate, isError } = useUpdateSetMutation({
-    workoutId,
+    sessionId,
     setId,
   });
 

@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from 'react-query';
 
-const createSet = async ({ body, workoutId }) => {
+const createSet = async ({ body, sessionId }) => {
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/workouts/${workoutId}/sets`,
+    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/sessions/${sessionId}/sets`,
     {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -14,9 +14,9 @@ const createSet = async ({ body, workoutId }) => {
   return json;
 };
 
-export const useCreateSetMutation = ({ workoutId }) => {
+export const useCreateSetMutation = ({ sessionId }) => {
   const queryClient = useQueryClient();
-  return useMutation((body) => createSet({ workoutId, body }), {
+  return useMutation((body) => createSet({ sessionId, body }), {
     onSuccess: () => {
       queryClient.invalidateQueries('fetchSetsByExercise');
     },
