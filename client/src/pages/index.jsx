@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 
 import { HomeHeader } from 'features/common/HomeHeader';
 import Navbar from 'features/common/Navbar';
-import { Overview } from 'features/common/Overview';
-import { Steps } from 'features/google-fit/Steps';
+
+import { GetSelectedDailyOverview } from 'features/daily/GetSelectedDailyOverview';
 
 function HomePage() {
   // the day selected by the user
@@ -15,12 +15,7 @@ function HomePage() {
       <div style={{ height: '40px' }} />
       <HomeHeader selected={selected} setSelected={setSelected} />
 
-      <section className="flex w-100 items-center justify-center">
-        <div className="max-w-xl flex-1">
-          <Overview selected={selected} />
-          <Steps selected={selected} />
-        </div>
-      </section>
+      <GetSelectedDailyOverview selected={selected} />
 
       {/* Empty div to cover the height of the navbar */}
       <div style={{ height: '70px' }} />
