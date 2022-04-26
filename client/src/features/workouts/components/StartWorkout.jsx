@@ -2,6 +2,7 @@ import { Button } from 'features/common/Button';
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
+import { apiClient } from 'config/axios';
 
 const StartWorkout = ({ sessionId, hasStarted, hasEnded }) => {
   const [isLoading, setIsLoading] = useState(false);
@@ -9,30 +10,13 @@ const StartWorkout = ({ sessionId, hasStarted, hasEnded }) => {
   const router = useRouter();
 
   const getSingleWorkout = async (id) => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/sessions/${id}`,
-      {
-        credentials: 'include',
-      }
-    );
-
-    if (!response.ok) throw Error;
-    const json = await res.json();
-    return json;
+    const { data } = await apiClient.get(`/sessions/${id}`);
+    return data;
   };
 
   const initSession = async (id) => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/sessions/${id}/start`,
-      {
-        method: 'PATCH',
-        credentials: 'include',
-      }
-    );
-
-    if (!response.ok) throw Error;
-    const json = await res.json();
-    return json;
+    const { data } = await apiClient.patch(`/sessions/${id}/start`);
+    return data;
   };
 
   const startOrContinueWorkout = async (sessionId) => {

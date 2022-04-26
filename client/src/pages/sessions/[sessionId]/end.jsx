@@ -3,6 +3,7 @@ import { Button } from 'features/common/Button';
 import SessionHeader from 'features/sessions/SessionHeader';
 import Modal from 'features/common/Modal';
 import { useRouter } from 'next/router';
+import { apiClient } from 'config/axios';
 
 export async function getStaticPaths() {
   return {
@@ -23,18 +24,10 @@ const EndPage = ({ sessionId, endedAt }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState(false);
   const router = useRouter();
-  const endWorkout = async (id) => {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/sessions/${id}/end`,
-      {
-        method: 'PATCH',
-        credentials: 'include',
-      }
-    );
 
-    if (!response.ok) throw Error;
-    const json = await res.json();
-    return json;
+  const endWorkout = async (id) => {
+    const { data } = await apiClient.patch(`/sessions/${id}/end`);
+    return data;
   };
 
   const handleStop = () => {
