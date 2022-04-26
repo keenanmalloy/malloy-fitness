@@ -1,16 +1,9 @@
 import { useMutation } from 'react-query';
+import { apiClient } from 'config/axios';
 
 const deleteExercise = async ({ id }) => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/exercises/${id}`,
-    {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-    }
-  );
-  const json = await res.json();
-  return json;
+  const { data } = await apiClient.delete(`/exercises/${id}`);
+  return data;
 };
 
 export const useDeleteExerciseMutation = (id) => {

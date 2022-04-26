@@ -1,17 +1,34 @@
 import { db } from 'config/db';
 import { Response, Request } from 'express';
+import { fetchGoogleFitSteps } from './fetchGoogleFitSteps';
 
 export const retrieveDailyOverviewQuery = async (
   req: Request,
   res: Response
 ) => {
-  if (!req.query.date) {
+  const dateQuery = req.query.date as string;
+  if (!dateQuery) {
     return res.status(400).json({
       status: 'error',
       message: 'Missing required date param',
       sessions: null,
     });
   }
+
+  const startTimeQuery = req.query.startTime as string;
+  const endTimeQuery = req.query.endTime as string;
+  if (!startTimeQuery || !endTimeQuery) {
+    return res.status(400).json({
+      error: 'Missing start / end time query params (UNIX) milliseconds',
+    });
+  }
+
+  const stepData = await fetchGoogleFitSteps(
+    req,
+    res,
+    startTimeQuery,
+    endTimeQuery
+  );
 
   try {
     const dateQuery = req.query.date as string;
@@ -23,6 +40,7 @@ export const retrieveDailyOverviewQuery = async (
       status: 'success',
       message: 'Overview fetched successfully',
       sessions,
+      steps: stepData,
     });
   } catch (error) {
     console.log({ error });

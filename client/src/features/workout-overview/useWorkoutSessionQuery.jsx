@@ -1,16 +1,9 @@
 import { useQuery } from 'react-query';
+import { apiClient } from 'config/axios';
 
 const fetchWorkoutSession = async ({ id }) => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/sessions/${id}`,
-    {
-      credentials: 'include',
-    }
-  );
-
-  const json = await res.json();
-
-  return json;
+  const { data } = await apiClient.get(`/sessions/${id}`);
+  return data;
 };
 
 export const useWorkoutSessionQuery = (id) => {

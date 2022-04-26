@@ -1,7 +1,12 @@
 // ! Keep dotent.config at the very beginning of the file!!!
 import dotenv from 'dotenv';
 
-const envFile = '.env';
+const envFile =
+  process.env.NODE_ENV === 'test'
+    ? `test.env`
+    : process.env.NODE_ENV === 'development'
+    ? 'development.env'
+    : '.env';
 dotenv.config({ path: envFile });
 
 export * from './application';

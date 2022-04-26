@@ -1,16 +1,9 @@
 import { useQuery } from 'react-query';
+import { apiClient } from 'config/axios';
 
 const fetchMuscleGroup = async ({ id }) => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/muscle-groups/${id}`,
-    {
-      credentials: 'include',
-    }
-  );
-
-  const json = await res.json();
-
-  return json;
+  const { data } = await apiClient.get(`/muscle-groups/${id}`);
+  return data;
 };
 
 export const useMuscleGroupQuery = (id) => {

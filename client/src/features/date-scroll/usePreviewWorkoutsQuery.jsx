@@ -1,18 +1,9 @@
 import { useQuery } from 'react-query';
+import { apiClient } from 'config/axios';
 
 const fetchPreviewWorkouts = async ({ date }) => {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/sessions/preview?date=${date}`,
-      {
-        credentials: 'include',
-      }
-    );
-    const json = await res.json();
-    return json;
-  } catch (error) {
-    throw new Error(error);
-  }
+  const { data } = await apiClient.get(`/sessions/preview?date=${date}`);
+  return data;
 };
 
 export const usePreviewWorkoutsQuery = ({ date, items }) => {

@@ -1,20 +1,14 @@
 import { useQuery } from 'react-query';
+import { apiClient } from 'config/axios';
 
 const fetchWorkouts = async ({ view, type, category, sortBy }) => {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/workouts/?category=${
-        category ?? ''
-      }&type=${type ?? ''}&view=${view ?? ''}&sortBy=${sortBy ?? ''}`,
-      {
-        credentials: 'include',
-      }
-    );
-    const json = await res.json();
-    return json;
-  } catch (error) {
-    throw new Error(error);
-  }
+  const { data } = await apiClient.get(
+    `/workouts/?category=${category ?? ''}&type=${type ?? ''}&view=${
+      view ?? ''
+    }&sortBy=${sortBy ?? ''}`
+  );
+
+  return data;
 };
 
 export const useWorkoutsQuery = ({ view, type, category, sortBy }) => {
@@ -24,18 +18,8 @@ export const useWorkoutsQuery = ({ view, type, category, sortBy }) => {
 };
 
 const fetchFutureWorkouts = async () => {
-  try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_API_ENDPOINT}/workouts/?date=future`,
-      {
-        credentials: 'include',
-      }
-    );
-    const json = await res.json();
-    return json;
-  } catch (error) {
-    throw new Error(error);
-  }
+  const { data } = await apiClient.get(`/workouts/?date=future`);
+  return data;
 };
 
 export const useFutureWorkoutsQuery = () => {

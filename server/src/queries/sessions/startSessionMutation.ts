@@ -4,7 +4,7 @@ import { Response } from 'express';
 export const startSessionMutation = async (res: Response, id: string) => {
   const query = `
     UPDATE sessions
-    SET started_at = CURRENT_TIMESTAMP, session_dt = CURRENT_TIMESTAMP
+    SET started_at = CURRENT_TIMESTAMP, session_dt = date_trunc('day', CURRENT_TIMESTAMP - interval '12 hours') + interval '7 hours'
     WHERE session_id = $1 AND created_by = $2
     RETURNING *;
   `;
