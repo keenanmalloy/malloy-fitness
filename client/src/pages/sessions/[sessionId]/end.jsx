@@ -31,6 +31,8 @@ const EndPage = ({ sessionId, endedAt }) => {
         credentials: 'include',
       }
     );
+
+    if (!response.ok) throw Error;
     const json = await res.json();
     return json;
   };

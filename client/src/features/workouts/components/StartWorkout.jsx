@@ -15,6 +15,8 @@ const StartWorkout = ({ sessionId, hasStarted, hasEnded }) => {
         credentials: 'include',
       }
     );
+
+    if (!response.ok) throw Error;
     const json = await res.json();
     return json;
   };
@@ -27,6 +29,8 @@ const StartWorkout = ({ sessionId, hasStarted, hasEnded }) => {
         credentials: 'include',
       }
     );
+
+    if (!response.ok) throw Error;
     const json = await res.json();
     return json;
   };

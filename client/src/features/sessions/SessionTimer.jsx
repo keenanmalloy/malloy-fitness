@@ -43,6 +43,8 @@ const SessionTimer = ({ startedAt, workoutId, endedAt }) => {
         credentials: 'include',
       }
     );
+
+    if (!response.ok) throw Error;
     const json = await res.json();
     return json;
   };

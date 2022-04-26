@@ -1,17 +1,9 @@
 import { useMutation } from 'react-query';
+import { apiClient } from 'config/axios';
 
 const updateWorkout = async ({ id, workout }) => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/workouts/${id}`,
-    {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(workout),
-      credentials: 'include',
-    }
-  );
-  const json = await res.json();
-  return json;
+  const { data } = await apiClient.put(`/workouts/${id}`, workout);
+  return data;
 };
 
 export const useUpdateWorkoutMutation = (id) => {
