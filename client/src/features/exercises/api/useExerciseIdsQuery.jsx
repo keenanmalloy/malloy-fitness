@@ -1,20 +1,13 @@
+import { apiClient } from 'config/axios';
 import { useQuery } from 'react-query';
 
 const fetchExercises = async (ids) => {
   // fetch the data, the fetch call returns a promise of a response.
   // we await for the promise to resolve with the await keyword.
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/exercises/?ids=${ids.join(',')}`,
-    {
-      credentials: 'include',
-    }
-  );
-
-  // once we have the response, we need to turn it into JSON.
-  const json = await res.json();
+  const { data } = await apiClient.get(`/exercises/?ids=${ids.join(',')}`);
 
   // return the data that we got from the API.
-  return json;
+  return data;
 };
 
 export const useExerciseIdsQuery = (ids) => {

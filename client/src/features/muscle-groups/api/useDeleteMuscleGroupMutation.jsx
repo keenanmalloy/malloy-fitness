@@ -1,16 +1,9 @@
 import { useMutation } from 'react-query';
+import { apiClient } from 'config/axios';
 
 const deleteMuscleGroup = async ({ id }) => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/muscle-groups/${id}`,
-    {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-    }
-  );
-  const json = await res.json();
-  return json;
+  const { data } = await apiClient.delete(`/muscle-groups/${id}`);
+  return data;
 };
 
 export const useDeleteMuscleGroupMutation = () => {

@@ -6,7 +6,7 @@ const envFile =
     ? `test.env`
     : process.env.NODE_ENV === 'development'
     ? 'development.env'
-    : 'production.env';
+    : '.env';
 dotenv.config({ path: envFile });
 
 export * from './application';

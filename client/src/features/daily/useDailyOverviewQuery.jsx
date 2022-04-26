@@ -1,14 +1,12 @@
+import { apiClient } from 'config/axios';
 import { useQuery } from 'react-query';
 
 const fetchDailyOverview = async ({ date, start, end }) => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/overview?date=${date}&startTime=${start}&endTime=${end}`,
-    {
-      credentials: 'include',
-    }
+  const { data } = await apiClient.get(
+    `/overview?date=${date}&startTime=${start}&endTime=${end}`
   );
-  const json = await res.json();
-  return json;
+
+  return data;
 };
 
 export const useDailyOverviewQuery = (selected) => {

@@ -1,3 +1,4 @@
+import { apiClient } from 'config/axios';
 import { useMutation, useQueryClient } from 'react-query';
 
 const removeMuscleGroupFromExercise = async ({
@@ -5,16 +6,11 @@ const removeMuscleGroupFromExercise = async ({
   muscleGroupId,
   group,
 }) => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/exercises/${exerciseId}/muscle-group/${muscleGroupId}/${group}`,
-    {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-    }
+  const { data } = await apiClient.delete(
+    `/exercises/${exerciseId}/muscle-group/${muscleGroupId}/${group}`
   );
-  const json = await res.json();
-  return json;
+
+  return data;
 };
 
 export const useRemoveMuscleGroupFromExerciseMutation = (exerciseId) => {

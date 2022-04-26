@@ -5,7 +5,7 @@ import { DietPanel } from 'features/daily/DietPanel';
 import { TrainingPanel } from 'features/daily/TrainingPanel';
 
 export const GetSelectedDailyOverview = ({ selected }) => {
-  const { data, isError, isLoading } = useDailyOverviewQuery(selected);
+  const { data, isError, isLoading, error } = useDailyOverviewQuery(selected);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -15,7 +15,7 @@ export const GetSelectedDailyOverview = ({ selected }) => {
     return <div>Error</div>;
   }
 
-  console.log({ data });
+  console.log({ data, isError, error });
 
   return (
     <section className="flex w-100 items-center justify-center">
