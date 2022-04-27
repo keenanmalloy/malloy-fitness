@@ -4,7 +4,6 @@ import { Logout } from 'features/auth/Logout';
 
 export const Profile = () => {
   const { data, isError, isLoading } = useAccountQuery();
-  console.log({ data });
 
   if (isLoading) {
     return <p>loading...</p>;
