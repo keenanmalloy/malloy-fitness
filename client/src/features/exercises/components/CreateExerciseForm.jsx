@@ -5,17 +5,24 @@ import { RadioGroup } from 'features/form/RadioGroup';
 import { useCreateExerciseMutation } from 'features/exercises/api/useCreateExerciseMutation';
 import Select from 'react-select';
 import { useQueryClient } from 'react-query';
-import { EXERCISE_CATEGORIES } from 'features/environment';
+import { EXERCISE_CATEGORIES, EXERCISE_TRACKERS } from 'features/environment';
 
 export const CreateExerciseForm = ({ muscleGroups, setIsOpen }) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [profile, setProfile] = useState('short');
+
+  // muscle-groups
   const [primary, setPrimary] = useState([]);
   const [secondary, setSecondary] = useState([]);
-  const [isPrimaryError, setIsPrimaryError] = useState(false);
+
+  // tracking data
+  const [primaryTracker, setPrimaryTracker] = useState('reps');
+  const [secondaryTracker, setSecondaryTracker] = useState('weight');
+
   const [isCategoryError, setIsCategoryError] = useState(false);
+
   const { mutate, isLoading, isError, error } = useCreateExerciseMutation();
 
   const queryClient = useQueryClient();
@@ -23,22 +30,22 @@ export const CreateExerciseForm = ({ muscleGroups, setIsOpen }) => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    const isWeight =
+      primaryTracker === 'weight' || secondaryTracker === 'weight';
+
     const exercise = {
       name,
       description,
       category,
-      profile,
+      profile: isWeight ? profile : '',
+      primaryTracker,
+      secondaryTracker,
       primary: primary.map((object) => object.value),
       secondary: secondary.map((object) => object.value),
     };
 
-    if (!exercise.category) {
+    if (!exercise.category && isWeight) {
       setIsCategoryError(true);
-      return;
-    }
-
-    if (!exercise.primary.length) {
-      setIsPrimaryError(true);
       return;
     }
 
@@ -52,6 +59,8 @@ export const CreateExerciseForm = ({ muscleGroups, setIsOpen }) => {
           setProfile('short');
           setPrimary([]);
           setSecondary([]);
+          setPrimaryTracker('reps');
+          setSecondaryTracker('weight');
           queryClient.refetchQueries('fetchExercises');
           setIsOpen(false);
         },
@@ -78,62 +87,104 @@ export const CreateExerciseForm = ({ muscleGroups, setIsOpen }) => {
       />
 
       <div className="py-2">
-        <label>Category</label>
-        <Select
-          onChange={(data) => {
-            setCategory(data.value);
-            setIsCategoryError(false);
-          }}
-          name="category"
-          styles={{
-            control: (base) => ({
-              ...base,
-              ...(isCategoryError
-                ? {
-                    borderColor: 'red-500',
-                    boxShadow: '0 0 0 1px red inset',
-                  }
-                : {}),
-            }),
-          }}
-          options={EXERCISE_CATEGORIES}
-        />
-        {isCategoryError && (
-          <div className="text-red-500 text-xs italic text-right">
-            Please select a category
+        <label>What to Track</label>
+
+        <div className="flex items-center flex-1 w-full">
+          <div className="flex-1 w-full">
+            <Select
+              onChange={(data) => {
+                setPrimaryTracker(data.value);
+              }}
+              isSearchable={false}
+              name="primaryTracker"
+              styles={{
+                control: (base) => ({
+                  ...base,
+                }),
+              }}
+              defaultValue={{
+                label: primaryTracker,
+                value: primaryTracker,
+              }}
+              options={EXERCISE_TRACKERS}
+            />
           </div>
-        )}
+          <div className="flex-1 w-full">
+            <Select
+              onChange={(data) => {
+                setSecondaryTracker(data.value);
+              }}
+              isSearchable={false}
+              name="secondaryTracker"
+              styles={{
+                control: (base) => ({
+                  ...base,
+                }),
+              }}
+              defaultValue={{
+                label: secondaryTracker,
+                value: secondaryTracker,
+              }}
+              options={EXERCISE_TRACKERS}
+            />
+          </div>
+        </div>
       </div>
 
-      <RadioGroup
-        label="Resistance profile: "
-        onChange={(option) => {
-          return setProfile(option);
-        }}
-        checked={profile}
-        isRequired={true}
-        options={['short', 'mid', 'long']}
-        name="resistance-range"
-      />
+      {(primaryTracker === 'weight' || secondaryTracker === 'weight') && (
+        <>
+          <div className="py-2">
+            <label>Category</label>
+            <Select
+              onChange={(data) => {
+                setCategory(data.value);
+                setIsCategoryError(false);
+              }}
+              isSearchable={false}
+              name="category"
+              styles={{
+                control: (base) => ({
+                  ...base,
+                  ...(isCategoryError
+                    ? {
+                        borderColor: 'red-500',
+                        boxShadow: '0 0 0 1px red inset',
+                      }
+                    : {}),
+                }),
+              }}
+              options={EXERCISE_CATEGORIES}
+            />
+            {isCategoryError && (
+              <div className="text-red-500 text-xs italic text-right">
+                Please select a category
+              </div>
+            )}
+          </div>
+          <RadioGroup
+            label="Resistance profile: "
+            onChange={(option) => {
+              return setProfile(option);
+            }}
+            checked={profile}
+            isRequired={true}
+            options={['short', 'mid', 'long']}
+            name="resistance-range"
+          />
+        </>
+      )}
 
       <div className="py-2">
-        <label>Primary</label>
+        <label>Primary Muscle Group(s)</label>
         <Select
           isMulti
           styles={{
             control: (base) => ({
               ...base,
-              ...(isPrimaryError
-                ? {
-                    borderColor: 'red-500',
-                    boxShadow: '0 0 0 1px red inset',
-                  }
-                : {}),
             }),
           }}
           onChange={(data) => {
             setPrimary(data);
-            setIsPrimaryError(false);
           }}
           name="primary-muscle-groups"
           options={muscleGroups.map((muscleGroup) => {
@@ -143,15 +194,10 @@ export const CreateExerciseForm = ({ muscleGroups, setIsOpen }) => {
             };
           })}
         />
-        {isPrimaryError && (
-          <div className="text-red-500 text-xs italic text-right">
-            Please select a primary muscle-group
-          </div>
-        )}
       </div>
 
       <div className="py-2">
-        <label>Secondary</label>
+        <label>Secondary Muscle Group(s)</label>
         <Select
           isMulti
           onChange={(data) => setSecondary(data)}

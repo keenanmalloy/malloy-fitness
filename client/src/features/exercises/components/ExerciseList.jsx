@@ -87,7 +87,7 @@ export const ExerciseList = ({ query, category, view, profile, sortBy }) => {
           <div className="flex justify-between">
             <h3 className="text-lg">{exercise.name}</h3>
             <span className="bg-blue-300 flex items-center text-white px-4 rounded-md max-h-7">
-              {exercise.category}
+              {exercise.category || 'other'}
             </span>
           </div>
           <p className="text-xs">{exercise.description}</p>
