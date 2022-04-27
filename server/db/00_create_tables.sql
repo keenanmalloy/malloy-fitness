@@ -41,6 +41,8 @@ CREATE TABLE IF NOT EXISTS exercises (
     category character varying(30),
     video text,
     profile character varying(30),
+    primary_tracker character varying(30),
+    secondary_tracker character varying(30),
     created_by bigint
 );
 

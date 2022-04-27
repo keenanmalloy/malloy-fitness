@@ -23,29 +23,32 @@ export const GetRelatedExercises = ({ muscleGroupIds }) => {
     );
   }
 
-  if (!data) {
+  if (!data || (data && !data.exercises.length)) {
     return (
-      <div className="p-5">
-        <p>does not exist...</p>
+      <div className="py-5">
+        <h2 className="py-5 text-lg">Related exercises</h2>
+        <p>No exercises found...</p>
       </div>
     );
   }
 
   return (
-    <section>
+    <section className="py-5">
       <h2 className="py-5 text-lg">Related exercises</h2>
-      {data.exercises.map((e) => {
-        return (
-          <div key={e.exercise_id}>
-            <Link
-              href={`/exercises/${e.exercise_id}`}
-              as={`/exercises/${e.exercise_id}`}
-            >
-              {e.name}
-            </Link>
-          </div>
-        );
-      })}
+      <ul className="flex flex-col divide-y-2 divide-gray-100">
+        {data.exercises.map((e) => {
+          return (
+            <li key={e.exercise_id} className="border-solid">
+              <Link
+                href={`/exercises/${e.exercise_id}`}
+                as={`/exercises/${e.exercise_id}`}
+              >
+                {e.name}
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
     </section>
   );
 };

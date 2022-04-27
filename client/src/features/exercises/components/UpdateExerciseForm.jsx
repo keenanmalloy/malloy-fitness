@@ -5,7 +5,7 @@ import { useQueryClient } from 'react-query';
 import { useUpdateExerciseMutation } from 'features/exercises/api/useUpdateExerciseMutation';
 import { Button } from 'features/common/Button';
 import Select from 'react-select';
-import { EXERCISE_CATEGORIES } from 'features/environment';
+import { EXERCISE_CATEGORIES, EXERCISE_TRACKERS } from 'features/environment';
 import { useAddMuscleGroupToExerciseMutation } from 'features/exercises/api/useAddMuscleGroupToExerciseMutation';
 import { useRemoveMuscleGroupFromExerciseMutation } from 'features/exercises/api/useRemoveMuscleGroupFromExerciseMutation';
 
@@ -23,6 +23,15 @@ export const UpdateExerciseForm = ({
   const [secondary, setSecondary] = useState(exercise.secondary ?? []);
   const [isPrimaryError, setIsPrimaryError] = useState(false);
   const [isCategoryError, setIsCategoryError] = useState(false);
+
+  // tracking data
+  const [primaryTracker, setPrimaryTracker] = useState(
+    exercise.primary_tracker
+  );
+  const [secondaryTracker, setSecondaryTracker] = useState(
+    exercise.secondary_tracker
+  );
+
   const { isLoading, mutate, isError, error } = useUpdateExerciseMutation(
     exercise.exercise_id
   );
@@ -42,6 +51,8 @@ export const UpdateExerciseForm = ({
       description,
       category,
       profile,
+      primary_tracker: primaryTracker,
+      secondary_tracker: secondaryTracker,
     };
 
     mutate(
@@ -106,59 +117,106 @@ export const UpdateExerciseForm = ({
         onChange={(e) => setName(e.target.value)}
         value={name}
         label="Name"
-        isRequired={true}
         isTextArea={false}
       />
       <Input
         onChange={(e) => setDescription(e.target.value)}
         value={description}
         label="Description"
-        isRequired={true}
         isTextArea={true}
       />
 
       <div className="py-2">
-        <label>Category</label>
-        <Select
-          onChange={(data) => {
-            setCategory(data.value);
-            setIsCategoryError(false);
-          }}
-          name="category"
-          defaultValue={{
-            label: category,
-            value: category,
-          }}
-          styles={{
-            control: (base) => ({
-              ...base,
-              ...(isCategoryError
-                ? {
-                    borderColor: 'red-500',
-                    boxShadow: '0 0 0 1px red inset',
-                  }
-                : {}),
-            }),
-          }}
-          options={EXERCISE_CATEGORIES}
-        />
-        {isCategoryError && (
-          <div className="text-red-500 text-xs italic text-right">
-            Please select a category
+        <label>What to Track</label>
+
+        <div className="flex items-center flex-1 w-full">
+          <div className="flex-1 w-full">
+            <Select
+              onChange={(data) => {
+                setPrimaryTracker(data.value);
+              }}
+              isSearchable={false}
+              name="primaryTracker"
+              styles={{
+                control: (base) => ({
+                  ...base,
+                }),
+              }}
+              defaultValue={{
+                label: primaryTracker,
+                value: primaryTracker,
+              }}
+              options={EXERCISE_TRACKERS}
+            />
           </div>
-        )}
+          <div className="flex-1 w-full">
+            <Select
+              onChange={(data) => {
+                setSecondaryTracker(data.value);
+              }}
+              isSearchable={false}
+              name="secondaryTracker"
+              styles={{
+                control: (base) => ({
+                  ...base,
+                }),
+              }}
+              defaultValue={{
+                label: secondaryTracker,
+                value: secondaryTracker,
+              }}
+              options={EXERCISE_TRACKERS}
+            />
+          </div>
+        </div>
       </div>
 
-      <RadioGroup
-        label="Resistance profile: "
-        onChange={(option) => {
-          return setProfile(option);
-        }}
-        checked={profile}
-        isRequired={true}
-        options={['short', 'mid', 'long']}
-        name="resistance-range"
-      />
+      {(primaryTracker === 'weight' || secondaryTracker === 'weight') && (
+        <>
+          <div className="py-2">
+            <label>Category</label>
+            <Select
+              onChange={(data) => {
+                setCategory(data.value);
+                setIsCategoryError(false);
+              }}
+              name="category"
+              defaultValue={{
+                label: category,
+                value: category,
+              }}
+              styles={{
+                control: (base) => ({
+                  ...base,
+                  ...(isCategoryError
+                    ? {
+                        borderColor: 'red-500',
+                        boxShadow: '0 0 0 1px red inset',
+                      }
+                    : {}),
+                }),
+              }}
+              options={EXERCISE_CATEGORIES}
+            />
+            {isCategoryError && (
+              <div className="text-red-500 text-xs italic text-right">
+                Please select a category
+              </div>
+            )}
+          </div>
+
+          <RadioGroup
+            label="Resistance profile: "
+            onChange={(option) => {
+              return setProfile(option);
+            }}
+            checked={profile}
+            isRequired={true}
+            options={['short', 'mid', 'long']}
+            name="resistance-range"
+          />
+        </>
+      )}
 
       <div className="py-2">
         <label>Primary</label>

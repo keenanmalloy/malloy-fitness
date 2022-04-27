@@ -77,7 +77,7 @@ export const GetSingleExercise = ({ id }) => {
         <div className="flex justify-between">
           <h1 className="text-2xl pr-2 pb-2">{data.exercise.name}</h1>
           <span className="bg-blue-300 flex items-center text-white px-4 rounded-md max-h-8">
-            {data.exercise.category}
+            {data.exercise.category ?? 'other'}
           </span>
         </div>
         <p>{data.exercise.description}</p>
@@ -116,46 +116,49 @@ export const GetSingleExercise = ({ id }) => {
           </div>
         )}
 
-        <div className="mt-5">
-          <h2 className="text-lg">Profile</h2>
+        {(data.exercise.primary_tracker === 'weight' ||
+          data.exercise.secondary_tracker === 'weight') && (
+          <div className="mt-5">
+            <h2 className="text-lg">Profile</h2>
 
-          <div className="relative flex justify-between py-5">
-            <div>
-              <div
-                className={`p-2 ${
-                  data.exercise.profile.toLowerCase() === 'short'
-                    ? 'bg-blue-300'
-                    : 'bg-gray-200'
-                } rounded-full w-5 h-5 z-10`}
-              />
-              <p className="pt-2 text-xs">Short</p>
+            <div className="relative flex justify-between py-5">
+              <div>
+                <div
+                  className={`p-2 ${
+                    data.exercise.profile?.toLowerCase() === 'short'
+                      ? 'bg-blue-300'
+                      : 'bg-gray-200'
+                  } rounded-full w-5 h-5 z-10`}
+                />
+                <p className="pt-2 text-xs">Short</p>
+              </div>
+
+              <div>
+                <div
+                  className={`p-2 ${
+                    data.exercise.profile?.toLowerCase() === 'mid'
+                      ? 'bg-blue-300'
+                      : 'bg-gray-200'
+                  } rounded-full w-5 h-5 z-10`}
+                />
+                <p className="pt-2 text-xs">Mid</p>
+              </div>
+
+              <div>
+                <div
+                  className={`p-2 ${
+                    data.exercise.profile?.toLowerCase() === 'long'
+                      ? 'bg-blue-300'
+                      : 'bg-gray-200'
+                  } rounded-full w-5 h-5 z-10`}
+                />
+                <p className="pt-2 text-xs">Long</p>
+              </div>
+
+              <div className="absolute top-7 right-4 left-4 border-2 h-0.5 bg-black -z-50"></div>
             </div>
-
-            <div>
-              <div
-                className={`p-2 ${
-                  data.exercise.profile.toLowerCase() === 'mid'
-                    ? 'bg-blue-300'
-                    : 'bg-gray-200'
-                } rounded-full w-5 h-5 z-10`}
-              />
-              <p className="pt-2 text-xs">Mid</p>
-            </div>
-
-            <div>
-              <div
-                className={`p-2 ${
-                  data.exercise.profile.toLowerCase() === 'long'
-                    ? 'bg-blue-300'
-                    : 'bg-gray-200'
-                } rounded-full w-5 h-5 z-10`}
-              />
-              <p className="pt-2 text-xs">Long</p>
-            </div>
-
-            <div className="absolute top-7 right-4 left-4 border-2 h-0.5 bg-black -z-50"></div>
           </div>
-        </div>
+        )}
 
         <div className="py-5">
           <h2 className="text-lg">Muscle Groups</h2>

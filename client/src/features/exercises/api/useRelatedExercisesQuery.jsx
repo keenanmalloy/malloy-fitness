@@ -9,5 +9,6 @@ const fetchExercises = async (ids) => {
 export const useRelatedExercisesQuery = (ids) => {
   return useQuery(['fetchExerciseByIds', ids], () => fetchExercises(ids), {
     refetchOnWindowFocus: false,
+    enabled: ids.length > 0,
   });
 };

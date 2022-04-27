@@ -67,6 +67,8 @@ const getExercisesByIds = async (req: Request, res: Response) => {
       e.name,
       e.exercise_id,
       e.profile,
+      e.primary_tracker,
+      e.secondary_tracker,
       e.category,
       e.created_by,
       e.description,
@@ -106,6 +108,8 @@ const retrieveExercises = async (req: Request, res: Response) => {
       e.name,
       e.exercise_id,
       e.profile,
+      e.primary_tracker,
+      e.secondary_tracker,
       e.category,
       e.created_by,
       e.description,
@@ -125,7 +129,12 @@ const retrieveExercises = async (req: Request, res: Response) => {
   ${generateCategoryFilter(categoryQuery)} 
   ${generateProfileFilter(profileQuery)}
   ${generateViewFilter(viewQuery)}
-  ${generateSortByFilter(sortByQuery)}     
+  ${generateSortByFilter(sortByQuery)}
+  ${
+    !categoryQuery && !profileQuery && !viewQuery && !sortByQuery
+      ? `ORDER BY e.updated_at DESC`
+      : ''
+  }     
   `;
 
   const accountId = res.locals.state.account.account_id;
@@ -152,6 +161,8 @@ const searchExercises = async (req: Request, res: Response) => {
       e.name,
       e.exercise_id,
       e.profile,
+      e.primary_tracker,
+      e.secondary_tracker,
       e.category,
       e.created_by,
       e.description,
@@ -193,6 +204,8 @@ const formatExerciseResponse = (data: any[]) => {
         name,
         video,
         exercise_id,
+        primary_tracker,
+        secondary_tracker,
         profile,
         category,
         created_by,
@@ -203,6 +216,8 @@ const formatExerciseResponse = (data: any[]) => {
           name,
           video,
           exercise_id,
+          primary_tracker,
+          secondary_tracker,
           profile,
           category,
           created_by,
