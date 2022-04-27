@@ -15,8 +15,6 @@ export const GetSelectedDailyOverview = ({ selected }) => {
     return <div>Error</div>;
   }
 
-  console.log({ data, isError, error });
-
   return (
     <section className="flex w-100 items-center justify-center">
       <div className="max-w-xl flex-1">

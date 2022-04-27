@@ -11,10 +11,33 @@ export const AccountPanel = ({ account }) => {
   const [description, setDescription] = React.useState(account.description);
   const [phone, setPhone] = React.useState(account.phone);
   const [avatar, setAvatar] = React.useState(account.avatar_url);
+  const [weight, setWeight] = React.useState(account.weight);
+  const [height, setHeight] = React.useState(account.height);
+  const [dob, setDob] = React.useState(account.dob);
+  const [gender, setGender] = React.useState(account.gender);
+  const [city, setCity] = React.useState(account.city);
+  const [country, setCountry] = React.useState(account.country);
 
   return (
-    <section className="p-5">
-      <div>
+    <section className="px-5">
+      <div className="pt-2 flex justify-between">
+        <Avatar
+          onChange={(url) => setAvatar(url)}
+          value={avatar}
+          field="avatar_url"
+          prevValue={account.avatar_url}
+        />
+        <AccountField
+          label="Description"
+          onChange={(e) => setDescription(e.target.value)}
+          value={description ?? ''}
+          field="description"
+          isTextArea
+          prevValue={account.description}
+          className="min-h-60"
+        />
+      </div>
+      <div className="flex">
         <AccountField
           label="First name"
           onChange={(e) => setGivenName(e.target.value)}
@@ -40,26 +63,6 @@ export const AccountPanel = ({ account }) => {
           prevValue={account.name}
         />
       </div>
-      <div className="pt-2">
-        <label>Photo</label>
-        <Avatar
-          onChange={(url) => setAvatar(url)}
-          value={avatar}
-          field="avatar_url"
-          prevValue={account.avatar_url}
-        />
-      </div>
-      <div>
-        <AccountField
-          label="Description"
-          onChange={(e) => setDescription(e.target.value)}
-          value={description ?? ''}
-          field="description"
-          isTextArea
-          prevValue={account.description}
-        />
-      </div>
-
       <div>
         <Input
           label={'Email'}
@@ -67,6 +70,63 @@ export const AccountPanel = ({ account }) => {
           value={account.email}
           isDisabled
           prevValue={account.email}
+        />
+      </div>
+      <div className="flex">
+        <AccountField
+          label="Weight"
+          type="number"
+          onChange={(e) => setWeight(e.target.value)}
+          value="173"
+          field="given_name"
+          prevValue={account.given_name}
+        />
+
+        <AccountField
+          label="Date of Birth"
+          type="date"
+          onChange={(e) => setDob(e.target.value)}
+          value="1997-05-14"
+          field="family_name"
+          prevValue={account.family_name}
+        />
+      </div>
+      <div className="flex">
+        <AccountField
+          label="Gender"
+          type="select"
+          onChange={(e) => setGender(e.target.value)}
+          value="Male"
+          field="given_name"
+          prevValue={account.given_name}
+        />
+
+        <AccountField
+          label="Height"
+          type="number"
+          onChange={(e) => setHeight(e.target.value)}
+          value="6'0"
+          field="family_name"
+          prevValue={account.family_name}
+        />
+      </div>
+      <div className="flex">
+        <AccountField
+          label="City"
+          type="text"
+          onChange={(e) => setCity(e.target.value)}
+          value="Burnaby"
+          field="given_name"
+          prevValue={account.given_name}
+        />
+
+        <AccountField
+          label="Country"
+          type="text"
+          onChange={(e) => setCountry(e.target.value)}
+          value="Canada"
+          field="family_name"
+          prevValue={account.family_name}
         />
       </div>
       <div>
