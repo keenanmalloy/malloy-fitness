@@ -74,6 +74,7 @@ const getExercisesByIds = async (req: Request, res: Response) => {
       e.description,
       e.video,
       e.view,
+      e.type,
       mg.muscle_group_id,
       mg.name AS muscle_group_name,
       mg.description AS muscle_group_description,
@@ -115,6 +116,7 @@ const retrieveExercises = async (req: Request, res: Response) => {
       e.description,
       e.video,
       e.view,
+      e.type,
       mg.muscle_group_id,
       mg.name AS muscle_group_name,
       mg.description AS muscle_group_description,
@@ -168,6 +170,7 @@ const searchExercises = async (req: Request, res: Response) => {
       e.description,
       e.video,
       e.view,
+      e.type,
       mg.muscle_group_id,
       mg.name AS muscle_group_name,
       mg.description AS muscle_group_description,
@@ -210,6 +213,7 @@ const formatExerciseResponse = (data: any[]) => {
         category,
         created_by,
         description,
+        type,
         view,
       }) => {
         return {
@@ -223,6 +227,7 @@ const formatExerciseResponse = (data: any[]) => {
           created_by,
           description,
           view,
+          type,
           primary: data
             .filter(
               (e) =>

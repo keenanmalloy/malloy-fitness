@@ -43,6 +43,7 @@ CREATE TABLE IF NOT EXISTS exercises (
     profile character varying(30),
     primary_tracker character varying(30),
     secondary_tracker character varying(30),
+    type text, -- hypertrophy, strength, cardio, physiotherapy
     created_by bigint
 );
 

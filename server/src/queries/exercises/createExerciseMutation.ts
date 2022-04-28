@@ -11,6 +11,7 @@ interface createExercise {
   profile: string;
   primaryTracker: string;
   secondaryTracker: string;
+  type: string;
 }
 
 const createExerciseSchema = Joi.object({
@@ -22,6 +23,9 @@ const createExerciseSchema = Joi.object({
   primary: Joi.array().items(Joi.string(), Joi.number()).optional(),
   secondary: Joi.array().items(Joi.string(), Joi.number()).optional(),
   profile: Joi.string().allow('').valid('short', 'mid', 'long').optional(),
+  type: Joi.string()
+    .valid('strength', 'hypertrophy', 'physiotherapy', 'cardio')
+    .required(),
 });
 
 const createExerciseMuscleGroups = async (
@@ -84,13 +88,14 @@ export const createExerciseMutation = async (
       profile,
       primaryTracker,
       secondaryTracker,
+      type,
     } = data;
 
     const createdBy = res.locals.state.account.account_id;
 
     const query = `
       WITH 
-        data(name, description, category, profile, created_by, primary_tracker, secondary_tracker) AS (
+        data(name, description, category, profile, created_by, primary_tracker, secondary_tracker, type) AS (
           VALUES                           
               (
                 '${name}', 
@@ -99,11 +104,12 @@ export const createExerciseMutation = async (
                 ${!!category ? `'${profile}'` : null}, 
                 ${createdBy}, 
                 '${primaryTracker}', 
-                ${!!secondaryTracker ? `'${secondaryTracker}'` : null}
+                ${!!secondaryTracker ? `'${secondaryTracker}'` : null},
+                '${type}'
               )
           )
-        INSERT INTO exercises (name, description, category, profile, created_by, primary_tracker, secondary_tracker)
-          SELECT name, description, category, profile, created_by, primary_tracker, secondary_tracker
+        INSERT INTO exercises (name, description, category, profile, created_by, primary_tracker, secondary_tracker, type)
+          SELECT name, description, category, profile, created_by, primary_tracker, secondary_tracker, type
             FROM data
           RETURNING *
       `;
@@ -112,7 +118,8 @@ export const createExerciseMutation = async (
       const data = await db.query(query);
       const exerciseId = data.rows[0].exercise_id;
 
-      const hasMG = !!primary.length || !!secondary.length;
+      const hasMG =
+        primary && secondary && (!!primary.length || !!secondary.length);
       const muscleGroups = hasMG
         ? await createExerciseMuscleGroups(exerciseId, primary, secondary)
         : [];

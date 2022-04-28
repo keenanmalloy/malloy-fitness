@@ -2,10 +2,11 @@ import { Skeleton } from 'features/common/Skeleton';
 import React from 'react';
 import { EditMuscleGroup } from 'features/muscle-groups/components/EditMuscleGroup';
 import { useMuscleGroupQuery } from 'features/muscle-groups/api/useMuscleGroupQuery';
-import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 export const MuscleGroup = ({ muscleGroupId }) => {
   const { data, isError, isFetching } = useMuscleGroupQuery(muscleGroupId);
+  const router = useRouter();
 
   if (isFetching) {
     return (
@@ -41,11 +42,13 @@ export const MuscleGroup = ({ muscleGroupId }) => {
   return (
     <section className="p-5 relative">
       <header className="flex justify-between">
-        <Link href={`/muscle-groups/`}>
-          <button className="bg-white  text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-32">
-            Back
-          </button>
-        </Link>
+        <button
+          className="bg-white  text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-32"
+          onClick={() => router.back()}
+        >
+          Back
+        </button>
+
         {data.role === 'developer' && (
           <EditMuscleGroup
             name={data.muscleGroup.name}

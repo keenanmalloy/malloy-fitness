@@ -1,8 +1,9 @@
 import { Button } from 'features/common/Button';
 import { useMuscleGroupsQuery } from 'features/muscle-groups/api/useMuscleGroupsQuery';
-import Modal from 'features/common/Modal';
-import { CreateExerciseForm } from 'features/exercises/components/CreateExerciseForm';
+import FullPageModal from 'features/common/FullPageModal';
 import { useState } from 'react';
+import { CreateExerciseForms } from './CreateExerciseForms';
+import Modal from 'features/common/Modal';
 
 export const CreateExercise = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,17 +22,17 @@ export const CreateExercise = () => {
       <Button onClick={() => setIsOpen(true)} className="w-full">
         Create Exercise
       </Button>
-      <Modal
+      <FullPageModal
         isOpen={isOpen}
-        title="Create an exercise"
-        description="A form to create an exercise"
+        title=""
+        description=""
         closeModal={() => setIsOpen(false)}
       >
-        <CreateExerciseForm
+        <CreateExerciseForms
           muscleGroups={data.muscleGroups}
           setIsOpen={setIsOpen}
         />
-      </Modal>
+      </FullPageModal>
     </>
   );
 };
