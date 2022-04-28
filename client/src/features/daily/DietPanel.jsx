@@ -7,9 +7,11 @@ export const DietPanel = () => {
   const [carbs, setCarbs] = useState(77);
 
   return (
-    <div className="border-b border-slate-400 pt-24 mt-2">
-      <DietStatistic progress={calories} />
-
+    <div className="flex flex-col justify-center items-center">
+      <div className="text-2xl text-slate-600 pt-28">Nutrition</div>
+      <div className="border-b border-slate-400">
+        <DietStatistic progress={calories} />
+      </div>
       <div className="flex justify-center">
         <DietStatistic progress={protein} size="small" label="Protein" />
         <DietStatistic progress={fats} size="small" label="Fats" />
