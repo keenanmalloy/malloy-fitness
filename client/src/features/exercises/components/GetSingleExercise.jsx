@@ -1,5 +1,4 @@
 import React from 'react';
-import { DeleteExercise } from 'features/exercises/components/DeleteExercise';
 import { useExerciseQuery } from 'features/exercises/api/useExerciseQuery';
 import { UpdateExercise } from 'features/exercises/components/UpdateExercise';
 import { useMuscleGroupsQuery } from 'features/muscle-groups/api/useMuscleGroupsQuery';
@@ -9,10 +8,13 @@ import Upload from 'features/Upload';
 import { useUpdateExerciseMutation } from '../api/useUpdateExerciseMutation';
 import { useQueryClient } from 'react-query';
 import { GetRelatedExercises } from './GetRelatedExercises';
+import { IoIosArrowRoundForward } from 'react-icons/io';
+import { useRouter } from 'next/router';
 
 export const GetSingleExercise = ({ id }) => {
   const { data, isError, isLoading } = useExerciseQuery(id);
   const queryClient = useQueryClient();
+  const router = useRouter();
   const {
     data: mgData,
     isError: mgIsError,
@@ -59,11 +61,12 @@ export const GetSingleExercise = ({ id }) => {
   return (
     <section className="p-5 relative">
       <header className="flex justify-between">
-        <Link href={`/exercises/`}>
-          <button className="bg-white  text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-32">
-            Back
-          </button>
-        </Link>
+        <button
+          className="bg-white  text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-32"
+          onClick={() => router.back()}
+        >
+          Back
+        </button>
         {(data.role === 'developer' || data.exercise.view === 'private') && (
           <UpdateExercise
             exercise={data.exercise}
@@ -161,23 +164,55 @@ export const GetSingleExercise = ({ id }) => {
         )}
 
         <div className="py-5">
-          <h2 className="text-lg">Muscle Groups</h2>
-          <ul className="pl-5">
-            <h3>primary muscle groups:</h3>
-
+          <h2 className="py-3 text-lg underline">Muscle Groups</h2>
+          <ul className="pl-5 flex-col space-y-1">
+            <h3 className="py-3 text-sm underline capitalize">primary</h3>
+            {!data.exercise.primary.length && (
+              <li className="border-solid py-4 bg-gray-50 flex justify-between px-3 rounded-sm">
+                <p>None</p>
+              </li>
+            )}
             {data.exercise.primary.map((group) => (
-              <li key={group.muscle_group_id}>- {group.name}</li>
+              <Link
+                href={`/muscle-groups/${group.muscle_group_id}`}
+                as={`/muscle-groups/${group.muscle_group_id}`}
+                key={group.muscle_group_id}
+              >
+                <li className="border-solid py-4 bg-gray-50 flex justify-between px-3 rounded-sm">
+                  <p>{group.name}</p>
+                  <IoIosArrowRoundForward />
+                </li>
+              </Link>
             ))}
           </ul>
-          <ul className="pl-5 pt-5">
-            <h3>secondary muscle groups:</h3>
+
+          <ul className="pl-5 flex-col space-y-1">
+            <h3 className="py-3 text-sm underline capitalize">secondary</h3>
+            {!data.exercise.secondary.length && (
+              <li className="border-solid py-4 bg-gray-50 flex justify-between px-3 rounded-sm">
+                <p>None</p>
+              </li>
+            )}
             {data.exercise.secondary.map((group) => (
-              <li key={group.muscle_group_id}>- {group.name}</li>
+              <Link
+                href={`/muscle-groups/${group.muscle_group_id}`}
+                as={`/muscle-groups/${group.muscle_group_id}`}
+                key={group.muscle_group_id}
+              >
+                <li className="border-solid py-4 bg-gray-50 flex justify-between px-3 rounded-sm">
+                  <p>{group.name}</p>
+                  <IoIosArrowRoundForward />
+                </li>
+              </Link>
             ))}
           </ul>
         </div>
 
         <GetRelatedExercises
+          type={data.exercise.type}
+          profile={data.exercise.profile}
+          category={data.exercise.category}
+          exerciseId={data.exercise.exercise_id}
           muscleGroupIds={[
             ...data.exercise.secondary.map((mg) => mg.muscle_group_id),
             ...data.exercise.primary.map((mg) => mg.muscle_group_id),
