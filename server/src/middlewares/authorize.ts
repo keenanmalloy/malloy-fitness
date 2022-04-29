@@ -1,7 +1,7 @@
 import { NextFunction, Response, Request } from 'express';
-import { authorizeSessionQuery } from 'queries/authorize/authorizeSessionQuery';
-import { authorizeExerciseQuery } from 'queries/authorize/authorizeExerciseQuery';
-import { authorizeWorkoutQuery } from 'queries/authorize/authorizeWorkoutQuery';
+import { authorizeSessionQuery } from 'controllers/authorize/authorizeSessionQuery';
+import { authorizeExerciseQuery } from 'controllers/authorize/authorizeExerciseQuery';
+import { authorizeWorkoutQuery } from 'controllers/authorize/authorizeWorkoutQuery';
 
 /**
  * Checks the DB for authorization of resource.

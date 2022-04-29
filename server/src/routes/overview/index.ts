@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { authenticate } from 'middlewares/authenticate';
-import { retrieveDailyOverviewQuery } from 'queries/overview/retrieveDailyOverviewQuery';
+import { retrieveDailyOverviewQuery } from 'controllers/overview/retrieveDailyOverviewQuery';
 
 const router = Router();
 

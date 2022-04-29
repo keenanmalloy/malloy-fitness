@@ -82,20 +82,32 @@ const SessionTimer = ({ startedAt, workoutId, endedAt }) => {
 
   return (
     <div className="flex">
-      <div className="px-4">
+      <div className="px-1">
         <h2>{formatTime(time)}</h2>
       </div>
       <div className="flex">
-        <BsFillStopFill onClick={() => setIsOpen(!isOpen)} />
+        <button onClick={() => setIsOpen(!isOpen)}>
+          <BsFillStopFill />
+        </button>
         <Modal
           isOpen={isOpen}
           title="Finish workout"
           description={'Are you sure you want to stop the workout early?'}
           closeModal={() => setIsOpen(false)}
         >
-          <div className="flex justify-center">
-            <Button onClick={() => setIsOpen(false)}>No</Button>
-            <Button onClick={() => handleStop()}>Yes</Button>
+          <div className="flex justify-between py-5">
+            <Button
+              className="flex justify-between px-10"
+              onClick={() => setIsOpen(false)}
+            >
+              No
+            </Button>
+            <Button
+              className="flex justify-between px-10"
+              onClick={() => handleStop()}
+            >
+              Yes
+            </Button>
             {error && <p>Something went wrong</p>}
           </div>
         </Modal>

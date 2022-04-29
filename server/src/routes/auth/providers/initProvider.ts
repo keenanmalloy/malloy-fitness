@@ -5,11 +5,11 @@ import { Strategy } from 'passport-google-oauth20';
 import {
   createAccountProviderMutation,
   createAccountWithProviderMutation,
-} from 'queries/createAccountMutation';
+} from 'controllers/createAccountMutation';
 import {
   retrievAccountByEmailQuery,
   retrieveAccountByProviderQuery,
-} from 'queries/retrieveAccountQuery';
+} from 'controllers/retrieveAccountQuery';
 import { setLoginSession } from 'sessions';
 
 interface Props {

@@ -1,7 +1,8 @@
 import { Router } from 'express';
 import { authenticate } from 'middlewares/authenticate';
 import { authorize } from 'middlewares/authorize';
-import { retrieveExerciseSessionQuery } from 'queries/sessions/retrieveExerciseSessionQuery';
+import { rotateSessionExercise } from 'controllers/rotateSessionExercise';
+import { retrieveExerciseSessionQuery } from 'controllers/sessions/retrieveExerciseSessionQuery';
 
 const router = Router();
 
@@ -15,6 +16,21 @@ router.get(
       res,
       req.params.sessionId,
       req.params.exerciseId
+    );
+  }
+);
+
+// Rotate exercise in the session
+router.put(
+  '/:sessionId/exercises/:exerciseId',
+  authenticate,
+  authorize,
+  async (req, res) => {
+    await rotateSessionExercise(
+      res,
+      req.params.sessionId,
+      req.params.exerciseId,
+      req.body
     );
   }
 );

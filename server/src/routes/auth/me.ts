@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { authenticate } from 'middlewares/authenticate';
-import { retrieveMeQuery } from 'queries/retrieveAccountQuery';
-import { updateAccountMutation } from 'queries/updateAccountMutation';
+import { retrieveMeQuery } from 'controllers/retrieveAccountQuery';
+import { updateAccountMutation } from 'controllers/updateAccountMutation';
 
 const router = Router();
 

@@ -1,12 +1,12 @@
 import { Router } from 'express';
 import { authenticate } from 'middlewares/authenticate';
 import { authorize } from 'middlewares/authorize';
-import { createExerciseMutation } from 'queries/exercises/createExerciseMutation';
-import { deleteExerciseMutation } from 'queries/exercises/deleteExerciseMutation';
-import { retrieveExerciseQuery } from 'queries/exercises/retrieveExerciseQuery';
-import { retrieveExercisesByMuscleGroupQuery } from 'queries/exercises/retrieveExercisesByMuscleGroupsQuery';
-import { retrieveExercisesQuery } from 'queries/exercises/retrieveExercisesQuery';
-import { updateExerciseMutation } from 'queries/exercises/updateExerciseMutation';
+import { createExerciseMutation } from 'controllers/exercises/createExerciseMutation';
+import { deleteExerciseMutation } from 'controllers/exercises/deleteExerciseMutation';
+import { retrieveExerciseQuery } from 'controllers/exercises/retrieveExerciseQuery';
+import { retrieveExercisesByMuscleGroupQuery } from 'controllers/exercises/retrieveExercisesByMuscleGroupsQuery';
+import { retrieveExercisesQuery } from 'controllers/exercises/retrieveExercisesQuery';
+import { updateExerciseMutation } from 'controllers/exercises/updateExerciseMutation';
 import muscleGroups from './muscle-groups';
 
 const router = Router();
