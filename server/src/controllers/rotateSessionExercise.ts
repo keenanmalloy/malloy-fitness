@@ -80,10 +80,8 @@ const onRelatedExerciseChangeClone = async ({
   sessionId,
   exerciseId,
 }: CloneMutationParams) => {
-  const { newWorkoutId, oldWorkout } = await cloneWorkout({
-    accountId,
-    workoutId,
-  });
+  const oldWorkout = await retrieveWorkoutQuery(workoutId, accountId);
+  if (!oldWorkout) throw new Error('Workout not found');
 
   const exerciseData = await getExerciseWithMuscleGroups({
     exerciseId,
@@ -106,9 +104,18 @@ const onRelatedExerciseChangeClone = async ({
     type: exerciseData.type,
   });
 
-  const rowLength = relatedExercises.rows.length;
+  const oldExerciseIds = oldWorkout.workoutExercises.map((we) => we.exerciseId);
+
+  // Filter out exercises that are already in the workout so we don't add duplicates
+  const filteredRelatedExercises = relatedExercises.rows.filter(
+    (re) => !oldExerciseIds.includes(re.exercise_id)
+  );
+
+  const rowLength = filteredRelatedExercises.length;
+  if (!rowLength) throw new Error('No related exercises found');
+
   const randomRelatedExercise =
-    relatedExercises.rows[Math.floor(Math.random() * rowLength)];
+    filteredRelatedExercises[Math.floor(Math.random() * rowLength)];
 
   // get workout exercise with id
   const workoutExercise = oldWorkout.workoutExercises.find(
@@ -129,6 +136,11 @@ const onRelatedExerciseChangeClone = async ({
     ...oldWorkout.workoutExercises.filter((we) => we.exerciseId !== exerciseId),
     formattedRandomRelatedExercise,
   ];
+
+  const { newWorkoutId } = await cloneWorkout({
+    accountId,
+    workoutId,
+  });
 
   const generateWeValues = () => {
     return newWorkoutExercises
@@ -178,6 +190,9 @@ const onRelatedExerciseChangeSwap = async ({
   sessionId,
   exerciseId,
 }: CloneMutationParams) => {
+  const oldWorkout = await retrieveWorkoutQuery(workoutId, accountId);
+  if (!oldWorkout) throw new Error('Workout not found');
+
   const exerciseData = await getExerciseWithMuscleGroups({
     exerciseId,
     accountId,
@@ -199,11 +214,18 @@ const onRelatedExerciseChangeSwap = async ({
     type: exerciseData.type,
   });
 
-  const rowLength = relatedExercises.rows.length;
+  const oldExerciseIds = oldWorkout.workoutExercises.map((we) => we.exerciseId);
+
+  // Filter out exercises that are already in the workout so we don't add duplicates
+  const filteredRelatedExercises = relatedExercises.rows.filter(
+    (re) => !oldExerciseIds.includes(re.exercise_id)
+  );
+
+  const rowLength = filteredRelatedExercises.length;
   if (!rowLength) throw new Error('No related exercises found');
 
   const randomRelatedExercise =
-    relatedExercises.rows[Math.floor(Math.random() * rowLength)];
+    filteredRelatedExercises[Math.floor(Math.random() * rowLength)];
 
   const workout = await retrieveWorkoutQuery(workoutId, accountId);
   if (!workout) throw new Error('Workout not found');
