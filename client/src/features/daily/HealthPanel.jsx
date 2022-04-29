@@ -2,9 +2,7 @@ import React from 'react';
 import { AuthorizeGoogleFitButton } from './AuthorizeGoogleFitButton';
 
 export const HealthPanel = ({ data }) => {
-  if (data.steps === null) {
-    return <AuthorizeGoogleFitButton />;
-  }
+  
 
   return (
     <div>

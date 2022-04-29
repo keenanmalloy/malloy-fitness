@@ -2,10 +2,6 @@ import React from 'react';
 import { AuthorizeGoogleFitButton } from './AuthorizeGoogleFitButton';
 
 export const SleepPanel = ({ data }) => {
-  if (data.steps === null) {
-    return <AuthorizeGoogleFitButton />;
-  }
-
   return (
     <div>
       <div className="text-center text-2xl text-slate-600">Sleep</div>
