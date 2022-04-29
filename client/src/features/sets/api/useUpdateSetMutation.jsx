@@ -2,9 +2,10 @@ import { apiClient } from 'config/axios';
 import { useMutation, useQueryClient } from 'react-query';
 
 const updateSet = async ({ sessionId, body, setId }) => {
-  const { data } = await apiClient.put(`/sessions/${sessionId}/sets/${setId}`, {
-    body,
-  });
+  const { data } = await apiClient.put(
+    `/sessions/${sessionId}/sets/${setId}`,
+    body
+  );
   return data;
 };
 

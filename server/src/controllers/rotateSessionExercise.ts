@@ -4,22 +4,48 @@ import { cloneWorkout } from 'queries/cloneWorkout';
 import { doesWorkoutHaveSessions } from 'queries/doesWorkoutHaveSessions';
 import { getExerciseWithMuscleGroups } from 'queries/getExerciseWithMuscleGroups';
 import { getRelatedExercises } from 'queries/getRelatedExercises';
+import { retrieveWorkoutQuery } from 'queries/retrieveWorkoutQuery';
 import { updateSessionWorkout } from 'queries/updateSessionWorkout';
+import { updateWorkoutExercise } from 'queries/updateWorkoutExercise';
 
 export const rotateSessionExercise = async (
   res: Response,
   sessionId: string,
   exerciseId: string,
   body: {
-    workoutId: string;
+    workout_id: string;
   }
 ): Promise<Response> => {
   const accountId = res.locals.state.account.account_id;
-  const workoutId = body.workoutId;
+  const workoutId = body.workout_id;
 
-  const hasSessions = await doesWorkoutHaveSessions(workoutId);
-  if (hasSessions) {
-    const data = await onRelatedExerciseChangeClone({
+  try {
+    const { hasSessions, sessionCount } = await doesWorkoutHaveSessions(
+      workoutId
+    );
+
+    if (hasSessions && sessionCount > 1) {
+      console.warn('WORKOUT ALREADY HAS SESSIONS - NEED TO CLONE', {
+        need_to_clone: sessionCount > 1,
+      });
+
+      const data = await onRelatedExerciseChangeClone({
+        workoutId,
+        accountId,
+        exerciseId,
+        sessionId,
+      });
+
+      return res.status(201).json({
+        role: res.locals.state.account.role,
+        message: 'Successfully cloned workout and changed exercise in session.',
+        status: 'success',
+        exerciseId: data,
+      });
+    }
+
+    console.warn('REPLACING EXERCISE IN SESSION');
+    const newExerciseId = await onRelatedExerciseChangeSwap({
       workoutId,
       accountId,
       exerciseId,
@@ -28,18 +54,17 @@ export const rotateSessionExercise = async (
 
     return res.status(201).json({
       role: res.locals.state.account.role,
-      message: 'Successfully cloned workout',
+      message: 'Successfully changed exercise in session.',
       status: 'success',
-      workout: data,
+      exerciseId: newExerciseId,
+    });
+  } catch (error) {
+    const errorMessage = (error as unknown as { message: string })?.message;
+    return res.status(500).json({
+      error: 'Something went wrong',
+      message: errorMessage,
     });
   }
-
-  return res.status(201).json({
-    role: res.locals.state.account.role,
-    message: 'Successfully cloned workout.',
-    status: 'success',
-    workout: '',
-  });
 };
 
 interface CloneMutationParams {
@@ -85,9 +110,24 @@ const onRelatedExerciseChangeClone = async ({
   const randomRelatedExercise =
     relatedExercises.rows[Math.floor(Math.random() * rowLength)];
 
+  // get workout exercise with id
+  const workoutExercise = oldWorkout.workoutExercises.find(
+    (we) => we.exerciseId === exerciseId
+  );
+  if (!workoutExercise) throw new Error('WorkoutExercise not found');
+  const formattedRandomRelatedExercise = {
+    ...randomRelatedExercise,
+    exerciseId: randomRelatedExercise.exercise_id,
+    order: workoutExercise.order,
+    priority: workoutExercise.priority,
+    repetitions: workoutExercise.repetitions,
+    reps_in_reserve: workoutExercise.reps_in_reserve,
+    rest_period: workoutExercise.rest_period,
+  };
+
   const newWorkoutExercises = [
     ...oldWorkout.workoutExercises.filter((we) => we.exerciseId !== exerciseId),
-    randomRelatedExercise,
+    formattedRandomRelatedExercise,
   ];
 
   const generateWeValues = () => {
@@ -129,5 +169,55 @@ const onRelatedExerciseChangeClone = async ({
     workoutId: newWorkoutId,
   });
 
-  return newWorkoutId;
+  return randomRelatedExercise.exercise_id;
+};
+
+const onRelatedExerciseChangeSwap = async ({
+  workoutId,
+  accountId,
+  sessionId,
+  exerciseId,
+}: CloneMutationParams) => {
+  const exerciseData = await getExerciseWithMuscleGroups({
+    exerciseId,
+    accountId,
+  });
+
+  const relatedExercises = await getRelatedExercises({
+    accountId: accountId,
+    categoryQuery: exerciseData.category,
+    exerciseIdQuery: exerciseData.exercise_id,
+    mgIds: [
+      ...exerciseData.primary.map(
+        (mg: { muscle_group_id: any }) => mg.muscle_group_id
+      ),
+      ...exerciseData.secondary.map(
+        (mg: { muscle_group_id: any }) => mg.muscle_group_id
+      ),
+    ],
+    profileQuery: exerciseData.profile,
+    type: exerciseData.type,
+  });
+
+  const rowLength = relatedExercises.rows.length;
+  if (!rowLength) throw new Error('No related exercises found');
+
+  const randomRelatedExercise =
+    relatedExercises.rows[Math.floor(Math.random() * rowLength)];
+
+  const workout = await retrieveWorkoutQuery(workoutId, accountId);
+  if (!workout) throw new Error('Workout not found');
+
+  // get workout exercise with id
+  const workoutExercise = workout.workoutExercises.find(
+    (we) => we.exerciseId === exerciseId
+  );
+  if (!workoutExercise) throw new Error('WorkoutExercise not found');
+
+  const newExerciseId = await updateWorkoutExercise({
+    exerciseId: randomRelatedExercise.exercise_id,
+    workoutExerciseId: workoutExercise.workout_exercise_id,
+  });
+
+  return newExerciseId;
 };

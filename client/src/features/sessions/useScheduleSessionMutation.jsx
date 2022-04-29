@@ -1,14 +1,12 @@
+import { apiClient } from 'config/axios';
 import { useMutation, useQueryClient } from 'react-query';
 
 const scheduleSession = async ({ workoutId, date }) => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/sessions/`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    credentials: 'include',
-    body: JSON.stringify({ workout_id: workoutId, session_dt: date }),
+  const { data } = await apiClient.post(`/sessions/`, {
+    workout_id: workoutId,
+    session_dt: date,
   });
-  const json = await res.json();
-  return json;
+  return data;
 };
 
 export const useScheduleSessionMutation = (workoutId) => {

@@ -13,7 +13,8 @@ export const retrieveWorkoutQuery = async (
       workouts.created_by,
       we.priority,
       we.order,
-      we.exercise_id
+      we.exercise_id,
+      we.workout_exercise_id
     FROM workouts
     LEFT OUTER JOIN workout_exercises we on workouts.workout_id = we.workout_id
     WHERE workouts.workout_id = $1`;
@@ -39,6 +40,7 @@ export const retrieveWorkoutQuery = async (
             repetitions: we.repetitions,
             reps_in_reserve: we.reps_in_reserve,
             rest_period: we.rest_period,
+            workout_exercise_id: we.workout_exercise_id,
           };
         });
 
