@@ -16,14 +16,14 @@ export const SessionExercise = ({
   return (
     <main className="pb-20">
       <div className="px-3 py-5 bg-gray-50">
-        <OverviewRow
+        {/* <OverviewRow
           order="A1"
           name={exercise.name}
           sets="sets 3"
           reps="reps 10-12"
           rir="rir 1"
           rest="REST 90 seconds"
-        />
+        /> */}
       </div>
 
       {!!exercise.video && (
@@ -42,12 +42,12 @@ export const SessionExercise = ({
       </div>
       <GetExerciseSets sessionId={sessionId} exerciseId={exerciseId} />
 
-      {/* <Notes
+      <Notes
         exercise={exercise}
         exNotes={exercise.notes}
         sessionId={sessionId}
         exerciseId={exerciseId}
-      /> */}
+      />
 
       <Footer nextEx={nextEx} prevEx={prevEx} sessionId={sessionId} />
     </main>

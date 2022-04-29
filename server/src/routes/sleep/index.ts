@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { authenticate } from 'middlewares/authenticate';
-import { logSleepMutation } from 'queries/sleep/logSleepMutation';
+import { logSleepMutation } from 'controllers/sleep/logSleepMutation';
 
 const router = Router();
 

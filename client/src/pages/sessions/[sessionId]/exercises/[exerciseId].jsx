@@ -48,11 +48,13 @@ const SessionExercisePage = ({ exerciseId, sessionId }) => {
     return <div>Error!</div>;
   }
 
-  console.log({ data });
-
   return (
     <>
-      <SessionHeader sessionId={sessionId} />
+      <SessionHeader
+        sessionId={sessionId}
+        exerciseId={exerciseId}
+        workoutId={data.exercise.workout_id}
+      />
       <SessionExercise
         exercise={data.exercise}
         prevEx={data.prev}

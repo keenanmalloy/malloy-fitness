@@ -1,5 +1,5 @@
 import { NextFunction, Response, Request } from 'express';
-import { authorizeAdminQuery } from 'queries/authorize/authorizeAdminQuery';
+import { authorizeAdminQuery } from 'controllers/authorize/authorizeAdminQuery';
 
 /**
  * Checks the DB for role to authorize resource.

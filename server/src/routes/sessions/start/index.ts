@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { authenticate } from 'middlewares/authenticate';
 import { authorize } from 'middlewares/authorize';
-import { startSessionMutation } from 'queries/sessions/startSessionMutation';
+import { startSessionMutation } from 'controllers/sessions/startSessionMutation';
 
 const router = Router();
 

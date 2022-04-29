@@ -1,10 +1,10 @@
 import { Router } from 'express';
 import { authenticate } from 'middlewares/authenticate';
 import { authorize } from 'middlewares/authorize';
-import { addExerciseToWorkoutMutation } from 'queries/addExerciseToWorkoutMutation';
-import { removeExerciseFromWorkoutMutation } from 'queries/removeExerciseFromWorkoutMutation';
-import { updateWorkoutExerciseMetadataMutation } from 'queries/updateWorkoutExerciseMetadataMutation';
-import { updateWorkoutExerciseMutation } from 'queries/updateWorkoutExerciseMutation';
+import { addExerciseToWorkoutMutation } from 'controllers/addExerciseToWorkoutMutation';
+import { removeExerciseFromWorkoutMutation } from 'controllers/removeExerciseFromWorkoutMutation';
+import { updateWorkoutExerciseMetadataMutation } from 'controllers/updateWorkoutExerciseMetadataMutation';
+import { updateWorkoutExerciseMutation } from 'controllers/updateWorkoutExerciseMutation';
 
 const router = Router();
 

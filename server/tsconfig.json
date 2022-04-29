@@ -9,7 +9,7 @@
       "*": [
         "*",
         "src/middlewares/*",
-        "src/queries/*",
+        "src/controllers/*",
         "src/config/*",
         "src/utils/*"
       ]

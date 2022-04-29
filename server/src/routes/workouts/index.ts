@@ -1,21 +1,21 @@
 import { Router } from 'express';
 import { authenticate } from 'middlewares/authenticate';
 import { authorize } from 'middlewares/authorize';
-import { cloneWorkoutMutation } from 'queries/workouts/cloneWorkoutMutation';
-import { createStrengthWorkoutMutation } from 'queries/workouts/createStrengthWorkoutMutation';
-import { deleteWorkoutMutation } from 'queries/workouts/deleteWorkoutMutation';
-import { retrieveWorkoutQuery } from 'queries/workouts/retrieveWorkoutQuery';
-import { retrieveWorkoutsQuery } from 'queries/workouts/retrieveWorkoutsQuery';
-import { updateWorkoutMutation } from 'queries/workouts/updateWorkoutMutation';
+import { cloneWorkoutMutation } from 'controllers/workouts/cloneWorkoutMutation';
+import { createStrengthWorkoutMutation } from 'controllers/workouts/createStrengthWorkoutMutation';
+import { deleteWorkoutMutation } from 'controllers/workouts/deleteWorkoutMutation';
+import { retrieveWorkoutQuery } from 'controllers/workouts/retrieveWorkoutQuery';
+import { retrieveWorkoutsQuery } from 'controllers/workouts/retrieveWorkoutsQuery';
+import { updateWorkoutMutation } from 'controllers/workouts/updateWorkoutMutation';
 
 import setsRouter from '../sessions/sets';
 import exercisesRouter from '../sessions/exercises';
 
-import { cloneScheduleWorkoutMutation } from 'queries/workouts/cloneScheduleMutation';
-import { createRestWorkoutMutation } from 'queries/workouts/createRestWorkoutMutation';
-import { createDeloadWorkoutMutation } from 'queries/workouts/createDeloadWorkoutMutation';
-import { createCardioWorkoutMutation } from 'queries/workouts/createCardioWorkoutMutation';
-import { createTherapyWorkoutMutation } from 'queries/workouts/createTherapyWorkoutMutation';
+import { cloneScheduleWorkoutMutation } from 'controllers/workouts/cloneScheduleMutation';
+import { createRestWorkoutMutation } from 'controllers/workouts/createRestWorkoutMutation';
+import { createDeloadWorkoutMutation } from 'controllers/workouts/createDeloadWorkoutMutation';
+import { createCardioWorkoutMutation } from 'controllers/workouts/createCardioWorkoutMutation';
+import { createTherapyWorkoutMutation } from 'controllers/workouts/createTherapyWorkoutMutation';
 
 const router = Router();
 

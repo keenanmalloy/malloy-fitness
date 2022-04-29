@@ -1,11 +1,11 @@
 import { Router } from 'express';
 import { admin } from 'middlewares/admin';
 import { authenticate } from 'middlewares/authenticate';
-import { createMuscleGroupMutation } from 'queries/muscle-groups/createMuscleGroup';
-import { deleteMuscleGroupMutation } from 'queries/muscle-groups/deleteMuscleGroupMutation';
-import { retrieveMuscleGroupQuery } from 'queries/muscle-groups/retrieveMuscleGroupQuery';
-import { retrieveMuscleGroupsQuery } from 'queries/muscle-groups/retrieveMuscleGroupsQuery';
-import { updateMuscleGroupMutation } from 'queries/muscle-groups/updateMuscleGroup';
+import { createMuscleGroupMutation } from 'controllers/muscle-groups/createMuscleGroup';
+import { deleteMuscleGroupMutation } from 'controllers/muscle-groups/deleteMuscleGroupMutation';
+import { retrieveMuscleGroupQuery } from 'controllers/muscle-groups/retrieveMuscleGroupQuery';
+import { retrieveMuscleGroupsQuery } from 'controllers/muscle-groups/retrieveMuscleGroupsQuery';
+import { updateMuscleGroupMutation } from 'controllers/muscle-groups/updateMuscleGroup';
 
 const router = Router();
 
