@@ -10,7 +10,7 @@ import { OverviewRow } from 'features/workout-overview/OverviewRow';
 
 const SessionHeader = ({ sessionId, exerciseId, workoutId }) => {
   const router = useRouter();
-  const { data, isError, isLoading } = useSessionQuery(sessionId);
+  const { data, isError, isLoading } = useSessionQuery(sessionId, exerciseId);
 
   if (isLoading) {
     return <p>loading...</p>;

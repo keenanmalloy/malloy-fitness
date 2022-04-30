@@ -5,6 +5,7 @@ import { TrainingPanel } from 'features/daily/TrainingPanel';
 import { ActivityPanel } from './ActivityPanel';
 import { SleepPanel } from './SleepPanel';
 import { HealthPanel } from './HealthPanel';
+import { Divider } from 'features/feed/Divider';
 
 export const GetSelectedDailyOverview = ({ selected }) => {
   const { data, isError, isLoading, error } = useDailyOverviewQuery(selected);
@@ -19,13 +20,24 @@ export const GetSelectedDailyOverview = ({ selected }) => {
 
   return (
     <section className="flex w-100 items-center justify-center">
-      <div className="max-w-xl flex-1">
-        <DietPanel data={data} />
-        <TrainingPanel data={data} />
-        <ActivityPanel data={data} />
-        <SleepPanel data={data} />
-        <HealthPanel data={data} />
-      </div>
+      <ul className="max-w-xl flex-col flex-1 divider-y">
+        <div className="h-28" />
+        <li className="p-2">
+          <DietPanel data={data} />
+          <Divider label="Nutrition" />
+        </li>
+        <li className="p-2">
+          <TrainingPanel data={data} />
+          <Divider label="Training" />
+        </li>
+        <li className="p-2">
+          <ActivityPanel data={data} />
+          <Divider label="Activity" />
+        </li>
+
+        {/* <SleepPanel data={data} /> */}
+        {/* <HealthPanel data={data} /> */}
+      </ul>
     </section>
   );
 };
