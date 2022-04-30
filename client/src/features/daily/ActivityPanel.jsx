@@ -25,7 +25,7 @@ export const ActivityPanel = ({ data }) => {
           />
         </div>
       </div>
-      <div className="pb-8">
+      {/* <div className="pb-8">
         <div className="flex justify-center text-center rounded-sm mx-3 pb-2">
           30/180 minutes @ 140 BPM of Cardio Today
         </div>
@@ -37,7 +37,7 @@ export const ActivityPanel = ({ data }) => {
             }}
           />
         </div>
-      </div>
+      </div> */}
     </section>
   );
 };

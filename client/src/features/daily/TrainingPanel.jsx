@@ -23,13 +23,17 @@ export const TrainingPanel = ({ data }) => {
         return (
           <article className="flex" key={session.session_id}>
             <div className="h-full w-full aspect-video relative">
-              <Image
-                src={`https://thumbnails.trckd.ca/9/videos/2022-04-29/20220428-172524-mp4-xwbqc-0.jpg`}
-                layout="fill"
-                className="-z-10  rounded-md"
-              />
+              {!session.video ? (
+                <div className="bg-gray-100 h-full w-full rounded-md" />
+              ) : (
+                <Image
+                  src={`https://thumbnails.trckd.ca/${session.video}-0.jpg`}
+                  layout="fill"
+                  className="-z-10  rounded-md"
+                />
+              )}
             </div>
-            <div className="w-full pt-3 px-3 flex flex-col justify-between truncate relative">
+            <div className="w-full pt-3 px-3 flex flex-col justify-between relative">
               <div className="flex items-center overflow-hidden ">
                 <span
                   style={{
@@ -50,13 +54,14 @@ export const TrainingPanel = ({ data }) => {
                 >
                   {session.completed ? 'completed' : 'incomplete'}
                 </span>
-                <div>
-                  <h2 className="text-lg pt-2 font-medium truncate text-ellipsis overflow-hidden ">
+                <div className="pt-3">
+                  <h2 className="text-lg font-medium text-ellipsis truncate overflow-hidden leading-tight">
                     {session.name}
                   </h2>
 
-                  <p className="text-xs text-ellipsis overflow-hidden text-gray-500">
-                    {session.description}
+                  <p className="text-xs text-gray-500 pb-2">
+                    {session.description} this is a workout for pull that has a
+                    veryu long description
                   </p>
                 </div>
               </div>

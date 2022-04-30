@@ -54,23 +54,46 @@ export const retrieveDailyOverviewQuery = async (
 
 const getTodaysSessions = async (date: string, accountId: string) => {
   const query = `
-    SELECT 
-        sessions.workout_id,
-        sessions.created_by,
-        name,
-        description,
-        category,
-        type,
-        view,
-        session_id,
-        started_at,
-        ended_at,
-        session_dt,
-        completed,
-        deload
-    FROM sessions 
-    JOIN workouts ON sessions.workout_id = workouts.workout_id
-    WHERE session_dt = $1 AND sessions.created_by = $2
+  WITH
+  today_sessions as (
+       SELECT
+              session_id
+          FROM sessions
+      WHERE session_dt = $1
+      AND created_by = $2
+  ),
+   exercise_video_image as (
+       SELECT
+           distinct session_id,
+           MAX(video) as video
+       FROM exercises
+       JOIN workout_exercises we on exercises.exercise_id = we.exercise_id
+       JOIN sessions s on we.workout_id = s.workout_id
+       WHERE session_id IN(select session_id from today_sessions)
+       GROUP BY 1
+   ),
+  data as (
+   SELECT
+          sessions.workout_id,
+          sessions.created_by,
+          workouts.name,
+          workouts.description,
+          workouts.category,
+          workouts.type,
+          workouts.view,
+          sessions.session_id,
+          started_at,
+          ended_at,
+          session_dt,
+          completed,
+          video,
+          deload
+      FROM sessions
+      JOIN workouts ON sessions.workout_id = workouts.workout_id
+      JOIN exercise_video_image on exercise_video_image.session_id = sessions.session_id
+  )
+  
+  SELECT * FROM data
   `;
   const data = await db.query(query, [date, accountId]);
   return data.rows;
