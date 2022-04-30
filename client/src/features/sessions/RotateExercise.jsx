@@ -48,14 +48,12 @@ const RotateConfirmationPanel = ({
       { workoutId },
       {
         onSuccess: (data) => {
-          console.log({ data });
+          setIsOpen(false);
           router.push(`/sessions/${sessionId}/exercises/${data.exerciseId}`);
         },
       }
     );
   };
-
-  console.log({ error: error?.response?.data?.message });
 
   return (
     <>

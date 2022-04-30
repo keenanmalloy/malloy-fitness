@@ -8,7 +8,9 @@ const Overview = ({ sessionId }) => {
 
   return (
     <>
-      <Button onClick={() => setIsOpen(true)}>Overview</Button>
+      <Button onClick={() => setIsOpen(true)} className="w-full">
+        Overview
+      </Button>
 
       <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
         <OverviewExercises sessionId={sessionId} setIsOpen={setIsOpen} />

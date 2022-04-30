@@ -8,7 +8,6 @@ export const DietPanel = () => {
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <div className="text-2xl text-slate-600 pt-28">Nutrition</div>
       <div className="border-b border-slate-400">
         <DietStatistic progress={calories} />
       </div>

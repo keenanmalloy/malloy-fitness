@@ -1,13 +1,17 @@
 import { useQuery } from 'react-query';
 import { apiClient } from 'config/axios';
 
-const fetchSession = async ({ id }) => {
-  const { data } = await apiClient.get(`/sessions/${id}`);
+const fetchSession = async ({ sessionId }) => {
+  const { data } = await apiClient.get(`/sessions/${sessionId}`);
   return data;
 };
 
-export const useSessionQuery = (id) => {
-  return useQuery(['fetchSession', id], () => fetchSession({ id }), {
-    enabled: !!id,
-  });
+export const useSessionQuery = (sessionId, exerciseId) => {
+  return useQuery(
+    ['fetchSession', sessionId, exerciseId],
+    () => fetchSession({ sessionId }),
+    {
+      enabled: !!sessionId,
+    }
+  );
 };

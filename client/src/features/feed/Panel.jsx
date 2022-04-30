@@ -35,7 +35,7 @@ const RestDay = () => {
   );
 };
 
-const ScheduleNextDay = ({ day }) => {
+export const ScheduleNextDay = ({ day }) => {
   const ArtComponent = () => {
     switch (day) {
       case 0:
@@ -58,19 +58,22 @@ const ScheduleNextDay = ({ day }) => {
   };
 
   return (
-    <div className="my-4 px-2">
+    <div className="mb-2 px-2">
       <div className="flex flex-row items-start gap-4 px-2">
         <div className="w-full flex flex-row justify-between">
-          <div className="pt-2">
-            <p className="text-xl font-medium">Schedule your next workout</p>
+          <div className="pt-2 flex-4">
+            <p className="text-xl font-medium leading-tight">
+              Schedule your next workout
+            </p>
             <Link href="/workouts">
               <button className="bg-white mt-2 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-32">
                 Schedule
               </button>
             </Link>
           </div>
-
-          <ArtComponent />
+          <div className="w-full flex justify-between px-2 items-center max-w-md">
+            <ArtComponent />
+          </div>
         </div>
       </div>
     </div>
