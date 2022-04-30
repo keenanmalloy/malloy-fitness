@@ -11,6 +11,7 @@ import startSessionRouter from './start';
 import endSessionRouter from './end';
 import exercisesRouter from './exercises';
 import setsRouter from './sets';
+import continueRouter from './continue';
 
 const router = Router();
 
@@ -58,6 +59,7 @@ startSessionRouter(router);
 endSessionRouter(router);
 exercisesRouter(router);
 setsRouter(router);
+continueRouter(router);
 
 export default (parentRouter: Router) => {
   parentRouter.use('/sessions', router);
