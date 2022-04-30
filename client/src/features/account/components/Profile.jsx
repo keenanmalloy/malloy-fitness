@@ -1,10 +1,8 @@
 import React from 'react';
-import { useAccountQuery } from 'features/account/useAccountQuery';
-import { Logout } from 'features/auth/Logout';
+import { useAccountQuery } from 'features/account/api/useAccountQuery';
 
 export const Profile = () => {
   const { data, isError, isLoading } = useAccountQuery();
-  console.log({ data });
 
   if (isLoading) {
     return <p>loading...</p>;

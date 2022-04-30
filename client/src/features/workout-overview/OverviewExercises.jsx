@@ -1,10 +1,10 @@
 import React from 'react';
-import { useWorkoutQuery } from 'features/workouts/api/useWorkoutQuery';
 import { OverviewRow } from 'features/workout-overview/OverviewRow';
-import StartWorkout from 'features/workouts/components/StartWorkout';
+import StartSession from 'features/sessions/StartSession';
 import { useWorkoutSessionQuery } from './useWorkoutSessionQuery';
+import { IoClose } from 'react-icons/io5';
 
-export const OverviewExercises = ({ sessionId }) => {
+export const OverviewExercises = ({ sessionId, setIsOpen }) => {
   const { data, isError, isLoading } = useWorkoutSessionQuery(sessionId);
 
   if (isLoading) {
@@ -21,8 +21,15 @@ export const OverviewExercises = ({ sessionId }) => {
   };
 
   return (
-    <div>
-      <ul className="py-5">
+    <div className="relative">
+      <h1 className="text-lg text-center capitalize">{data.session.name}</h1>
+      <button
+        className="absolute top-0 right-0"
+        onClick={() => setIsOpen(false)}
+      >
+        <IoClose className="w-5 h-5" />
+      </button>
+      <ul className="pt-2 pb-2 divide-y">
         {data.session.exercises
           .sort((a, b) => {
             if (a.order < b.order) {
@@ -47,7 +54,7 @@ export const OverviewExercises = ({ sessionId }) => {
             );
           })}
       </ul>
-      <StartWorkout
+      <StartSession
         sessionId={sessionId}
         hasStarted={!!data.session.started_at}
         hasEnded={!!data.session.ended_at}

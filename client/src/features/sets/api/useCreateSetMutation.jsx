@@ -1,17 +1,9 @@
+import { apiClient } from 'config/axios';
 import { useMutation, useQueryClient } from 'react-query';
 
 const createSet = async ({ body, sessionId }) => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/sessions/${sessionId}/sets`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-      credentials: 'include',
-    }
-  );
-  const json = await res.json();
-  return json;
+  const { data } = await apiClient.post(`/sessions/${sessionId}/sets`, body);
+  return data;
 };
 
 export const useCreateSetMutation = ({ sessionId }) => {

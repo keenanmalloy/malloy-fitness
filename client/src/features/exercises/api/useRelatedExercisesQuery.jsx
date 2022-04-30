@@ -1,24 +1,35 @@
 import { useQuery } from 'react-query';
+import { apiClient } from 'config/axios';
 
-const fetchExercises = async (ids) => {
-  // fetch the data, the fetch call returns a promise of a response.
-  // we await for the promise to resolve with the await keyword.
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/exercises/?mgIds=${ids.join(',')}`,
-    {
-      credentials: 'include',
-    }
+const fetchExercises = async ({
+  muscleGroupIds,
+  type,
+  profile,
+  category,
+  exerciseId,
+}) => {
+  const { data } = await apiClient.get(
+    `/exercises/?mgIds=${muscleGroupIds.join(
+      ','
+    )}&type=${type}&profile=${profile}&category=${category}&exerciseId=${exerciseId}`
   );
-
-  // once we have the response, we need to turn it into JSON.
-  const json = await res.json();
-
-  // return the data that we got from the API.
-  return json;
+  return data;
 };
 
-export const useRelatedExercisesQuery = (ids) => {
-  return useQuery(['fetchExerciseByIds', ids], () => fetchExercises(ids), {
-    refetchOnWindowFocus: false,
-  });
+export const useRelatedExercisesQuery = ({
+  muscleGroupIds,
+  type,
+  profile,
+  category,
+  exerciseId,
+}) => {
+  return useQuery(
+    ['fetchExerciseByIds', exerciseId],
+    () =>
+      fetchExercises({ muscleGroupIds, type, profile, category, exerciseId }),
+    {
+      refetchOnWindowFocus: false,
+      enabled: muscleGroupIds.length > 0,
+    }
+  );
 };

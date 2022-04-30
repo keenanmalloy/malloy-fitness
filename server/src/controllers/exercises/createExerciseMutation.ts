@@ -8,18 +8,24 @@ interface createExercise {
   category: string;
   primary: string[];
   secondary: string[];
-  video: string;
   profile: string;
+  primaryTracker: string;
+  secondaryTracker: string;
+  type: string;
 }
 
 const createExerciseSchema = Joi.object({
   name: Joi.string().min(3).max(200).required(),
+  primaryTracker: Joi.string().max(200).required(),
+  secondaryTracker: Joi.string().allow('').max(200).optional(),
   description: Joi.string().max(500).allow('').optional(),
-  category: Joi.string().required(),
-  primary: Joi.array().items(Joi.string(), Joi.number()).required(),
+  category: Joi.string().allow('').optional(),
+  primary: Joi.array().items(Joi.string(), Joi.number()).optional(),
   secondary: Joi.array().items(Joi.string(), Joi.number()).optional(),
-  video: Joi.string().allow(null).optional(),
-  profile: Joi.string().allow(null).valid('short', 'mid', 'long').optional(),
+  profile: Joi.string().allow('').valid('short', 'mid', 'long').optional(),
+  type: Joi.string()
+    .valid('strength', 'hypertrophy', 'physiotherapy', 'cardio')
+    .required(),
 });
 
 const createExerciseMuscleGroups = async (
@@ -64,16 +70,6 @@ export const createExerciseMutation = async (
 ) => {
   const { error, value, warning } = createExerciseSchema.validate(data);
 
-  if (!data.primary.length) {
-    return res.status(422).json({
-      role: res.locals.state.account.role,
-      status: 'error',
-      message: 'Invalid request data, missing primary muscle group id(s)',
-      exercise: value,
-      error: error,
-    });
-  }
-
   if (error) {
     return res.status(422).json({
       role: res.locals.state.account.role,
@@ -89,21 +85,31 @@ export const createExerciseMutation = async (
       category,
       primary, // array of ids
       secondary, // array of ids
-      video,
       profile,
+      primaryTracker,
+      secondaryTracker,
+      type,
     } = data;
 
     const createdBy = res.locals.state.account.account_id;
+
     const query = `
       WITH 
-        data(name, description, category, video, profile, created_by) AS (
+        data(name, description, category, profile, created_by, primary_tracker, secondary_tracker, type) AS (
           VALUES                           
-              ('${name}', '${description}', '${category}', ${
-      video ?? null
-    }, '${profile}', ${createdBy})
+              (
+                '${name}', 
+                '${description}', 
+                ${!!category ? `'${category}'` : null}, 
+                ${!!category ? `'${profile}'` : null}, 
+                ${createdBy}, 
+                '${primaryTracker}', 
+                ${!!secondaryTracker ? `'${secondaryTracker}'` : null},
+                '${type}'
+              )
           )
-        INSERT INTO exercises (name, description, category, video, profile, created_by)
-          SELECT name, description, category, video, profile, created_by
+        INSERT INTO exercises (name, description, category, profile, created_by, primary_tracker, secondary_tracker, type)
+          SELECT name, description, category, profile, created_by, primary_tracker, secondary_tracker, type
             FROM data
           RETURNING *
       `;
@@ -112,11 +118,11 @@ export const createExerciseMutation = async (
       const data = await db.query(query);
       const exerciseId = data.rows[0].exercise_id;
 
-      const muscleGroups = await createExerciseMuscleGroups(
-        exerciseId,
-        primary,
-        secondary
-      );
+      const hasMG =
+        primary && secondary && (!!primary.length || !!secondary.length);
+      const muscleGroups = hasMG
+        ? await createExerciseMuscleGroups(exerciseId, primary, secondary)
+        : [];
 
       const exercise = {
         ...data.rows[0],

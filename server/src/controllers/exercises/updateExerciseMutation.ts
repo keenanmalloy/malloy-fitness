@@ -1,27 +1,27 @@
 import { db } from 'config/db';
 import Joi from 'joi';
 import { update } from 'utils/update';
-
-interface Response {
-  status: string;
-  message: string;
-  exercise: any;
-  error?: any;
-}
+import { Response } from 'express';
 
 const updateExerciseSchema = Joi.object({
   name: Joi.string().min(3).max(200).optional(),
   description: Joi.string().max(500).allow('').optional(),
-  category: Joi.string().optional(),
+  category: Joi.string().allow('').allow(null).optional(),
   video: Joi.string().allow(null).optional(),
-  profile: Joi.string().allow(null).valid('short', 'mid', 'long').optional(),
+  profile: Joi.string()
+    .allow(null)
+    .allow('')
+    .valid('short', 'mid', 'long')
+    .optional(),
+  primary_tracker: Joi.string().max(200).optional(),
+  secondary_tracker: Joi.string().allow('').max(200).optional(),
 });
 
 export const updateExerciseMutation = async (
-  res: any,
+  res: Response,
   data: Record<string, string>,
   id: string
-): Promise<Response> => {
+) => {
   const { error, value, warning } = updateExerciseSchema.validate(data);
   if (error) {
     return res.status(422).json({

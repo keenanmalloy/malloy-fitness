@@ -36,7 +36,7 @@ const Modal = ({ isOpen, title, description, closeModal, children }) => {
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="inline-block border-solid w-full max-w-md p-6 text-left align-middle transition-all transform bg-white rounded-t-2xl">
+            <div className="inline-block border-solid w-full max-w-md py-5 px-2 text-left align-middle transition-all transform bg-white rounded-t-2xl">
               <Dialog.Title
                 as="h3"
                 className="text-lg font-medium leading-6 text-gray-900"

@@ -1,16 +1,11 @@
+import { apiClient } from 'config/axios';
 import { useMutation, useQueryClient } from 'react-query';
 
 const deleteSet = async ({ setId, sessionId }) => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/sessions/${sessionId}/sets/${setId}`,
-    {
-      method: 'DELETE',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-    }
+  const { data } = await apiClient.delete(
+    `/sessions/${sessionId}/sets/${setId}`
   );
-  const json = await res.json();
-  return json;
+  return data;
 };
 
 export const useDeleteSetMutation = ({ setId, sessionId }) => {

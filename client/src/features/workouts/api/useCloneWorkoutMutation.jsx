@@ -1,16 +1,9 @@
 import { useMutation } from 'react-query';
+import { apiClient } from 'config/axios';
 
 const cloneWorkout = async ({ id }) => {
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_API_ENDPOINT}/workouts/${id}/copy`,
-    {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-    }
-  );
-  const json = await res.json();
-  return json;
+  const { data } = await apiClient.post(`/workouts/${id}/copy`);
+  return data;
 };
 
 export const useCloneWorkoutMutation = (id) => {

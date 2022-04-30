@@ -1,7 +1,5 @@
 import React from 'react';
-import { OverviewRow } from 'features/workout-overview/OverviewRow';
 import { Button } from 'features/common/Button';
-import { useRouter } from 'next/router';
 import { GetExerciseSets } from 'features/sets/components/GetExerciseSets';
 import { Notes } from './Notes';
 import Link from 'next/link';
@@ -14,16 +12,16 @@ export const SessionExercise = ({
   exercise,
 }) => {
   return (
-    <main className="pb-20">
+    <main className="pb-20 pt-16">
       <div className="px-3 py-5 bg-gray-50">
-        <OverviewRow
+        {/* <OverviewRow
           order="A1"
           name={exercise.name}
           sets="sets 3"
           reps="reps 10-12"
           rir="rir 1"
           rest="REST 90 seconds"
-        />
+        /> */}
       </div>
 
       {!!exercise.video && (
@@ -42,12 +40,12 @@ export const SessionExercise = ({
       </div>
       <GetExerciseSets sessionId={sessionId} exerciseId={exerciseId} />
 
-      {/* <Notes
+      <Notes
         exercise={exercise}
         exNotes={exercise.notes}
         sessionId={sessionId}
         exerciseId={exerciseId}
-      /> */}
+      />
 
       <Footer nextEx={nextEx} prevEx={prevEx} sessionId={sessionId} />
     </main>

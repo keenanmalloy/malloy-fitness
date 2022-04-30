@@ -10,12 +10,8 @@ const Overview = ({ sessionId }) => {
     <>
       <Button onClick={() => setIsOpen(true)}>Overview</Button>
 
-      <Modal
-        isOpen={isOpen}
-        title="Workout Details"
-        closeModal={() => setIsOpen(false)}
-      >
-        <OverviewExercises sessionId={sessionId} />
+      <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
+        <OverviewExercises sessionId={sessionId} setIsOpen={setIsOpen} />
       </Modal>
     </>
   );

@@ -80,3 +80,34 @@ export const WORKOUT_TYPES = [
     value: 'therapy',
   },
 ];
+
+export const EXERCISE_TRACKERS = [
+  {
+    label: 'reps',
+    value: 'reps',
+  },
+  {
+    label: 'weight',
+    value: 'weight',
+  },
+  {
+    label: 'time',
+    value: 'time',
+  },
+  {
+    label: 'distance',
+    value: 'distance',
+  },
+  {
+    label: 'inches',
+    value: 'inches',
+  },
+  {
+    label: 'other',
+    value: 'other',
+  },
+  {
+    label: '--none--',
+    value: '',
+  },
+];

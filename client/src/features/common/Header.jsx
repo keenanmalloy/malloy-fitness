@@ -28,16 +28,7 @@ export const Header = () => {
             </div>
           </Link>
 
-          <Link href="/search">
-            <button>
-              <RiSearchLine
-                style={{
-                  width: 20,
-                  height: 20,
-                }}
-              />
-            </button>
-          </Link>
+          <div></div>
         </div>
       </div>
     </nav>

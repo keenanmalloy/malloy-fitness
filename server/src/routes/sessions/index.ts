@@ -1,16 +1,17 @@
 import { Router } from 'express';
 import { authenticate } from 'middlewares/authenticate';
 import { authorize } from 'middlewares/authorize';
-import { createSessionMutation } from 'queries/sessions/createSessionMutation';
-import { deleteSessionMutation } from 'queries/sessions/deleteSessionMutation';
-import { retrievePreviewSessionsQuery } from 'queries/sessions/retrievePreviewSessionsQuery';
-import { retrieveSessionQuery } from 'queries/sessions/retrieveSessionQuery';
-import { retrieveSessionsQuery } from 'queries/sessions/retrieveSessionsQuery';
-import { updateSessionMutation } from 'queries/sessions/updateSessionMutation';
+import { createSessionMutation } from 'controllers/sessions/createSessionMutation';
+import { deleteSessionMutation } from 'controllers/sessions/deleteSessionMutation';
+import { retrievePreviewSessionsQuery } from 'controllers/sessions/retrievePreviewSessionsQuery';
+import { retrieveSessionQuery } from 'controllers/sessions/retrieveSessionQuery';
+import { retrieveSessionsQuery } from 'controllers/sessions/retrieveSessionsQuery';
+import { updateSessionMutation } from 'controllers/sessions/updateSessionMutation';
 import startSessionRouter from './start';
 import endSessionRouter from './end';
 import exercisesRouter from './exercises';
 import setsRouter from './sets';
+import continueRouter from './continue';
 
 const router = Router();
 
@@ -58,6 +59,7 @@ startSessionRouter(router);
 endSessionRouter(router);
 exercisesRouter(router);
 setsRouter(router);
+continueRouter(router);
 
 export default (parentRouter: Router) => {
   parentRouter.use('/sessions', router);
