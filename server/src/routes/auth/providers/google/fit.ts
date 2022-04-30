@@ -169,6 +169,87 @@ const initProvider = ({ router, middleware }: Props): void => {
     }
   });
 
+  // fetches the users step data
+  subRouter.get('/sleep', async (req, res) => {
+    const startTimeQuery = req.query.startTime as string;
+    const endTimeQuery = req.query.endTime as string;
+
+    if (!startTimeQuery || !endTimeQuery) {
+      return res.status(400).json({
+        error: 'Missing start / end time query params (UNIX) milliseconds',
+      });
+    }
+
+    try {
+      const session = await getGoogleFitSession(req);
+
+      const getAccessToken = async () => {
+        const accessToken = session.access_token;
+        const refreshToken = session.refresh_token;
+        const tokenExpiryDate = session.expiry_date;
+        const now = Date.now();
+
+        if (tokenExpiryDate < now) {
+          // refetch the accessToken
+          const { data } = await axios({
+            method: 'POST',
+            url: 'https://www.googleapis.com/oauth2/v4/token',
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            data: `refresh_token=${refreshToken}&client_id=${PROVIDERS.GOOGLE.clientID}&client_secret=${PROVIDERS.GOOGLE.clientSecret}&grant_type=refresh_token`,
+          });
+
+          await setGoogleFitSession(res, {
+            refresh_token: refreshToken,
+            ...data,
+          });
+
+          return data.access_token;
+        }
+
+        return accessToken;
+      };
+
+      const accessToken = await getAccessToken();
+
+      const { data } = await axios({
+        method: 'POST',
+        url: 'https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        data: {
+          aggregateBy: [{ dataTypeName: 'com.google.sleep.segment' }],
+          bucketByTime: { durationMillis: 86400000 },
+          startTimeMillis: startTimeQuery, // day start time in UNIX
+          endTimeMillis: endTimeQuery, // day end time in UNIX
+        },
+      });
+
+      const sleep =
+        data.bucket
+          .map((bucket: any) => {
+            return bucket.dataset[0];
+          })[0]
+          .point.map((point: any) => {
+            if (!point) return null;
+            return point.value[0].intVal;
+          })[0] ?? 0;
+
+      return res.json({
+        sleep: sleep,
+        status: 200,
+        message: 'success',
+      });
+    } catch (error) {
+      console.log({ error });
+      return res.status(400).json({
+        error: 'Missing google-fit session',
+      });
+    }
+  });
+
   router.use(`/google/fit`, subRouter);
 };
 

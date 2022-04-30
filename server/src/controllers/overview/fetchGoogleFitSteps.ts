@@ -56,6 +56,26 @@ export const fetchGoogleFitSteps = async (
       },
     });
 
+    try {
+      const { data: sleepData } = await axios({
+        method: 'POST',
+        url: 'https://www.googleapis.com/fitness/v1/users/me/dataset:aggregate',
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+        data: {
+          aggregateBy: [{ dataTypeName: 'com.google.sleep.segment' }],
+          bucketByTime: { durationMillis: 86400000 },
+          startTimeMillis: +startTimeQuery - 100000000, // day start time in UNIX
+          endTimeMillis: +endTimeQuery + 100000000, // day end time in UNIX
+        },
+      });
+
+      console.log(JSON.stringify(sleepData, null, 2));
+    } catch (error) {
+      console.log({ error });
+    }
+
     const steps: number =
       data.bucket
         .map((bucket: any) => {
