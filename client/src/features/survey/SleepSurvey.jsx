@@ -5,7 +5,7 @@ import { IoMdArrowBack, IoMdArrowForward } from 'react-icons/io';
 import { useRouter } from 'next/router';
 
 const Sleep = () => {
-  const [selectedColor, setSelectedColor] = useState();
+  const [selectedColor, setSelectedColor] = useState('');
 
   const router = useRouter();
 

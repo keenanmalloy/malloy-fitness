@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 
 const Stress = () => {
   const router = useRouter();
-  const [selectedColor, setSelectedColor] = useState();
+  const [selectedColor, setSelectedColor] = useState('');
 
   const onSubmit = (e) => {
     e.preventDefault();

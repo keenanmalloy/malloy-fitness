@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 
 const Mood = () => {
   const router = useRouter();
-  const [selectedColor, setSelectedColor] = useState();
+  const [selectedColor, setSelectedColor] = useState('');
 
   const handleButtonClick = (color) => {
     setSelectedColor(color);
