@@ -15,6 +15,7 @@
     "queries": "./dist/queries",
     "config": "./dist/config",
     "utils": "./dist/utils",
+    "controllers": "./dist/controllers",
     "sessions": "./dist/sessions",
     "time": "./dist/time"
   },
