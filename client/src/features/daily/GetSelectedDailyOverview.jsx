@@ -23,16 +23,16 @@ export const GetSelectedDailyOverview = ({ selected }) => {
       <ul className="max-w-xl flex-col flex-1 divider-y">
         <div className="h-28" />
         <li className="p-2">
-          <DietPanel data={data} />
           <Divider label="Nutrition" />
+          <DietPanel data={data} />
         </li>
         <li className="p-2">
-          <TrainingPanel data={data} />
           <Divider label="Training" />
+          <TrainingPanel data={data} />
         </li>
         <li className="p-2">
-          <ActivityPanel data={data} />
           <Divider label="Activity" />
+          <ActivityPanel data={data} />
         </li>
 
         {/* <SleepPanel data={data} /> */}
