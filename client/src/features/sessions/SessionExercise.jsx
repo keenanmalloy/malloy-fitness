@@ -1,7 +1,5 @@
 import React from 'react';
-import { OverviewRow } from 'features/workout-overview/OverviewRow';
 import { Button } from 'features/common/Button';
-import { useRouter } from 'next/router';
 import { GetExerciseSets } from 'features/sets/components/GetExerciseSets';
 import { Notes } from './Notes';
 import Link from 'next/link';
@@ -14,7 +12,7 @@ export const SessionExercise = ({
   exercise,
 }) => {
   return (
-    <main className="pb-20">
+    <main className="pb-20 pt-16">
       <div className="px-3 py-5 bg-gray-50">
         {/* <OverviewRow
           order="A1"

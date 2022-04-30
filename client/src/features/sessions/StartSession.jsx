@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
 import { apiClient } from 'config/axios';
 
-const StartWorkout = ({ sessionId, hasStarted, hasEnded }) => {
+const StartSession = ({ sessionId, hasStarted, hasEnded }) => {
   const [isLoading, setIsLoading] = useState(false);
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -43,9 +43,16 @@ const StartWorkout = ({ sessionId, hasStarted, hasEnded }) => {
 
     const isStarted = data.session.started_at;
     if (isStarted) {
-      return router.push(
-        `/sessions/${sessionId}/exercises/${firstExercise.exercise_id}`
-      );
+      try {
+        const { data } = await apiClient(`/sessions/${sessionId}/continue`);
+        return router.push(data.url);
+      } catch (error) {
+        // if error, then redirect to the first exercise in the session instead
+        console.log({ error });
+        return router.push(
+          `/sessions/${sessionId}/exercises/${firstExercise.exercise_id}`
+        );
+      }
     }
     const json = await initSession(sessionId);
     if (json.status !== 'success') {
@@ -82,4 +89,4 @@ const StartWorkout = ({ sessionId, hasStarted, hasEnded }) => {
   );
 };
 
-export default StartWorkout;
+export default StartSession;

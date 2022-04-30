@@ -1,37 +1,27 @@
-import { useWorkoutQuery } from 'features/workouts/api/useWorkoutQuery';
 import React from 'react';
 
-export const OverviewRow = ({
-  order,
-  name,
-  sets,
-  reps,
-  rir,
-  rest,
-  workoutId,
-}) => {
-  const { data, isError, isLoading } = useWorkoutQuery(workoutId);
-
-  if (isLoading) {
-    return <p>loading...</p>;
-  }
-
-  if (isError) {
-    return <p style={{ color: 'red' }}>fetching error...</p>;
-  }
-
+export const OverviewRow = ({ order, name, sets, reps, rir, rest }) => {
   return (
-    <li className="flex py-1">
-      <div className="bg-cyan-700 text-white p-2 rounded-md max-h-8">
-        {order}
+    <li className="flex py-1 items-center border-solid border-gray-50">
+      <div className="bg-cyan-700 text-white p-2 rounded-md h-10 w-10 flex justify-center items-center text-md">
+        <p>{order}</p>
       </div>
+
       <div className="px-1 w-full">
-        <div className="flex justify-between">
-          <h3>{name}</h3>
+        <div>
+          <h3
+            style={{
+              fontSize: '0.87rem',
+            }}
+          >
+            {name}
+          </h3>
         </div>
+
         <ul
           style={{
-            fontSize: '0.57rem',
+            fontSize: '0.67rem',
+            maxWidth: '250px',
           }}
           className="flex justify-between pt-0.5"
         >
