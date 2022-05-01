@@ -1,13 +1,18 @@
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
+import React from 'react';
 import { useExercisesQuery } from 'features/exercises/api/useExercisesQuery';
-import { UpdateExercise } from 'features/exercises/components/UpdateExercise';
 import { Skeleton } from 'features/common/Skeleton';
-import { DeleteExercise } from './DeleteExercise';
 import Image from 'next/image';
 import { useDebounce } from 'features/common/useDebounce';
 
-export const ExerciseList = ({ query, category, view, profile, sortBy }) => {
+export const SelectableExerciseList = ({
+  query,
+  category,
+  view,
+  profile,
+  sortBy,
+  exercises,
+  handleExerciseSelection,
+}) => {
   const debouncedSearchQuery = useDebounce(query, 600);
   const { data, isError, isLoading } = useExercisesQuery({
     query: debouncedSearchQuery,
@@ -52,20 +57,29 @@ export const ExerciseList = ({ query, category, view, profile, sortBy }) => {
     );
   }
 
+  const filteredExercises = data.exercises.filter((exercise) => {
+    if (exercises.find((e) => e.exercise_id === exercise.exercise_id)) {
+      return false;
+    }
+    return true;
+  });
+
   return (
     <ul className="flex flex-col divide-y-2 divide-gray-100">
-      {data.exercises.map((exercise) => (
-        <li className="border-solid py-6" key={exercise.exercise_id}>
+      {filteredExercises.map((exercise) => (
+        <button
+          className="border-solid py-6"
+          key={exercise.exercise_id}
+          onClick={() => handleExerciseSelection(exercise.exercise_id)}
+        >
           {!!exercise.video && (
-            <Link href={`/exercises/${exercise.exercise_id}`}>
-              <div className="mb-5 w-full aspect-video relative">
-                <Image
-                  src={`https://thumbnails.trckd.ca/${exercise.video}-0.jpg`}
-                  layout="fill"
-                  className="-z-10"
-                />
-              </div>
-            </Link>
+            <div className="mb-5 w-full aspect-video relative">
+              <Image
+                src={`https://thumbnails.trckd.ca/${exercise.video}-0.jpg`}
+                layout="fill"
+                className="-z-10"
+              />
+            </div>
           )}
 
           <div className="flex justify-between">
@@ -75,22 +89,7 @@ export const ExerciseList = ({ query, category, view, profile, sortBy }) => {
             </span>
           </div>
           <p className="text-xs">{exercise.description}</p>
-
-          <footer className="flex pt-2 justify-between justify-self-stretch place-content-stretch justify-items-stretch">
-            <Link href={`/exercises/${exercise.exercise_id}`}>
-              <button className="bg-white mt-2 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-32">
-                Visit
-              </button>
-            </Link>
-            {(data.role === 'developer' || exercise.view === 'private') && (
-              <div className="flex">
-                <DeleteExercise exerciseId={exercise.exercise_id} />
-                <div className="w-1" />
-                <UpdateExercise exercise={exercise} queryKey="fetchExercises" />
-              </div>
-            )}
-          </footer>
-        </li>
+        </button>
       ))}
     </ul>
   );

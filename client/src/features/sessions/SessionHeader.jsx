@@ -5,8 +5,8 @@ import { RiTimerFill } from 'react-icons/ri';
 import SessionTimer from 'features/sessions/SessionTimer';
 import { useRouter } from 'next/router';
 import { RotateExercise } from './RotateExercise';
-import { CgSelect } from 'react-icons/cg';
 import { OverviewRow } from 'features/workout-overview/OverviewRow';
+import { ChangeExercise } from './ChangeExercise';
 
 const SessionHeader = ({ sessionId, exerciseId, workoutId }) => {
   const router = useRouter();
@@ -55,10 +55,12 @@ const SessionHeader = ({ sessionId, exerciseId, workoutId }) => {
         </div>
 
         <div className="flex">
-          <button className="py-4">
-            <CgSelect className="w-10 h-5" />
-          </button>
-
+          <ChangeExercise
+            exercises={data.session.exercises}
+            exerciseId={exerciseId}
+            sessionId={sessionId}
+            workoutId={workoutId}
+          />
           <RotateExercise
             exerciseId={exerciseId}
             sessionId={sessionId}
