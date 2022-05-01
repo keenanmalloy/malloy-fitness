@@ -2,6 +2,7 @@ import FullPageModal from 'features/common/FullPageModal';
 import { Input } from 'features/form/Input';
 import React, { useEffect, useState } from 'react';
 import { useUpdateWorkoutExerciseMetadataMutation } from 'features/workout-exercises/api/useUpdateWorkoutExerciseMetadataMutation';
+import { useDebounce } from 'features/common/useDebounce';
 
 export const Notes = ({ exercise, workoutId, exerciseId, exNotes }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -38,23 +39,6 @@ export const Notes = ({ exercise, workoutId, exerciseId, exNotes }) => {
     </div>
   );
 };
-
-function useDebounce(value, delay = 500) {
-  const [debouncedValue, setDebouncedValue] = useState(value);
-
-  useEffect(() => {
-    const handler = setTimeout(() => {
-      setDebouncedValue(value);
-    }, delay);
-
-    // Cancel the timeout if value changes (also on delay change or unmount)
-    return () => {
-      clearTimeout(handler);
-    };
-  }, [value, delay]);
-
-  return debouncedValue;
-}
 
 const SaveNotes = ({ exNotes, notes, setNotes, workoutId, exerciseId }) => {
   const debouncedNotes = useDebounce(notes, 600);
