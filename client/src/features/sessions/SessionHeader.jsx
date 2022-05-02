@@ -13,7 +13,7 @@ const SessionHeader = ({ sessionId, exerciseId, workoutId }) => {
   const { data, isError, isLoading } = useSessionQuery(sessionId, exerciseId);
 
   if (isLoading) {
-    return <p>loading...</p>;
+    return <div className="pt-1"></div>;
   }
 
   if (isError) {

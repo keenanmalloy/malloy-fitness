@@ -12,6 +12,7 @@ import endSessionRouter from './end';
 import exercisesRouter from './exercises';
 import setsRouter from './sets';
 import continueRouter from './continue';
+import { retrieveSessionWithSetsQuery } from 'controllers/sessions/retrieveSessionWithSetsQuery';
 
 const router = Router();
 
@@ -35,9 +36,14 @@ router.get('/preview', authenticate, async (req, res) => {
   await retrievePreviewSessionsQuery(req, res);
 });
 
-// Retrieve Session
+// Retrieve Session with exercises
 router.get('/:sessionId', authenticate, authorize, async (req, res) => {
   await retrieveSessionQuery(res, req.params.sessionId);
+});
+
+// Retrieve Session Summary
+router.get('/:sessionId/summary', authenticate, authorize, async (req, res) => {
+  await retrieveSessionWithSetsQuery(res, req.params.sessionId);
 });
 
 // Create new Session

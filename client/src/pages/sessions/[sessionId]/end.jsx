@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { Button } from 'features/common/Button';
-import SessionHeader from 'features/sessions/SessionHeader';
 import Modal from 'features/common/Modal';
 import { useRouter } from 'next/router';
 import { apiClient } from 'config/axios';
+import { useSessionQuery } from 'features/sessions/useSessionQuery';
+import { Skeleton } from 'features/common/Skeleton';
+import SessionTimer from 'features/sessions/SessionTimer';
+import { useSessionSummaryQuery } from 'features/sessions/useSessionSummaryQuery';
 
 export async function getStaticPaths() {
   return {
@@ -20,10 +23,12 @@ export async function getStaticProps({ params }) {
   };
 }
 
-const EndPage = ({ sessionId, endedAt }) => {
+const EndPage = ({ sessionId }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState(false);
   const router = useRouter();
+
+  const { data, isError, isLoading } = useSessionSummaryQuery(sessionId);
 
   const endWorkout = async (id) => {
     const { data } = await apiClient.patch(`/sessions/${id}/end`);
@@ -41,30 +46,33 @@ const EndPage = ({ sessionId, endedAt }) => {
       });
   };
 
-  if (!!endedAt) {
+  if (isLoading) {
     return (
-      <div className="flex">
-        <div className="px-4">
-          <h2>
-            {formatTime(
-              Math.floor(
-                Math.abs(
-                  (new Date(endedAt).getTime() -
-                    new Date(startedAt).getTime()) /
-                    1000
-                )
-              )
-            )}
-          </h2>
+      <div className="py-5">
+        <Skeleton className="h-20 w-full mt-7" />
+        <Skeleton className="h-44 w-full mt-1" />
+        <Skeleton className="h-28 w-full mt-10" />
+        <div className="flex justify-end">
+          <Skeleton className="h-10 w-24 mt-8 mr-4 rounded-md" />
+        </div>
+
+        <div className="flex justify-end">
+          <Skeleton className="h-10 w-full mt-8 mx-4 rounded-md" />
         </div>
       </div>
     );
   }
+
   return (
     <div>
-      <SessionHeader sessionId={sessionId} />
-      <div className="flex justify-center">
+      <div className="flex flex-col justify-center items-center">
         <h1>Workout Completed!</h1>
+        {/* <SessionTimer
+          endedAt={data.session.ended_at}
+          startedAt={data.session.started_at}
+        /> */}
+
+        <pre className="text-xs">{JSON.stringify(data, null, 2)}</pre>
       </div>
       <div className="flex justify-center">
         <Button onClick={() => setIsOpen(!isOpen)}>End Workout</Button>

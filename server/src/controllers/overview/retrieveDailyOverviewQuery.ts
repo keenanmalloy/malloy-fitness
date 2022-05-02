@@ -53,6 +53,7 @@ export const retrieveDailyOverviewQuery = async (
 };
 
 const getTodaysSessions = async (date: string, accountId: string) => {
+  console.log({ date });
   const query = `
   WITH
   today_sessions as (
