@@ -121,9 +121,9 @@ export default function Navbar() {
   return (
     <>
       {isOpen && (
-        <nav className=" p-2 bg-white shadow md:flex md:items-center md:justify-between md:p-6 fixed bottom-16 left-0 w-full">
-          <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-            <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+        <nav className=" p-2 bg-white shadow fixed bottom-16 left-0 w-full">
+          <div className="max-w-7xl mx-auto px-2">
+            <div className="flex-1 flex items-center justify-center">
               {libraryNavigation.map((item) => {
                 return (
                   <Link key={item.name} href={item.href}>
@@ -146,9 +146,9 @@ export default function Navbar() {
           </div>
         </nav>
       )}
-      <nav className="dark:bg-gray-900 p-2 bg-white shadow md:flex md:items-center md:justify-between md:p-6 fixed bottom-0 left-0 w-full">
-        <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-          <div className="flex-1 flex items-center justify-center sm:items-stretch sm:justify-start">
+      <nav className="dark:bg-gray-900 py-2 bg-white shadow flex items-center justify-between fixed bottom-0 left-0 right-0 w-full">
+        <div className="max-w-7xl mx-auto">
+          <div className="flex-1 flex items-center justify-center">
             {navigation.map((item) => {
               if (item.name === 'Library') {
                 return (

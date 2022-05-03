@@ -85,8 +85,8 @@ export const ScrollDatePicker = ({
     };
 
   return (
-    <div className="pt-5">
-      <div className="flex justify-between">
+    <div className="pt-5 max-w-2xl mx-auto ">
+      <div className="flex-1 flex items-center justify-between">
         <CalendarComponent
           setItems={setItems}
           scrollToItem={(itemId) => {
@@ -137,6 +137,7 @@ export const ScrollDatePicker = ({
             }}
           options={{ throttle: 0 }}
           onMouseMove={handleDrag}
+          scrollContainerClassName={'no-scrollbar'}
         >
           {items.map((state, key) => {
             return (
