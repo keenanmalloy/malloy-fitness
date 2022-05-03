@@ -47,8 +47,8 @@ export const CalendarComponent = ({
         {isOpen ? <BiChevronUp /> : <BiChevronDown />}
       </button>
       <Modal
-        title="Schedule"
-        description="Schedule a workout"
+        title="Go-to-date"
+        description="View a summary of the day"
         closeModal={() => setIsOpen(false)}
         isOpen={isOpen}
       >
