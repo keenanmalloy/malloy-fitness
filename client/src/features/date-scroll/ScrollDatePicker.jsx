@@ -137,6 +137,7 @@ export const ScrollDatePicker = ({
             }}
           options={{ throttle: 0 }}
           onMouseMove={handleDrag}
+          scrollContainerClassName={'no-scrollbar'}
         >
           {items.map((state, key) => {
             return (
