@@ -78,11 +78,15 @@ export const AccountPanel = ({ account }) => {
       <div className="flex">
         <AccountSelectField
           label="Gender"
-          onChange={(e) => setGender(e.value)}
+          onChange={(value) => setGender(value)}
           value={gender}
           field="gender"
-          prevValue={account.dob}
+          prevValue={account.gender}
           options={[
+            {
+              label: 'prefer not to say',
+              value: 'prefer not to say',
+            },
             {
               label: 'male',
               value: 'male',
@@ -98,7 +102,7 @@ export const AccountPanel = ({ account }) => {
           label="Date of Birth"
           type="date"
           onChange={(e) => setDob(e.target.value)}
-          value={dob}
+          value={new Date(dob).toISOString().split('T')[0]}
           field="dob"
           prevValue={account.dob}
         />
@@ -125,7 +129,7 @@ export const AccountPanel = ({ account }) => {
         <AccountSelectField
           label="Country"
           type="text"
-          onChange={(e) => setCountry(e.value)}
+          onChange={(value) => setCountry(value)}
           value={country}
           field="country"
           prevValue={account.country}

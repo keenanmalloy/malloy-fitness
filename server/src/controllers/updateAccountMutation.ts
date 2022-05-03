@@ -10,6 +10,12 @@ const updateMuscleGroupSchema = Joi.object({
   description: Joi.string().max(500).allow('').optional(),
   avatar_url: Joi.string().max(200).allow('').optional(),
   phone: Joi.string().max(20).allow('').optional(),
+  gender: Joi.string().allow('male', 'female', 'prefer not to say').optional(),
+  dob: Joi.string().max(20).allow('').optional(),
+  weight: Joi.number().allow(null).optional(),
+  height: Joi.number().allow(null).optional(),
+  country: Joi.string().max(2).allow('').optional(),
+  city: Joi.string().max(50).allow('').optional(),
 });
 
 export const updateAccountMutation = async (
