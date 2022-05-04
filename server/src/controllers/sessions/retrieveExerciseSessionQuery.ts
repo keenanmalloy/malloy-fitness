@@ -8,6 +8,11 @@ export const retrieveExerciseSessionQuery = async (
 ) => {
   try {
     const mainExercise = await queryMainExercise(sessionId, exerciseId);
+    const sessionSetRecord = await queryWorkoutExerciseRecord(
+      mainExercise.workout_id,
+      exerciseId,
+      res.locals.state.account.account_id
+    );
     const nextOrderEx = await queryExerciseByNextOrder(
       sessionId,
       mainExercise.order
@@ -18,20 +23,9 @@ export const retrieveExerciseSessionQuery = async (
       mainExercise.order
     );
 
-    const prioritizedExercise = await queryExerciseByPriority(
-      sessionId,
-      mainExercise.order
-    );
-
     const nextExerciseByOrder =
       nextOrderEx.filter(
         (ex) => ex.exercise_id !== exerciseId && mainExercise.order < ex.order
-      )[0] ?? null;
-
-    const nextExerciseByPriority =
-      prioritizedExercise.filter(
-        (ex) =>
-          ex.exercise_id !== exerciseId && mainExercise.priority < ex.priority
       )[0] ?? null;
 
     const prevExerciseByOrder =
@@ -39,24 +33,17 @@ export const retrieveExerciseSessionQuery = async (
         (ex) => ex.exercise_id !== exerciseId && mainExercise.order > ex.order
       )[0] ?? null;
 
-    const prevExerciseByPriority =
-      prioritizedExercise.filter(
-        (ex) =>
-          ex.exercise_id !== exerciseId && mainExercise.priority > ex.priority
-      )[0] ?? null;
-
     return res.status(200).json({
       role: res.locals.state.account.role,
       message: 'Exercise fetched successfully',
       status: 'success',
       exercise: mainExercise,
+      record: sessionSetRecord,
       next: {
         order: nextExerciseByOrder,
-        priority: nextExerciseByPriority,
       },
       prev: {
         order: prevExerciseByOrder,
-        priority: prevExerciseByPriority,
       },
     });
   } catch (error) {
@@ -140,22 +127,33 @@ const queryExerciseByPrevOrder = async (sessionId: string, order: number) => {
   return data.rows;
 };
 
-const queryExerciseByPriority = async (sessionId: string, order: number) => {
-  let query = `
-          SELECT
-              exercises.exercise_id,
-              priority,
-              "order"
-          FROM exercises
-          JOIN workout_exercises
-              ON exercises.exercise_id = workout_exercises.exercise_id
-          JOIN sessions 
-              ON sessions.workout_id = workout_exercises.workout_id
-          WHERE
-            session_id = ${sessionId}
-          AND workout_exercises."order" = ${order}
-      `;
+const queryWorkoutExerciseRecord = async (
+  workoutId: string,
+  exerciseId: string,
+  accountId: string
+) => {
+  const query = `SELECT
+  sets.weight,
+  sets.repetitions,
+  sets.set_id,
+  sets.session_id,
+  sets.created_at
+  FROM sets
+  JOIN (
+      SELECT
+          sets.session_id,
+          sets.weight
+      FROM sets
+      ORDER BY weight DESC
+      LIMIT 1
+  ) x
+      on sets.session_id = x.session_id
+  JOIN sessions s on sets.session_id = s.session_id
+      WHERE s.workout_id = $1
+        AND exercise_id = $2
+        AND created_by = $3
+  ORDER BY sets.created_at ASC`;
 
-  const data = await db.query(query);
+  const data = await db.query(query, [workoutId, exerciseId, accountId]);
   return data.rows;
 };

@@ -10,19 +10,11 @@ export const SessionExercise = ({
   nextEx,
   prevEx,
   exercise,
+  record,
 }) => {
   return (
     <main className="pb-20 pt-16">
-      <div className="px-3 py-5 bg-gray-50">
-        {/* <OverviewRow
-          order="A1"
-          name={exercise.name}
-          sets="sets 3"
-          reps="reps 10-12"
-          rir="rir 1"
-          rest="REST 90 seconds"
-        /> */}
-      </div>
+      <div className="px-3 py-5 bg-gray-50" />
 
       {!!exercise.video && (
         <div className="pb-5 w-full">
@@ -38,7 +30,12 @@ export const SessionExercise = ({
         <p>Reps</p>
         <p>Weight (LBS)</p>
       </div>
-      <GetExerciseSets sessionId={sessionId} exerciseId={exerciseId} />
+
+      <GetExerciseSets
+        sessionId={sessionId}
+        exerciseId={exerciseId}
+        record={record}
+      />
 
       <Notes
         exercise={exercise}
