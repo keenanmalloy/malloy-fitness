@@ -15,7 +15,7 @@ const FullPageModal = ({
         className="fixed inset-0 z-10 overflow-y-auto"
         onClose={closeModal}
       >
-        <div className={`min-h-screen text-center  h-100 bg-white`}>
+        <section className={`min-h-screen text-center  h-100 bg-white`}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -40,7 +40,7 @@ const FullPageModal = ({
             leaveTo="opacity-0 scale-95"
           >
             <div
-              className={`inline-block w-full max-w-md px-3 py-2 text-left align-middle transition-all transform bg-white rounded-2xl`}
+              className={`inline-block min-h-screen w-full max-w-md px-3 py-2 text-left align-middle transition-all transform bg-white rounded-2xl`}
             >
               <Dialog.Title
                 as="h3"
@@ -59,7 +59,7 @@ const FullPageModal = ({
               {children}
             </div>
           </Transition.Child>
-        </div>
+        </section>
       </Dialog>
     </Transition>
   );

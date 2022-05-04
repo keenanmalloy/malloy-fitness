@@ -1,16 +1,21 @@
 import React from 'react';
-import { AuthorizeGoogleFitButton } from './AuthorizeGoogleFitButton';
 
 export const HealthPanel = ({ data }) => {
-  
-
   return (
     <div>
-      <div className="text-center text-2xl text-slate-600">Health</div>
-      <div className="flex justify-between pt-3">
-        <div>blood pressure: {data.blood_pressure}</div>
-        <div>resting heart rate: {data.resting_heart_rate}</div>
-        <div>blood glucose: {data.blood_glucose}</div>
+      <div className="flex justify-between items-center pt-5">
+        <div>
+          blood <span className="flex">pressure: 120/60</span>{' '}
+          {data.blood_pressure}
+        </div>
+        <div>
+          resting <span className="flex">heart rate: 63 bpm</span>{' '}
+          {data.resting_heart_rate}
+        </div>
+        <div>
+          blood <span className="flex">glucose: 78mg/dL</span>{' '}
+          {data.blood_glucose}
+        </div>
       </div>
     </div>
   );
