@@ -6,6 +6,7 @@ import { ActivityPanel } from './ActivityPanel';
 import { SleepPanel } from './SleepPanel';
 import { HealthPanel } from './HealthPanel';
 import { Divider } from 'features/feed/Divider';
+import { UserAction } from './UserAction';
 
 export const GetSelectedDailyOverview = ({ selected }) => {
   const { data, isError, isLoading, error } = useDailyOverviewQuery(selected);
@@ -38,6 +39,8 @@ export const GetSelectedDailyOverview = ({ selected }) => {
         {/* <SleepPanel data={data} /> */}
         {/* <HealthPanel data={data} /> */}
       </ul>
+
+      <UserAction selected={selected} />
     </section>
   );
 };

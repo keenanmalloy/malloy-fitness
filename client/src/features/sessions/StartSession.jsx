@@ -15,8 +15,12 @@ const StartSession = ({ sessionId, hasStarted, hasEnded }) => {
   };
 
   const initSession = async (id) => {
-    const { data } = await apiClient.patch(`/sessions/${id}/start`);
-    return data;
+    try {
+      const { data } = await apiClient.patch(`/sessions/${id}/start`);
+      return data;
+    } catch (error) {
+      console.log({ error });
+    }
   };
 
   const startOrContinueWorkout = async (sessionId) => {
@@ -49,6 +53,7 @@ const StartSession = ({ sessionId, hasStarted, hasEnded }) => {
       } catch (error) {
         // if error, then redirect to the first exercise in the session instead
         console.log({ error });
+        if (!firstExercise) return router.push(`/sessions/${sessionId}/`);
         return router.push(
           `/sessions/${sessionId}/exercises/${firstExercise.exercise_id}`
         );
@@ -59,6 +64,7 @@ const StartSession = ({ sessionId, hasStarted, hasEnded }) => {
       return;
     }
     queryClient.invalidateQueries('fetchSession', sessionId);
+    if (!firstExercise) return router.push(`/sessions/${sessionId}/`);
     router.push(
       `/sessions/${sessionId}/exercises/${firstExercise.exercise_id}`
     );

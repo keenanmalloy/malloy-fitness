@@ -146,7 +146,7 @@ export default function Navbar() {
           </div>
         </nav>
       )}
-      <nav className="dark:bg-gray-900 py-2 bg-white shadow flex items-center justify-between fixed bottom-0 left-0 right-0 w-full">
+      <nav className="dark:bg-gray-900 py-2 bg-white shadow flex items-center z-40 justify-between fixed bottom-0 left-0 right-0 w-full">
         <div className="max-w-7xl mx-auto">
           <div className="flex-1 flex items-center justify-center">
             {navigation.map((item) => {
