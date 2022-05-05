@@ -60,8 +60,7 @@ export const TrainingPanel = ({ data }) => {
                   </h2>
 
                   <p className="text-xs text-gray-500 pb-2">
-                    {session.description} this is a workout for pull that has a
-                    veryu long description
+                    {session.description}
                   </p>
                 </div>
               </div>

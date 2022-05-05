@@ -12,6 +12,8 @@ import endSessionRouter from './end';
 import exercisesRouter from './exercises';
 import setsRouter from './sets';
 import continueRouter from './continue';
+import { retrieveSessionWithSetsQuery } from 'controllers/sessions/retrieveSessionWithSetsQuery';
+import { initializeSessionMutation } from 'controllers/sessions/initializeSessionMutation';
 
 const router = Router();
 
@@ -35,14 +37,24 @@ router.get('/preview', authenticate, async (req, res) => {
   await retrievePreviewSessionsQuery(req, res);
 });
 
-// Retrieve Session
+// Retrieve Session with exercises
 router.get('/:sessionId', authenticate, authorize, async (req, res) => {
   await retrieveSessionQuery(res, req.params.sessionId);
+});
+
+// Retrieve Session Summary
+router.get('/:sessionId/summary', authenticate, authorize, async (req, res) => {
+  await retrieveSessionWithSetsQuery(res, req.params.sessionId);
 });
 
 // Create new Session
 router.post('/', authenticate, authorize, async (req, res) => {
   await createSessionMutation(res, req.body);
+});
+
+// Initialize a new session (creates empty workout and session)
+router.post('/init', authenticate, authorize, async (req, res) => {
+  await initializeSessionMutation(res, req.body);
 });
 
 // Delete Session

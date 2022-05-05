@@ -61,6 +61,7 @@ const SessionExercisePage = ({ exerciseId, sessionId }) => {
         nextEx={data.next}
         sessionId={sessionId}
         exerciseId={exerciseId}
+        record={data.record}
       />
     </>
   );

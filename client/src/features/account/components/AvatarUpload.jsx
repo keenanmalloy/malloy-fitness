@@ -1,27 +1,12 @@
-import { useState, useRef } from 'react';
-import { IoMdClose } from 'react-icons/io';
-import { Button } from 'features/common/Button';
-import Modal from 'features/common/Modal';
+import { useRef } from 'react';
+import { BsPersonFill } from 'react-icons/bs';
 
 export default function AvatarUpload({
   value,
   onChange,
-  defaultSrc,
-  hidePreview,
-  title = 'Upload image or video',
   accepts = 'image/*, video/*',
 }) {
-  const [success, setIsSuccess] = useState(null);
-  const [filetype, setFiletype] = useState(null);
-  const [cleared, setCleared] = useState(null);
-  const [key, setKey] = useState('');
-  const [isOpen, setIsOpen] = useState(false);
-
   const ref = useRef();
-
-  const reset = () => {
-    ref.current.value = '';
-  };
 
   const uploadPhoto = async (e) => {
     if (!e.target.files.length) {
@@ -31,15 +16,11 @@ export default function AvatarUpload({
     const filename = encodeURIComponent(file.name);
     const filetype = encodeURIComponent(file.type);
 
-    setFiletype(filetype);
-
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_ENDPOINT}/storage/upload?file=${filename}&type=${filetype}`,
       { credentials: 'include' }
     );
     const { url, fields } = await res.json();
-
-    setKey(fields.key);
 
     const formData = new FormData();
     formData.append('Content-Type', file.type);
@@ -53,7 +34,6 @@ export default function AvatarUpload({
     });
 
     if (upload.ok) {
-      setIsSuccess(true);
       onChange(fields.key);
       console.log(
         `Uploaded successfully! - visit https://cdn.trckd.ca/${fields.key}`
@@ -64,7 +44,7 @@ export default function AvatarUpload({
   };
 
   return (
-    <section className="py-2 relative">
+    <section className="py-2 relative mr-3">
       <button onClick={() => ref.current.click()}>
         <input
           onChange={uploadPhoto}
@@ -74,7 +54,9 @@ export default function AvatarUpload({
           ref={ref}
         />
         {!value ? (
-          <div />
+          <button className="p-4 rounded-full border-2 bg-gray-50">
+            <BsPersonFill className="w-7 h-7" />
+          </button>
         ) : (
           <img
             src={value}

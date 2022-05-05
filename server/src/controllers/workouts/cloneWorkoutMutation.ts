@@ -1,5 +1,6 @@
 import { db } from 'config/db';
 import { Response } from 'express';
+import { inferCloneName } from 'utils/inferCloneName';
 
 export const cloneWorkoutMutation = async (
   res: Response,
@@ -17,27 +18,13 @@ export const cloneWorkoutMutation = async (
       });
     }
 
-    const inferIteratedWorkoutName = (name: string) => {
-      const nameParts = name.split(' ');
-      const lastNamePart = nameParts[nameParts.length - 1];
-      const lastNamePartNumber = parseInt(lastNamePart, 10);
-      if (isNaN(lastNamePartNumber)) {
-        return `${name} (copy)`;
-      }
-      const newName = nameParts
-        .slice(0, nameParts.length - 1)
-        .join(' ')
-        .concat(` (copy ${lastNamePartNumber + 1})`);
-      return newName;
-    };
-
     const workoutQuery = `
       WITH
         workoutdata(name, description, category, created_by, type) AS (
           VALUES
-              ('${inferIteratedWorkoutName(workout.name)}', '${
-      workout.description
-    }', '${workout.category}', ${accountId}, '${workout.type}')
+              ('${inferCloneName(workout.name)}', '${workout.description}', '${
+      workout.category
+    }', ${accountId}, '${workout.type}')
           )
         INSERT INTO workouts (name, description, category, created_by, type)
           SELECT *

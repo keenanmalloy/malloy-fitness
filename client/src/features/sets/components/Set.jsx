@@ -5,7 +5,14 @@ import { IoClose } from 'react-icons/io5';
 import { useDeleteSetMutation } from '../api/useDeleteSetMutation';
 import { useUpdateSetMutation } from '../api/useUpdateSetMutation';
 
-export const Set = ({ set, setNumber, sessionId, exerciseId, isRemote }) => {
+export const Set = ({
+  set,
+  setNumber,
+  sessionId,
+  exerciseId,
+  isRemote,
+  setRecord,
+}) => {
   const [repetitions, setRepetitions] = useState(set.repetitions);
   const [weight, setWeight] = useState(set.weight);
   const [setId, setSetId] = useState(set.set_id);
@@ -18,41 +25,70 @@ export const Set = ({ set, setNumber, sessionId, exerciseId, isRemote }) => {
 
   return (
     <div className="flex items-center">
-      <div className="pr-3">
-        Set <span className="flex">{setNumber}</span>
+      <div
+        className="pr-3 text-md"
+        style={{
+          lineHeight: '0.2rem',
+        }}
+      >
+        Set <span className="flex text-xl ">{setNumber}</span>
       </div>
-      <SavedInput
-        set={set}
-        exerciseId={exerciseId}
-        sessionId={sessionId}
-        onChange={(e) => setRepetitions(e.target.value)}
-        value={repetitions}
-        weight={weight}
-        repetitions={repetitions}
-        placeholder="6-8"
-        name="repetitions"
-        id="repetitions"
-        setId={setId}
-        setSetId={setSetId}
-        hasSaved={hasSaved}
-        setHasSaved={setHasSaved}
-      />
-      <SavedInput
-        set={set}
-        exerciseId={exerciseId}
-        sessionId={sessionId}
-        onChange={(e) => setWeight(e.target.value)}
-        value={weight}
-        weight={weight}
-        repetitions={repetitions}
-        placeholder="LBS"
-        name="weight"
-        id="weight"
-        setId={setId}
-        setSetId={setSetId}
-        hasSaved={hasSaved}
-        setHasSaved={setHasSaved}
-      />
+      <div className="relative pt-2">
+        <span
+          className="absolute top-1 right-0 italic text-gray-600"
+          style={{
+            fontSize: '0.55rem',
+          }}
+        >
+          {typeof setRecord !== 'undefined'
+            ? `set record ${setRecord?.repetitions} reps`
+            : null}
+        </span>
+        <SavedInput
+          set={set}
+          exerciseId={exerciseId}
+          sessionId={sessionId}
+          onChange={(e) => setRepetitions(e.target.value)}
+          value={repetitions}
+          weight={weight}
+          repetitions={repetitions}
+          placeholder="6-8"
+          name="repetitions"
+          id="repetitions"
+          setId={setId}
+          setSetId={setSetId}
+          hasSaved={hasSaved}
+          setHasSaved={setHasSaved}
+        />
+      </div>
+      <div className="relative pt-2">
+        <span
+          className="absolute top-1 right-0 italic text-gray-600"
+          style={{
+            fontSize: '0.55rem',
+          }}
+        >
+          {typeof setRecord !== 'undefined'
+            ? `set record ${setRecord?.weight}lbs`
+            : null}
+        </span>
+        <SavedInput
+          set={set}
+          exerciseId={exerciseId}
+          sessionId={sessionId}
+          onChange={(e) => setWeight(e.target.value)}
+          value={weight}
+          weight={weight}
+          repetitions={repetitions}
+          placeholder="LBS"
+          name="weight"
+          id="weight"
+          setId={setId}
+          setSetId={setSetId}
+          hasSaved={hasSaved}
+          setHasSaved={setHasSaved}
+        />
+      </div>
       <div className="pl-2">
         <button onClick={() => mutate()} className="bg-none">
           <IoClose className="w-4 h-5" />

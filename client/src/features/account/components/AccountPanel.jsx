@@ -1,22 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Input } from 'features/form/Input';
 import { Avatar } from 'features/account/components/Avatar';
-import { AccountField } from 'features/account/components/AccountField';
+import {
+  AccountField,
+  AccountSelectField,
+} from 'features/account/components/AccountField';
 import { Logout } from 'features/account/components/Logout';
 
 export const AccountPanel = ({ account }) => {
-  const [givenName, setGivenName] = React.useState(account.given_name);
-  const [familyName, setFamilyName] = React.useState(account.family_name);
-  const [name, setName] = React.useState(account.name);
-  const [description, setDescription] = React.useState(account.description);
-  const [phone, setPhone] = React.useState(account.phone);
-  const [avatar, setAvatar] = React.useState(account.avatar_url);
-  const [weight, setWeight] = React.useState(account.weight);
-  const [height, setHeight] = React.useState(account.height);
-  const [dob, setDob] = React.useState(account.dob);
-  const [gender, setGender] = React.useState(account.gender);
-  const [city, setCity] = React.useState(account.city);
-  const [country, setCountry] = React.useState(account.country);
+  const [givenName, setGivenName] = useState(account.given_name);
+  const [familyName, setFamilyName] = useState(account.family_name);
+  const [name, setName] = useState(account.name);
+  const [description, setDescription] = useState(account.description);
+  const [phone, setPhone] = useState(account.phone);
+  const [avatar, setAvatar] = useState(account.avatar_url);
+  const [weight, setWeight] = useState(account.weight);
+  const [height, setHeight] = useState(account.height);
+  const [dob, setDob] = useState(account.dob);
+  const [gender, setGender] = useState(account.gender);
+  const [city, setCity] = useState(account.city);
+  const [country, setCountry] = useState(account.country);
 
   return (
     <section className="px-5">
@@ -73,60 +76,81 @@ export const AccountPanel = ({ account }) => {
         />
       </div>
       <div className="flex">
-        <AccountField
-          label="Weight"
-          type="number"
-          onChange={(e) => setWeight(e.target.value)}
-          value="173"
-          field="given_name"
-          prevValue={account.given_name}
+        <AccountSelectField
+          label="Gender"
+          onChange={(value) => setGender(value)}
+          value={gender}
+          field="gender"
+          prevValue={account.gender}
+          options={[
+            {
+              label: 'prefer not to say',
+              value: 'prefer not to say',
+            },
+            {
+              label: 'male',
+              value: 'male',
+            },
+            {
+              label: 'female',
+              value: 'female',
+            },
+          ]}
         />
 
         <AccountField
           label="Date of Birth"
           type="date"
           onChange={(e) => setDob(e.target.value)}
-          value="1997-05-14"
-          field="family_name"
-          prevValue={account.family_name}
+          value={new Date(dob).toISOString().split('T')[0]}
+          field="dob"
+          prevValue={account.dob}
         />
       </div>
       <div className="flex">
         <AccountField
-          label="Gender"
-          type="select"
-          onChange={(e) => setGender(e.target.value)}
-          value="Male"
-          field="given_name"
-          prevValue={account.given_name}
+          label="Weight"
+          type="number"
+          onChange={(e) => setWeight(e.target.value)}
+          field="weight"
+          value={weight}
+          prevValue={account.weight}
         />
-
         <AccountField
           label="Height"
           type="number"
           onChange={(e) => setHeight(e.target.value)}
-          value="6'0"
-          field="family_name"
-          prevValue={account.family_name}
+          value={height}
+          field="height"
+          prevValue={account.height}
         />
       </div>
       <div className="flex">
+        <AccountSelectField
+          label="Country"
+          type="text"
+          onChange={(value) => setCountry(value)}
+          value={country}
+          field="country"
+          prevValue={account.country}
+          options={[
+            {
+              label: 'CA',
+              value: 'CA',
+            },
+            {
+              label: 'US',
+              value: 'US',
+            },
+          ]}
+        />
         <AccountField
           label="City"
           type="text"
           onChange={(e) => setCity(e.target.value)}
-          value="Burnaby"
-          field="given_name"
-          prevValue={account.given_name}
-        />
-
-        <AccountField
-          label="Country"
-          type="text"
-          onChange={(e) => setCountry(e.target.value)}
-          value="Canada"
-          field="family_name"
-          prevValue={account.family_name}
+          value={city}
+          field="city"
+          prevValue={account.city}
         />
       </div>
       <div>

@@ -109,7 +109,13 @@ CREATE TABLE IF NOT EXISTS accounts (
     ticket_expiry timestamp with time zone DEFAULT now() NOT NULL,
     description text,
     phone text,
-    locale VARCHAR(5) DEFAULT 'en-CA'
+    locale VARCHAR(5) DEFAULT 'en-CA',
+    gender text DEFAULT 'prefer not to say',
+    dob timestamp with time zone,
+    weight int,
+    height int,
+    country VARCHAR(2) DEFAULT 'CA',
+    city text
 );
 
 CREATE TABLE IF NOT EXISTS sleep (
