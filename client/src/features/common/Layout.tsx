@@ -2,7 +2,7 @@ import React from 'react';
 import Navbar from './Navbar';
 import { Header } from './Header';
 
-const Layout = ({ children }) => {
+const Layout: React.FC = ({ children }) => {
   return (
     <main>
       {/* Empty div to cover the height of the navbar */}

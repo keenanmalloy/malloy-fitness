@@ -2,7 +2,14 @@ import React, { useEffect } from 'react';
 import { useAccountFieldMutation } from 'features/account/api/useAccountFieldMutation';
 import AvatarUpload from './AvatarUpload';
 
-export const Avatar = ({ onChange, value, field, prevValue }) => {
+interface Props {
+  onChange: (url: string) => void;
+  value: string;
+  field: string;
+  prevValue: string;
+}
+
+export const Avatar = ({ onChange, value, field, prevValue }: Props) => {
   const { mutate, isLoading, isError } = useAccountFieldMutation();
 
   useEffect(() => {
@@ -29,7 +36,6 @@ export const Avatar = ({ onChange, value, field, prevValue }) => {
           onChange(`https://cdn.trckd.ca/${key}`);
         }
       }}
-      hidePreview
     />
   );
 };

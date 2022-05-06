@@ -1,7 +1,20 @@
-import React from 'react';
+import React, { ChangeEventHandler } from 'react';
 import { CgSpinner } from 'react-icons/cg';
 
-export const Input = ({
+interface Props {
+  onChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
+  value: string | number;
+  label: string;
+  isRequired?: boolean;
+  isTextArea?: boolean;
+  autoFocus?: string;
+  isDisabled?: boolean;
+  isLoading?: boolean;
+  placeholder?: string;
+  type?: string;
+}
+
+export const Input: React.FC<Props> = ({
   onChange,
   value,
   label,
@@ -18,7 +31,6 @@ export const Input = ({
       <div className="py-2 relative">
         <label>{label}</label>
         <textarea
-          type={type}
           className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           required={isRequired}
           value={value}

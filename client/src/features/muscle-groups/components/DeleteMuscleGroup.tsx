@@ -5,21 +5,22 @@ import { useQueryClient } from 'react-query';
 import { useDeleteMuscleGroupMutation } from 'features/muscle-groups/api/useDeleteMuscleGroupMutation';
 import { MdDelete } from 'react-icons/md';
 
-export const DeleteMuscleGroup = ({ id }) => {
+interface Props {
+  id: string;
+}
+
+export const DeleteMuscleGroup = ({ id }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const { mutate, isLoading, isError } = useDeleteMuscleGroupMutation();
 
   const queryCLient = useQueryClient();
 
   const handleDelete = () => {
-    mutate(
-      { id },
-      {
-        onSuccess: () => {
-          queryCLient.refetchQueries('fetchMuscleGroups');
-        },
-      }
-    );
+    mutate(id, {
+      onSuccess: () => {
+        queryCLient.refetchQueries('fetchMuscleGroups');
+      },
+    });
   };
 
   return (
@@ -35,7 +36,7 @@ export const DeleteMuscleGroup = ({ id }) => {
       >
         <div className="flex justify-between pt-3">
           <Button onClick={() => setIsOpen(false)}>Cancel</Button>
-          <Button onClick={handleDelete} disabled={isLoading}>
+          <Button onClick={handleDelete} isDisabled={isLoading}>
             {isLoading ? 'Deleting...' : 'Delete'}
           </Button>
         </div>

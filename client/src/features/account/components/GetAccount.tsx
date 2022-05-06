@@ -12,7 +12,7 @@ export const GetAccount = () => {
     return <p className="text-red-500 p-5">Error fetching account...</p>;
   }
 
-  if (!data.account) {
+  if (!data) {
     return null;
   }
 

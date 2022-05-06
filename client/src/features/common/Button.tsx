@@ -1,6 +1,19 @@
 import Link from 'next/link';
+import { MouseEventHandler } from 'react';
 
-export const Button = ({
+interface Props {
+  onClick?: MouseEventHandler<HTMLButtonElement>;
+  size?: string;
+  variant?: string;
+  href?: string;
+  isLoading?: boolean;
+  isDisabled?: boolean;
+  className?: string;
+  hidden?: boolean;
+  type?: 'submit' | 'button' | 'reset';
+}
+
+export const Button: React.FC<Props> = ({
   children,
   onClick,
   size,

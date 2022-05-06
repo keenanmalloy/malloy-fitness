@@ -43,7 +43,7 @@ export const MuscleGroups = () => {
     );
   }
 
-  if (!data.muscleGroups) {
+  if (!data || !data.muscleGroups.length) {
     return (
       <section className="relative p-5">
         <SearchMuscleGroups
@@ -94,7 +94,7 @@ export const MuscleGroups = () => {
                     return 0;
                   }
 
-                  return a.muscle_group_id - b.muscle_group_id;
+                  return +a.muscle_group_id - +b.muscle_group_id;
                 })
                 .filter(
                   (mg) =>
@@ -122,7 +122,7 @@ export const MuscleGroups = () => {
                               name={mg.name}
                               description={mg.description}
                               image={mg.image}
-                              refetchMuscleGroup="fetchMuscleGroups"
+                              refetchKey="fetchMuscleGroups"
                               id={mg.muscle_group_id}
                             />
                           </div>
@@ -157,7 +157,7 @@ export const MuscleGroups = () => {
                     return 0;
                   }
 
-                  return a.muscle_group_id - b.muscle_group_id;
+                  return +a.muscle_group_id - +b.muscle_group_id;
                 })
                 .map((mg) => {
                   return (
@@ -179,7 +179,7 @@ export const MuscleGroups = () => {
                               name={mg.name}
                               description={mg.description}
                               image={mg.image}
-                              refetchMuscleGroup="fetchMuscleGroups"
+                              refetchKey="fetchMuscleGroups"
                               id={mg.muscle_group_id}
                             />
                           </div>

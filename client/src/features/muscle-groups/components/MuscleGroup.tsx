@@ -4,7 +4,11 @@ import { EditMuscleGroup } from 'features/muscle-groups/components/EditMuscleGro
 import { useMuscleGroupQuery } from 'features/muscle-groups/api/useMuscleGroupQuery';
 import { useRouter } from 'next/router';
 
-export const MuscleGroup = ({ muscleGroupId }) => {
+interface Props {
+  muscleGroupId: string;
+}
+
+export const MuscleGroup = ({ muscleGroupId }: Props) => {
   const { data, isError, isFetching } = useMuscleGroupQuery(muscleGroupId);
   const router = useRouter();
 
@@ -31,7 +35,7 @@ export const MuscleGroup = ({ muscleGroupId }) => {
     );
   }
 
-  if (!data.muscleGroup) {
+  if (!data) {
     return (
       <div className="p-5">
         <p>does not exist...</p>

@@ -12,7 +12,7 @@ export const Profile = () => {
     return <p style={{ color: 'red' }}>fetching error...</p>;
   }
 
-  if (data && !data.account) {
+  if (!data) {
     return <p>none available...</p>;
   }
 

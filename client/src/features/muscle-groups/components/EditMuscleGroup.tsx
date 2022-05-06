@@ -1,13 +1,19 @@
 import { Button } from 'features/common/Button';
 import { Input } from 'features/form/Input';
 import Upload from 'features/Upload';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useUpdateMuscleGroupMutation } from 'features/muscle-groups/api/useUpdateMuscleGroupMutation';
 import Modal from 'features/common/Modal';
 import { MdEdit } from 'react-icons/md';
+import { MuscleGroup } from '../types';
 
-export const EditMuscleGroup = (props) => {
+interface Props extends Omit<MuscleGroup, 'muscle_group_id'> {
+  id: string;
+  refetchKey: string;
+}
+
+export const EditMuscleGroup = (props: Props) => {
   const { id, refetchKey } = props;
   const [name, setName] = useState(props.name);
   const [description, setDescription] = useState(props.description);
@@ -18,7 +24,7 @@ export const EditMuscleGroup = (props) => {
 
   const { isLoading, mutate, isError } = useUpdateMuscleGroupMutation(id);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     const muscleGroup = {
@@ -59,7 +65,7 @@ export const EditMuscleGroup = (props) => {
           />
           <Input
             onChange={(e) => setDescription(e.target.value)}
-            value={description}
+            value={description ?? ''}
             label="description"
             isTextArea
           />
@@ -72,10 +78,10 @@ export const EditMuscleGroup = (props) => {
                 setImage(null);
               }
             }}
-            defaultSrc={image}
+            defaultSrc={image ?? ''}
           />
 
-          <Button disabled={isLoading} className="w-full mt-2">
+          <Button isDisabled={isLoading} className="w-full mt-2">
             {isLoading ? 'Updating...' : 'Update'}
           </Button>
 

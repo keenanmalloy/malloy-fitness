@@ -6,16 +6,21 @@ import {
   AccountSelectField,
 } from 'features/account/components/AccountField';
 import { Logout } from 'features/account/components/Logout';
+import { Account } from 'features/account//types';
 
-export const AccountPanel = ({ account }) => {
+interface Props {
+  account: Account;
+}
+
+export const AccountPanel = ({ account }: Props) => {
   const [givenName, setGivenName] = useState(account.given_name);
   const [familyName, setFamilyName] = useState(account.family_name);
   const [name, setName] = useState(account.name);
   const [description, setDescription] = useState(account.description);
   const [phone, setPhone] = useState(account.phone);
   const [avatar, setAvatar] = useState(account.avatar_url);
-  const [weight, setWeight] = useState(account.weight);
-  const [height, setHeight] = useState(account.height);
+  const [weight, setWeight] = useState<string | number>(account.weight);
+  const [height, setHeight] = useState<string | number>(account.height);
   const [dob, setDob] = useState(account.dob);
   const [gender, setGender] = useState(account.gender);
   const [city, setCity] = useState(account.city);
@@ -37,7 +42,6 @@ export const AccountPanel = ({ account }) => {
           field="description"
           isTextArea
           prevValue={account.description}
-          className="min-h-60"
         />
       </div>
       <div className="flex">
@@ -72,7 +76,6 @@ export const AccountPanel = ({ account }) => {
           onChange={() => console.log('changed')}
           value={account.email}
           isDisabled
-          prevValue={account.email}
         />
       </div>
       <div className="flex">
