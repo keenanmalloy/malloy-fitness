@@ -1,15 +1,21 @@
-import { useRef } from 'react';
+import { ChangeEvent, useRef } from 'react';
 import { BsPersonFill } from 'react-icons/bs';
+
+interface Props {
+  value: string;
+  onChange: (value: string) => void;
+  accepts?: string;
+}
 
 export default function AvatarUpload({
   value,
   onChange,
   accepts = 'image/*, video/*',
-}) {
-  const ref = useRef();
+}: Props) {
+  const ref = useRef<HTMLInputElement>(null);
 
-  const uploadPhoto = async (e) => {
-    if (!e.target.files.length) {
+  const uploadPhoto = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e?.target?.files?.length) {
       return;
     }
     const file = e.target.files[0];
@@ -24,7 +30,7 @@ export default function AvatarUpload({
 
     const formData = new FormData();
     formData.append('Content-Type', file.type);
-    Object.entries({ ...fields, file }).forEach(([key, value]) => {
+    Object.entries<string>({ ...fields, file }).forEach(([key, value]) => {
       formData.append(key, value);
     });
 
@@ -45,7 +51,7 @@ export default function AvatarUpload({
 
   return (
     <section className="py-2 relative mr-3">
-      <button onClick={() => ref.current.click()}>
+      <button onClick={() => ref.current && ref.current.click()}>
         <input
           onChange={uploadPhoto}
           className="hidden"

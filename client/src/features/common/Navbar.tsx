@@ -110,7 +110,7 @@ const libraryNavigation = [
   },
 ];
 
-function classNames(...classes) {
+function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
 }
 
@@ -134,7 +134,6 @@ export default function Navbar() {
                           : 'text-gray-800 hover:bg-gray-700 hover:text-white',
                         'px-3 py-2 rounded-md text-xs font-medium'
                       )}
-                      aria-current={item.current ? 'page' : undefined}
                     >
                       <div className="flex justify-center">{item.icon}</div>
                       <p>{item.name}</p>
@@ -161,7 +160,6 @@ export default function Navbar() {
                         : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                       'px-3 py-2 rounded-md text-xs font-medium'
                     )}
-                    aria-current={item.current ? 'page' : undefined}
                   >
                     <div className="flex justify-center">{item.icon}</div>
                     <p>{item.name}</p>
@@ -177,7 +175,6 @@ export default function Navbar() {
                         : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                       'px-3 py-2 rounded-md text-xs font-medium'
                     )}
-                    aria-current={item.current ? 'page' : undefined}
                   >
                     <div className="flex justify-center">{item.icon}</div>
                     <p>{item.name}</p>

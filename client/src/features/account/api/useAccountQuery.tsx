@@ -1,5 +1,6 @@
 import { useQuery } from 'react-query';
 import { apiClient } from 'config/axios';
+import { GetAccountResponse } from 'features/account/types';
 
 const fetchAccount = async () => {
   const { data } = await apiClient.get(`/auth/me`);
@@ -7,5 +8,5 @@ const fetchAccount = async () => {
 };
 
 export const useAccountQuery = () => {
-  return useQuery('fetchAccount', fetchAccount);
+  return useQuery<GetAccountResponse>('fetchAccount', fetchAccount);
 };

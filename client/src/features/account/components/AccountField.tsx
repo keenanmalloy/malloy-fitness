@@ -1,7 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { ChangeEventHandler, useEffect } from 'react';
 import { useAccountFieldMutation } from 'features/account/api/useAccountFieldMutation';
 import { Input } from 'features/form/Input';
 import Select from 'react-select';
+
+interface AccountFieldProps {
+  label: string;
+  value: string | number;
+  prevValue: string | number;
+  field: string;
+  type?: string;
+  onChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
+  isTextArea?: boolean;
+}
 
 export const AccountField = ({
   label,
@@ -11,7 +21,7 @@ export const AccountField = ({
   onChange,
   prevValue,
   isTextArea,
-}) => {
+}: AccountFieldProps) => {
   if (!field || !label) {
     throw new Error('field and label are required');
   }
@@ -53,6 +63,16 @@ export const AccountField = ({
   );
 };
 
+interface AccountSelectFieldProps {
+  label: string;
+  value: string;
+  field: string;
+  type?: string;
+  onChange: (value: string) => void;
+  options: { label: string; value: string }[];
+  prevValue: string;
+}
+
 export const AccountSelectField = ({
   label,
   value,
@@ -60,7 +80,7 @@ export const AccountSelectField = ({
   onChange,
   options,
   prevValue,
-}) => {
+}: AccountSelectFieldProps) => {
   if (!field || !label) {
     throw new Error('field and label are required');
   }
@@ -86,7 +106,7 @@ export const AccountSelectField = ({
       <label>{label}</label>
       <Select
         onChange={(data) => {
-          onChange(data.value);
+          onChange(data?.value ?? '');
         }}
         isSearchable={false}
         className="flex-1"

@@ -10,7 +10,7 @@ export const Logout = () => {
       method: 'POST',
       credentials: 'include',
     }).finally(() => {
-      router.reload('/');
+      router.reload();
     });
   };
 

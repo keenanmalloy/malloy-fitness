@@ -3,7 +3,7 @@ import { CgSpinner } from 'react-icons/cg';
 
 interface Props {
   onChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
-  value: string;
+  value: string | number;
   label: string;
   isRequired?: boolean;
   isTextArea?: boolean;
