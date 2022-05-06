@@ -1,5 +1,6 @@
 import { useQuery } from 'react-query';
 import { apiClient } from 'config/axios';
+import { GetMuscleGroupsResponse } from '../types';
 
 const fetchMuscleGroups = async () => {
   const { data } = await apiClient.get(
@@ -10,5 +11,8 @@ const fetchMuscleGroups = async () => {
 };
 
 export const useMuscleGroupsQuery = () => {
-  return useQuery(['fetchMuscleGroups'], fetchMuscleGroups);
+  return useQuery<GetMuscleGroupsResponse, any>(
+    ['fetchMuscleGroups'],
+    fetchMuscleGroups
+  );
 };

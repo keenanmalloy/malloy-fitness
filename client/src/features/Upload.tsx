@@ -1,7 +1,15 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, ChangeEventHandler, ChangeEvent } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import { Button } from './common/Button';
 import Modal from './common/Modal';
+
+interface Props {
+  onChange: (a: any) => void;
+  defaultSrc?: string;
+  hidePreview?: boolean;
+  title?: string;
+  accepts?: string;
+}
 
 export default function Upload({
   onChange,
@@ -9,21 +17,23 @@ export default function Upload({
   hidePreview,
   title = 'Upload image or video',
   accepts = 'image/*, video/*',
-}) {
-  const [success, setIsSuccess] = useState(null);
-  const [filetype, setFiletype] = useState(null);
-  const [cleared, setCleared] = useState(null);
+}: Props) {
+  const [success, setIsSuccess] = useState<null | boolean>(null);
+  const [filetype, setFiletype] = useState<null | string>(null);
+  const [cleared, setCleared] = useState<null | boolean>(null);
   const [key, setKey] = useState('');
   const [isOpen, setIsOpen] = useState(false);
 
-  const ref = useRef();
+  const ref = useRef<HTMLInputElement>(null);
 
   const reset = () => {
-    ref.current.value = '';
+    if (ref.current) {
+      ref.current.value = '';
+    }
   };
 
-  const uploadPhoto = async (e) => {
-    if (!e.target.files.length) {
+  const uploadPhoto = async (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e?.target?.files?.length) {
       return;
     }
     const file = e.target.files[0];
@@ -42,7 +52,7 @@ export default function Upload({
 
     const formData = new FormData();
     formData.append('Content-Type', file.type);
-    Object.entries({ ...fields, file }).forEach(([key, value]) => {
+    Object.entries<string>({ ...fields, file }).forEach(([key, value]) => {
       formData.append(key, value);
     });
 
@@ -62,8 +72,7 @@ export default function Upload({
     }
   };
 
-  const removeFileAndUnlink = async (e) => {
-    e.preventDefault();
+  const removeFileAndUnlink = async () => {
     setCleared(true);
     setKey('');
     onChange(null);

@@ -4,7 +4,19 @@ import { CreateMuscleGroup } from 'features/muscle-groups/components/CreateMuscl
 import { FaChevronUp, FaChevronDown } from 'react-icons/fa';
 import { FilterMuscleGroups } from './FilterMuscleGroups';
 
-export const SearchMuscleGroups = ({ query, setQuery, setSortBy, role }) => {
+interface Props {
+  query: string;
+  setQuery: (s: string) => void;
+  setSortBy: (s: string) => void;
+  role?: string;
+}
+
+export const SearchMuscleGroups = ({
+  query,
+  setQuery,
+  setSortBy,
+  role,
+}: Props) => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
   return (
