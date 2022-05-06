@@ -1,0 +1,28 @@
+{
+  "exclude": ["node_modules"],
+  "include": ["src/**/*.ts", "src/**/*.tsx"],
+  "compilerOptions": {
+    "jsx": "preserve",
+    "types": ["jest"],
+    "lib": ["dom", "es2020"],
+    "baseUrl": "./src",
+    "paths": {
+      "*": ["*"]
+    },
+    "module": "commonjs",
+    "outDir": "dist",
+    "strict": true,
+    "target": "esnext",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "strictNullChecks": true,
+    "resolveJsonModule": true,
+    "inlineSourceMap": true,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "incremental": true,
+    "isolatedModules": true
+  }
+}
