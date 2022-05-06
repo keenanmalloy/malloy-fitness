@@ -13,6 +13,7 @@ import exercisesRouter from './exercises';
 import setsRouter from './sets';
 import continueRouter from './continue';
 import { retrieveSessionWithSetsQuery } from 'controllers/sessions/retrieveSessionWithSetsQuery';
+import { initializeSessionMutation } from 'controllers/sessions/initializeSessionMutation';
 
 const router = Router();
 
@@ -49,6 +50,11 @@ router.get('/:sessionId/summary', authenticate, authorize, async (req, res) => {
 // Create new Session
 router.post('/', authenticate, authorize, async (req, res) => {
   await createSessionMutation(res, req.body);
+});
+
+// Initialize a new session (creates empty workout and session)
+router.post('/init', authenticate, authorize, async (req, res) => {
+  await initializeSessionMutation(res, req.body);
 });
 
 // Delete Session

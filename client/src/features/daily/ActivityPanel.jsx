@@ -12,7 +12,7 @@ export const ActivityPanel = ({ data }) => {
 
   return (
     <section>
-      <div className="pb-10">
+      <div className="pb-5">
         <div className="flex justify-center text-center mx-3 pb-2">
           {data.steps}/10000 Steps Today
         </div>
