@@ -4,7 +4,7 @@ import Upload from 'features/Upload';
 import React, { FormEvent, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useCreateMuscleGroupMutation } from 'features/muscle-groups/api/useCreateMuscleGroupMutation';
-import Modal from 'features/common/Modal';
+import Modal from 'features/modal/Modal';
 
 export const CreateMuscleGroup = () => {
   const [name, setName] = useState('');

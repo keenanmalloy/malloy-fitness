@@ -1,4 +1,4 @@
-import HomeModal from 'features/common/HomeModal';
+import HomeModal from 'features/modal/HomeModal';
 import Router from 'next/router';
 import React, { useState } from 'react';
 import { IoAdd } from 'react-icons/io5';

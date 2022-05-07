@@ -1,19 +1,14 @@
-import React, { useState } from 'react';
-import Modal from 'features/common/Modal';
+import React, { FormEvent, useState } from 'react';
+import Modal from 'features/modal/Modal';
 import { Button } from 'features/common/Button';
 import { useQueryClient } from 'react-query';
 import { useRemoveExerciseFromWorkoutMutation } from 'features/workout-exercises/api/useRemoveExerciseFromWorkoutMutation';
 
-/**
- * A component that contains the logic to remove an exercise from a workout.
- * DELETE /workouts/:workoutId/exercises/:exerciseId
- *
- * The behaviour of this component should be:
- * 1. User clicks button with the intent to remove an exercise from their workout.
- * 2. Modal opens with details about removing the exercise and a button to click which sends the request.
- * 3. User clicks button in modal which removes the exercise from the workout.
- */
-export const RemoveExerciseFromWorkout = ({ workoutId, exerciseId }) => {
+interface Props {
+  workoutId: string;
+  exerciseId: string;
+}
+export const RemoveExerciseFromWorkout = ({ workoutId, exerciseId }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const { mutate, isLoading, isError } = useRemoveExerciseFromWorkoutMutation();
   const queryCLient = useQueryClient();
@@ -26,7 +21,7 @@ export const RemoveExerciseFromWorkout = ({ workoutId, exerciseId }) => {
     setIsOpen(true);
   }
 
-  function handleSubmit(e) {
+  function handleSubmit(e: FormEvent) {
     e.preventDefault();
     mutate(
       { workoutId, exerciseId },
@@ -49,7 +44,7 @@ export const RemoveExerciseFromWorkout = ({ workoutId, exerciseId }) => {
       <Modal isOpen={isOpen} closeModal={closeModal}>
         <p>Are you sure you want to remove this exercise from your workout?</p>
         <form onSubmit={handleSubmit}>
-          <Button type="submit" disabled={isLoading}>
+          <Button type="submit" isDisabled={isLoading}>
             {isLoading ? 'Removing Exercise...' : 'Remove Exercise'}
           </Button>
           {isError && (

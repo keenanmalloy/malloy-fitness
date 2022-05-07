@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { BsFillStopFill } from 'react-icons/bs';
-import Modal from 'features/common/Modal';
+import Modal from 'features/modal/Modal';
 import { Button } from 'features/common/Button';
 import { useRouter } from 'next/router';
 

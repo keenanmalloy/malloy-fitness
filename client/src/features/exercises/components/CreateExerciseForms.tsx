@@ -1,5 +1,5 @@
+import { MuscleGroup } from 'features/muscle-groups/types';
 import React, { useState } from 'react';
-import { MuscleGroup } from '../types';
 import { ChooseCreateExerciseForm } from './ChooseCreateExerciseForm';
 import { CreateCardioExerciseForm } from './CreateCardioExerciseForm';
 import { CreateHypertrophyExerciseForm } from './CreateHypertrophyExerciseForm';

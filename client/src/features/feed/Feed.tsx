@@ -4,7 +4,7 @@ import { Panel } from 'features/feed/Panel';
 import { getFutureDate, isToday } from './utils';
 
 interface Props {
-  workouts: any;
+  workouts: any[];
 }
 
 export const Feed = ({ workouts }: Props) => {

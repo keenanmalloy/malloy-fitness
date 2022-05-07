@@ -1,3 +1,5 @@
+import { MuscleGroup } from 'features/muscle-groups/types';
+
 export interface Exercise {
   name: string;
   video: string;
@@ -10,15 +12,9 @@ export interface Exercise {
   description: string;
   view: string;
   type: string;
+  order: number;
   primary: MuscleGroup[];
   secondary: MuscleGroup[];
-}
-
-export interface MuscleGroup {
-  name: string;
-  description: any;
-  muscle_group_id: string;
-  group: string;
 }
 
 interface SharedResponse {

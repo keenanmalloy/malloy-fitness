@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { Button } from 'features/common/Button';
 import { Input } from 'features/form/Input';
 import { RadioGroup } from 'features/form/RadioGroup';
@@ -36,7 +36,7 @@ export const CreateTherapyExerciseForm = ({
 
   const queryClient = useQueryClient();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     const isWeight =

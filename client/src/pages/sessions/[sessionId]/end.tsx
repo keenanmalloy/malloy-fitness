@@ -7,7 +7,7 @@ import { Skeleton } from 'features/common/Skeleton';
 import SessionTimer from 'features/sessions/SessionTimer';
 import { useSessionSummaryQuery } from 'features/sessions/useSessionSummaryQuery';
 import { Range } from 'react-range';
-import FullPageModal from 'features/common/FullPageModal';
+import FullPageModal from 'features/modal/FullPageModal';
 
 export async function getStaticPaths() {
   return {

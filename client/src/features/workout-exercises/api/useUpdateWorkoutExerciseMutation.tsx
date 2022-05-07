@@ -1,7 +1,17 @@
 import { apiClient } from 'config/axios';
 import { useMutation } from 'react-query';
-
-const updateWorkoutExercise = async ({ workoutId, exerciseId, payload }) => {
+interface UpdateWorkoutExerciseMutationProps {
+  workoutId: string;
+  exerciseId: string;
+  payload: {
+    order?: number;
+  };
+}
+const updateWorkoutExercise = async ({
+  workoutId,
+  exerciseId,
+  payload,
+}: UpdateWorkoutExerciseMutationProps) => {
   const { data } = await apiClient.put(
     `/workouts/${workoutId}/exercises/${exerciseId}/`,
     payload
@@ -9,8 +19,11 @@ const updateWorkoutExercise = async ({ workoutId, exerciseId, payload }) => {
   return data;
 };
 
-export const useUpdateWorkoutExerciseMutation = (workoutId, exerciseId) => {
-  return useMutation((data) => {
+export const useUpdateWorkoutExerciseMutation = (
+  workoutId: string,
+  exerciseId: string
+) => {
+  return useMutation<any, any, { order: number }>((data) => {
     return updateWorkoutExercise({ workoutId, exerciseId, payload: data });
   });
 };

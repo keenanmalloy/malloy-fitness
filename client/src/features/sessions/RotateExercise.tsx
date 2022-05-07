@@ -1,6 +1,6 @@
 import { MdOutlineRotateRight } from 'react-icons/md';
 import React, { useState } from 'react';
-import Modal from 'features/common/Modal';
+import Modal from 'features/modal/Modal';
 import { Button } from 'features/common/Button';
 import { useRotateExercise } from './useRotateExercise';
 import { useRouter } from 'next/router';
@@ -37,12 +37,19 @@ export const RotateExercise = ({ sessionId, exerciseId, workoutId }: Props) => {
   );
 };
 
+interface RotateConfirmationPanelProps {
+  setIsOpen: (b: boolean) => void;
+  sessionId: string;
+  exerciseId: string;
+  workoutId: string;
+}
+
 const RotateConfirmationPanel = ({
   setIsOpen,
   sessionId,
   exerciseId,
   workoutId,
-}) => {
+}: RotateConfirmationPanelProps) => {
   const router = useRouter();
   const { isError, isLoading, mutate, error } = useRotateExercise({
     exerciseId,

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { Input } from 'features/form/Input';
 import { RadioGroup } from 'features/form/RadioGroup';
 import { useQueryClient } from 'react-query';
@@ -51,7 +51,7 @@ export const UpdateExerciseForm = ({
 
   const queryClient = useQueryClient();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     const exercise = {

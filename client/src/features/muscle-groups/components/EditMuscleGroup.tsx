@@ -4,7 +4,7 @@ import Upload from 'features/Upload';
 import { FormEvent, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useUpdateMuscleGroupMutation } from 'features/muscle-groups/api/useUpdateMuscleGroupMutation';
-import Modal from 'features/common/Modal';
+import Modal from 'features/modal/Modal';
 import { MdEdit } from 'react-icons/md';
 import { MuscleGroup } from '../types';
 

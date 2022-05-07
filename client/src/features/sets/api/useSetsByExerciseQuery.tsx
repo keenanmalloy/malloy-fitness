@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 import { apiClient } from 'config/axios';
 
-const fetchSetsByExercise = async (exerciseId, sessionId) => {
+const fetchSetsByExercise = async (exerciseId: string, sessionId: string) => {
   const { data } = await apiClient.get(
     `/sessions/${sessionId}/exercise/${exerciseId}/sets/`
   );
@@ -9,7 +9,11 @@ const fetchSetsByExercise = async (exerciseId, sessionId) => {
   return data;
 };
 
-export const useSetsByExerciseQuery = ({ sessionId, exerciseId }) => {
+interface Props {
+  exerciseId: string;
+  sessionId: string;
+}
+export const useSetsByExerciseQuery = ({ sessionId, exerciseId }: Props) => {
   return useQuery(['fetchSetsByExercise', exerciseId], () =>
     fetchSetsByExercise(exerciseId, sessionId)
   );

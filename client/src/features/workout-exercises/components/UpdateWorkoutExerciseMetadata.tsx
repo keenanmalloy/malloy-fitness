@@ -1,13 +1,24 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 import { Button } from 'features/common/Button';
 import { Input } from 'features/form/Input';
 import { useState } from 'react';
 import { useQueryClient } from 'react-query';
-import Modal from 'features/common/Modal';
+import Modal from 'features/modal/Modal';
 import { useUpdateWorkoutExerciseMetadataMutation } from 'features/workout-exercises/api/useUpdateWorkoutExerciseMetadataMutation';
 import { REP_RANGES, REST_PERIODS } from 'features/environment';
 
-const UpdateWorkoutExerciseMetadata = (props) => {
+interface Props {
+  workoutId: string;
+  exerciseId: string;
+  sets: string;
+  restPeriod: string;
+  weight: string;
+  repsInReserve: string;
+  repetitions: string;
+  refetchKey: string;
+}
+
+const UpdateWorkoutExerciseMetadata = (props: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const { refetchKey, workoutId, exerciseId } = props;
   const [sets, setSets] = useState(props.sets);
@@ -20,7 +31,7 @@ const UpdateWorkoutExerciseMetadata = (props) => {
   const { isLoading, mutate, isError } =
     useUpdateWorkoutExerciseMetadataMutation({ workoutId, exerciseId });
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     mutate(
@@ -69,7 +80,7 @@ const UpdateWorkoutExerciseMetadata = (props) => {
             placeholder={REST_PERIODS.join(', ')}
           />
 
-          <Button disabled={isLoading} className="w-full mt-2">
+          <Button isDisabled={isLoading} className="w-full mt-2">
             {isLoading ? 'Updating...' : 'Update'}
           </Button>
 

@@ -1,7 +1,15 @@
 import { apiClient } from 'config/axios';
 import { useMutation, useQueryClient } from 'react-query';
 
-const addExerciseToWorkout = async ({ workoutId, payload }) => {
+interface AddExerciseToWorkoutParams {
+  workoutId: string;
+  payload: any;
+}
+
+const addExerciseToWorkout = async ({
+  workoutId,
+  payload,
+}: AddExerciseToWorkoutParams) => {
   const { data } = await apiClient.post(
     `/workouts/${workoutId}/exercises/`,
     payload

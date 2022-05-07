@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from 'react-query';
 
 interface ScheduleSessionParams {
   workoutId: string;
-  date: string;
+  date: Date;
 }
 
 const scheduleSession = async ({ workoutId, date }: ScheduleSessionParams) => {
@@ -16,7 +16,7 @@ const scheduleSession = async ({ workoutId, date }: ScheduleSessionParams) => {
 
 export const useScheduleSessionMutation = (workoutId: string) => {
   const queryClient = useQueryClient();
-  return useMutation<any, any, { date: string }>(
+  return useMutation<any, any, { date: Date }>(
     ({ date }) => scheduleSession({ workoutId, date }),
     {
       onSuccess: () => {

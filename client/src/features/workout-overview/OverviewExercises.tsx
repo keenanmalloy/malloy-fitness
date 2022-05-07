@@ -20,6 +20,10 @@ export const OverviewExercises = ({ sessionId, setIsOpen }: Props) => {
     return <p style={{ color: 'red' }}>fetching error...</p>;
   }
 
+  if (!data) {
+    return <p>no data</p>;
+  }
+
   const getLetter = (index: number) => {
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     return letters[index];

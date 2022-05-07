@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface Props {
-  order: number;
+  order: string;
   name: string;
   sets: string;
   reps: string;

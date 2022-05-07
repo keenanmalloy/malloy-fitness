@@ -1,6 +1,6 @@
 import { Button } from 'features/common/Button';
 import { useMuscleGroupsQuery } from 'features/muscle-groups/api/useMuscleGroupsQuery';
-import FullPageModal from 'features/common/FullPageModal';
+import FullPageModal from 'features/modal/FullPageModal';
 import { useState } from 'react';
 import { CreateExerciseForms } from './CreateExerciseForms';
 

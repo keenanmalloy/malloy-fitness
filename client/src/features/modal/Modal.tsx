@@ -1,13 +1,26 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 
-const HomeModal = ({ isOpen, title, description, closeModal, children }) => {
+interface Props {
+  isOpen: boolean;
+  title?: string;
+  description?: string;
+  closeModal: () => void;
+}
+
+const Modal: React.FC<Props> = ({
+  isOpen,
+  title,
+  description,
+  closeModal,
+  children,
+}) => {
   return (
     <Transition show={isOpen} as={Fragment}>
       <Dialog
         as="div"
-        className="fixed inset-0 overflow-y-auto"
-        onClose={() => {}}
+        className="fixed inset-0 z-50  overflow-y-auto"
+        onClose={closeModal}
       >
         <div className="min-h-screen">
           <Transition.Child
@@ -19,7 +32,7 @@ const HomeModal = ({ isOpen, title, description, closeModal, children }) => {
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className="fixed inset-0 bg-slate-500 opacity-75" />
+            <Dialog.Overlay className="fixed inset-0 " />
           </Transition.Child>
           <span
             className="inline-block h-screen align-bottom"
@@ -36,7 +49,21 @@ const HomeModal = ({ isOpen, title, description, closeModal, children }) => {
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="inline-block border-solid max-w-md py-5 px-4 text-right align-middle transition-all transform bottom-36 right-14 absolute">
+            <div className="inline-block border-solid w-full max-w-md py-5 px-2 text-left align-middle transition-all transform bg-white rounded-t-2xl">
+              <Dialog.Title
+                as="h3"
+                className="text-lg font-medium leading-6 text-gray-900"
+              >
+                {title}
+              </Dialog.Title>
+              {description && (
+                <Dialog.Description
+                  as="p"
+                  className="mt-2 text-sm leading-5 text-gray-500"
+                >
+                  {description}
+                </Dialog.Description>
+              )}
               {children}
             </div>
           </Transition.Child>
@@ -46,4 +73,4 @@ const HomeModal = ({ isOpen, title, description, closeModal, children }) => {
   );
 };
 
-export default HomeModal;
+export default Modal;

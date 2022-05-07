@@ -1,7 +1,7 @@
 import { useState, useRef, ChangeEventHandler, ChangeEvent } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import { Button } from './common/Button';
-import Modal from './common/Modal';
+import Modal from './modal/Modal';
 
 interface Props {
   onChange: (a: any) => void;

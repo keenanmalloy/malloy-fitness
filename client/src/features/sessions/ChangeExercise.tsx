@@ -1,4 +1,4 @@
-import FullPageModal from 'features/common/FullPageModal';
+import FullPageModal from 'features/modal/FullPageModal';
 import React, { useState } from 'react';
 import { CgSelect } from 'react-icons/cg';
 import { SelectableExerciseList } from './SelectableExercistList';
@@ -37,14 +37,13 @@ export const ChangeExercise = ({
   const { data, isLoading, isError, error, mutate } = useChangeExercise({
     sessionId,
     oldExerciseId: exerciseId,
-    workoutId,
   });
 
   const handleQuery = (e) => {
     setQuery(e.target.value);
   };
 
-  const handleExerciseSelection = (exerciseId) => {
+  const handleExerciseSelection = (exerciseId: string) => {
     // change exercise here:
     mutate(
       { workoutId, newExerciseId: exerciseId },

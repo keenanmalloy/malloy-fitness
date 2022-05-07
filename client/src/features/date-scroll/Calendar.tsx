@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
-import Modal from 'features/common/Modal';
+import Modal from 'features/modal/Modal';
 import { Button } from 'features/common/Button';
 import { generateCalendarState } from './generateCalendarState';
 import { BiChevronDown, BiChevronUp } from 'react-icons/bi';

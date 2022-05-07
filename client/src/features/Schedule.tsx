@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
-import Modal from 'features/common/Modal';
+import Modal from 'features/modal/Modal';
 import { Button } from 'features/common/Button';
 import { useScheduleSessionMutation } from './sessions/useScheduleSessionMutation';
 
@@ -62,9 +62,6 @@ export const Schedule = ({ workoutId }: Props) => {
           nextLabel=""
           prevLabel=""
           tileClassName={({ activeStartDate, date, view }) => {
-            return null;
-          }}
-          tileDisabled={({ activeStartDate, date, view }) => {
             return null;
           }}
         />

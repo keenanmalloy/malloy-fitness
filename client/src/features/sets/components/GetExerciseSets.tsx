@@ -5,7 +5,16 @@ import { Set } from 'features/sets/components/Set';
 import { useCreateSetMutation } from '../api/useCreateSetMutation';
 import { Skeleton } from 'features/common/Skeleton';
 
-export const GetExerciseSets = ({ sessionId, exerciseId, record }) => {
+interface Props {
+  sessionId: string;
+  exerciseId: string;
+  record: {
+    repeptitions: number;
+    weight: number;
+  };
+}
+
+export const GetExerciseSets = ({ sessionId, exerciseId, record }: Props) => {
   const { data, isError, isLoading } = useSetsByExerciseQuery({
     sessionId,
     exerciseId,
@@ -48,8 +57,12 @@ export const GetExerciseSets = ({ sessionId, exerciseId, record }) => {
   );
 };
 
-const SetsList = ({ sets, sessionId, exerciseId, record }) => {
-  const { isLoading, mutate, isError } = useCreateSetMutation({ sessionId });
+interface SetsListProps extends Props {
+  sets: any[];
+}
+
+const SetsList = ({ sets, sessionId, exerciseId, record }: SetsListProps) => {
+  const { isLoading, mutate, isError } = useCreateSetMutation(sessionId);
 
   return (
     <section className="px-3">

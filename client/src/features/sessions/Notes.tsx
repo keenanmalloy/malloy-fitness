@@ -1,4 +1,4 @@
-import FullPageModal from 'features/common/FullPageModal';
+import FullPageModal from 'features/modal/FullPageModal';
 import { Input } from 'features/form/Input';
 import React, { useEffect, useState } from 'react';
 import { useUpdateWorkoutExerciseMetadataMutation } from 'features/workout-exercises/api/useUpdateWorkoutExerciseMetadataMutation';
@@ -41,6 +41,7 @@ export const Notes = ({ exercise, workoutId, exerciseId, exNotes }: Props) => {
           setNotes={setNotes}
           workoutId={workoutId}
           exerciseId={exerciseId}
+          exNotes={exercise.notes}
         />
       </FullPageModal>
     </div>

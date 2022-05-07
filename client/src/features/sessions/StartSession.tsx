@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
 import { apiClient } from 'config/axios';
+import { GetSessionResponse } from './types';
 
 interface Props {
   sessionId: string;
@@ -16,7 +17,7 @@ const StartSession = ({ sessionId, hasStarted, hasEnded }: Props) => {
   const router = useRouter();
 
   const getSingleWorkout = async (id: string) => {
-    const { data } = await apiClient.get(`/sessions/${id}`);
+    const { data } = await apiClient.get<GetSessionResponse>(`/sessions/${id}`);
     return data;
   };
 
@@ -69,7 +70,7 @@ const StartSession = ({ sessionId, hasStarted, hasEnded }: Props) => {
     if (json.status !== 'success') {
       return;
     }
-    queryClient.invalidateQueries('fetchSession', sessionId);
+    queryClient.invalidateQueries('fetchSession');
     if (!firstExercise) return router.push(`/sessions/${sessionId}/`);
     router.push(
       `/sessions/${sessionId}/exercises/${firstExercise.exercise_id}`

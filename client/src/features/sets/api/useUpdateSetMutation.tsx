@@ -1,7 +1,16 @@
 import { apiClient } from 'config/axios';
 import { useMutation, useQueryClient } from 'react-query';
 
-const updateSet = async ({ sessionId, body, setId }) => {
+interface UpdateSetParams {
+  sessionId: string;
+  setId: string;
+  body: {
+    sets: string;
+    repetitions: string;
+  };
+}
+
+const updateSet = async ({ sessionId, body, setId }: UpdateSetParams) => {
   const { data } = await apiClient.put(
     `/sessions/${sessionId}/sets/${setId}`,
     body
@@ -9,11 +18,19 @@ const updateSet = async ({ sessionId, body, setId }) => {
   return data;
 };
 
-export const useUpdateSetMutation = ({ sessionId, setId }) => {
+interface Props {
+  sessionId: string;
+  setId: string;
+}
+
+export const useUpdateSetMutation = ({ sessionId, setId }: Props) => {
   const queryClient = useQueryClient();
-  return useMutation((body) => updateSet({ sessionId, body, setId }), {
-    onSuccess: () => {
-      queryClient.invalidateQueries('fetchSetsByExercise');
-    },
-  });
+  return useMutation<any, any, any>(
+    (body) => updateSet({ sessionId, body, setId }),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries('fetchSetsByExercise');
+      },
+    }
+  );
 };

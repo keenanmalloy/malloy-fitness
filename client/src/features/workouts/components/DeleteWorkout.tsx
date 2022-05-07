@@ -1,5 +1,5 @@
 import { Button } from 'features/common/Button';
-import Modal from 'features/common/Modal';
+import Modal from 'features/modal/Modal';
 import React, { useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useDeleteWorkoutMutation } from 'features/workouts/api/useDeleteWorkoutMutation';
@@ -25,16 +25,13 @@ export const DeleteWorkout = ({ workoutId }: Props) => {
     setIsOpen(true);
   }
 
-  const handleClick = (workoutId) => {
-    mutate(
-      { workoutId },
-      {
-        onSuccess: () => {
-          queryClient.refetchQueries('fetchWorkouts');
-          router.push('/workouts');
-        },
-      }
-    );
+  const handleClick = () => {
+    mutate(undefined, {
+      onSuccess: () => {
+        queryClient.refetchQueries('fetchWorkouts');
+        router.push('/workouts');
+      },
+    });
   };
 
   return (
@@ -52,8 +49,8 @@ export const DeleteWorkout = ({ workoutId }: Props) => {
           <div className="flex justify-between">
             <Button
               className="mt-4"
-              onClick={() => handleClick(workoutId)}
-              disabled={isLoading}
+              onClick={() => handleClick()}
+              isDisabled={isLoading}
             >
               {isLoading ? 'Deleting...' : 'Delete'}
             </Button>

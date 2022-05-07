@@ -10,7 +10,7 @@ interface Props {
   view: string;
   profile: string;
   sortBy: string;
-  exercises: any;
+  exercises: any[];
   handleExerciseSelection: (exerciseId: string) => void;
 }
 

@@ -1,10 +1,9 @@
 import { Button } from 'features/common/Button';
 import { Input } from 'features/form/Input';
-import Upload from 'features/Upload';
 import { FormEvent, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useUpdateWorkoutMutation } from 'features/workouts/api/useUpdateWorkoutMutation';
-import Modal from 'features/common/Modal';
+import Modal from 'features/modal/Modal';
 import { MdEdit } from 'react-icons/md';
 import { WORKOUT_CATEGORIES } from 'features/environment';
 import Select from 'react-select';
@@ -77,7 +76,7 @@ export const UpdateWorkout = ({ workout, queryKey }: Props) => {
             <label>Category</label>
             <Select
               onChange={(data) => {
-                setCategory(data.value);
+                setCategory(data?.value ?? '');
                 setIsCategoryError(false);
               }}
               value={{
@@ -100,7 +99,7 @@ export const UpdateWorkout = ({ workout, queryKey }: Props) => {
             />
           </div>
 
-          <Button disabled={isLoading} className="w-full">
+          <Button isDisabled={isLoading} className="w-full">
             {isLoading ? 'Updating...' : 'Update'}
           </Button>
 

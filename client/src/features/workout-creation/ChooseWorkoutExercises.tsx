@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Input } from 'features/form/Input';
 import { Button } from 'features/common/Button';
-import FullPageModal from 'features/common/FullPageModal';
+import FullPageModal from 'features/modal/FullPageModal';
 import { ChooseWorkoutExerciseList } from './ChooseWorkoutExerciseList';
 import { IoMdClose } from 'react-icons/io';
 import { Exercise } from 'features/exercises/types';

@@ -66,7 +66,7 @@ export const GetSingleWorkout = ({ workoutId }: Props) => {
           </button>
         </Link>
         <div className="flex">
-          <UpdateWorkout workout={data.workout} />
+          <UpdateWorkout workout={data.workout} queryKey="getWorkout" />
           <div className="w-1" />
           <DeleteWorkout workoutId={data.workout.workout_id} />
           <div className="w-1" />

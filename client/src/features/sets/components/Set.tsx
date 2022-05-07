@@ -5,14 +5,24 @@ import { IoClose } from 'react-icons/io5';
 import { useDeleteSetMutation } from '../api/useDeleteSetMutation';
 import { useUpdateSetMutation } from '../api/useUpdateSetMutation';
 
+interface Props {
+  set: any;
+  setNumber: number | string;
+  sessionId: string;
+  exerciseId: string;
+  setRecord: {
+    weight: number;
+    repetitions: number;
+  };
+}
+
 export const Set = ({
   set,
   setNumber,
   sessionId,
   exerciseId,
-  isRemote,
   setRecord,
-}) => {
+}: Props) => {
   const [repetitions, setRepetitions] = useState(set.repetitions);
   const [weight, setWeight] = useState(set.weight);
   const [setId, setSetId] = useState(set.set_id);
@@ -98,6 +108,19 @@ export const Set = ({
   );
 };
 
+interface SavedInputProps {
+  sessionId: string;
+  exerciseId: string;
+  onChange: (e: any) => void;
+  value: string;
+  weight: string;
+  repetitions: string;
+  placeholder: string;
+  name: string;
+  id: string;
+  setId: string;
+}
+
 const SavedInput = ({
   onChange,
   value,
@@ -109,7 +132,7 @@ const SavedInput = ({
   sessionId,
   exerciseId,
   setId,
-}) => {
+}: SavedInputProps) => {
   const { isLoading, mutate, isError } = useUpdateSetMutation({
     sessionId,
     setId,

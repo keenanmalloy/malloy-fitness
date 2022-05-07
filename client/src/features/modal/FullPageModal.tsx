@@ -1,7 +1,8 @@
 import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
+import { ModalPropsShared } from './types';
 
-const FullPageModal = ({
+const FullPageModal: React.FC<ModalPropsShared> = ({
   isOpen,
   title,
   description,

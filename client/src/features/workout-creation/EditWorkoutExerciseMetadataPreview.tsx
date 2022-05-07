@@ -1,5 +1,5 @@
 import { Button } from 'features/common/Button';
-import Modal from 'features/common/Modal';
+import Modal from 'features/modal/Modal';
 import { Input } from 'features/form/Input';
 import React, { useState } from 'react';
 import { MdEdit } from 'react-icons/md';

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { Button } from 'features/common/Button';
 import { Input } from 'features/form/Input';
 import { RadioGroup } from 'features/form/RadioGroup';
@@ -21,15 +21,25 @@ export const CreateStrengthExerciseForm = ({
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [profile, setProfile] = useState('short');
-  const [primary, setPrimary] = useState([]);
-  const [secondary, setSecondary] = useState([]);
+  const [primary, setPrimary] = useState<
+    {
+      value: string;
+      label: string;
+    }[]
+  >([]);
+  const [secondary, setSecondary] = useState<
+    {
+      value: string;
+      label: string;
+    }[]
+  >([]);
   const [isCategoryError, setIsCategoryError] = useState(false);
 
   const { mutate, isLoading, isError, error } = useCreateExerciseMutation();
 
   const queryClient = useQueryClient();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     const exercise = {
@@ -44,7 +54,7 @@ export const CreateStrengthExerciseForm = ({
       secondary: secondary.map((object) => object.value),
     };
 
-    if (!exercise.category && isWeight) {
+    if (!exercise.category) {
       setIsCategoryError(true);
       return;
     }
@@ -63,7 +73,7 @@ export const CreateStrengthExerciseForm = ({
           setIsOpen(false);
         },
         onError: (e) => {
-          console.log('error', e.message);
+          console.log('error', { e });
         },
       }
     );
@@ -90,7 +100,7 @@ export const CreateStrengthExerciseForm = ({
           <label>Category</label>
           <Select
             onChange={(data) => {
-              setCategory(data.value);
+              setCategory(data?.value ?? '');
               setIsCategoryError(false);
             }}
             isSearchable={false}
@@ -119,7 +129,7 @@ export const CreateStrengthExerciseForm = ({
           onChange={(option) => {
             return setProfile(option);
           }}
-          checked={profile}
+          checked={!!profile}
           isRequired={true}
           options={['short', 'mid', 'long']}
           name="resistance-range"
@@ -166,7 +176,9 @@ export const CreateStrengthExerciseForm = ({
           {isLoading ? 'Adding exercise...' : 'Add exercise'}
         </Button>
         {isError && (
-          <p className="pt-2 text-red-600 text-center">{error.message}...</p>
+          <p className="pt-2 text-red-600 text-center">
+            {(error as { message: string }).message}...
+          </p>
         )}
       </form>
     </section>

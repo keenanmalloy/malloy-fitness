@@ -1,5 +1,5 @@
 import { Button } from 'features/common/Button';
-import Modal from 'features/common/Modal';
+import Modal from 'features/modal/Modal';
 import { useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useDeleteMuscleGroupMutation } from 'features/muscle-groups/api/useDeleteMuscleGroupMutation';

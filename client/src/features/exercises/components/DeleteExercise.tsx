@@ -1,5 +1,5 @@
 import { Button } from 'features/common/Button';
-import Modal from 'features/common/Modal';
+import Modal from 'features/modal/Modal';
 import React, { useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useDeleteExerciseMutation } from 'features/exercises/api/useDeleteExerciseMutation';

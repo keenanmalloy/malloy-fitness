@@ -3,7 +3,12 @@ import React from 'react';
 import UpdateWorkoutExerciseMetadata from 'features/workout-exercises/components/UpdateWorkoutExerciseMetadata';
 import WorkoutOrder from 'features/workouts/components/WorkoutOrder';
 
-const WorkoutExercises = ({ exercises, workoutId }) => {
+interface Props {
+  workoutId: string;
+  exercises: any[];
+}
+
+const WorkoutExercises = ({ exercises, workoutId }: Props) => {
   if (!exercises) {
     return <div>No exercises in workout</div>;
   }

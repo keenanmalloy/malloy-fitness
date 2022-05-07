@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
-import Modal from 'features/common/Modal';
+import Modal from 'features/modal/Modal';
 import { Button } from 'features/common/Button';
 
 export const RemoveWorkoutExerciseFromPreview = ({

@@ -1,5 +1,5 @@
 import { Button } from 'features/common/Button';
-import Modal from 'features/common/Modal';
+import Modal from 'features/modal/Modal';
 import React, { useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useCloneWorkoutMutation } from 'features/workouts/api/useCloneWorkoutMutation';
@@ -22,17 +22,14 @@ export const CloneWorkout = ({ workoutId, hasSessions }: Props) => {
     setIsOpen(false);
   }
 
-  const handleClick = (workoutId: string) => {
-    mutate(
-      { workoutId },
-      {
-        onSuccess: (data) => {
-          router.push(`/workouts/${data.workoutId}`);
-          queryClient.refetchQueries('fetchWorkout');
-          setIsOpen(false);
-        },
-      }
-    );
+  const handleClick = () => {
+    mutate(undefined, {
+      onSuccess: (data) => {
+        router.push(`/workouts/${data.workoutId}`);
+        queryClient.refetchQueries('fetchWorkout');
+        setIsOpen(false);
+      },
+    });
   };
 
   return (
@@ -50,7 +47,7 @@ export const CloneWorkout = ({ workoutId, hasSessions }: Props) => {
 
           <Button
             className="mt-4"
-            onClick={() => handleClick(workoutId)}
+            onClick={() => handleClick()}
             isDisabled={isLoading}
           >
             {isLoading ? 'Cloning...' : 'Clone'}

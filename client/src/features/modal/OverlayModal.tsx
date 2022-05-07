@@ -1,7 +1,8 @@
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
+import { ModalPropsShared } from './types';
 
-export const DefaultModal = ({
+const OverlayModal: React.FC<ModalPropsShared> = ({
   isOpen,
   title,
   description,
@@ -42,7 +43,7 @@ export const DefaultModal = ({
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="inline-block w-full max-w-md p-6 my-8 text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+            <div className="fixed bottom-28 right-0 h-full w-full inline-block p-6 my-8 text-left align-middle transition-all transform bg-black/[.60] rounded-2xl">
               <Dialog.Title
                 as="h3"
                 className="text-lg font-medium leading-6 text-gray-900"
@@ -65,3 +66,5 @@ export const DefaultModal = ({
     </Transition>
   );
 };
+
+export default OverlayModal;

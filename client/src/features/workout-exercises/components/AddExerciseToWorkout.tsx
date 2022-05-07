@@ -1,16 +1,26 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 import { Button } from 'features/common/Button';
 import { Fragment, useState } from 'react';
-import Select from 'react-select';
-import Modal from 'features/common/Modal';
+import Select, { ActionMeta } from 'react-select';
+import Modal from 'features/modal/Modal';
 import { useExercisesQuery } from 'features/exercises/api/useExercisesQuery';
 import { useAddExerciseToWorkoutMutation } from 'features/workout-exercises/api/useAddExerciseToWorkoutMutation';
 import { AiOutlinePlus } from 'react-icons/ai';
+import { Workout } from 'features/workouts/types';
 
-const AddExerciseToWorkout = ({ workout }) => {
-  const [exercise, setExercise] = useState(null);
-  const [order, setOrder] = useState(null);
-  const [priority, setPriority] = useState(null);
+interface Props {
+  workout: Workout;
+}
+
+const AddExerciseToWorkout = ({ workout }: Props) => {
+  const [exercise, setExercise] = useState<null | {
+    value: number;
+    label: string;
+  }>(null);
+  const [order, setOrder] = useState<null | {
+    value: number;
+    label: string;
+  }>(null);
   const [isOpen, setIsOpen] = useState(false);
 
   const { data, isError, isLoading } = useExercisesQuery({});
@@ -24,19 +34,15 @@ const AddExerciseToWorkout = ({ workout }) => {
     setIsOpen(true);
   }
 
-  function handleExerciseChange(selectedOption) {
-    setExercise(selectedOption);
+  function handleExerciseChange(newValue: null, actionMeta: ActionMeta<never>) {
+    setExercise(newValue);
   }
 
-  function handleOrderChange(selectedOption) {
-    setOrder(selectedOption);
+  function handleOrderChange(newValue: null, actionMeta: ActionMeta<never>) {
+    setOrder(newValue);
   }
 
-  function handlePriorityChange(selectedOption) {
-    setPriority(selectedOption);
-  }
-
-  function handleSubmit(e) {
+  function handleSubmit(e: FormEvent) {
     e.preventDefault();
 
     if (!exercise) {
@@ -47,7 +53,6 @@ const AddExerciseToWorkout = ({ workout }) => {
     const payload = {
       exerciseId: exercise.value,
       order: order?.value ?? null,
-      priority: priority?.value ?? null,
     };
 
     mutate({ workoutId: workout.workout_id, payload });
@@ -63,7 +68,7 @@ const AddExerciseToWorkout = ({ workout }) => {
     return <p style={{ color: 'red' }}>fetching error...</p>;
   }
 
-  if (!data.exercises) {
+  if (!data || !data.exercises) {
     return <p>none available...</p>;
   }
 
