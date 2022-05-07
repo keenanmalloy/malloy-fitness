@@ -23,8 +23,12 @@ export const CreateTherapyExerciseForm = ({
   const [profile, setProfile] = useState('short');
 
   // muscle-groups
-  const [primary, setPrimary] = useState([]);
-  const [secondary, setSecondary] = useState([]);
+  const [primary, setPrimary] = useState<{ value: string; label: string }[]>(
+    []
+  );
+  const [secondary, setSecondary] = useState<
+    { value: string; label: string }[]
+  >([]);
 
   // tracking data
   const [primaryTracker, setPrimaryTracker] = useState('reps');
@@ -75,7 +79,7 @@ export const CreateTherapyExerciseForm = ({
           setIsOpen(false);
         },
         onError: (e) => {
-          console.log('error', e.message);
+          console.log('error', { e });
         },
       }
     );
@@ -107,7 +111,7 @@ export const CreateTherapyExerciseForm = ({
             <div className="flex-1 w-full">
               <Select
                 onChange={(data) => {
-                  setPrimaryTracker(data.value);
+                  setPrimaryTracker(data?.value ?? '');
                 }}
                 isSearchable={false}
                 name="primaryTracker"
@@ -126,7 +130,7 @@ export const CreateTherapyExerciseForm = ({
             <div className="flex-1 w-full">
               <Select
                 onChange={(data) => {
-                  setSecondaryTracker(data.value);
+                  setSecondaryTracker(data?.value ?? '');
                 }}
                 isSearchable={false}
                 name="secondaryTracker"
@@ -151,7 +155,7 @@ export const CreateTherapyExerciseForm = ({
               <label>Category</label>
               <Select
                 onChange={(data) => {
-                  setCategory(data.value);
+                  setCategory(data?.value ?? '');
                   setIsCategoryError(false);
                 }}
                 isSearchable={false}
@@ -180,7 +184,7 @@ export const CreateTherapyExerciseForm = ({
               onChange={(option) => {
                 return setProfile(option);
               }}
-              checked={profile}
+              checked={!!profile}
               isRequired={true}
               options={['short', 'mid', 'long']}
               name="resistance-range"
@@ -198,7 +202,7 @@ export const CreateTherapyExerciseForm = ({
               }),
             }}
             onChange={(data) => {
-              setPrimary(data);
+              setPrimary([...data]);
             }}
             name="primary-muscle-groups"
             options={muscleGroups.map((muscleGroup) => {
@@ -214,7 +218,7 @@ export const CreateTherapyExerciseForm = ({
           <label>Secondary Muscle Group(s)</label>
           <Select
             isMulti
-            onChange={(data) => setSecondary(data)}
+            onChange={(data) => setSecondary([...data])}
             name="secondary-muscle-groups"
             options={muscleGroups.map((muscleGroup) => {
               return {
@@ -229,7 +233,9 @@ export const CreateTherapyExerciseForm = ({
           {isLoading ? 'Adding exercise...' : 'Add exercise'}
         </Button>
         {isError && (
-          <p className="pt-2 text-red-600 text-center">{error.message}...</p>
+          <p className="pt-2 text-red-600 text-center">
+            {(error as { message: string }).message}...
+          </p>
         )}
       </form>
     </section>

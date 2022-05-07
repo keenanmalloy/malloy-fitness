@@ -1,5 +1,6 @@
 import { useQuery } from 'react-query';
 import { apiClient } from 'config/axios';
+import { GetSessionResponse } from './types';
 
 const fetchSession = async (sessionId: string) => {
   const { data } = await apiClient.get(`/sessions/${sessionId}`);
@@ -7,7 +8,7 @@ const fetchSession = async (sessionId: string) => {
 };
 
 export const useSessionQuery = (sessionId: string, exerciseId: string) => {
-  return useQuery(
+  return useQuery<GetSessionResponse>(
     ['fetchSession', sessionId, exerciseId],
     () => fetchSession(sessionId),
     {

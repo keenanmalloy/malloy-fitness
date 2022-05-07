@@ -1,20 +1,29 @@
+import { GetExercisesResponse } from 'features/exercises/types';
 import React from 'react';
 import { BsArrowDown, BsArrowUp } from 'react-icons/bs';
+import { LocalExercise } from './CreateWorkout';
+
+interface Props {
+  exercises: LocalExercise[];
+  setExercises: (exercises: LocalExercise[]) => void;
+  exercise: GetExercisesResponse['exercises'][0];
+}
 
 export const OrderWorkoutExercisePreview = ({
   exercises,
   setExercises,
   exercise,
-}) => {
+}: Props) => {
   return (
     <div>
       <button
         className="ml-2"
         type="button"
         onClick={() => {
-          setExercises((prev) => {
+          // @ts-ignore
+          setExercises((prev: LocalExercise[]) => {
             const updateable = prev.filter(
-              (ex) => ex.id === exercise.exercise_id
+              (ex) => ex.id === +exercise.exercise_id
             )[0];
 
             const newOrderedExercise = {
@@ -30,7 +39,7 @@ export const OrderWorkoutExercisePreview = ({
             });
 
             return [
-              ...updatedOrders.filter((ex) => ex.id !== exercise.exercise_id),
+              ...updatedOrders.filter((ex) => ex.id !== +exercise.exercise_id),
               newOrderedExercise,
             ];
           });
@@ -42,9 +51,10 @@ export const OrderWorkoutExercisePreview = ({
         className="ml-2"
         type="button"
         onClick={() => {
-          setExercises((prev) => {
+          // @ts-ignore
+          setExercises((prev: LocalExercise[]) => {
             const updateable = prev.filter(
-              (ex) => ex.id === exercise.exercise_id
+              (ex) => ex.id === +exercise.exercise_id
             )[0];
 
             const newOrderedExercise = {
@@ -60,7 +70,7 @@ export const OrderWorkoutExercisePreview = ({
             });
 
             return [
-              ...updatedOrders.filter((ex) => ex.id !== exercise.exercise_id),
+              ...updatedOrders.filter((ex) => ex.id !== +exercise.exercise_id),
               newOrderedExercise,
             ];
           });

@@ -55,7 +55,6 @@ export const Set = ({
             : null}
         </span>
         <SavedInput
-          set={set}
           exerciseId={exerciseId}
           sessionId={sessionId}
           onChange={(e) => setRepetitions(e.target.value)}
@@ -66,9 +65,6 @@ export const Set = ({
           name="repetitions"
           id="repetitions"
           setId={setId}
-          setSetId={setSetId}
-          hasSaved={hasSaved}
-          setHasSaved={setHasSaved}
         />
       </div>
       <div className="relative pt-2">
@@ -83,7 +79,6 @@ export const Set = ({
             : null}
         </span>
         <SavedInput
-          set={set}
           exerciseId={exerciseId}
           sessionId={sessionId}
           onChange={(e) => setWeight(e.target.value)}
@@ -94,9 +89,6 @@ export const Set = ({
           name="weight"
           id="weight"
           setId={setId}
-          setSetId={setSetId}
-          hasSaved={hasSaved}
-          setHasSaved={setHasSaved}
         />
       </div>
       <div className="pl-2">
@@ -127,8 +119,6 @@ const SavedInput = ({
   weight,
   repetitions,
   placeholder,
-  name,
-  id,
   sessionId,
   exerciseId,
   setId,
@@ -151,12 +141,10 @@ const SavedInput = ({
 
   return (
     <Input
+      label=""
       type="number"
-      name={name}
-      id={id}
       onChange={onChange}
       placeholder={placeholder}
-      className="flex text-center"
       value={value || ''}
       isLoading={isLoading}
     />

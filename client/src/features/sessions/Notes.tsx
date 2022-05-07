@@ -9,9 +9,16 @@ interface Props {
   workoutId: string;
   exerciseId: string;
   exNotes: string;
+  sessionId: string;
 }
 
-export const Notes = ({ exercise, workoutId, exerciseId, exNotes }: Props) => {
+export const Notes = ({
+  exercise,
+  workoutId,
+  exerciseId,
+  exNotes,
+  sessionId,
+}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [notes, setNotes] = useState('');
 

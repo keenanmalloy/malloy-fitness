@@ -13,7 +13,7 @@ export const GetAllExercises = () => {
   const [profile, setProfile] = useState('');
   const [sortBy, setSortBy] = useState('');
 
-  const handleQuery = (e) => {
+  const handleQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
   };
 

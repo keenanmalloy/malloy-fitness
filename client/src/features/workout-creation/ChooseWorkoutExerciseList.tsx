@@ -1,12 +1,12 @@
 import React from 'react';
 import { useExercisesQuery } from 'features/exercises/api/useExercisesQuery';
 import { useDebounce } from 'features/common/useDebounce';
-import { Exercise } from 'features/exercises/types';
+import { LocalExercise } from './CreateWorkout';
 
 interface Props {
   query: string;
-  exercises: Exercise[];
-  setExercises: (exercises: Exercise[]) => void;
+  exercises: LocalExercise[];
+  setExercises: (exercises: LocalExercise[]) => void;
 }
 
 export const ChooseWorkoutExerciseList = ({
@@ -42,7 +42,8 @@ export const ChooseWorkoutExerciseList = ({
             type="checkbox"
             className="absolute top-0 opacity-0 right-0 w-full h-full peer"
             onChange={(e) => {
-              setExercises((prev) => {
+              // @ts-ignore
+              setExercises((prev: LocalExercise[]) => {
                 if (e.target.checked) {
                   return [
                     ...prev,
@@ -58,7 +59,7 @@ export const ChooseWorkoutExerciseList = ({
                   ];
                 } else {
                   const removeableOrder = prev.filter(
-                    (ex) => ex.id === exercise.exercise_id
+                    (ex) => ex.id === +exercise.exercise_id
                   )[0].order;
 
                   const updatedOrders = prev.map((d) => {
@@ -69,20 +70,20 @@ export const ChooseWorkoutExerciseList = ({
                   });
 
                   return updatedOrders.filter(
-                    (ex) => ex.id !== exercise.exercise_id
+                    (ex) => ex.id !== +exercise.exercise_id
                   );
                 }
               });
             }}
             value={exercise.exercise_id}
-            checked={exercises.some((ex) => ex.id === exercise.exercise_id)}
+            checked={exercises.some((ex) => ex.id === +exercise.exercise_id)}
           />
           <div className="px-2 py-2 rounded-md ">
             <h2 className="text-md font-bold">{exercise.name}</h2>
           </div>
 
           <span className="hidden peer-checked:flex absolute right-2 top-4 bg-blue-500 rounded-full text-white w-5 h-5  justify-center items-center">
-            {exercises.findIndex((ex) => ex.id === exercise.exercise_id) + 1}
+            {exercises.findIndex((ex) => ex.id === +exercise.exercise_id) + 1}
           </span>
         </article>
       ))}

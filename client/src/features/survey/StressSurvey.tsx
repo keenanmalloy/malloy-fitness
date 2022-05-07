@@ -1,18 +1,19 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import Layout from 'features/common/Layout';
 import { BiBrain } from 'react-icons/bi';
 import { IoMdArrowBack, IoMdArrowForward } from 'react-icons/io';
 import { useRouter } from 'next/router';
+import { SurveyButton } from './SurveyButton';
 
 const Stress = () => {
   const router = useRouter();
   const [selectedColor, setSelectedColor] = useState('');
 
-  const onSubmit = (e) => {
+  const onSubmit = (e: FormEvent) => {
     e.preventDefault();
   };
 
-  const handleButtonClick = (color) => {
+  const handleButtonClick = (color: string) => {
     setSelectedColor(color);
   };
 
@@ -35,7 +36,6 @@ const Stress = () => {
           <SurveyButton
             number={1}
             text="Very Stressed"
-            color="text-red-700"
             onClick={() => handleButtonClick('bg-red-700')}
             textColor={
               selectedColor === 'bg-red-700' ? 'text-black' : 'text-red-700'
@@ -104,22 +104,3 @@ const Stress = () => {
 };
 
 export default Stress;
-
-function SurveyButton({ number, text, textColor, bgColor, onClick }) {
-  return (
-    <button
-      className={`h-12 w-1/5 border-solid border-2 border-slate-500 flex flex-col justify-center items-center ${textColor} ${bgColor}`}
-      onClick={onClick}
-    >
-      <p>{number}</p>
-      <span
-        className="flex"
-        style={{
-          fontSize: '0.7rem',
-        }}
-      >
-        {text}
-      </span>
-    </button>
-  );
-}

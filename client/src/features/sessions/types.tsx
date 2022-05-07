@@ -38,3 +38,12 @@ export interface Exercise {
   priority: number;
   notes: any;
 }
+
+export interface Set {
+  set_id: string;
+  set_order: number;
+  repetitions: number;
+  weight: number;
+  primary_tracker: string;
+  secondary_tracker: string;
+}

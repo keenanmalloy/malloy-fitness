@@ -5,10 +5,11 @@ import FullPageModal from 'features/modal/FullPageModal';
 import { ChooseWorkoutExerciseList } from './ChooseWorkoutExerciseList';
 import { IoMdClose } from 'react-icons/io';
 import { Exercise } from 'features/exercises/types';
+import { LocalExercise } from './CreateWorkout';
 
 interface Props {
-  exercises: Exercise[];
-  setExercises: (exercises: Exercise[]) => void;
+  exercises: LocalExercise[];
+  setExercises: (exercises: LocalExercise[]) => void;
 }
 
 export const ChooseWorkoutExercises = ({ exercises, setExercises }: Props) => {
@@ -22,7 +23,7 @@ export const ChooseWorkoutExercises = ({ exercises, setExercises }: Props) => {
     setIsOpen(true);
   }
 
-  const handleQuery = (e) => {
+  const handleQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
   };
 
@@ -52,6 +53,7 @@ export const ChooseWorkoutExercises = ({ exercises, setExercises }: Props) => {
                 isRequired
                 type="search"
                 placeholder={'Search'}
+                label={''}
               />
             </div>
           </div>

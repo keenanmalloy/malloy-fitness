@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { Input } from 'features/form/Input';
 import { useCreateWorkoutMutation } from 'features/workout-creation/useCreateWorkoutMutation';
 import { ChooseWorkoutExercises } from 'features/workout-creation/ChooseWorkoutExercises';
@@ -8,17 +8,27 @@ import { WorkoutExercisesPreview } from 'features/workout-creation/WorkoutExerci
 import { Button } from 'features/common/Button';
 import { useRouter } from 'next/router';
 
+export interface LocalExercise {
+  id: number;
+  order: number;
+  priority: number;
+  repetitions: number;
+  repsInReserve: number;
+  restPeriod: number;
+  sets: number;
+}
+
 export const CreateWorkout = () => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const { mutate, isLoading, isError } = useCreateWorkoutMutation();
-  const [exercises, setExercises] = useState([]);
+  const [exercises, setExercises] = useState<LocalExercise[]>([]);
   const [isCategoryError, setIsCategoryError] = useState(false);
 
   const router = useRouter();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
     const workout = {
       name: name,
@@ -69,7 +79,7 @@ export const CreateWorkout = () => {
         <label>Category</label>
         <Select
           onChange={(data) => {
-            setCategory(data.value);
+            setCategory(data?.value ?? '');
             setIsCategoryError(false);
           }}
           name="category"

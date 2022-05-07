@@ -1,9 +1,12 @@
 import { apiClient } from 'config/axios';
+import { MuscleGroup } from 'features/muscle-groups/types';
 import { useMutation } from 'react-query';
-import { MuscleGroup } from '../types';
 
 interface Params {
-  payload: MuscleGroup;
+  payload: {
+    group: 'primary' | 'secondary';
+    muscleGroupId: string;
+  };
   exerciseId: string;
 }
 
@@ -17,7 +20,7 @@ const addMuscleGroupToExercise = async ({ exerciseId, payload }: Params) => {
 };
 
 export const useAddMuscleGroupToExerciseMutation = (exerciseId: string) => {
-  return useMutation<any, any, MuscleGroup>((payload) =>
+  return useMutation<any, any, Params['payload']>((payload) =>
     addMuscleGroupToExercise({ exerciseId, payload })
   );
 };

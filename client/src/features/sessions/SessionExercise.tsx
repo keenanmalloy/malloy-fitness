@@ -7,8 +7,16 @@ import Link from 'next/link';
 interface Props {
   sessionId: string;
   exerciseId: string;
-  nextEx: string;
-  prevEx: string;
+  nextEx: {
+    order: {
+      exercise_id: string;
+    };
+  };
+  prevEx: {
+    order: {
+      exercise_id: string;
+    };
+  };
   exercise: any;
   record: any;
 }
@@ -51,6 +59,7 @@ export const SessionExercise = ({
         exNotes={exercise.notes}
         sessionId={sessionId}
         exerciseId={exerciseId}
+        workoutId={''}
       />
 
       <Footer nextEx={nextEx} prevEx={prevEx} sessionId={sessionId} />
@@ -58,7 +67,21 @@ export const SessionExercise = ({
   );
 };
 
-const Footer = ({ prevEx, nextEx, sessionId }) => {
+interface SessionFooterProps {
+  sessionId: string;
+  nextEx: {
+    order: {
+      exercise_id: string;
+    };
+  };
+  prevEx: {
+    order: {
+      exercise_id: string;
+    };
+  };
+}
+
+const Footer = ({ prevEx, nextEx, sessionId }: SessionFooterProps) => {
   return (
     <div className="flex justify-between py-3 px-3 fixed bottom-0 bg-white left-0 right-0 ">
       {!!prevEx.order && (

@@ -9,10 +9,10 @@ import { FilterExercises } from 'features/exercises/components/FilterExercises';
 import { BiX } from 'react-icons/bi';
 import { useChangeExercise } from './useChangeExercise';
 import { useRouter } from 'next/router';
-import { Exercise } from 'features/exercises/types';
+import { GetSessionResponse } from './types';
 
 interface Props {
-  exercises: Exercise[];
+  exercises: GetSessionResponse['session']['exercises'];
   exerciseId: string;
   sessionId: string;
   workoutId: string;
@@ -39,7 +39,7 @@ export const ChangeExercise = ({
     oldExerciseId: exerciseId,
   });
 
-  const handleQuery = (e) => {
+  const handleQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
     setQuery(e.target.value);
   };
 

@@ -1,8 +1,9 @@
 import React from 'react';
+import { FormType } from './CreateExerciseForms';
 
 interface Props {
-  setType: (type: string) => void;
-  type: string;
+  setType: (type: FormType) => void;
+  type: FormType;
 }
 
 export const ChooseCreateExerciseForm = ({ type, setType }: Props) => {
@@ -17,8 +18,8 @@ export const ChooseCreateExerciseForm = ({ type, setType }: Props) => {
 };
 
 interface CardButtonProps {
-  label: string;
-  setType: (type: string) => void;
+  label: FormType;
+  setType: (type: FormType) => void;
 }
 
 const CardButton = ({ label, setType }: CardButtonProps) => {

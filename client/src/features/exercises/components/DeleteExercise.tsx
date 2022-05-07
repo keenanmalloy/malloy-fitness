@@ -23,14 +23,11 @@ export const DeleteExercise = ({ exerciseId }: Props) => {
   }
 
   const handleClick = (exerciseId: string) => {
-    mutate(
-      { exerciseId },
-      {
-        onSuccess: () => {
-          queryCLient.refetchQueries('fetchExercise');
-        },
-      }
-    );
+    mutate(undefined, {
+      onSuccess: () => {
+        queryCLient.refetchQueries('fetchExercise');
+      },
+    });
   };
 
   return (
@@ -48,7 +45,7 @@ export const DeleteExercise = ({ exerciseId }: Props) => {
           <div className="flex flex-col">
             <Button
               className="mt-4"
-              disabled={isLoading}
+              isDisabled={isLoading}
               onClick={() => handleClick(exerciseId)}
             >
               {isLoading ? 'Deleting...' : 'Delete'}

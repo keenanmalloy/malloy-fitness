@@ -4,17 +4,20 @@ import { RadioGroup } from 'features/form/RadioGroup';
 import { useQueryClient } from 'react-query';
 import { useUpdateExerciseMutation } from 'features/exercises/api/useUpdateExerciseMutation';
 import { Button } from 'features/common/Button';
-import Select from 'react-select';
+import Select, { MultiValue } from 'react-select';
 import { EXERCISE_CATEGORIES, EXERCISE_TRACKERS } from 'features/environment';
 import { useAddMuscleGroupToExerciseMutation } from 'features/exercises/api/useAddMuscleGroupToExerciseMutation';
 import { useRemoveMuscleGroupFromExerciseMutation } from 'features/exercises/api/useRemoveMuscleGroupFromExerciseMutation';
-import { MuscleGroup } from 'features/muscle-groups/types';
+import { GetMuscleGroupsResponse } from 'features/muscle-groups/types';
+import { GetExercisesResponse, GetSingleExerciseResponse } from '../types';
 
 interface Props {
-  exercise: any;
+  exercise:
+    | GetSingleExerciseResponse['exercise']
+    | GetExercisesResponse['exercises'][0];
   queryKey: string;
   setIsOpen: (type: boolean) => void;
-  muscleGroups: MuscleGroup[];
+  muscleGroups: GetMuscleGroupsResponse['muscleGroups'];
 }
 
 export const UpdateExerciseForm = ({
@@ -27,8 +30,8 @@ export const UpdateExerciseForm = ({
   const [description, setDescription] = useState(exercise.description);
   const [category, setCategory] = useState(exercise.category);
   const [profile, setProfile] = useState(exercise.profile);
-  const [primary, setPrimary] = useState(exercise.primary ?? []);
-  const [secondary, setSecondary] = useState(exercise.secondary ?? []);
+  const [primary, setPrimary] = useState<any>(exercise.primary ?? []);
+  const [secondary, setSecondary] = useState<any>(exercise.secondary ?? []);
   const [isPrimaryError, setIsPrimaryError] = useState(false);
   const [isCategoryError, setIsCategoryError] = useState(false);
 
@@ -74,10 +77,18 @@ export const UpdateExerciseForm = ({
     );
   };
 
-  const updateMuscleGroup = ({ data, group }) => {
+  const updateMuscleGroup = ({
+    data,
+    group,
+  }: {
+    data: MultiValue<{ label: string; value: string }>;
+    group: 'primary' | 'secondary';
+  }) => {
     // get the muscle groups that are not in the primary array
     const newPrimary = data.map((object) => object.value);
-    const oldPrimary = exercise[group].map((object) => object.muscle_group_id);
+    const oldPrimary = exercise[group as 'primary' | 'secondary'].map(
+      (object) => object.muscle_group_id
+    );
 
     // get difference array values in newPrimary and oldPrimary
     const difference =
@@ -141,7 +152,7 @@ export const UpdateExerciseForm = ({
           <div className="flex-1 w-full">
             <Select
               onChange={(data) => {
-                setPrimaryTracker(data.value);
+                setPrimaryTracker(data?.value ?? '');
               }}
               isSearchable={false}
               name="primaryTracker"
@@ -160,7 +171,7 @@ export const UpdateExerciseForm = ({
           <div className="flex-1 w-full">
             <Select
               onChange={(data) => {
-                setSecondaryTracker(data.value);
+                setSecondaryTracker(data?.value ?? '');
               }}
               isSearchable={false}
               name="secondaryTracker"
@@ -185,7 +196,7 @@ export const UpdateExerciseForm = ({
             <label>Category</label>
             <Select
               onChange={(data) => {
-                setCategory(data.value);
+                setCategory(data?.value ?? '');
                 setIsCategoryError(false);
               }}
               name="category"
@@ -218,7 +229,7 @@ export const UpdateExerciseForm = ({
             onChange={(option) => {
               return setProfile(option);
             }}
-            checked={profile}
+            checked={!!profile}
             isRequired={true}
             options={['short', 'mid', 'long']}
             name="resistance-range"
@@ -230,12 +241,14 @@ export const UpdateExerciseForm = ({
         <label>Primary</label>
         <Select
           isMulti
-          defaultValue={primary.map((mg) => {
-            return {
-              label: mg.name,
-              value: mg.muscle_group_id,
-            };
-          })}
+          defaultValue={primary.map(
+            (mg: { name: any; muscle_group_id: any }) => {
+              return {
+                label: mg.name,
+                value: mg.muscle_group_id,
+              };
+            }
+          )}
           styles={{
             control: (base) => ({
               ...base,
@@ -271,12 +284,14 @@ export const UpdateExerciseForm = ({
         <label>Secondary</label>
         <Select
           isMulti
-          defaultValue={secondary.map((mg) => {
-            return {
-              label: mg.name,
-              value: mg.muscle_group_id,
-            };
-          })}
+          defaultValue={secondary.map(
+            (mg: { name: any; muscle_group_id: any }) => {
+              return {
+                label: mg.name,
+                value: mg.muscle_group_id,
+              };
+            }
+          )}
           onChange={(data) => {
             updateMuscleGroup({ data, group: 'secondary' });
             setSecondary(data);
@@ -291,7 +306,7 @@ export const UpdateExerciseForm = ({
           })}
         />
       </div>
-      <Button disabled={isLoading} className="mt-2 w-full">
+      <Button isDisabled={isLoading} className="mt-2 w-full">
         {isLoading ? 'Updating exercise...' : 'Update exercise'}
       </Button>
       {isError && (

@@ -11,7 +11,7 @@ interface Props {
   record: {
     repeptitions: number;
     weight: number;
-  };
+  }[];
 }
 
 export const GetExerciseSets = ({ sessionId, exerciseId, record }: Props) => {
@@ -49,7 +49,7 @@ export const GetExerciseSets = ({ sessionId, exerciseId, record }: Props) => {
 
   return (
     <SetsList
-      sets={data.sets}
+      sets={data?.sets ?? []}
       sessionId={sessionId}
       exerciseId={exerciseId}
       record={record}
@@ -77,6 +77,7 @@ const SetsList = ({ sets, sessionId, exerciseId, record }: SetsListProps) => {
                 setNumber={key + 1 > 9 ? `${key + 1}` : `0${key + 1}`}
                 sessionId={sessionId}
                 exerciseId={exerciseId}
+                // @ts-ignore
                 setRecord={record[key]}
               />
             );

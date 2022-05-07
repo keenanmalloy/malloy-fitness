@@ -1,9 +1,12 @@
 import { useMutation } from 'react-query';
 import { apiClient } from 'config/axios';
 
-interface Props {}
+interface Props {
+  workoutId: string;
+  exerciseId: string;
+}
 
-const removeExerciseFromWorkout = async ({ workoutId, exerciseId }) => {
+const removeExerciseFromWorkout = async ({ workoutId, exerciseId }: Props) => {
   const { data } = await apiClient.delete(
     `/workouts/${workoutId}/exercises/${exerciseId}`
   );

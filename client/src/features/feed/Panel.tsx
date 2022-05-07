@@ -24,22 +24,6 @@ export const Panel = ({ workouts, day }: Props) => {
   return <ScheduledWorkouts workouts={workouts} />;
 };
 
-const RestDay = () => {
-  return (
-    <div className="my-4 px-2">
-      <div className="flex flex-row items-start gap-4 px-2">
-        <div className="w-full flex flex-row justify-between">
-          <div className="pt-2 w-40">
-            <p className="text-xl font-medium">Rest Day!</p>
-          </div>
-
-          <Sleep />
-        </div>
-      </div>
-    </div>
-  );
-};
-
 export const ScheduleNextDay = ({ day }: { day: number }) => {
   const ArtComponent = () => {
     switch (day) {
@@ -86,65 +70,51 @@ export const ScheduleNextDay = ({ day }: { day: number }) => {
 };
 
 const ScheduledWorkouts = ({ workouts }: { workouts: any[] }) => {
-  const startWorkout = (id: string) => {
-    console.log({ id });
-
-    // GET /workouts/:pk and distinguish the first exercise within the workout
-    // if success, continue
-    // if error, show error in UI & do not run the following PATCH
-
-    // PATCH /workouts/:pk/start
-    // If successful
-    // redirect to page localhost:3000/workouts/:pk/exercises/:pk
-    // If error
-    // show same error in UI as above
-  };
-
-  return workouts.map((w) => {
-    return (
-      <div className="mt-2 px-2 py-4" key={w.workout_id}>
-        <div className="flex flex-row items-start gap-4">
-          <div className="w-full flex flex-row justify-between">
-            <div className="pt-2 w-52">
-              <p className="text-xl font-medium">{w.name}</p>
-              <p className="text-xs">{w.description}</p>
+  return (
+    <>
+      {workouts.map((w) => {
+        return (
+          <div className="mt-2 px-2 py-4" key={w.workout_id}>
+            <div className="flex flex-row items-start gap-4">
+              <div className="w-full flex flex-row justify-between">
+                <div className="pt-2 w-52">
+                  <p className="text-xl font-medium">{w.name}</p>
+                  <p className="text-xs">{w.description}</p>
+                </div>
+                <aside className="flex flex-col justify-between">
+                  <p className="font-black text-2xl text-right">
+                    {new Intl.DateTimeFormat('en-US', {
+                      month: 'short',
+                      day: '2-digit',
+                    }).format(new Date(w.workout_dt))}
+                  </p>
+                </aside>
+              </div>
             </div>
-            <aside className="flex flex-col justify-between">
-              <p className="font-black text-2xl text-right">
-                {new Intl.DateTimeFormat('en-US', {
-                  month: 'short',
-                  day: '2-digit',
-                }).format(new Date(w.workout_dt))}
-              </p>
-            </aside>
-          </div>
-        </div>
 
-        {isToday(new Date(w.workout_dt)) ? (
-          <div className="flex items-center justify-between gap-4 mt-2">
-            <Button
-              type="button"
-              className="w-36"
-              onClick={() => startWorkout(w.workout_id)}
-            >
-              Start
-            </Button>
+            {isToday(new Date(w.workout_dt)) ? (
+              <div className="flex items-center justify-between gap-4 mt-2">
+                <Button type="button" className="w-36" onClick={() => {}}>
+                  Start
+                </Button>
+              </div>
+            ) : (
+              <div className="flex items-center justify-between gap-4 mt-2">
+                <Button
+                  type="button"
+                  className="disabled:border-none disabled:opacity-30 px-10"
+                  isDisabled
+                >
+                  Scheduled for{' '}
+                  {new Intl.DateTimeFormat('en-CA', {
+                    weekday: 'short',
+                  }).format(new Date(w.workout_dt))}
+                </Button>
+              </div>
+            )}
           </div>
-        ) : (
-          <div className="flex items-center justify-between gap-4 mt-2">
-            <Button
-              type="button"
-              className="disabled:border-none disabled:opacity-30 px-10"
-              isDisabled
-            >
-              Scheduled for{' '}
-              {new Intl.DateTimeFormat('en-CA', {
-                weekday: 'short',
-              }).format(new Date(w.workout_dt))}
-            </Button>
-          </div>
-        )}
-      </div>
-    );
-  });
+        );
+      })}
+    </>
+  );
 };

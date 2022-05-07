@@ -6,9 +6,12 @@ import { MdEdit } from 'react-icons/md';
 import Modal from 'features/modal/Modal';
 import { UpdateExerciseForm } from 'features/exercises/components/UpdateExerciseForm';
 import { useMuscleGroupsQuery } from 'features/muscle-groups/api/useMuscleGroupsQuery';
+import { GetExercisesResponse, GetSingleExerciseResponse } from '../types';
 
 interface Props {
-  exercise: any;
+  exercise:
+    | GetSingleExerciseResponse['exercise']
+    | GetExercisesResponse['exercises'][0];
   queryKey: string;
 }
 

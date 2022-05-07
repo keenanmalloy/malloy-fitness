@@ -2,12 +2,20 @@ import React, { useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import Modal from 'features/modal/Modal';
 import { Button } from 'features/common/Button';
+import { LocalExercise } from './CreateWorkout';
+import { GetExercisesResponse } from 'features/exercises/types';
+
+interface Props {
+  exercise: GetExercisesResponse['exercises'][0];
+  setExercises: (exercises: LocalExercise[]) => void;
+  exercises: LocalExercise[];
+}
 
 export const RemoveWorkoutExerciseFromPreview = ({
   setExercises,
   exercises,
   exercise,
-}) => {
+}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -25,9 +33,10 @@ export const RemoveWorkoutExerciseFromPreview = ({
           <Button onClick={() => setIsOpen(false)}>Cancel</Button>
           <Button
             onClick={() => {
-              setExercises((prev) => {
+              // @ts-ignore
+              setExercises((prev: LocalExercise[]) => {
                 const removeableOrder = prev.filter(
-                  (ex) => ex.id === exercise.exercise_id
+                  (ex) => ex.id === +exercise.exercise_id
                 )[0].order;
 
                 const updatedOrders = prev.map((d) => {
@@ -38,7 +47,7 @@ export const RemoveWorkoutExerciseFromPreview = ({
                 });
 
                 return updatedOrders.filter(
-                  (ex) => ex.id !== exercise.exercise_id
+                  (ex) => ex.id !== +exercise.exercise_id
                 );
               });
             }}

@@ -145,7 +145,7 @@ export const CreateStrengthExerciseForm = ({
               }),
             }}
             onChange={(data) => {
-              setPrimary(data);
+              setPrimary([...data]);
             }}
             name="primary-muscle-groups"
             options={muscleGroups.map((muscleGroup) => {
@@ -161,7 +161,7 @@ export const CreateStrengthExerciseForm = ({
           <label>Secondary Muscle Group(s)</label>
           <Select
             isMulti
-            onChange={(data) => setSecondary(data)}
+            onChange={(data) => setSecondary([...data])}
             name="secondary-muscle-groups"
             options={muscleGroups.map((muscleGroup) => {
               return {

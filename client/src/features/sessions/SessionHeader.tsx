@@ -34,7 +34,7 @@ const SessionHeader = ({ sessionId, exerciseId, workoutId }: Props) => {
     (ex) => ex.exercise_id === exerciseId
   );
 
-  const getLetter = (index: string) => {
+  const getLetter = (index: number) => {
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     return letters[index];
   };
@@ -56,6 +56,7 @@ const SessionHeader = ({ sessionId, exerciseId, workoutId }: Props) => {
             <SessionTimer
               endedAt={data.session.ended_at}
               startedAt={data.session.started_at}
+              workoutId={''}
             />
           </div>
         </div>
@@ -76,8 +77,8 @@ const SessionHeader = ({ sessionId, exerciseId, workoutId }: Props) => {
       </section>
       <div className="px-1 pt-0.5 border-solid border-gray-200 border-t">
         <OverviewRow
-          order={`${getLetter(currentExercise.order - 1)}1`}
-          name={currentExercise.name}
+          order={`${getLetter(currentExercise?.order ?? 0 - 1)}1`}
+          name={currentExercise?.name ?? ''}
           sets="sets 3"
           reps="reps 10-12"
           rir="rir 1"

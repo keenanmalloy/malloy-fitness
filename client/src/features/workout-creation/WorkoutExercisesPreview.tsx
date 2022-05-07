@@ -3,8 +3,15 @@ import React, { useState } from 'react';
 import { EditWorkoutExerciseMetadataPreview } from 'features/workout-creation/EditWorkoutExerciseMetadataPreview';
 import { RemoveWorkoutExerciseFromPreview } from './RemoveWorkoutExerciseFromPreview';
 import { OrderWorkoutExercisePreview } from './OrderWorkoutExercisePreview';
+import { LocalExercise } from './CreateWorkout';
+import { GetExercisesResponse } from 'features/exercises/types';
 
-export const WorkoutExercisesPreview = ({ exercises, setExercises }) => {
+interface Props {
+  exercises: LocalExercise[];
+  setExercises: (exercises: LocalExercise[]) => void;
+}
+
+export const WorkoutExercisesPreview = ({ exercises, setExercises }: Props) => {
   const { data, isLoading, isError } = useExerciseIdsQuery(
     exercises.map((ex) => ex.id)
   );
@@ -25,9 +32,13 @@ export const WorkoutExercisesPreview = ({ exercises, setExercises }) => {
     <ul className="divide-y-2 divide-solid divide-gray-200 py-2">
       {data.exercises
         .sort((a, b) => {
-          const aIndex = exercises.find((ex) => ex.id === a.exercise_id);
-          const bIndex = exercises.find((ex) => ex.id === b.exercise_id);
-          return aIndex.order - bIndex.order;
+          const aIndex = exercises.find((ex) => ex.id === +a.exercise_id);
+          const bIndex = exercises.find((ex) => ex.id === +b.exercise_id);
+          if (aIndex && bIndex) {
+            return aIndex.order - bIndex.order;
+          } else {
+            return 0;
+          }
         })
         .map((exercise, key) => (
           <ExercisePreviewRow
@@ -42,7 +53,19 @@ export const WorkoutExercisesPreview = ({ exercises, setExercises }) => {
   );
 };
 
-const ExercisePreviewRow = ({ order, exercises, setExercises, exercise }) => {
+interface ExercisePreviewRowProps {
+  order: number;
+  exercise: GetExercisesResponse['exercises'][0];
+  exercises: LocalExercise[];
+  setExercises: (exercises: LocalExercise[]) => void;
+}
+
+const ExercisePreviewRow = ({
+  order,
+  exercises,
+  setExercises,
+  exercise,
+}: ExercisePreviewRowProps) => {
   const [isOrdering, setIsOrdering] = useState(false);
   return (
     <li className="flex items-center justify-between py-1">
@@ -65,26 +88,29 @@ const ExercisePreviewRow = ({ order, exercises, setExercises, exercise }) => {
           >
             <p>
               sets:
-              {exercises.filter((ex) => ex.id === exercise.exercise_id)[0].sets}
+              {
+                exercises.filter((ex) => ex.id === +exercise.exercise_id)[0]
+                  .sets
+              }
             </p>
             <p>
               reps:
               {
-                exercises.filter((ex) => ex.id === exercise.exercise_id)[0]
+                exercises.filter((ex) => ex.id === +exercise.exercise_id)[0]
                   .repetitions
               }
             </p>
             <p>
               rir:
               {
-                exercises.filter((ex) => ex.id === exercise.exercise_id)[0]
+                exercises.filter((ex) => ex.id === +exercise.exercise_id)[0]
                   .repsInReserve
               }
             </p>
             <p>
               rest:
               {
-                exercises.filter((ex) => ex.id === exercise.exercise_id)[0]
+                exercises.filter((ex) => ex.id === +exercise.exercise_id)[0]
                   .restPeriod
               }
             </p>

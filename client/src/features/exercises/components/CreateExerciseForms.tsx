@@ -11,7 +11,12 @@ interface Props {
   muscleGroups: MuscleGroup[];
 }
 
-type FormType = 'cardio' | 'hypertrophy' | 'strength' | 'therapy' | 'choose';
+export type FormType =
+  | 'cardio'
+  | 'hypertrophy'
+  | 'physiotherapy'
+  | 'strength'
+  | 'choose';
 
 export const CreateExerciseForms = ({ muscleGroups, setIsOpen }: Props) => {
   const [type, setType] = useState<FormType>('choose');

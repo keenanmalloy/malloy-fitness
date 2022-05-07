@@ -50,12 +50,7 @@ export const UserAction = ({ selected }: Props) => {
           />
         </button>
       </div>
-      <HomeModal
-        title="Schedule"
-        description="Schedule a workout"
-        closeModal={() => setIsOpen(false)}
-        isOpen={isOpen}
-      >
+      <HomeModal closeModal={() => setIsOpen(false)} isOpen={isOpen}>
         <button
           className="bg-gray-50 px-4 py-2 rounded-md"
           onClick={createSession}
