@@ -4,13 +4,20 @@ import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { usePreviewWorkoutsQuery } from 'features/date-scroll/usePreviewWorkoutsQuery';
 import { generateCalendarState } from 'features/date-scroll/generateCalendarState';
+import { SelectedDate } from 'features/daily/types';
 
 const ScrollDatePicker = dynamic(
+  // @ts-ignore
   import('../date-scroll/ScrollDatePicker').then((mod) => mod.ScrollDatePicker),
   { ssr: false }
 );
 
-export const HomeHeader = ({ selected, setSelected }) => {
+interface Props {
+  selected: SelectedDate;
+  setSelected: (date: SelectedDate) => void;
+}
+
+export const HomeHeader = ({ selected, setSelected }: Props) => {
   // state used to generate the array of calendar dates (+1 / -1 months)
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [items, setItems] = useState(generateCalendarState(selectedDate));
@@ -60,15 +67,14 @@ export const HomeHeader = ({ selected, setSelected }) => {
       </div>
 
       <ScrollDatePicker
-        selectedDate={selectedDate}
-        setSelectedDate={setSelectedDate}
+        // @ts-ignore
         items={items}
         setItems={setItems}
         selected={selected}
         setSelected={setSelected}
         data={data}
-        isError={isError}
-        isLoading={isLoading}
+        selectedDate={selectedDate}
+        setSelectedDate={setSelectedDate}
       />
     </nav>
   );

@@ -5,7 +5,13 @@ import { Button } from 'features/common/Button';
 import { useRotateExercise } from './useRotateExercise';
 import { useRouter } from 'next/router';
 
-export const RotateExercise = ({ sessionId, exerciseId, workoutId }) => {
+interface Props {
+  sessionId: string;
+  exerciseId: string;
+  workoutId: string;
+}
+
+export const RotateExercise = ({ sessionId, exerciseId, workoutId }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (

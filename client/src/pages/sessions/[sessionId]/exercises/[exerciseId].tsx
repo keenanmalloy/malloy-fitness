@@ -3,6 +3,7 @@ import { useSessionExerciseQuery } from 'features/sessions/useSessionExerciseQue
 import { SessionExercise } from 'features/sessions/SessionExercise';
 import SessionHeader from 'features/sessions/SessionHeader';
 import { Skeleton } from 'features/common/Skeleton';
+import { GetStaticPropsContext } from 'next';
 
 export async function getStaticPaths() {
   arguments;
@@ -12,7 +13,7 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps({ params }: GetStaticPropsContext) {
   const exerciseId = params && params.exerciseId;
   const sessionId = params && params.sessionId;
 
@@ -20,8 +21,11 @@ export async function getStaticProps({ params }) {
     props: { exerciseId, sessionId },
   };
 }
-
-const SessionExercisePage = ({ exerciseId, sessionId }) => {
+interface Props {
+  exerciseId: string;
+  sessionId: string;
+}
+const SessionExercisePage = ({ exerciseId, sessionId }: Props) => {
   const { data, isError, isLoading } = useSessionExerciseQuery(
     exerciseId,
     sessionId

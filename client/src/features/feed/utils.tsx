@@ -1,4 +1,4 @@
-export const isToday = (someDate, index = 0) => {
+export const isToday = (someDate: Date, index = 0) => {
   const today = getFutureDate(index);
   return (
     someDate.getDate() == today.getDate() &&
@@ -7,7 +7,7 @@ export const isToday = (someDate, index = 0) => {
   );
 };
 
-export const getFutureDate = (index) => {
+export const getFutureDate = (index: number) => {
   const today = new Date();
   const futureDate = new Date(today);
   futureDate.setDate(futureDate.getDate() + index);

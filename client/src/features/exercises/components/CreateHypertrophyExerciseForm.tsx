@@ -6,8 +6,17 @@ import { useCreateExerciseMutation } from 'features/exercises/api/useCreateExerc
 import Select from 'react-select';
 import { useQueryClient } from 'react-query';
 import { EXERCISE_CATEGORIES } from 'features/environment';
+import { MuscleGroup } from 'features/muscle-groups/types';
 
-export const CreateHypertrophyExerciseForm = ({ muscleGroups, setIsOpen }) => {
+interface Props {
+  setIsOpen: (type: boolean) => void;
+  muscleGroups: MuscleGroup[];
+}
+
+export const CreateHypertrophyExerciseForm = ({
+  muscleGroups,
+  setIsOpen,
+}: Props) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');

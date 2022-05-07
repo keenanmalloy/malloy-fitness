@@ -4,17 +4,23 @@ import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
 import { apiClient } from 'config/axios';
 
-const StartSession = ({ sessionId, hasStarted, hasEnded }) => {
+interface Props {
+  sessionId: string;
+  hasStarted: boolean;
+  hasEnded: boolean;
+}
+
+const StartSession = ({ sessionId, hasStarted, hasEnded }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const queryClient = useQueryClient();
   const router = useRouter();
 
-  const getSingleWorkout = async (id) => {
+  const getSingleWorkout = async (id: string) => {
     const { data } = await apiClient.get(`/sessions/${id}`);
     return data;
   };
 
-  const initSession = async (id) => {
+  const initSession = async (id: string) => {
     try {
       const { data } = await apiClient.patch(`/sessions/${id}/start`);
       return data;
@@ -23,7 +29,7 @@ const StartSession = ({ sessionId, hasStarted, hasEnded }) => {
     }
   };
 
-  const startOrContinueWorkout = async (sessionId) => {
+  const startOrContinueWorkout = async (sessionId: string) => {
     setIsLoading(true);
     const data = await getSingleWorkout(sessionId);
     if (data.status !== 'success') {

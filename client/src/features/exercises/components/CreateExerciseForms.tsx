@@ -1,12 +1,20 @@
 import React, { useState } from 'react';
+import { MuscleGroup } from '../types';
 import { ChooseCreateExerciseForm } from './ChooseCreateExerciseForm';
 import { CreateCardioExerciseForm } from './CreateCardioExerciseForm';
 import { CreateHypertrophyExerciseForm } from './CreateHypertrophyExerciseForm';
 import { CreateStrengthExerciseForm } from './CreateStrengthExerciseForm';
 import { CreateTherapyExerciseForm } from './CreateTherapyExerciseForm';
 
-export const CreateExerciseForms = ({ muscleGroups, setIsOpen }) => {
-  const [type, setType] = useState('choose');
+interface Props {
+  setIsOpen: (type: boolean) => void;
+  muscleGroups: MuscleGroup[];
+}
+
+type FormType = 'cardio' | 'hypertrophy' | 'strength' | 'therapy' | 'choose';
+
+export const CreateExerciseForms = ({ muscleGroups, setIsOpen }: Props) => {
+  const [type, setType] = useState<FormType>('choose');
 
   const formStates = {
     strength: (

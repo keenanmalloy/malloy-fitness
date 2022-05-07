@@ -4,6 +4,16 @@ import Modal from 'features/common/Modal';
 import { Button } from 'features/common/Button';
 import { generateCalendarState } from './generateCalendarState';
 import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
+import { SelectedDate } from 'features/daily/types';
+
+interface Props {
+  displayDate: string;
+  setSelectedDate: (date: Date) => void;
+  setSelected: (date: SelectedDate) => void;
+  items: SelectedDate[];
+  scrollToItem: any;
+  setItems: (newDates: SelectedDate[]) => void;
+}
 
 export const CalendarComponent = ({
   displayDate,
@@ -12,7 +22,7 @@ export const CalendarComponent = ({
   items,
   scrollToItem,
   setItems,
-}) => {
+}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [value, onChange] = useState(new Date());
 
@@ -53,7 +63,7 @@ export const CalendarComponent = ({
         isOpen={isOpen}
       >
         <Calendar
-          onChange={(d) => {
+          onChange={(d: any) => {
             const filteredItem = items.filter(
               (item) =>
                 item.month === d.getMonth() + 1 &&
@@ -74,9 +84,6 @@ export const CalendarComponent = ({
           nextLabel={<span className="px-2">&gt;</span>}
           prevLabel={<span className="px-2">&lt;</span>}
           tileClassName={({ activeStartDate, date, view }) => {
-            return null;
-          }}
-          tileDisabled={({ activeStartDate, date, view }) => {
             return null;
           }}
         />

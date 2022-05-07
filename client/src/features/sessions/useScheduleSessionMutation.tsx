@@ -1,7 +1,12 @@
 import { apiClient } from 'config/axios';
 import { useMutation, useQueryClient } from 'react-query';
 
-const scheduleSession = async ({ workoutId, date }) => {
+interface ScheduleSessionParams {
+  workoutId: string;
+  date: string;
+}
+
+const scheduleSession = async ({ workoutId, date }: ScheduleSessionParams) => {
   const { data } = await apiClient.post(`/sessions/`, {
     workout_id: workoutId,
     session_dt: date,
@@ -9,11 +14,14 @@ const scheduleSession = async ({ workoutId, date }) => {
   return data;
 };
 
-export const useScheduleSessionMutation = (workoutId) => {
+export const useScheduleSessionMutation = (workoutId: string) => {
   const queryClient = useQueryClient();
-  return useMutation(({ date }) => scheduleSession({ workoutId, date }), {
-    onSuccess: () => {
-      queryClient.refetchQueries('fetchSessions');
-    },
-  });
+  return useMutation<any, any, { date: string }>(
+    ({ date }) => scheduleSession({ workoutId, date }),
+    {
+      onSuccess: () => {
+        queryClient.refetchQueries('fetchSessions');
+      },
+    }
+  );
 };

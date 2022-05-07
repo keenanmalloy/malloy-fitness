@@ -3,7 +3,6 @@ import { useMuscleGroupsQuery } from 'features/muscle-groups/api/useMuscleGroups
 import FullPageModal from 'features/common/FullPageModal';
 import { useState } from 'react';
 import { CreateExerciseForms } from './CreateExerciseForms';
-import Modal from 'features/common/Modal';
 
 export const CreateExercise = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -15,6 +14,10 @@ export const CreateExercise = () => {
 
   if (isError) {
     return <p style={{ color: 'red' }}>fetching error...</p>;
+  }
+
+  if (!data) {
+    return <p>no data</p>;
   }
 
   return (

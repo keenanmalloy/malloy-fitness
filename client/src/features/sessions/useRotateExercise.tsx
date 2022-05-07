@@ -1,7 +1,17 @@
 import { apiClient } from 'config/axios';
 import { useMutation, useQueryClient } from 'react-query';
 
-const rotateExercise = async ({ workoutId, sessionId, exerciseId }) => {
+interface RotateExerciseParams {
+  workoutId: string;
+  sessionId: string;
+  exerciseId: string;
+}
+
+const rotateExercise = async ({
+  workoutId,
+  sessionId,
+  exerciseId,
+}: RotateExerciseParams) => {
   const { data } = await apiClient.put(
     `/sessions/${sessionId}/exercises/${exerciseId}`,
     {
@@ -11,9 +21,14 @@ const rotateExercise = async ({ workoutId, sessionId, exerciseId }) => {
   return data;
 };
 
-export const useRotateExercise = ({ sessionId, exerciseId }) => {
+interface Props {
+  exerciseId: string;
+  sessionId: string;
+}
+
+export const useRotateExercise = ({ sessionId, exerciseId }: Props) => {
   const queryClient = useQueryClient();
-  return useMutation(
+  return useMutation<any, any, { workoutId: string }>(
     ({ workoutId }) => rotateExercise({ workoutId, sessionId, exerciseId }),
     {
       onSuccess: () => {

@@ -1,6 +1,11 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { GetDailyResponse } from './types';
 
-export const DietPanel = () => {
+interface DietPanelProps {
+  data: GetDailyResponse;
+}
+
+export const DietPanel = ({ data }: DietPanelProps) => {
   const [calories, setCalories] = useState(22);
   const [protein, setProtein] = useState(44);
   const [fats, setFats] = useState(55);
@@ -20,7 +25,13 @@ export const DietPanel = () => {
   );
 };
 
-const DietStatistic = ({ progress, size, label }) => {
+interface DietStatisticProps {
+  progress: number;
+  size?: 'small' | 'medium' | 'large';
+  label?: string;
+}
+
+const DietStatistic = ({ progress, size, label }: DietStatisticProps) => {
   if (size === 'small') {
     return (
       <div className="flex flex-col justify-center items-center">
@@ -60,9 +71,18 @@ const DietStatistic = ({ progress, size, label }) => {
   );
 };
 
-const ProgressBar = (props) => {
+interface ProgressBarProps {
+  progress: number;
+  size: number;
+  strokeWidth: number;
+  circleOneStroke: string;
+  circleTwoStroke: string;
+  top?: string;
+}
+
+const ProgressBar = (props: ProgressBarProps) => {
   const [offset, setOffset] = useState(302);
-  const circleRef = useRef(null);
+  const circleRef = useRef<SVGCircleElement>(null);
   const { size, progress, strokeWidth, circleOneStroke, circleTwoStroke, top } =
     props;
 
@@ -74,51 +94,50 @@ const ProgressBar = (props) => {
     const progressOffset = ((100 - progress) / 100) * circumference;
     setOffset(progressOffset);
 
+    // @ts-ignore
     circleRef.current.style = 'transition: stroke-dashoffset 850ms ease-in-out';
   }, [setOffset, progress, circumference, offset]);
 
   return (
-    <>
-      <svg
-        className="svg"
-        width={size}
-        height={size}
+    <svg
+      className="svg"
+      width={size}
+      height={size}
+      style={{
+        display: 'block',
+        margin: '20px auto',
+        maxWidth: '100%',
+        position: 'absolute',
+        zIndex: '-1',
+        top: top,
+        bottom: '0',
+      }}
+    >
+      <circle
+        className="svg-circle-bg"
         style={{
-          display: 'block',
-          margin: '20px auto',
-          maxWidth: '100%',
-          position: 'absolute',
-          zIndex: '-1',
-          top: top,
-          bottom: '0',
+          fill: 'none',
         }}
-      >
-        <circle
-          className="svg-circle-bg"
-          style={{
-            fill: 'none',
-          }}
-          stroke={circleOneStroke}
-          cx={center}
-          cy={center}
-          r={radius}
-          strokeWidth={strokeWidth}
-        />
-        <circle
-          className="svg-circle"
-          style={{
-            fill: 'none',
-          }}
-          ref={circleRef}
-          stroke={circleTwoStroke}
-          cx={center}
-          cy={center}
-          r={radius}
-          strokeWidth={strokeWidth}
-          strokeDasharray={circumference}
-          strokeDashoffset={offset}
-        />
-      </svg>
-    </>
+        stroke={circleOneStroke}
+        cx={center}
+        cy={center}
+        r={radius}
+        strokeWidth={strokeWidth}
+      />
+      <circle
+        className="svg-circle"
+        style={{
+          fill: 'none',
+        }}
+        ref={circleRef}
+        stroke={circleTwoStroke}
+        cx={center}
+        cy={center}
+        r={radius}
+        strokeWidth={strokeWidth}
+        strokeDasharray={circumference}
+        strokeDashoffset={offset}
+      />
+    </svg>
   );
 };

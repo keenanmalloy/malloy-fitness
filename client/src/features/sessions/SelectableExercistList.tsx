@@ -4,6 +4,16 @@ import { Skeleton } from 'features/common/Skeleton';
 import Image from 'next/image';
 import { useDebounce } from 'features/common/useDebounce';
 
+interface Props {
+  query: string;
+  category: string;
+  view: string;
+  profile: string;
+  sortBy: string;
+  exercises: any;
+  handleExerciseSelection: (exerciseId: string) => void;
+}
+
 export const SelectableExerciseList = ({
   query,
   category,
@@ -12,7 +22,7 @@ export const SelectableExerciseList = ({
   sortBy,
   exercises,
   handleExerciseSelection,
-}) => {
+}: Props) => {
   const debouncedSearchQuery = useDebounce(query, 600);
   const { data, isError, isLoading } = useExercisesQuery({
     query: debouncedSearchQuery,
@@ -45,7 +55,7 @@ export const SelectableExerciseList = ({
     );
   }
 
-  if (!data.exercises) {
+  if (!data || (data && !data.exercises)) {
     return (
       <section className="relative p-5">
         {/* <SearchMuscleGroups query={query} setQuery={setQuery} /> */}

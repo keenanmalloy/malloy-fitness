@@ -6,7 +6,11 @@ import { useDeleteWorkoutMutation } from 'features/workouts/api/useDeleteWorkout
 import { MdDelete } from 'react-icons/md';
 import { useRouter } from 'next/router';
 
-export const DeleteWorkout = ({ workoutId }) => {
+interface Props {
+  workoutId: string;
+}
+
+export const DeleteWorkout = ({ workoutId }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const { mutate, isLoading, isError } = useDeleteWorkoutMutation(workoutId);
 
@@ -21,7 +25,7 @@ export const DeleteWorkout = ({ workoutId }) => {
     setIsOpen(true);
   }
 
-  const handleClick = ({ workoutId }) => {
+  const handleClick = (workoutId) => {
     mutate(
       { workoutId },
       {

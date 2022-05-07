@@ -1,6 +1,11 @@
 import React from 'react';
+import { GetDailyResponse } from './types';
 
-export const SleepPanel = ({ data }) => {
+interface Props {
+  data: GetDailyResponse;
+}
+
+export const SleepPanel = ({ data }: Props) => {
   return (
     <div>
       <div className="flex justify-center text-center mx-3 py-2">

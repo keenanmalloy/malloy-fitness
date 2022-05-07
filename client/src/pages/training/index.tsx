@@ -6,7 +6,7 @@ import { History } from 'features/training/History';
 import { Active } from 'features/training/Active';
 
 const TrainingPage = () => {
-  function classNames(...classes) {
+  function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ');
   }
 

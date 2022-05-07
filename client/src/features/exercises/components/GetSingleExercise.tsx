@@ -11,7 +11,11 @@ import { GetRelatedExercises } from './GetRelatedExercises';
 import { IoIosArrowRoundForward } from 'react-icons/io';
 import { useRouter } from 'next/router';
 
-export const GetSingleExercise = ({ id }) => {
+interface Props {
+  id: string;
+}
+
+export const GetSingleExercise = ({ id }: Props) => {
   const { data, isError, isLoading } = useExerciseQuery(id);
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -50,7 +54,7 @@ export const GetSingleExercise = ({ id }) => {
     );
   }
 
-  if (data && !data.exercise) {
+  if ((data && !data.exercise) || !data) {
     return (
       <div className="p-5">
         <p>does not exist...</p>
@@ -68,11 +72,7 @@ export const GetSingleExercise = ({ id }) => {
           Back
         </button>
         {(data.role === 'developer' || data.exercise.view === 'private') && (
-          <UpdateExercise
-            exercise={data.exercise}
-            muscleGroups={mgData.muscleGroups}
-            queryKey="fetchExercise"
-          />
+          <UpdateExercise exercise={data.exercise} queryKey="fetchExercise" />
         )}
       </header>
 

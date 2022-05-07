@@ -7,7 +7,21 @@ import { DeleteExercise } from './DeleteExercise';
 import Image from 'next/image';
 import { useDebounce } from 'features/common/useDebounce';
 
-export const ExerciseList = ({ query, category, view, profile, sortBy }) => {
+interface Props {
+  query: string;
+  category: string;
+  view: string;
+  profile: string;
+  sortBy: string;
+}
+
+export const ExerciseList = ({
+  query,
+  category,
+  view,
+  profile,
+  sortBy,
+}: Props) => {
   const debouncedSearchQuery = useDebounce(query, 600);
   const { data, isError, isLoading } = useExercisesQuery({
     query: debouncedSearchQuery,
@@ -40,7 +54,7 @@ export const ExerciseList = ({ query, category, view, profile, sortBy }) => {
     );
   }
 
-  if (!data.exercises) {
+  if (!data || !data.exercises) {
     return (
       <section className="relative p-5">
         {/* <SearchMuscleGroups query={query} setQuery={setQuery} /> */}

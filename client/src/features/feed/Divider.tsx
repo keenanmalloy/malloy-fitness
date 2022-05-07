@@ -1,6 +1,10 @@
 import React from 'react';
 
-export const Divider = ({ label }) => {
+interface Props {
+  label: string;
+}
+
+export const Divider = ({ label }: Props) => {
   return (
     <div className="flex items-center py-3">
       <div className="h-0.5 w-full bg-gray-100" />

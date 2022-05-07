@@ -4,6 +4,15 @@ import { GetExerciseSets } from 'features/sets/components/GetExerciseSets';
 import { Notes } from './Notes';
 import Link from 'next/link';
 
+interface Props {
+  sessionId: string;
+  exerciseId: string;
+  nextEx: string;
+  prevEx: string;
+  exercise: any;
+  record: any;
+}
+
 export const SessionExercise = ({
   sessionId,
   exerciseId,
@@ -11,7 +20,7 @@ export const SessionExercise = ({
   prevEx,
   exercise,
   record,
-}) => {
+}: Props) => {
   return (
     <main className="pb-20 pt-16">
       <div className="px-3 py-5 bg-gray-50" />

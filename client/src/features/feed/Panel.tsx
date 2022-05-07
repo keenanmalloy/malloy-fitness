@@ -11,7 +11,12 @@ import { FitnessTracker } from 'features/art/FitnessTracker';
 import { FitnessStats } from 'features/art/FitnessStats';
 import Link from 'next/link';
 
-export const Panel = ({ workouts, day }) => {
+interface Props {
+  workouts: any[];
+  day: number;
+}
+
+export const Panel = ({ workouts, day }: Props) => {
   if (!workouts.length) {
     return <ScheduleNextDay day={day} />;
   }
@@ -35,7 +40,7 @@ const RestDay = () => {
   );
 };
 
-export const ScheduleNextDay = ({ day }) => {
+export const ScheduleNextDay = ({ day }: { day: number }) => {
   const ArtComponent = () => {
     switch (day) {
       case 0:
@@ -80,8 +85,8 @@ export const ScheduleNextDay = ({ day }) => {
   );
 };
 
-const ScheduledWorkouts = ({ workouts }) => {
-  const startWorkout = (id) => {
+const ScheduledWorkouts = ({ workouts }: { workouts: any[] }) => {
+  const startWorkout = (id: string) => {
     console.log({ id });
 
     // GET /workouts/:pk and distinguish the first exercise within the workout

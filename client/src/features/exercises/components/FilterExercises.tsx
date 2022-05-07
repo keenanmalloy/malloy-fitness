@@ -2,19 +2,26 @@ import React from 'react';
 import Select from 'react-select';
 import { EXERCISE_CATEGORIES } from 'features/environment';
 
+interface Props {
+  setCategory: (category: string) => void;
+  setProfile: (profile: string) => void;
+  setView: (view: string) => void;
+  setSortBy: (sortBy: string) => void;
+}
+
 export const FilterExercises = ({
   setCategory,
   setProfile,
   setView,
   setSortBy,
-}) => {
+}: Props) => {
   return (
     <>
       <div className="flex flex-1 w-full">
         <div className="pb-2 flex-1 w-full">
           <label>Category</label>
           <Select
-            onChange={(data) => setCategory(data.value)}
+            onChange={(data) => setCategory(data?.value ?? '')}
             name="category"
             placeholder="Select"
             isSearchable={false}
@@ -24,7 +31,7 @@ export const FilterExercises = ({
         <div className="pb-2 flex-1 w-full">
           <label>Profile</label>
           <Select
-            onChange={(data) => setProfile(data.value)}
+            onChange={(data) => setProfile(data?.value ?? '')}
             name="profile"
             placeholder="Select"
             isSearchable={false}
@@ -42,7 +49,7 @@ export const FilterExercises = ({
         <div className="pb-2 flex-1 w-full">
           <label>View</label>
           <Select
-            onChange={(data) => setView(data.value)}
+            onChange={(data) => setView(data?.value ?? '')}
             name="view"
             placeholder="Select"
             isSearchable={false}
@@ -65,7 +72,7 @@ export const FilterExercises = ({
         <div className="pb-2 flex-1 w-full">
           <label>Sort By</label>
           <Select
-            onChange={(data) => setSortBy(data.value)}
+            onChange={(data) => setSortBy(data?.value ?? '')}
             name="sortBy"
             placeholder="Select"
             isSearchable={false}

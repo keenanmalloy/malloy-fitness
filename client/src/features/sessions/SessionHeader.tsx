@@ -8,7 +8,13 @@ import { RotateExercise } from './RotateExercise';
 import { OverviewRow } from 'features/workout-overview/OverviewRow';
 import { ChangeExercise } from './ChangeExercise';
 
-const SessionHeader = ({ sessionId, exerciseId, workoutId }) => {
+interface Props {
+  sessionId: string;
+  exerciseId: string;
+  workoutId: string;
+}
+
+const SessionHeader = ({ sessionId, exerciseId, workoutId }: Props) => {
   const router = useRouter();
   const { data, isError, isLoading } = useSessionQuery(sessionId, exerciseId);
 
@@ -28,7 +34,7 @@ const SessionHeader = ({ sessionId, exerciseId, workoutId }) => {
     (ex) => ex.exercise_id === exerciseId
   );
 
-  const getLetter = (index) => {
+  const getLetter = (index: string) => {
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     return letters[index];
   };

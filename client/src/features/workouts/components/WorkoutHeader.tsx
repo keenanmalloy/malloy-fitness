@@ -1,4 +1,10 @@
-export const WorkoutHeader = ({ hasEnded, hasStarted, scheduledAt }) => {
+interface Props {
+  hasEnded: boolean;
+  hasStarted: boolean;
+  scheduledAt: string;
+}
+
+export const WorkoutHeader = ({ hasEnded, hasStarted, scheduledAt }: Props) => {
   if (hasEnded) {
     return (
       <header className="w-full bg-green-50 px-2 py-2 mb-2 rounded-sm">

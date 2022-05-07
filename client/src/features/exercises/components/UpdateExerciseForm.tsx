@@ -8,13 +8,21 @@ import Select from 'react-select';
 import { EXERCISE_CATEGORIES, EXERCISE_TRACKERS } from 'features/environment';
 import { useAddMuscleGroupToExerciseMutation } from 'features/exercises/api/useAddMuscleGroupToExerciseMutation';
 import { useRemoveMuscleGroupFromExerciseMutation } from 'features/exercises/api/useRemoveMuscleGroupFromExerciseMutation';
+import { MuscleGroup } from 'features/muscle-groups/types';
+
+interface Props {
+  exercise: any;
+  queryKey: string;
+  setIsOpen: (type: boolean) => void;
+  muscleGroups: MuscleGroup[];
+}
 
 export const UpdateExerciseForm = ({
   exercise,
   muscleGroups,
   setIsOpen,
   queryKey,
-}) => {
+}: Props) => {
   const [name, setName] = useState(exercise.name);
   const [description, setDescription] = useState(exercise.description);
   const [category, setCategory] = useState(exercise.category);

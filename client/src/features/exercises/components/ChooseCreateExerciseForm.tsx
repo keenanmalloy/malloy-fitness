@@ -1,6 +1,11 @@
 import React from 'react';
 
-export const ChooseCreateExerciseForm = ({ type, setType }) => {
+interface Props {
+  setType: (type: string) => void;
+  type: string;
+}
+
+export const ChooseCreateExerciseForm = ({ type, setType }: Props) => {
   return (
     <section>
       <CardButton setType={setType} label={'strength'} />
@@ -11,7 +16,12 @@ export const ChooseCreateExerciseForm = ({ type, setType }) => {
   );
 };
 
-const CardButton = ({ label, setType }) => {
+interface CardButtonProps {
+  label: string;
+  setType: (type: string) => void;
+}
+
+const CardButton = ({ label, setType }: CardButtonProps) => {
   return (
     <button
       onClick={() => setType(label)}

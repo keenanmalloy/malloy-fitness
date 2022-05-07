@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FormEvent } from 'react';
 import { Range } from 'react-range';
 import { useState } from 'react';
 
@@ -6,7 +6,7 @@ function SleepPage() {
   const [values, setValues] = useState([0]);
   const [duration, setDuration] = useState('');
   const [rating, setRating] = useState('');
-  const onSubmit = async (e) => {
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const sleepStats = {
       duration: parseInt(duration),

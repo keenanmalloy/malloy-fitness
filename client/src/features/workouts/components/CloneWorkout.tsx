@@ -5,7 +5,12 @@ import { useQueryClient } from 'react-query';
 import { useCloneWorkoutMutation } from 'features/workouts/api/useCloneWorkoutMutation';
 import { useRouter } from 'next/router';
 
-export const CloneWorkout = ({ workoutId, hasSessions }) => {
+interface Props {
+  workoutId: string;
+  hasSessions: boolean;
+}
+
+export const CloneWorkout = ({ workoutId, hasSessions }: Props) => {
   const [isOpen, setIsOpen] = useState(hasSessions);
   const { mutate, isLoading, isError } = useCloneWorkoutMutation(workoutId);
 
@@ -17,7 +22,7 @@ export const CloneWorkout = ({ workoutId, hasSessions }) => {
     setIsOpen(false);
   }
 
-  const handleClick = ({ workoutId }) => {
+  const handleClick = (workoutId: string) => {
     mutate(
       { workoutId },
       {
@@ -46,7 +51,7 @@ export const CloneWorkout = ({ workoutId, hasSessions }) => {
           <Button
             className="mt-4"
             onClick={() => handleClick(workoutId)}
-            disabled={isLoading}
+            isDisabled={isLoading}
           >
             {isLoading ? 'Cloning...' : 'Clone'}
           </Button>

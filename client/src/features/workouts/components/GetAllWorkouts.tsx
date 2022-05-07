@@ -3,7 +3,14 @@ import { WorkoutList } from 'features/workouts/components/WorkoutList';
 import { useWorkoutsQuery } from 'features/workouts/api/useWorkoutsQuery';
 import { Skeleton } from 'features/common/Skeleton';
 
-export const GetAllWorkouts = ({ view, type, category, sortBy }) => {
+interface Props {
+  view: string;
+  type: string;
+  category: string;
+  sortBy: string;
+}
+
+export const GetAllWorkouts = ({ view, type, category, sortBy }: Props) => {
   const { data, isError, isLoading } = useWorkoutsQuery({
     view,
     type,

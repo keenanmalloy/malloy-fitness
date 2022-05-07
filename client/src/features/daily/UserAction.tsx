@@ -2,9 +2,14 @@ import HomeModal from 'features/common/HomeModal';
 import Router from 'next/router';
 import React, { useState } from 'react';
 import { IoAdd } from 'react-icons/io5';
+import { SelectedDate } from './types';
 import { useInitSessionMutation } from './useInitializeSessionMutation';
 
-export const UserAction = ({ selected }) => {
+interface Props {
+  selected: SelectedDate;
+}
+
+export const UserAction = ({ selected }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const { mutate, isLoading, isError, error } = useInitSessionMutation();

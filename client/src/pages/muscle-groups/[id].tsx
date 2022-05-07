@@ -1,5 +1,6 @@
 import Layout from 'features/common/Layout';
 import { MuscleGroup } from 'features/muscle-groups/components/MuscleGroup';
+import { GetStaticPropsContext } from 'next';
 
 export async function getStaticPaths() {
   return {
@@ -8,7 +9,7 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps({ params }: GetStaticPropsContext) {
   const muscleGroupId = params && params.id;
 
   return {
@@ -16,7 +17,10 @@ export async function getStaticProps({ params }) {
   };
 }
 
-const MuscleGroupsPage = ({ muscleGroupId }) => {
+interface Props {
+  muscleGroupId: string;
+}
+const MuscleGroupsPage = ({ muscleGroupId }: Props) => {
   return (
     <Layout>
       <h1 className="text-2xl p-5">Muscle Group</h1>

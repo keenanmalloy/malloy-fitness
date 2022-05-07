@@ -3,7 +3,11 @@ import Modal from 'features/common/Modal';
 import React, { useState } from 'react';
 import { OverviewExercises } from 'features/workout-overview/OverviewExercises';
 
-const Overview = ({ sessionId }) => {
+interface Props {
+  sessionId: string;
+}
+
+const Overview = ({ sessionId }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (

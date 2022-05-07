@@ -1,7 +1,15 @@
 import { apiClient } from 'config/axios';
 import { useQuery } from 'react-query';
 
-const fetchSessionExercise = async ({ exerciseId, sessionId }) => {
+interface FetchSessionExerciseParams {
+  exerciseId: string;
+  sessionId: string;
+}
+
+const fetchSessionExercise = async ({
+  exerciseId,
+  sessionId,
+}: FetchSessionExerciseParams) => {
   const { data } = await apiClient.get(
     `/sessions/${sessionId}/exercises/${exerciseId}`
   );
@@ -9,7 +17,10 @@ const fetchSessionExercise = async ({ exerciseId, sessionId }) => {
   return data;
 };
 
-export const useSessionExerciseQuery = (exerciseId, sessionId) => {
+export const useSessionExerciseQuery = (
+  exerciseId: string,
+  sessionId: string
+) => {
   return useQuery(['fetchSessionExercise', exerciseId], () =>
     fetchSessionExercise({ exerciseId, sessionId })
   );

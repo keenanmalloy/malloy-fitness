@@ -1,5 +1,16 @@
 import React from 'react';
 
+interface Props {
+  label: string;
+
+  onChange: (data: any) => void;
+
+  checked: boolean;
+  isRequired: boolean;
+  options: any[];
+  name: string;
+}
+
 export const RadioGroup = ({
   onChange,
   label,
@@ -7,7 +18,7 @@ export const RadioGroup = ({
   isRequired,
   options,
   name,
-}) => {
+}: Props) => {
   return (
     <div className="py-2">
       <label>{label}</label>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { GetSingleExercise } from 'features/exercises/components/GetSingleExercise';
 import Layout from 'features/common/Layout';
+import { GetStaticPropsContext } from 'next';
 
 export async function getStaticPaths() {
   return {
@@ -9,15 +10,17 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps({ params }: GetStaticPropsContext) {
   const exerciseId = params && params.id;
 
   return {
     props: { exerciseId },
   };
 }
-
-const ExercisePage = ({ exerciseId }) => {
+interface Props {
+  exerciseId: string;
+}
+const ExercisePage = ({ exerciseId }: Props) => {
   return (
     <Layout>
       <h1 className="text-2xl p-5">Exercise</h1>

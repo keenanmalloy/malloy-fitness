@@ -4,7 +4,13 @@ import Modal from 'features/common/Modal';
 import { Button } from 'features/common/Button';
 import { useRouter } from 'next/router';
 
-const SessionTimer = ({ startedAt, workoutId, endedAt }) => {
+interface Props {
+  startedAt: string;
+  workoutId: string;
+  endedAt: string;
+}
+
+const SessionTimer = ({ startedAt, workoutId, endedAt }: Props) => {
   const router = useRouter();
   const startTime = new Date(startedAt);
   const currentTime = new Date();
@@ -16,7 +22,7 @@ const SessionTimer = ({ startedAt, workoutId, endedAt }) => {
   const hourInSeconds = 3600;
   const minuteInSeconds = 60;
   const [time, setTime] = useState(diff);
-  const formatTime = (time) => {
+  const formatTime = (time: number) => {
     const hours = Math.floor(time / hourInSeconds);
     const minutes = Math.floor(
       (time - hours * hourInSeconds) / minuteInSeconds
@@ -35,7 +41,7 @@ const SessionTimer = ({ startedAt, workoutId, endedAt }) => {
     return () => clearInterval(interval);
   }, []);
 
-  const endWorkout = async (id) => {
+  const endWorkout = async (id: string) => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_API_ENDPOINT}/workouts/${id}/end`,
       {
@@ -44,7 +50,7 @@ const SessionTimer = ({ startedAt, workoutId, endedAt }) => {
       }
     );
 
-    if (!response.ok) throw Error;
+    if (!res.ok) throw Error;
     const json = await res.json();
     return json;
   };

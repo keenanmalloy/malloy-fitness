@@ -8,7 +8,7 @@ import { Settings } from 'features/account/components/Settings';
 function ProfilePage() {
   const [selectedIndex, setSelectedIndex] = useState(0);
 
-  function classNames(...classes) {
+  function classNames(...classes: string[]) {
     return classes.filter(Boolean).join(' ');
   }
 

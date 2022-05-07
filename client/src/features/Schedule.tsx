@@ -4,7 +4,11 @@ import Modal from 'features/common/Modal';
 import { Button } from 'features/common/Button';
 import { useScheduleSessionMutation } from './sessions/useScheduleSessionMutation';
 
-export const Schedule = ({ workoutId }) => {
+interface Props {
+  workoutId: string;
+}
+
+export const Schedule = ({ workoutId }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const currentDate = new Date(
     new Date().getFullYear(),

@@ -20,7 +20,7 @@ export default function useDrag() {
     []
   );
 
-  const dragMove = (ev, cb) => {
+  const dragMove = (ev: { clientX: number }, cb: (a: number) => void) => {
     const newDiff = position.current - ev.clientX;
     const movedEnough = Math.abs(newDiff) > 5;
 

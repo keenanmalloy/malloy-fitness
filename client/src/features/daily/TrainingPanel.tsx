@@ -2,8 +2,13 @@ import { ScheduleNextDay } from 'features/feed/Panel';
 import Overview from 'features/workout-overview/Overview';
 import Image from 'next/image';
 import React from 'react';
+import { GetDailyResponse } from './types';
 
-export const TrainingPanel = ({ data }) => {
+interface Props {
+  data: GetDailyResponse;
+}
+
+export const TrainingPanel = ({ data }: Props) => {
   if (!data.sessions.length) {
     return (
       <section className="flex flex-col">

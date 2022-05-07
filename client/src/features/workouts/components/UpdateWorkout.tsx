@@ -1,7 +1,7 @@
 import { Button } from 'features/common/Button';
 import { Input } from 'features/form/Input';
 import Upload from 'features/Upload';
-import { useState } from 'react';
+import { FormEvent, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useUpdateWorkoutMutation } from 'features/workouts/api/useUpdateWorkoutMutation';
 import Modal from 'features/common/Modal';
@@ -9,7 +9,12 @@ import { MdEdit } from 'react-icons/md';
 import { WORKOUT_CATEGORIES } from 'features/environment';
 import Select from 'react-select';
 
-export const UpdateWorkout = ({ workout, queryKey }) => {
+interface Props {
+  workout: any;
+  queryKey: string;
+}
+
+export const UpdateWorkout = ({ workout, queryKey }: Props) => {
   const [name, setName] = useState(workout.name);
   const [description, setDescription] = useState(workout.description);
   const [category, setCategory] = useState(workout.category);
@@ -22,7 +27,7 @@ export const UpdateWorkout = ({ workout, queryKey }) => {
     workout.workout_id
   );
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     const workout = {

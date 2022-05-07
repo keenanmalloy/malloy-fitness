@@ -1,12 +1,19 @@
 import { apiClient } from 'config/axios';
 import { useMutation, useQueryClient } from 'react-query';
 
+interface ChageExerciseParams {
+  workoutId: string;
+  sessionId: string;
+  oldExerciseId: string;
+  newExerciseId: string;
+}
+
 const changeExercise = async ({
   workoutId,
   sessionId,
   oldExerciseId,
   newExerciseId,
-}) => {
+}: ChageExerciseParams) => {
   const { data } = await apiClient.post(
     `/sessions/${sessionId}/exercises/${oldExerciseId}`,
     {
@@ -17,9 +24,21 @@ const changeExercise = async ({
   return data;
 };
 
-export const useChangeExercise = ({ sessionId, oldExerciseId }) => {
+interface Props {
+  sessionId: string;
+  oldExerciseId: string;
+}
+
+export const useChangeExercise = ({ sessionId, oldExerciseId }: Props) => {
   const queryClient = useQueryClient();
-  return useMutation(
+  return useMutation<
+    any,
+    any,
+    {
+      workoutId: string;
+      newExerciseId: string;
+    }
+  >(
     ({ workoutId, newExerciseId }) =>
       changeExercise({ workoutId, sessionId, oldExerciseId, newExerciseId }),
     {

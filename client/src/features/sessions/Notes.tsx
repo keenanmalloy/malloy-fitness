@@ -4,7 +4,14 @@ import React, { useEffect, useState } from 'react';
 import { useUpdateWorkoutExerciseMetadataMutation } from 'features/workout-exercises/api/useUpdateWorkoutExerciseMetadataMutation';
 import { useDebounce } from 'features/common/useDebounce';
 
-export const Notes = ({ exercise, workoutId, exerciseId, exNotes }) => {
+interface Props {
+  exercise: any;
+  workoutId: string;
+  exerciseId: string;
+  exNotes: string;
+}
+
+export const Notes = ({ exercise, workoutId, exerciseId, exNotes }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [notes, setNotes] = useState('');
 
@@ -40,7 +47,21 @@ export const Notes = ({ exercise, workoutId, exerciseId, exNotes }) => {
   );
 };
 
-const SaveNotes = ({ exNotes, notes, setNotes, workoutId, exerciseId }) => {
+interface SaveNotesProps {
+  notes: string;
+  setNotes: (notes: string) => void;
+  workoutId: string;
+  exerciseId: string;
+  exNotes: string;
+}
+
+const SaveNotes = ({
+  exNotes,
+  notes,
+  setNotes,
+  workoutId,
+  exerciseId,
+}: SaveNotesProps) => {
   const debouncedNotes = useDebounce(notes, 600);
   const { mutate, isLoading } = useUpdateWorkoutExerciseMetadataMutation({
     workoutId,
@@ -62,6 +83,7 @@ const SaveNotes = ({ exNotes, notes, setNotes, workoutId, exerciseId }) => {
       placeholder="Add all your notes here: execution, setup, goals, ideas etc."
       isTextArea
       isLoading={isLoading}
+      label={''}
     />
   );
 };

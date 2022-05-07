@@ -3,7 +3,11 @@ import { Schedule } from 'features/Schedule';
 import { WorkoutHeader } from './WorkoutHeader';
 import { Button } from 'features/common/Button';
 
-export const WorkoutList = ({ workouts }) => {
+interface Props {
+  workouts: any[];
+}
+
+export const WorkoutList = ({ workouts }: Props) => {
   return (
     <ul className="flex flex-col divide-y-2 divide-gray-100">
       {workouts.map((workout) => (

@@ -3,7 +3,11 @@ import { Divider } from 'features/feed/Divider';
 import { Panel } from 'features/feed/Panel';
 import { getFutureDate, isToday } from './utils';
 
-export const Feed = ({ workouts }) => {
+interface Props {
+  workouts: any;
+}
+
+export const Feed = ({ workouts }: Props) => {
   return (
     <div className="px-3 pb-10 w-full">
       {Array.of(0, 1, 2, 3, 4, 5, 6).map((day) => {

@@ -4,8 +4,14 @@ import { Button } from 'features/common/Button';
 import FullPageModal from 'features/common/FullPageModal';
 import { ChooseWorkoutExerciseList } from './ChooseWorkoutExerciseList';
 import { IoMdClose } from 'react-icons/io';
+import { Exercise } from 'features/exercises/types';
 
-export const ChooseWorkoutExercises = ({ exercises, setExercises }) => {
+interface Props {
+  exercises: Exercise[];
+  setExercises: (exercises: Exercise[]) => void;
+}
+
+export const ChooseWorkoutExercises = ({ exercises, setExercises }: Props) => {
   const [query, setQuery] = useState('');
   const [isOpen, setIsOpen] = useState(false);
 
@@ -25,7 +31,7 @@ export const ChooseWorkoutExercises = ({ exercises, setExercises }) => {
       <Button type="button" onClick={openModal} className="w-full mt-2">
         Choose exercises
       </Button>
-      <FullPageModal isOpen={isOpen} closeModal={closeModal} isFull>
+      <FullPageModal isOpen={isOpen} closeModal={closeModal}>
         <header className="sticky top-0 bg-white z-40 flex flex-col justify-between">
           <div className="flex items-center justify-between pt-2">
             <h2 className="text-2xl font-bold">Exercises</h2>

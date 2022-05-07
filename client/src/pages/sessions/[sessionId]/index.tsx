@@ -10,6 +10,7 @@ import Modal from 'features/common/Modal';
 import { Skeleton } from 'features/common/Skeleton';
 import FullPageModal from 'features/common/FullPageModal';
 import Image from 'next/image';
+import { GetStaticPropsContext } from 'next';
 
 export async function getStaticPaths() {
   arguments;
@@ -19,18 +20,20 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps({ params }: GetStaticPropsContext) {
   const sessionId = params && params.sessionId;
 
   return {
     props: { sessionId },
   };
 }
+interface Props {
+  sessionId: string;
+}
 
-const SummaryPage = ({ sessionId }) => {
+const SummaryPage = ({ sessionId }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const { data, isError, isLoading } = useSessionSummaryQuery(sessionId);
-  console.log({ data });
 
   if (isLoading) {
     return (

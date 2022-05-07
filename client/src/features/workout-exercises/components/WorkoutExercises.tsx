@@ -2,7 +2,6 @@ import { RemoveExerciseFromWorkout } from 'features/workout-exercises/components
 import React from 'react';
 import UpdateWorkoutExerciseMetadata from 'features/workout-exercises/components/UpdateWorkoutExerciseMetadata';
 import WorkoutOrder from 'features/workouts/components/WorkoutOrder';
-import WorkoutPriority from 'features/workouts/components/WorkoutPriority';
 
 const WorkoutExercises = ({ exercises, workoutId }) => {
   if (!exercises) {

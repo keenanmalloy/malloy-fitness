@@ -7,8 +7,13 @@ import { SleepPanel } from './SleepPanel';
 import { HealthPanel } from './HealthPanel';
 import { Divider } from 'features/feed/Divider';
 import { UserAction } from './UserAction';
+import { SelectedDate } from './types';
 
-export const GetSelectedDailyOverview = ({ selected }) => {
+interface Props {
+  selected: SelectedDate;
+}
+
+export const GetSelectedDailyOverview = ({ selected }: Props) => {
   const { data, isError, isLoading, error } = useDailyOverviewQuery(selected);
 
   if (isLoading) {
@@ -18,6 +23,8 @@ export const GetSelectedDailyOverview = ({ selected }) => {
   if (isError) {
     return <div>Error</div>;
   }
+
+  if (!data) return <div>No data...</div>;
 
   return (
     <section className="flex w-100 items-center justify-center">

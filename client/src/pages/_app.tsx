@@ -3,6 +3,7 @@ import '../styles/calendar.css';
 
 import { QueryClient, QueryClientProvider } from 'react-query';
 import Router from 'next/router';
+import { AppProps } from 'next/app';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -15,7 +16,7 @@ const queryClient = new QueryClient({
   },
 });
 
-export default function MyApp({ Component, pageProps }) {
+export default function MyApp({ Component, pageProps }: AppProps) {
   return (
     <QueryClientProvider client={queryClient}>
       <Component {...pageProps} />

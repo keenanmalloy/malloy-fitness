@@ -1,7 +1,13 @@
 import { apiClient } from 'config/axios';
 import { useMutation } from 'react-query';
+import { MuscleGroup } from '../types';
 
-const addMuscleGroupToExercise = async ({ exerciseId, payload }) => {
+interface Params {
+  payload: MuscleGroup;
+  exerciseId: string;
+}
+
+const addMuscleGroupToExercise = async ({ exerciseId, payload }: Params) => {
   const { data } = await apiClient.post(
     `/exercises/${exerciseId}/muscle-group/`,
     payload
@@ -10,8 +16,8 @@ const addMuscleGroupToExercise = async ({ exerciseId, payload }) => {
   return data;
 };
 
-export const useAddMuscleGroupToExerciseMutation = (exerciseId) => {
-  return useMutation((payload) =>
+export const useAddMuscleGroupToExerciseMutation = (exerciseId: string) => {
+  return useMutation<any, any, MuscleGroup>((payload) =>
     addMuscleGroupToExercise({ exerciseId, payload })
   );
 };

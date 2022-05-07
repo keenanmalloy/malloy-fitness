@@ -1,5 +1,14 @@
 import { useQuery } from 'react-query';
 import { apiClient } from 'config/axios';
+import { GetRelatedExercisesResponse } from '../types';
+
+interface FetchRelatedExercisesQueryParams {
+  muscleGroupIds: string[];
+  type: string;
+  profile: string;
+  category: string;
+  exerciseId: string;
+}
 
 const fetchExercises = async ({
   muscleGroupIds,
@@ -7,7 +16,7 @@ const fetchExercises = async ({
   profile,
   category,
   exerciseId,
-}) => {
+}: FetchRelatedExercisesQueryParams) => {
   const { data } = await apiClient.get(
     `/exercises/?mgIds=${muscleGroupIds.join(
       ','
@@ -22,8 +31,8 @@ export const useRelatedExercisesQuery = ({
   profile,
   category,
   exerciseId,
-}) => {
-  return useQuery(
+}: FetchRelatedExercisesQueryParams) => {
+  return useQuery<GetRelatedExercisesResponse>(
     ['fetchExerciseByIds', exerciseId],
     () =>
       fetchExercises({ muscleGroupIds, type, profile, category, exerciseId }),

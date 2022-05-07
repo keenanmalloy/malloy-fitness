@@ -1,7 +1,16 @@
 import { apiClient } from 'config/axios';
 import { useQuery } from 'react-query';
+import { GetDailyResponse, SelectedDate } from './types';
 
-const fetchDailyOverview = async ({ date, start, end }) => {
+const fetchDailyOverview = async ({
+  date,
+  start,
+  end,
+}: {
+  date: string;
+  start: number;
+  end: number;
+}) => {
   const { data } = await apiClient.get(
     `/overview?date=${date}&startTime=${start}&endTime=${end}`
   );
@@ -9,7 +18,7 @@ const fetchDailyOverview = async ({ date, start, end }) => {
   return data;
 };
 
-export const useDailyOverviewQuery = (selected) => {
+export const useDailyOverviewQuery = (selected: SelectedDate) => {
   const start = new Date(
     new Intl.DateTimeFormat('en-CA', {
       month: 'short',
@@ -46,7 +55,7 @@ export const useDailyOverviewQuery = (selected) => {
     )
   ).toISOString();
 
-  return useQuery(['fetchDailyOverview', date], () =>
+  return useQuery<GetDailyResponse, any>(['fetchDailyOverview', date], () =>
     fetchDailyOverview({ date, start, end })
   );
 };

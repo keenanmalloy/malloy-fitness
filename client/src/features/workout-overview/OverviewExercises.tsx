@@ -4,7 +4,12 @@ import StartSession from 'features/sessions/StartSession';
 import { useWorkoutSessionQuery } from './useWorkoutSessionQuery';
 import { IoClose } from 'react-icons/io5';
 
-export const OverviewExercises = ({ sessionId, setIsOpen }) => {
+interface Props {
+  sessionId: string;
+  setIsOpen: (isOpen: boolean) => void;
+}
+
+export const OverviewExercises = ({ sessionId, setIsOpen }: Props) => {
   const { data, isError, isLoading } = useWorkoutSessionQuery(sessionId);
 
   if (isLoading) {
@@ -15,7 +20,7 @@ export const OverviewExercises = ({ sessionId, setIsOpen }) => {
     return <p style={{ color: 'red' }}>fetching error...</p>;
   }
 
-  const getLetter = (index) => {
+  const getLetter = (index: number) => {
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     return letters[index];
   };

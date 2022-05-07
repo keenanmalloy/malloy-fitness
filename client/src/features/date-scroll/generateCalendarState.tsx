@@ -1,6 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 
-export const generateCalendarState = (selectedDate) => {
+export const generateCalendarState = (selectedDate: Date) => {
   const currentMonthState = [
     ...Array(
       new Date(

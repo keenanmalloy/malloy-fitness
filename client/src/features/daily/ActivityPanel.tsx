@@ -1,7 +1,12 @@
 import React from 'react';
 import { AuthorizeGoogleFitButton } from './AuthorizeGoogleFitButton';
+import { GetDailyResponse } from './types';
 
-export const ActivityPanel = ({ data }) => {
+interface Props {
+  data: GetDailyResponse;
+}
+
+export const ActivityPanel = ({ data }: Props) => {
   if (data.steps === null) {
     return (
       <div className="pb-10">

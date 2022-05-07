@@ -1,16 +1,20 @@
-import React, { useState } from 'react';
+import React, { FormEvent, useState } from 'react';
 import { Button } from 'features/common/Button';
 import { Input } from 'features/form/Input';
 import { useCreateExerciseMutation } from 'features/exercises/api/useCreateExerciseMutation';
 import { useQueryClient } from 'react-query';
 
-export const CreateCardioExerciseForm = ({ setIsOpen }) => {
+interface Props {
+  setIsOpen: (type: boolean) => void;
+}
+
+export const CreateCardioExerciseForm = ({ setIsOpen }: Props) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const { mutate, isLoading, isError, error } = useCreateExerciseMutation();
   const queryClient = useQueryClient();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
     const exercise = {
@@ -31,7 +35,7 @@ export const CreateCardioExerciseForm = ({ setIsOpen }) => {
           setIsOpen(false);
         },
         onError: (e) => {
-          console.log('error', e.message);
+          console.log('error', { e });
         },
       }
     );
@@ -58,7 +62,9 @@ export const CreateCardioExerciseForm = ({ setIsOpen }) => {
           {isLoading ? 'Adding exercise...' : 'Add exercise'}
         </Button>
         {isError && (
-          <p className="pt-2 text-red-600 text-center">{error.message}...</p>
+          <p className="pt-2 text-red-600 text-center">
+            {(error as { message: string })?.message}...
+          </p>
         )}
       </form>{' '}
     </section>

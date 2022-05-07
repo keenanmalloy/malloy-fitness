@@ -10,7 +10,11 @@ import { WorkoutHeader } from './WorkoutHeader';
 import { Schedule } from 'features/Schedule';
 import { CloneWorkout } from './CloneWorkout';
 
-export const GetSingleWorkout = ({ workoutId }) => {
+interface Props {
+  workoutId: string;
+}
+
+export const GetSingleWorkout = ({ workoutId }: Props) => {
   const { data, isError, isLoading } = useWorkoutQuery(workoutId);
 
   if (isLoading) {

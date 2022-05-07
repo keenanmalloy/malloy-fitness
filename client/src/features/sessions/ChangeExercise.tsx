@@ -9,13 +9,21 @@ import { FilterExercises } from 'features/exercises/components/FilterExercises';
 import { BiX } from 'react-icons/bi';
 import { useChangeExercise } from './useChangeExercise';
 import { useRouter } from 'next/router';
+import { Exercise } from 'features/exercises/types';
+
+interface Props {
+  exercises: Exercise[];
+  exerciseId: string;
+  sessionId: string;
+  workoutId: string;
+}
 
 export const ChangeExercise = ({
   exercises,
   exerciseId,
   sessionId,
   workoutId,
-}) => {
+}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
   const [isFilterOpen, setIsFilterOpen] = useState(false);

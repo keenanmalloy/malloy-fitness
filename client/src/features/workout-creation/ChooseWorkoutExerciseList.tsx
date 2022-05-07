@@ -1,12 +1,19 @@
 import React from 'react';
 import { useExercisesQuery } from 'features/exercises/api/useExercisesQuery';
 import { useDebounce } from 'features/common/useDebounce';
+import { Exercise } from 'features/exercises/types';
+
+interface Props {
+  query: string;
+  exercises: Exercise[];
+  setExercises: (exercises: Exercise[]) => void;
+}
 
 export const ChooseWorkoutExerciseList = ({
   query,
   exercises,
   setExercises,
-}) => {
+}: Props) => {
   const debouncedSearchQuery = useDebounce(query, 600);
   const { data, isError, isLoading } = useExercisesQuery({
     query: debouncedSearchQuery,
@@ -20,7 +27,7 @@ export const ChooseWorkoutExerciseList = ({
     return <p style={{ color: 'red' }}>fetching error...</p>;
   }
 
-  if (!data.exercises.length) {
+  if (!data || !data.exercises.length) {
     return <p>Could not find an exercise with {query}...</p>;
   }
 

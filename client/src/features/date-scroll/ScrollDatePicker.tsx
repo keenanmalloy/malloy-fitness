@@ -7,21 +7,31 @@ import {
 import useDrag from './useDrag';
 import { CalendarComponent } from 'features/date-scroll/Calendar';
 import { generateCalendarState } from './generateCalendarState';
+import { SelectedDate, Session } from 'features/daily/types';
+
+interface Props {
+  displayDate: SelectedDate;
+  items: SelectedDate[];
+  scrollToItem: any;
+  setItems: (newDates: SelectedDate[]) => void;
+  data: any;
+  selectedDate: any;
+  setSelectedDate: (date: Date) => void;
+  selected: any;
+  setSelected: (date: SelectedDate) => void;
+}
 
 export const ScrollDatePicker = ({
-  selectedDate,
   setSelectedDate,
   items,
   setItems,
   selected,
   setSelected,
   data,
-  isError,
-  isLoading,
-}) => {
+}: Props) => {
   const { dragStart, dragStop, dragMove, dragging } = useDrag();
   const [hasMounted, setHasMounted] = useState(false);
-  const apiRef = useRef();
+  const apiRef = useRef<any>(null);
 
   const reset = () => {
     const filteredItem = items.filter(
@@ -66,8 +76,8 @@ export const ScrollDatePicker = ({
   }, []);
 
   const handleDrag =
-    ({ scrollContainer }) =>
-    (ev) =>
+    ({ scrollContainer }: any) =>
+    (ev: { clientX: number }) =>
       dragMove(ev, (posDiff) => {
         if (scrollContainer.current) {
           scrollContainer.current.scrollLeft += posDiff;
@@ -75,8 +85,8 @@ export const ScrollDatePicker = ({
       });
 
   const handleItemClick =
-    (itemId) =>
-    ({ getItemById, scrollToItem }) => {
+    (itemId: string) =>
+    ({ getItemById, scrollToItem }: any) => {
       if (dragging) {
         return false;
       }
@@ -89,7 +99,7 @@ export const ScrollDatePicker = ({
       <div className="flex-1 flex items-center justify-between">
         <CalendarComponent
           setItems={setItems}
-          scrollToItem={(itemId) => {
+          scrollToItem={(itemId: string) => {
             return apiRef.current.scrollToItem(
               apiRef.current.getItemElementById(itemId),
               'smooth',
@@ -157,7 +167,24 @@ export const ScrollDatePicker = ({
   );
 };
 
-const ButtonDate = ({ onClick, selected, state, itemId, highlight }) => {
+interface ButtonDateProps {
+  state: SelectedDate;
+  onClick: (v: any) => void;
+  itemId: string;
+  selected: boolean;
+  highlight: {
+    isPresent: boolean;
+    sessions?: { isCompleted: boolean; color: string; type: string }[];
+  };
+}
+
+const ButtonDate = ({
+  onClick,
+  selected,
+  state,
+  itemId,
+  highlight,
+}: ButtonDateProps) => {
   const visibility = React.useContext(VisibilityContext);
   const visible = visibility.isItemVisible(itemId);
 
@@ -174,7 +201,7 @@ const ButtonDate = ({ onClick, selected, state, itemId, highlight }) => {
 
       {highlight.isPresent && (
         <div className="flex space-x-0.5">
-          {highlight.sessions.map((item, key) => {
+          {highlight.sessions?.map((item, key) => {
             return (
               <span
                 key={key}
@@ -191,7 +218,12 @@ const ButtonDate = ({ onClick, selected, state, itemId, highlight }) => {
   );
 };
 
-const handleHighlight = (state, group) => {
+const handleHighlight = (
+  state: SelectedDate,
+  group: {
+    sessions: Session[];
+  }
+) => {
   const data =
     group &&
     group.sessions?.length &&
@@ -200,7 +232,7 @@ const handleHighlight = (state, group) => {
         month: new Date(item.session_dt).getMonth() + 1,
         day: new Date(item.session_dt).getDate(),
         year: new Date(item.session_dt).getFullYear(),
-        type: item.type,
+        type: item.type as Highlight,
       };
     });
 
@@ -230,7 +262,9 @@ const handleHighlight = (state, group) => {
   };
 };
 
-const getHighlightColor = (type) => {
+type Highlight = 'cardio' | 'strength' | 'therapy' | 'deload';
+
+const getHighlightColor = (type: Highlight) => {
   switch (type) {
     case 'cardio':
       return 'text-yellow-300';

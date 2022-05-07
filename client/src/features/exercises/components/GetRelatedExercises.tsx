@@ -4,13 +4,21 @@ import { useRelatedExercisesQuery } from '../api/useRelatedExercisesQuery';
 import Link from 'next/link';
 import { IoIosArrowRoundForward } from 'react-icons/io';
 
+interface Props {
+  muscleGroupIds: string[];
+  type: string;
+  profile: string;
+  category: string;
+  exerciseId: string;
+}
+
 export const GetRelatedExercises = ({
   muscleGroupIds,
   type,
   profile,
   category,
   exerciseId,
-}) => {
+}: Props) => {
   const { data, isError, isLoading } = useRelatedExercisesQuery({
     muscleGroupIds,
     type,

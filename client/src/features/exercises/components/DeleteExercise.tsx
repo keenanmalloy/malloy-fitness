@@ -5,7 +5,11 @@ import { useQueryClient } from 'react-query';
 import { useDeleteExerciseMutation } from 'features/exercises/api/useDeleteExerciseMutation';
 import { MdDelete } from 'react-icons/md';
 
-export const DeleteExercise = ({ exerciseId }) => {
+interface Props {
+  exerciseId: string;
+}
+
+export const DeleteExercise = ({ exerciseId }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const { mutate, isLoading, isError } = useDeleteExerciseMutation(exerciseId);
 
@@ -18,7 +22,7 @@ export const DeleteExercise = ({ exerciseId }) => {
     setIsOpen(true);
   }
 
-  const handleClick = (exerciseId) => {
+  const handleClick = (exerciseId: string) => {
     mutate(
       { exerciseId },
       {
