@@ -32,18 +32,18 @@ const navigation = [
       />
     ),
   },
-  {
-    name: 'Diet',
-    href: '/diet',
-    icon: (
-      <GiKnifeFork
-        style={{
-          width: 20,
-          height: 20,
-        }}
-      />
-    ),
-  },
+  // {
+  //   name: 'Diet',
+  //   href: '/diet',
+  //   icon: (
+  //     <GiKnifeFork
+  //       style={{
+  //         width: 20,
+  //         height: 20,
+  //       }}
+  //     />
+  //   ),
+  // },
   {
     name: 'CheckIn',
     href: '/check-in',

@@ -44,8 +44,6 @@ export interface Set {
   set_order: number;
   repetitions: number;
   weight: number;
-  primary_tracker: string;
-  secondary_tracker: string;
 }
 
 export interface SessionSummaryResponse extends SharedResponse {
@@ -62,6 +60,8 @@ export interface SessionSummaryResponse extends SharedResponse {
       name: string;
       exercise_id: string;
       video: string;
+      primary_tracker: string;
+      secondary_tracker: string;
       sets: Set[];
     }[];
   };
