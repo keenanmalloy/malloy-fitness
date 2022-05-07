@@ -8,6 +8,7 @@ import SessionTimer from 'features/sessions/SessionTimer';
 import { useSessionSummaryQuery } from 'features/sessions/useSessionSummaryQuery';
 import { Range } from 'react-range';
 import FullPageModal from 'features/modal/FullPageModal';
+import { GetStaticPropsContext } from 'next';
 
 export async function getStaticPaths() {
   return {
@@ -16,7 +17,7 @@ export async function getStaticPaths() {
   };
 }
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps({ params }: GetStaticPropsContext) {
   const sessionId = params && params.sessionId;
 
   return {
@@ -24,7 +25,11 @@ export async function getStaticProps({ params }) {
   };
 }
 
-const EndPage = ({ sessionId }) => {
+interface Props {
+  sessionId: string;
+}
+
+const EndPage = ({ sessionId }: Props) => {
   const [values, setValues] = useState([0]);
   const [isOpen, setIsOpen] = useState(false);
   const [error, setError] = useState(false);
@@ -32,7 +37,7 @@ const EndPage = ({ sessionId }) => {
 
   const { data, isError, isLoading } = useSessionSummaryQuery(sessionId);
 
-  const endWorkout = async (id) => {
+  const endWorkout = async (id: string) => {
     const { data } = await apiClient.patch(`/sessions/${id}/end`);
     return data;
   };
@@ -160,7 +165,7 @@ const EndPage = ({ sessionId }) => {
 
 export default EndPage;
 
-const intensityByValue = (value) => {
+const intensityByValue = (value: number) => {
   switch (value) {
     case 0:
       return 'Rest';

@@ -23,7 +23,7 @@ export const OrderWorkoutExercisePreview = ({
           // @ts-ignore
           setExercises((prev: LocalExercise[]) => {
             const updateable = prev.filter(
-              (ex) => ex.id === +exercise.exercise_id
+              (ex) => ex.id === exercise.exercise_id
             )[0];
 
             const newOrderedExercise = {
@@ -39,7 +39,7 @@ export const OrderWorkoutExercisePreview = ({
             });
 
             return [
-              ...updatedOrders.filter((ex) => ex.id !== +exercise.exercise_id),
+              ...updatedOrders.filter((ex) => ex.id !== exercise.exercise_id),
               newOrderedExercise,
             ];
           });
@@ -54,7 +54,7 @@ export const OrderWorkoutExercisePreview = ({
           // @ts-ignore
           setExercises((prev: LocalExercise[]) => {
             const updateable = prev.filter(
-              (ex) => ex.id === +exercise.exercise_id
+              (ex) => ex.id === exercise.exercise_id
             )[0];
 
             const newOrderedExercise = {
@@ -70,7 +70,7 @@ export const OrderWorkoutExercisePreview = ({
             });
 
             return [
-              ...updatedOrders.filter((ex) => ex.id !== +exercise.exercise_id),
+              ...updatedOrders.filter((ex) => ex.id !== exercise.exercise_id),
               newOrderedExercise,
             ];
           });

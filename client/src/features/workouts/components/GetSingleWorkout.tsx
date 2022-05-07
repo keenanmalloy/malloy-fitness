@@ -6,7 +6,6 @@ import { UpdateWorkout } from 'features/workouts/components/UpdateWorkout';
 import WorkoutExercises from 'features/workout-exercises/components/WorkoutExercises';
 import { Skeleton } from 'features/common/Skeleton';
 import Link from 'next/link';
-import { WorkoutHeader } from './WorkoutHeader';
 import { Schedule } from 'features/Schedule';
 import { CloneWorkout } from './CloneWorkout';
 
@@ -40,7 +39,7 @@ export const GetSingleWorkout = ({ workoutId }: Props) => {
     );
   }
 
-  if (!data.workout) {
+  if (!data || !data.workout) {
     return (
       <div className="p-5">
         <p>does not exist...</p>
@@ -53,11 +52,6 @@ export const GetSingleWorkout = ({ workoutId }: Props) => {
       <CloneWorkout
         workoutId={workoutId}
         hasSessions={data.workout.hasSessions}
-      />
-      <WorkoutHeader
-        hasEnded={!!data.workout.ended_at}
-        hasStarted={!!data.workout.started_at}
-        scheduledAt={data.workout.workout_dt}
       />
       <header className="flex justify-between">
         <Link href={`/workouts/`}>

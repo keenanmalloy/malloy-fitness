@@ -45,7 +45,8 @@ const WorkoutExercises = ({ exercises, workoutId }: Props) => {
                   sets={ex.sets}
                   repetitions={ex.repetitions}
                   repsInReserve={ex.repsInReserve}
-                  rest={ex.restPeriod}
+                  weight={ex.weight}
+                  restPeriod={ex.restPeriod}
                   refetchKey={'fetchWorkout'}
                   workoutId={workoutId}
                   exerciseId={ex.exercise_id}

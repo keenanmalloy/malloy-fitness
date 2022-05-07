@@ -20,25 +20,25 @@ export const EditWorkoutExerciseMetadataPreview = ({
 
   const [sets, setSets] = useState(
     exercises.filter((ex) => {
-      return ex.id === +exerciseId;
+      return ex.id === exerciseId;
     })[0].sets ?? ''
   );
 
   const [repetitions, setRepetitions] = useState(
     exercises.filter((ex) => {
-      return ex.id === +exerciseId;
+      return ex.id === exerciseId;
     })[0].repetitions ?? ''
   );
 
   const [rir, setRir] = useState(
     exercises.filter((ex) => {
-      return ex.id === +exerciseId;
+      return ex.id === exerciseId;
     })[0].repsInReserve ?? ''
   );
 
   const [rest, setRest] = useState(
     exercises.filter((ex) => {
-      return ex.id === +exerciseId;
+      return ex.id === exerciseId;
     })[0].restPeriod ?? ''
   );
 
@@ -49,7 +49,7 @@ export const EditWorkoutExerciseMetadataPreview = ({
     // filter out changed exercise from array and replace with new one
     const newExercise = exercises
       .filter((ex) => {
-        return ex.id === +exerciseId;
+        return ex.id === exerciseId;
       })
       .map((ex) => {
         return {
@@ -62,7 +62,7 @@ export const EditWorkoutExerciseMetadataPreview = ({
       })[0];
 
     const filteredExercises = exercises.filter((ex) => {
-      return ex.id !== +exerciseId;
+      return ex.id !== exerciseId;
     });
 
     const newExercises = [...filteredExercises, newExercise];

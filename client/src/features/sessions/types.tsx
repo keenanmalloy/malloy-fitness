@@ -47,3 +47,22 @@ export interface Set {
   primary_tracker: string;
   secondary_tracker: string;
 }
+
+export interface SessionSummaryResponse extends SharedResponse {
+  session: {
+    name: string;
+    category: string;
+    type: string;
+    session_id: string;
+    workout_id: string;
+    started_at: string;
+    ended_at: any;
+    completed: boolean;
+    exercises: {
+      name: string;
+      exercise_id: string;
+      video: string;
+      sets: Set[];
+    }[];
+  };
+}

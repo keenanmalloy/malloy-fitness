@@ -33,7 +33,7 @@ export const GetAllWorkouts = ({ view, type, category, sortBy }: Props) => {
     return <p className="w-full p-5 text-red-500">fetching error...</p>;
   }
 
-  if (!data.workouts) {
+  if (!data || !data.workouts) {
     return <p className="w-full p-5">none available...</p>;
   }
 

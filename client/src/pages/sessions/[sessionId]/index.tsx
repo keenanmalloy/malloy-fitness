@@ -52,7 +52,7 @@ const SummaryPage = ({ sessionId }: Props) => {
     );
   }
 
-  if (!data.session) {
+  if (!data || !data.session) {
     return (
       <Layout>
         <p>No sets have been logged</p>

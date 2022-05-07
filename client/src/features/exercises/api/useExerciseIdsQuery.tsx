@@ -2,7 +2,7 @@ import { apiClient } from 'config/axios';
 import { useQuery } from 'react-query';
 import { GetExercisesResponse } from '../types';
 
-const fetchExercises = async (ids: number[]) => {
+const fetchExercises = async (ids: string[]) => {
   // fetch the data, the fetch call returns a promise of a response.
   // we await for the promise to resolve with the await keyword.
   const { data } = await apiClient.get(`/exercises/?ids=${ids.join(',')}`);
@@ -11,7 +11,7 @@ const fetchExercises = async (ids: number[]) => {
   return data;
 };
 
-export const useExerciseIdsQuery = (ids: number[]) => {
+export const useExerciseIdsQuery = (ids: string[]) => {
   return useQuery<GetExercisesResponse>(
     ['fetchExerciseByIds', ids],
     () => fetchExercises(ids),

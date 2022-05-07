@@ -4,7 +4,7 @@ export interface SharedResponse {
   message: string;
 }
 
-export interface GetWorkoutRespose extends SharedResponse {
+export interface GetWorkoutResponse extends SharedResponse {
   workout: Workout;
 }
 

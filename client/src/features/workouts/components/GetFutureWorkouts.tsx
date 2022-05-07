@@ -13,7 +13,7 @@ export const GetFutureWorkouts = () => {
     return <p style={{ color: 'red' }}>fetching error...</p>;
   }
 
-  if (!data.workouts) {
+  if (!data || !data.workouts) {
     return <p>none available...</p>;
   }
 

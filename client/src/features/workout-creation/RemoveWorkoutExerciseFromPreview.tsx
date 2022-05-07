@@ -36,7 +36,7 @@ export const RemoveWorkoutExerciseFromPreview = ({
               // @ts-ignore
               setExercises((prev: LocalExercise[]) => {
                 const removeableOrder = prev.filter(
-                  (ex) => ex.id === +exercise.exercise_id
+                  (ex) => ex.id === exercise.exercise_id
                 )[0].order;
 
                 const updatedOrders = prev.map((d) => {
@@ -47,7 +47,7 @@ export const RemoveWorkoutExerciseFromPreview = ({
                 });
 
                 return updatedOrders.filter(
-                  (ex) => ex.id !== +exercise.exercise_id
+                  (ex) => ex.id !== exercise.exercise_id
                 );
               });
             }}

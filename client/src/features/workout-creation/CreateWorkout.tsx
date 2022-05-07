@@ -9,7 +9,7 @@ import { Button } from 'features/common/Button';
 import { useRouter } from 'next/router';
 
 export interface LocalExercise {
-  id: number;
+  id: string;
   order: number;
   priority: number;
   repetitions: number;
@@ -47,14 +47,11 @@ export const CreateWorkout = () => {
       }),
     };
 
-    mutate(
-      { workout },
-      {
-        onSuccess: () => {
-          router.push('/workouts');
-        },
-      }
-    );
+    mutate(workout, {
+      onSuccess: () => {
+        router.push('/workouts');
+      },
+    });
   };
 
   return (

@@ -1,7 +1,20 @@
 import { useQuery } from 'react-query';
 import { apiClient } from 'config/axios';
+import { GetWorkoutsReponse } from '../types';
 
-const fetchWorkouts = async ({ view, type, category, sortBy }) => {
+interface FetchWorkoutsParams {
+  view?: string;
+  type?: string;
+  category?: string;
+  sortBy?: string;
+}
+
+const fetchWorkouts = async ({
+  view,
+  type,
+  category,
+  sortBy,
+}: FetchWorkoutsParams) => {
   const { data } = await apiClient.get(
     `/workouts/?category=${category ?? ''}&type=${type ?? ''}&view=${
       view ?? ''
@@ -11,9 +24,15 @@ const fetchWorkouts = async ({ view, type, category, sortBy }) => {
   return data;
 };
 
-export const useWorkoutsQuery = ({ view, type, category, sortBy }) => {
-  return useQuery(['fetchWorkouts', view, type, category, sortBy], () =>
-    fetchWorkouts({ view, type, category, sortBy })
+export const useWorkoutsQuery = ({
+  view,
+  type,
+  category,
+  sortBy,
+}: FetchWorkoutsParams) => {
+  return useQuery<GetWorkoutsReponse>(
+    ['fetchWorkouts', view, type, category, sortBy],
+    () => fetchWorkouts({ view, type, category, sortBy })
   );
 };
 
@@ -23,5 +42,8 @@ const fetchFutureWorkouts = async () => {
 };
 
 export const useFutureWorkoutsQuery = () => {
-  return useQuery('fetchFutureWorkouts', fetchFutureWorkouts);
+  return useQuery<GetWorkoutsReponse>(
+    'fetchFutureWorkouts',
+    fetchFutureWorkouts
+  );
 };
