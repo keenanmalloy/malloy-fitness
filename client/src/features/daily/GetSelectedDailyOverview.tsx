@@ -17,27 +17,21 @@ interface Props {
 export const GetSelectedDailyOverview = ({ selected }: Props) => {
   const { data, isError, isLoading, error } = useDailyOverviewQuery(selected);
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-
   if (isError) {
     return <div>Error</div>;
   }
-
-  if (!data) return <div>No data...</div>;
 
   return (
     <section className="flex w-100 items-center justify-center">
       <ul className="max-w-xl flex-col flex-1 divider-y">
         <div className="h-28" />
-        <li>
+        {/* <li>
           <Divider label="Nutrition" />
           <DietPanel data={data} />
-        </li>
+        </li> */}
 
         {/* Only show training if its scheduled for today */}
-        {data.sessions.length > 0 && (
+        {data && data.sessions && data.sessions.length > 0 && (
           <li>
             <Divider label="Training" />
             <TrainingPanel data={data} />
@@ -45,7 +39,7 @@ export const GetSelectedDailyOverview = ({ selected }: Props) => {
         )}
 
         {/* Google Fit Data only shown if authorized */}
-        {data.steps === null ? (
+        {data && data.steps === null ? (
           <div className="pb-5 px-3">
             <AuthorizeGoogleFitButton />
           </div>

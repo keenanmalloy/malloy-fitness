@@ -1,6 +1,10 @@
+import Modal from 'features/modal/Modal';
+import { useDeleteSessionMutation } from 'features/sessions/useDeleteSessionMutation';
 import Overview from 'features/workout-overview/Overview';
 import Image from 'next/image';
-import React from 'react';
+import React, { useState } from 'react';
+import { BiX } from 'react-icons/bi';
+import { CgSpinner } from 'react-icons/cg';
 import { GetDailyResponse } from './types';
 
 interface Props {
@@ -8,11 +12,31 @@ interface Props {
 }
 
 export const TrainingPanel = ({ data }: Props) => {
+  const { mutate, isError, isLoading } = useDeleteSessionMutation();
   return (
     <section className="flex flex-col justify-center w-full rounded-sm py-3 space-y-2 pl-3">
       {data.sessions.map((session) => {
         return (
-          <article className="flex" key={session.session_id}>
+          <article className="flex relative" key={session.session_id}>
+            {!session.completed && !!session.started_at ? (
+              <DeleteSesssionConfirmation session={session} />
+            ) : !session.completed ? (
+              <button
+                className="absolute top-0 z-10 right-0 p-1"
+                onClick={() =>
+                  mutate({
+                    sessionId: session.session_id,
+                  })
+                }
+              >
+                {isLoading ? (
+                  <CgSpinner className="w-4 h-4 animate-spin text-slate-700" />
+                ) : (
+                  <BiX />
+                )}
+              </button>
+            ) : null}
+
             <div className="h-full w-full aspect-video relative">
               {!session.video ? (
                 <div className="bg-gray-100 h-full w-full rounded-md" />
@@ -65,5 +89,51 @@ export const TrainingPanel = ({ data }: Props) => {
         );
       })}
     </section>
+  );
+};
+
+const DeleteSesssionConfirmation = ({
+  session,
+}: {
+  session: GetDailyResponse['sessions'][0];
+}) => {
+  const { mutate, isError, isLoading } = useDeleteSessionMutation();
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <>
+      <button
+        className="absolute top-0 z-10 right-0 p-1"
+        onClick={() => setIsOpen(!isOpen)}
+      >
+        <BiX />
+      </button>
+      <Modal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
+        <div className="flex flex-col justify-center">
+          <h2 className="text-lg font-medium text-center">
+            Are you sure you want to delete this session?
+          </h2>
+          <div className="flex flex-col justify-center">
+            <button
+              className="flex items-center justify-center p-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              onClick={() => {
+                setIsOpen(false);
+                mutate({
+                  sessionId: session.session_id,
+                });
+              }}
+            >
+              <span className="text-sm">Yes</span>
+            </button>
+            <button
+              className="flex items-center justify-center p-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              onClick={() => setIsOpen(false)}
+            >
+              <span className="text-sm">No</span>
+            </button>
+          </div>
+        </div>
+      </Modal>
+    </>
   );
 };

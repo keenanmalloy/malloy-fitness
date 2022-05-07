@@ -4,6 +4,7 @@ import { authorize } from 'middlewares/authorize';
 import { rotateSessionExercise } from 'controllers/rotateSessionExercise';
 import { retrieveExerciseSessionQuery } from 'controllers/sessions/retrieveExerciseSessionQuery';
 import { changeSessionExercise } from 'controllers/sessions/changeSessionExercise';
+import { addExerciseToSession } from 'controllers/sessions/addExerciseToSession';
 
 const router = Router();
 
@@ -48,6 +49,16 @@ router.post(
       req.params.exerciseId,
       req.body
     );
+  }
+);
+
+// Create exercise in the session
+router.post(
+  '/:sessionId/exercises',
+  authenticate,
+  authorize,
+  async (req, res) => {
+    await addExerciseToSession(res, req.params.sessionId, req.body);
   }
 );
 
