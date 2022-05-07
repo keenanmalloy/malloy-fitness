@@ -6,7 +6,6 @@ import { CgCalendarDates } from 'react-icons/cg';
 import { GiTrafficLightsReadyToGo } from 'react-icons/gi';
 import { FaRegTired, FaWeightHanging } from 'react-icons/fa';
 import { Button } from 'features/common/Button';
-import Modal from 'features/modal/Modal';
 import { Skeleton } from 'features/common/Skeleton';
 import FullPageModal from 'features/modal/FullPageModal';
 import Image from 'next/image';

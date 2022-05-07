@@ -8,6 +8,7 @@ import { HealthPanel } from './HealthPanel';
 import { Divider } from 'features/feed/Divider';
 import { UserAction } from './UserAction';
 import { SelectedDate } from './types';
+import { AuthorizeGoogleFitButton } from './AuthorizeGoogleFitButton';
 
 interface Props {
   selected: SelectedDate;
@@ -34,22 +35,36 @@ export const GetSelectedDailyOverview = ({ selected }: Props) => {
           <Divider label="Nutrition" />
           <DietPanel data={data} />
         </li>
-        <li>
-          <Divider label="Training" />
-          <TrainingPanel data={data} />
-        </li>
-        <li>
-          <Divider label="Activity" />
-          <ActivityPanel data={data} />
-        </li>
-        <li>
-          <Divider label="Sleep" />
-          <SleepPanel data={data} />
-        </li>
-        <li>
-          <Divider label="Health" />
-          <HealthPanel data={data} />
-        </li>
+
+        {/* Only show training if its scheduled for today */}
+        {data.sessions.length > 0 && (
+          <li>
+            <Divider label="Training" />
+            <TrainingPanel data={data} />
+          </li>
+        )}
+
+        {/* Google Fit Data only shown if authorized */}
+        {data.steps === null ? (
+          <div className="pb-5 px-3">
+            <AuthorizeGoogleFitButton />
+          </div>
+        ) : (
+          <>
+            <li>
+              <Divider label="Activity" />
+              <ActivityPanel data={data} />
+            </li>
+            {/* <li>
+              <Divider label="Sleep" />
+              <SleepPanel data={data} />
+            </li>
+            <li>
+              <Divider label="Health" />
+              <HealthPanel data={data} />
+            </li> */}
+          </>
+        )}
       </ul>
 
       <UserAction selected={selected} />

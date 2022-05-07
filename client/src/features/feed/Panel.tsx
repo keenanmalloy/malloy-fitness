@@ -51,11 +51,11 @@ export const ScheduleNextDay = ({ day }: { day: number }) => {
       <div className="flex flex-row items-start gap-4 px-2">
         <div className="w-full flex flex-row justify-between">
           <div className="pt-2 flex-4">
-            <p className="text-xl font-medium leading-tight">
+            <p className="text-lg font-medium leading-tight">
               Schedule your next workout
             </p>
             <Link href="/workouts">
-              <button className="bg-white mt-2 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-32">
+              <button className="bg-white mt-2 text-gray-800 font-semibold py-1 px-2 border border-gray-400 rounded shadow w-32 text-sm">
                 Schedule
               </button>
             </Link>

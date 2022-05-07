@@ -7,21 +7,13 @@ interface Props {
 }
 
 export const ActivityPanel = ({ data }: Props) => {
-  if (data.steps === null) {
-    return (
-      <div className="pb-10">
-        <AuthorizeGoogleFitButton />
-      </div>
-    );
-  }
-
   return (
     <section>
-      <div className="pb-5">
-        <div className="flex justify-center text-center mx-3 pb-2">
+      <div className="pb-5 px-3 py-3">
+        <div className="flex justify-center text-center mx-3 py-2">
           {data.steps}/10000 Steps Today
         </div>
-        <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700">
+        <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-800">
           <div
             className="bg-green-400 h-2.5 rounded-full"
             style={{

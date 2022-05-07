@@ -13,10 +13,9 @@ export const DietPanel = ({ data }: DietPanelProps) => {
 
   return (
     <div className="flex flex-col justify-center items-center">
-      <div className="border-b border-slate-400">
-        <DietStatistic progress={calories} />
-      </div>
+      <div className="border-b border-slate-400"></div>
       <div className="flex justify-center">
+        <DietStatistic progress={calories} />
         <DietStatistic progress={protein} size="small" label="Protein" />
         <DietStatistic progress={fats} size="small" label="Fats" />
         <DietStatistic progress={carbs} size="small" label="Carbs" />
@@ -35,33 +34,39 @@ const DietStatistic = ({ progress, size, label }: DietStatisticProps) => {
   if (size === 'small') {
     return (
       <div className="flex flex-col justify-center items-center">
-        <div className="flex justify-center relative p-2">
-          <div className="w-16 h-16 rounded-full flex flex-col justify-center items-center bg-slate-900 text-gray-200">
-            <div className="text-white py-1">{progress}g</div>
+        <div className="flex justify-center relative p-1">
+          <div className="w-12 h-12 rounded-full flex flex-col justify-center items-center bg-slate-900 text-gray-200 text-xs">
+            <div className="text-white">{progress}g</div>
           </div>
           <ProgressBar
             progress={progress}
-            size={70}
+            size={52}
             strokeWidth={9}
             circleOneStroke="#f0fdf4"
             circleTwoStroke={'#4ade80'}
-            top={'-15'}
+            top={'-18'}
           />
         </div>
-        <label>{label}</label>
+        <label
+          style={{
+            fontSize: '0.6rem',
+          }}
+        >
+          {label}
+        </label>
       </div>
     );
   }
 
   return (
     <div className="flex justify-center relative p-2">
-      <div className="w-24 h-24 rounded-full flex flex-col justify-center items-center bg-slate-900 text-gray-200">
-        <div className="text-white py-1">800</div>
-        <label>Calories</label>
+      <div className="w-20 h-20 rounded-full flex flex-col justify-center items-center bg-slate-900 text-gray-200 text-xs">
+        <div className="text-white">800</div>
+        <label style={{ fontSize: '0.6rem' }}>Calories</label>
       </div>
       <ProgressBar
         progress={progress}
-        size={105}
+        size={88}
         strokeWidth={9}
         circleOneStroke="#f0fdf4"
         circleTwoStroke={'#4ade80'}

@@ -11,13 +11,13 @@ export const AuthorizeGoogleFitButton = () => {
   };
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center pt-3">
       <button
-        className="flex items-center px-5 py-3 rounded-md shadow-md w-full justify-center"
+        className=" bg-slate-900 text-white flex items-center px-6 py-2 rounded-md shadow-md justify-center"
         onClick={handleSubmit}
       >
         <FcGoogle className="text-3xl" />{' '}
-        <p className="px-2">Connect Google Fit</p>
+        <p className="px-2 text-sm">Connect Google Fit</p>
       </button>
     </div>
   );

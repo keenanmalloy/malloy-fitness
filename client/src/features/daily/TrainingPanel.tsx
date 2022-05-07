@@ -1,4 +1,3 @@
-import { ScheduleNextDay } from 'features/feed/Panel';
 import Overview from 'features/workout-overview/Overview';
 import Image from 'next/image';
 import React from 'react';
@@ -9,21 +8,8 @@ interface Props {
 }
 
 export const TrainingPanel = ({ data }: Props) => {
-  if (!data.sessions.length) {
-    return (
-      <section className="flex flex-col">
-        <h2 className="flex flex-col text-center text-sm text-gray-500">
-          No training tracked for today
-        </h2>
-        <div className="max-w-md w-full flex justify-center">
-          <ScheduleNextDay day={0} />
-        </div>
-      </section>
-    );
-  }
-
   return (
-    <section className="flex flex-col justify-center w-full rounded-sm pb-2 space-y-2">
+    <section className="flex flex-col justify-center w-full rounded-sm py-3 space-y-2 pl-3">
       {data.sessions.map((session) => {
         return (
           <article className="flex" key={session.session_id}>
@@ -44,21 +30,23 @@ export const TrainingPanel = ({ data }: Props) => {
                   style={{
                     fontSize: '0.65rem',
                   }}
-                  className="absolute text-xs top-0 left-2 px-2 py-0.5 rounded-md bg-red-500 text-white uppercase"
+                  className="absolute text-xs top-0 left-2 px-2 py-0.5 rounded-md bg-green-50 text-slate-900 uppercase"
                 >
                   {session.category}
                 </span>
 
-                <span
-                  style={{
-                    fontSize: '0.65rem',
-                  }}
-                  className={`absolute text-xs top-0 right-3 px-2 py-0.5 rounded-md uppercase ${
-                    session.completed ? `bg-green-400` : `bg-yellow-500`
-                  }  text-white`}
-                >
-                  {session.completed ? 'completed' : 'incomplete'}
-                </span>
+                {session.completed && (
+                  <span
+                    style={{
+                      fontSize: '0.65rem',
+                    }}
+                    className={`absolute text-xs top-0 right-3 px-2 py-0.5 rounded-md uppercase bg-green-50
+                      text-slate-900 `}
+                  >
+                    completed
+                  </span>
+                )}
+
                 <div className="pt-3">
                   <h2 className="text-lg font-medium text-ellipsis truncate overflow-hidden leading-tight">
                     {session.name}
