@@ -7,6 +7,7 @@ import { getRelatedExercises } from 'queries/getRelatedExercises';
 import { retrieveWorkoutQuery } from 'queries/retrieveWorkoutQuery';
 import { updateSessionWorkout } from 'queries/updateSessionWorkout';
 import { updateWorkoutExercise } from 'queries/updateWorkoutExercise';
+import { updateWorkoutExerciseOrder } from 'queries/updateWorkoutExerciseOrder';
 
 export const rotateSessionExercise = async (
   res: Response,
@@ -227,11 +228,10 @@ const onRelatedExerciseChangeSwap = async ({
   const randomRelatedExercise =
     filteredRelatedExercises[Math.floor(Math.random() * rowLength)];
 
-  const workout = await retrieveWorkoutQuery(workoutId, accountId);
-  if (!workout) throw new Error('Workout not found');
+  if (!oldWorkout) throw new Error('Workout not found');
 
   // get workout exercise with id
-  const workoutExercise = workout.workoutExercises.find(
+  const workoutExercise = oldWorkout.workoutExercises.find(
     (we) => we.exerciseId === exerciseId
   );
   if (!workoutExercise) throw new Error('WorkoutExercise not found');
@@ -239,6 +239,28 @@ const onRelatedExerciseChangeSwap = async ({
   const newExerciseId = await updateWorkoutExercise({
     exerciseId: randomRelatedExercise.exercise_id,
     workoutExerciseId: workoutExercise.workout_exercise_id,
+  });
+
+  const exerciseOrder = JSON.stringify(
+    [
+      ...oldWorkout.workoutExercises.filter((e) => e.exerciseId !== exerciseId),
+      { exerciseId: newExerciseId, order: workoutExercise.order },
+    ]
+      .sort((a, b) => {
+        if (a.order && b.order) {
+          return a.order - b.order;
+        } else {
+          return 0;
+        }
+      })
+      .map((e) => {
+        return e.exerciseId;
+      })
+  );
+
+  await updateWorkoutExerciseOrder({
+    exerciseOrder,
+    workoutId,
   });
 
   return newExerciseId;

@@ -3,6 +3,7 @@ import { BsFillStopFill } from 'react-icons/bs';
 import Modal from 'features/modal/Modal';
 import { Button } from 'features/common/Button';
 import { useRouter } from 'next/router';
+import { DefaultModal } from 'features/modal/DefaultModal';
 
 interface Props {
   startedAt: string;
@@ -95,7 +96,7 @@ const SessionTimer = ({ startedAt, workoutId, endedAt }: Props) => {
         <button onClick={() => setIsOpen(!isOpen)}>
           <BsFillStopFill />
         </button>
-        <Modal
+        <DefaultModal
           isOpen={isOpen}
           title="Finish workout"
           description={'Are you sure you want to stop the workout early?'}
@@ -116,7 +117,7 @@ const SessionTimer = ({ startedAt, workoutId, endedAt }: Props) => {
             </Button>
             {error && <p>Something went wrong</p>}
           </div>
-        </Modal>
+        </DefaultModal>
       </div>
     </div>
   );

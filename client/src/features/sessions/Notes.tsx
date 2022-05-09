@@ -50,6 +50,7 @@ export const Notes = ({ exercise, exerciseId, exNotes, workoutId }: Props) => {
           exerciseId={exerciseId}
           exNotes={exercise.notes}
         />
+        <div className="h-20" />
       </Modal>
     </div>
   );
@@ -92,6 +93,7 @@ const SaveNotes = ({
       isTextArea
       isLoading={isLoading}
       label={''}
+      autoFocus
     />
   );
 };
