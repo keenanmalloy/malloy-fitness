@@ -147,9 +147,9 @@ const onExerciseChangeSwap = async ({
   const exerciseOrder = JSON.stringify(
     [
       ...oldWorkout.workoutExercises.filter(
-        (we) => we.exerciseId !== oldExerciseId
+        (e) => e.exerciseId !== oldExerciseId
       ),
-      workoutExercise,
+      { exerciseId: newExerciseId, order: workoutExercise.order },
     ]
       .sort((a, b) => {
         if (a.order && b.order) {

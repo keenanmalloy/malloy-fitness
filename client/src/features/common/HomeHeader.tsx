@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import { usePreviewWorkoutsQuery } from 'features/date-scroll/usePreviewWorkoutsQuery';
 import { generateCalendarState } from 'features/date-scroll/generateCalendarState';
 import { SelectedDate } from 'features/daily/types';
+import { BiCog } from 'react-icons/bi';
 
 const ScrollDatePicker = dynamic(
   // @ts-ignore
@@ -41,9 +42,9 @@ export const HomeHeader = ({ selected, setSelected }: Props) => {
     <nav className="dark:bg-gray-900 p-2 bg-white shadow fixed top-0 left-0 w-full z-10">
       <div className="max-w-2xl mx-auto px-2 text-gray-300">
         <div className="flex-1 flex items-center justify-between">
-          <Link href="/profile">
+          <Link href="/settings">
             <button>
-              <RiUser3Line
+              <BiCog
                 style={{
                   width: 20,
                   height: 20,

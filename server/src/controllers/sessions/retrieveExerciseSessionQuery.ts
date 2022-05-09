@@ -8,6 +8,12 @@ export const retrieveExerciseSessionQuery = async (
 ) => {
   try {
     const mainExercise = await queryMainExercise(sessionId, exerciseId);
+    if (!mainExercise) {
+      res.status(404).json({
+        status: 'error',
+        message: 'Exercise not found',
+      });
+    }
     const sessionSetRecord = await queryWorkoutExerciseRecord(
       mainExercise.workout_id,
       exerciseId,

@@ -7,7 +7,7 @@ interface Props {
   label: string;
   isRequired?: boolean;
   isTextArea?: boolean;
-  autoFocus?: string;
+  autoFocus?: boolean;
   isDisabled?: boolean;
   isLoading?: boolean;
   placeholder?: string;
@@ -39,6 +39,9 @@ export const Input: React.FC<Props> = ({
           disabled={isDisabled}
           onBlur={onChange}
           placeholder={placeholder}
+          style={{
+            minHeight: '100px',
+          }}
         />
         {isLoading && (
           <CgSpinner className="w-6 h-6 animate-spin absolute top-6 right-1 text-gray-300" />

@@ -26,7 +26,7 @@ export const DefaultModal: React.FC<ModalPropsShared> = ({
             leaveFrom="opacity-100"
             leaveTo="opacity-0"
           >
-            <Dialog.Overlay className="fixed inset-0" />
+            <Dialog.Overlay className="fixed inset-0 bg-slate-500 opacity-75" />
           </Transition.Child>
           <span
             className="inline-block h-screen align-middle"

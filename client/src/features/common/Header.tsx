@@ -1,15 +1,15 @@
 import React from 'react';
-import { RiUser3Line, RiSearchLine } from 'react-icons/ri';
 import Link from 'next/link';
+import { BiCog } from 'react-icons/bi';
 
 export const Header = () => {
   return (
     <nav className="dark:bg-gray-900 p-2 bg-white shadow fixed top-0 left-0 w-full z-10 flex flex-col justify-center items-center">
       <div className="max-w-2xl mx-auto px-2 text-gray-300 flex justify-between w-full">
         <div className="flex-1 flex items-center justify-between ">
-          <Link href="/profile">
+          <Link href="/settings">
             <button>
-              <RiUser3Line
+              <BiCog
                 style={{
                   width: 20,
                   height: 20,
