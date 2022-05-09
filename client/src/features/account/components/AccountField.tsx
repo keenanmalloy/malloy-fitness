@@ -11,12 +11,14 @@ interface AccountFieldProps {
   type?: string;
   onChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
   isTextArea?: boolean;
+  placeholder?: string;
 }
 
 export const AccountField = ({
   label,
   value,
   field,
+  placeholder,
   type,
   onChange,
   prevValue,
@@ -51,6 +53,7 @@ export const AccountField = ({
         isTextArea={isTextArea}
         isLoading={isLoading}
         type={type}
+        placeholder={placeholder}
       />
       {isError && (
         <div className="text-right w-full pb-1">

@@ -13,25 +13,13 @@ export const retrieveExerciseSessionQuery = async (
       exerciseId,
       res.locals.state.account.account_id
     );
-    const nextOrderEx = await queryExerciseByNextOrder(
-      sessionId,
-      mainExercise.order
+
+    const exerciseOrder = mainExercise.exercise_order;
+
+    // get index in array for current exercise
+    const currentExerciseIndex = exerciseOrder.findIndex(
+      (id: string) => id === exerciseId
     );
-
-    const prevOrderEx = await queryExerciseByPrevOrder(
-      sessionId,
-      mainExercise.order
-    );
-
-    const nextExerciseByOrder =
-      nextOrderEx.filter(
-        (ex) => ex.exercise_id !== exerciseId && mainExercise.order < ex.order
-      )[0] ?? null;
-
-    const prevExerciseByOrder =
-      prevOrderEx.filter(
-        (ex) => ex.exercise_id !== exerciseId && mainExercise.order > ex.order
-      )[0] ?? null;
 
     return res.status(200).json({
       role: res.locals.state.account.role,
@@ -40,13 +28,18 @@ export const retrieveExerciseSessionQuery = async (
       exercise: mainExercise,
       record: sessionSetRecord,
       next: {
-        order: nextExerciseByOrder,
+        order: {
+          exercise_id: exerciseOrder[currentExerciseIndex + 1],
+        },
       },
       prev: {
-        order: prevExerciseByOrder,
+        order: {
+          exercise_id: exerciseOrder[currentExerciseIndex - 1],
+        },
       },
     });
   } catch (error) {
+    console.log({ error });
     return res.status(500).json({
       status: 'error',
       message: 'Database error',
@@ -57,74 +50,31 @@ export const retrieveExerciseSessionQuery = async (
 
 const queryMainExercise = async (sessionId: string, exerciseId: string) => {
   const query = `SELECT
-    exercises.exercise_id,
-    name,
-    description,
-    category,
-    video,
-    profile,
-    view,
-    sessions.workout_id,
-    priority,
-    "order",
-    notes
+      exercises.exercise_id,
+      exercises.name,
+      exercises.description,
+      exercises.category,
+      workouts.exercise_order,
+      video,
+      profile,
+      exercises.view,
+      sessions.workout_id,
+      "order",
+      notes
   FROM exercises
   JOIN workout_exercises
      ON exercises.exercise_id = workout_exercises.exercise_id
   JOIN sessions 
     ON sessions.workout_id = workout_exercises.workout_id
+  JOIN workouts 
+    ON workouts.workout_id = sessions.workout_id
   WHERE
-       session_id = ${sessionId}
+    sessions.session_id = ${sessionId}
    AND exercises.exercise_id = ${exerciseId}
   `;
 
   const data = await db.query(query);
   return data.rows[0];
-};
-
-const queryExerciseByNextOrder = async (sessionId: string, order: number) => {
-  let query = `
-        SELECT
-            exercises.exercise_id,
-            priority,
-            "order"
-        FROM exercises
-        JOIN workout_exercises
-            ON exercises.exercise_id = workout_exercises.exercise_id
-        JOIN sessions 
-            ON sessions.workout_id = workout_exercises.workout_id
-        WHERE
-            session_id = ${sessionId}
-        AND workout_exercises.order > ${order}
-        ORDER BY 
-          workout_exercises.order ASC, workout_exercises.priority ASC
-        LIMIT 1
-    `;
-
-  const data = await db.query(query);
-  return data.rows;
-};
-
-const queryExerciseByPrevOrder = async (sessionId: string, order: number) => {
-  let query = `
-        SELECT
-            exercises.exercise_id,
-            priority,
-            "order"
-        FROM exercises
-        JOIN workout_exercises
-            ON exercises.exercise_id = workout_exercises.exercise_id
-        JOIN sessions 
-            ON sessions.workout_id = workout_exercises.workout_id
-        WHERE
-            session_id = ${sessionId}
-        AND workout_exercises.order < ${order}
-          ORDER BY workout_exercises.order DESC, workout_exercises.priority ASC
-        LIMIT 1
-    `;
-
-  const data = await db.query(query);
-  return data.rows;
 };
 
 const queryWorkoutExerciseRecord = async (

@@ -3,41 +3,24 @@ import { Button } from 'features/common/Button';
 import { GetExerciseSets } from 'features/sets/components/GetExerciseSets';
 import { Notes } from './Notes';
 import Link from 'next/link';
+import { GetSessionExerciseResponse } from './types';
 
 interface Props {
   sessionId: string;
   exerciseId: string;
-  nextEx: {
-    order: {
-      exercise_id: string;
-    };
-  };
-  prevEx: {
-    order: {
-      exercise_id: string;
-    };
-  };
-  exercise: any;
-  record: any;
+  data: GetSessionExerciseResponse;
 }
 
-export const SessionExercise = ({
-  sessionId,
-  exerciseId,
-  nextEx,
-  prevEx,
-  exercise,
-  record,
-}: Props) => {
+export const SessionExercise = ({ sessionId, exerciseId, data }: Props) => {
   return (
     <main className="pb-20 pt-16">
       <div className="px-3 py-5 bg-gray-50" />
 
-      {!!exercise.video && (
+      {!!data.exercise.video && (
         <div className="pb-5 w-full">
           <video
             controls
-            src={`https://cdn.trckd.ca/${exercise.video}`}
+            src={`https://cdn.trckd.ca/${data.exercise.video}`}
             className="w-full"
           />
         </div>
@@ -51,18 +34,17 @@ export const SessionExercise = ({
       <GetExerciseSets
         sessionId={sessionId}
         exerciseId={exerciseId}
-        record={record}
+        record={data.record}
       />
 
       <Notes
-        exercise={exercise}
-        exNotes={exercise.notes}
-        sessionId={sessionId}
+        exercise={data.exercise}
+        exNotes={data.exercise.notes}
         exerciseId={exerciseId}
-        workoutId={''}
+        workoutId={data.exercise.workout_id}
       />
 
-      <Footer nextEx={nextEx} prevEx={prevEx} sessionId={sessionId} />
+      <Footer nextEx={data.next} prevEx={data.prev} sessionId={sessionId} />
     </main>
   );
 };
@@ -82,9 +64,10 @@ interface SessionFooterProps {
 }
 
 const Footer = ({ prevEx, nextEx, sessionId }: SessionFooterProps) => {
+  console.log({ prevEx, nextEx });
   return (
     <div className="flex justify-between py-3 px-3 fixed bottom-0 bg-white left-0 right-0 ">
-      {!!prevEx.order && (
+      {!!prevEx.order.exercise_id && (
         <Link
           href={`/sessions/${sessionId}/exercises/${prevEx.order.exercise_id}`}
         >
@@ -92,7 +75,7 @@ const Footer = ({ prevEx, nextEx, sessionId }: SessionFooterProps) => {
         </Link>
       )}
 
-      {!!nextEx.order && (
+      {!!nextEx.order.exercise_id && (
         <Link
           href={`/sessions/${sessionId}/exercises/${nextEx.order.exercise_id}`}
         >
@@ -100,7 +83,7 @@ const Footer = ({ prevEx, nextEx, sessionId }: SessionFooterProps) => {
         </Link>
       )}
 
-      {!nextEx.order && (
+      {!nextEx.order.exercise_id && (
         <Link href={`/sessions/${sessionId}/end`}>
           <Button className="w-full">Finish Workout</Button>
         </Link>

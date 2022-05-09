@@ -39,11 +39,18 @@ const SessionHeader = ({ sessionId, exerciseId, workoutId }: Props) => {
     return letters[index];
   };
 
+  const currentExerciseIndex = data.session.exercise_order.findIndex(
+    (id: string) => id === exerciseId
+  );
+
   return (
     <header className="fixed top-0 left-0 right-0 bg-gray-50 z-10">
       <section className="flex justify-between border-solid border-gray-600">
         <div className="flex justify-between items-center w-full">
-          <button onClick={() => router.push('/workouts')} className="py-4">
+          <button
+            onClick={() => router.push(`/sessions/${sessionId}`)}
+            className="py-4"
+          >
             <BiArrowBack className="w-10 h-4" />
           </button>
 
@@ -77,7 +84,7 @@ const SessionHeader = ({ sessionId, exerciseId, workoutId }: Props) => {
       </section>
       <div className="px-1 pt-0.5 border-solid border-gray-200 border-t">
         <OverviewRow
-          order={`${getLetter(currentExercise?.order ?? 0 - 1)}1`}
+          order={`${getLetter(currentExerciseIndex)}1`}
           name={currentExercise?.name ?? ''}
           sets="sets 3"
           reps="reps 10-12"

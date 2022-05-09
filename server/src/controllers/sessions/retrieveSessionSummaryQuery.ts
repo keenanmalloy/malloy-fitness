@@ -22,6 +22,7 @@ export const retrieveSessionSummaryQuery = async (
       started_at: sessionData.started_at,
       ended_at: sessionData.ended_at,
       completed: sessionData.completed,
+      exercise_order: sessionData.exercise_order,
       exercises: !hasExercises
         ? []
         : exercises.map((row) => {
@@ -73,6 +74,7 @@ const querySessionWorkoutById = async (sessionId: string) => {
   completed,
   workouts.name workout_name,
   workouts.category,
+  workouts.exercise_order,
   workouts.type
 FROM sessions
   LEFT JOIN workouts ON workouts.workout_id = sessions.workout_id

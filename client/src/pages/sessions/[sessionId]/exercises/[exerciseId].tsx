@@ -52,6 +52,10 @@ const SessionExercisePage = ({ exerciseId, sessionId }: Props) => {
     return <div>Error!</div>;
   }
 
+  if (!data) {
+    return <div>No session exercise</div>;
+  }
+
   return (
     <>
       <SessionHeader
@@ -60,12 +64,9 @@ const SessionExercisePage = ({ exerciseId, sessionId }: Props) => {
         workoutId={data.exercise.workout_id}
       />
       <SessionExercise
-        exercise={data.exercise}
-        prevEx={data.prev}
-        nextEx={data.next}
+        data={data}
         sessionId={sessionId}
         exerciseId={exerciseId}
-        record={data.record}
       />
     </>
   );

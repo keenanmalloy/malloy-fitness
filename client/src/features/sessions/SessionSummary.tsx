@@ -19,6 +19,8 @@ import { Input } from 'features/form/Input';
 import { useAddExerciseToSessionMutation } from './useAddExerciseToSession';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
+import { RemoveExerciseFromSession } from './RemoveExerciseFromSession';
+import StartSession from './StartSession';
 
 interface Props {
   data: SessionSummaryResponse;
@@ -29,42 +31,52 @@ export const SessionSummary = ({ data }: Props) => {
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     return letters[index];
   };
+
   return (
     <div className="py-1">
-      <div className="p-3">
+      <div className="p-3 text-center">
         <h1 className="text-2xl">{data.session.name}</h1>
       </div>
 
       <SessionEndStats endedAt={data.session.ended_at} />
       <div className="px-5 w-full">
-        <button
-          className={`w-full py-2 px-4 text-sm font-medium bg-white rounded-md border border-gray-200 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:ring-1 focus:ring-green-300 focus:text-green-700`}
-        >
-          {!!data.session.started_at ? 'Continue Session' : 'Start Session'}
-        </button>
+        <StartSession
+          sessionId={data.session.session_id}
+          hasStarted={!!data.session.started_at}
+          hasEnded={!!data.session.ended_at}
+        />
       </div>
 
-      <ul className="flex flex-col divide-y-2 divide-gray-100 px-3">
+      <ul className="flex flex-col divide-y-2 divide-gray-50 px-3">
         {data.session.exercises.map((exercise, key) => (
-          <Link
+          <li
             key={exercise.exercise_id}
-            href={`/sessions/${data.session.session_id}/exercises/${exercise.exercise_id}`}
+            className="flex justify-between border-solid "
           >
-            <button className="border-solid py-6" onClick={() => {}}>
-              <div className="text-left flex">
-                <div className="flex p-3 rounded-md bg-slate-900 text-white items-center max-h-10 min-h-10 mr-3">
-                  <p>{getLetter(key)}1</p>
+            <Link
+              href={`/sessions/${data.session.session_id}/exercises/${exercise.exercise_id}`}
+            >
+              <button className="border-solid py-6 flex-1" onClick={() => {}}>
+                <div className="text-left flex">
+                  <div className="flex p-3 rounded-md bg-slate-900 text-white items-center max-h-10 min-h-10 mr-3">
+                    <p>{getLetter(key)}1</p>
+                  </div>
+                  <div>
+                    <h3 className="text-lg">{exercise.name}</h3>
+                    <span className="text-sm text-green-500">
+                      {exercise.sets.length}{' '}
+                      {exercise.sets.length > 1 ? 'sets' : 'set'}
+                    </span>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-lg">{exercise.name}</h3>
-                  <span className="text-sm text-green-500">
-                    {exercise.sets.length}{' '}
-                    {exercise.sets.length > 1 ? 'sets' : 'set'}
-                  </span>
-                </div>
-              </div>
-            </button>
-          </Link>
+              </button>
+            </Link>
+
+            <RemoveExerciseFromSession
+              data={data}
+              exerciseId={exercise.exercise_id}
+            />
+          </li>
         ))}
       </ul>
       <ChooseExerciseModal data={data} />

@@ -18,15 +18,29 @@ export const cloneWorkoutMutation = async (
       });
     }
 
+    const exerciseOrder = JSON.stringify(
+      workout.workoutExercises
+        .sort((a, b) => {
+          if (a.order && b.order) {
+            return a.order - b.order;
+          } else {
+            return 0;
+          }
+        })
+        .map((e) => {
+          return e.exerciseId;
+        })
+    );
+
     const workoutQuery = `
       WITH
-        workoutdata(name, description, category, created_by, type) AS (
+        workoutdata(name, description, category, created_by, type, exercise_order) AS (
           VALUES
               ('${inferCloneName(workout.name)}', '${workout.description}', '${
       workout.category
-    }', ${accountId}, '${workout.type}')
+    }', ${accountId}, '${workout.type}', '${exerciseOrder}'::jsonb)
           )
-        INSERT INTO workouts (name, description, category, created_by, type)
+        INSERT INTO workouts (name, description, category, created_by, type, exercise_order)
           SELECT *
             FROM workoutdata
           RETURNING *
@@ -96,6 +110,7 @@ const retrieveWorkoutQuery = async (workoutId: string, accountId: string) => {
   workouts.workout_id,
   workouts.type,
   workouts.created_by,
+  workouts.exercise_order,
   we.priority,
   we.order,
   we.exercise_id
@@ -133,6 +148,7 @@ WHERE workouts.workout_id = $1`;
       category: data.rows[0].category,
       workout_id: data.rows[0].workout_id,
       type: data.rows[0].type,
+      exercise_order: data.rows[0].exercise_order,
       workoutExercises,
     };
 

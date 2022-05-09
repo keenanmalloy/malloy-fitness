@@ -13,6 +13,8 @@ const WorkoutExercises = ({ exercises, workoutId }: Props) => {
     return <div>No exercises in workout</div>;
   }
 
+  console.log({ exercises: exercises.map((e) => e.exercise_id) });
+
   return (
     <ul className="pt-5 pb-20 divide-y-2 divide-gray-100">
       {exercises

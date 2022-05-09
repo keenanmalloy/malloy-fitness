@@ -6,6 +6,7 @@ import { doesWorkoutHaveSessions } from 'queries/doesWorkoutHaveSessions';
 import { retrieveWorkoutQuery } from 'queries/retrieveWorkoutQuery';
 import { updateSessionWorkout } from 'queries/updateSessionWorkout';
 import { updateWorkoutExercise } from 'queries/updateWorkoutExercise';
+import { updateWorkoutExerciseOrder } from 'queries/updateWorkoutExerciseOrder';
 
 export const changeSessionExercise = async (
   res: Response,
@@ -142,6 +143,30 @@ const onExerciseChangeSwap = async ({
     (we) => we.exerciseId === oldExerciseId
   );
   if (!workoutExercise) throw new Error('WorkoutExercise not found');
+
+  const exerciseOrder = JSON.stringify(
+    [
+      ...oldWorkout.workoutExercises.filter(
+        (we) => we.exerciseId !== oldExerciseId
+      ),
+      workoutExercise,
+    ]
+      .sort((a, b) => {
+        if (a.order && b.order) {
+          return a.order - b.order;
+        } else {
+          return 0;
+        }
+      })
+      .map((e) => {
+        return e.exerciseId;
+      })
+  );
+
+  await updateWorkoutExerciseOrder({
+    exerciseOrder,
+    workoutId,
+  });
 
   const changedExerciseId = await updateWorkoutExercise({
     exerciseId: newExerciseId,

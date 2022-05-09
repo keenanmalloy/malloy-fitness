@@ -1,5 +1,6 @@
 import { apiClient } from 'config/axios';
 import { useQuery } from 'react-query';
+import { GetSessionExerciseResponse } from './types';
 
 interface FetchSessionExerciseParams {
   exerciseId: string;
@@ -21,7 +22,8 @@ export const useSessionExerciseQuery = (
   exerciseId: string,
   sessionId: string
 ) => {
-  return useQuery(['fetchSessionExercise', exerciseId], () =>
-    fetchSessionExercise({ exerciseId, sessionId })
+  return useQuery<GetSessionExerciseResponse>(
+    ['fetchSessionExercise', exerciseId],
+    () => fetchSessionExercise({ exerciseId, sessionId })
   );
 };

@@ -1,24 +1,18 @@
-import FullPageModal from 'features/modal/FullPageModal';
 import { Input } from 'features/form/Input';
 import React, { useEffect, useState } from 'react';
-import { useUpdateWorkoutExerciseMetadataMutation } from 'features/workout-exercises/api/useUpdateWorkoutExerciseMetadataMutation';
 import { useDebounce } from 'features/common/useDebounce';
+import { BiX } from 'react-icons/bi';
+import Modal from 'features/modal/Modal';
+import { useUpdateSessionExerciseMetadataMutation } from 'features/workout-exercises/api/useUpdateSessionExerciseMetadataMutation';
 
 interface Props {
   exercise: any;
-  workoutId: string;
   exerciseId: string;
   exNotes: string;
-  sessionId: string;
+  workoutId: string;
 }
 
-export const Notes = ({
-  exercise,
-  workoutId,
-  exerciseId,
-  exNotes,
-  sessionId,
-}: Props) => {
+export const Notes = ({ exercise, exerciseId, exNotes, workoutId }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [notes, setNotes] = useState('');
 
@@ -29,7 +23,7 @@ export const Notes = ({
   return (
     <div className="p-5">
       <section>
-        <h3 className="text-sm">{notes}</h3>
+        <pre className="text-sm">{notes}</pre>
       </section>
       <button
         onClick={() => setIsOpen(!isOpen)}
@@ -37,12 +31,18 @@ export const Notes = ({
       >
         Notes
       </button>
-      <FullPageModal
+      <Modal
         isOpen={isOpen}
         title={`Notes for ${exercise.name}`}
         description={`Your notes will be saved with this exercise.`}
         closeModal={() => setIsOpen(false)}
       >
+        <button
+          onClick={() => setIsOpen(false)}
+          className="absolute right-0 top-0 p-3"
+        >
+          <BiX />
+        </button>
         <SaveNotes
           notes={notes}
           setNotes={setNotes}
@@ -50,7 +50,7 @@ export const Notes = ({
           exerciseId={exerciseId}
           exNotes={exercise.notes}
         />
-      </FullPageModal>
+      </Modal>
     </div>
   );
 };
@@ -71,7 +71,7 @@ const SaveNotes = ({
   exerciseId,
 }: SaveNotesProps) => {
   const debouncedNotes = useDebounce(notes, 600);
-  const { mutate, isLoading } = useUpdateWorkoutExerciseMetadataMutation({
+  const { mutate, isLoading } = useUpdateSessionExerciseMetadataMutation({
     workoutId,
     exerciseId,
   });

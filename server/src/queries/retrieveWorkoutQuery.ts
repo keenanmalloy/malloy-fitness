@@ -11,6 +11,7 @@ export const retrieveWorkoutQuery = async (
       workouts.workout_id,
       workouts.type,
       workouts.created_by,
+      workouts.exercise_order,
       we.priority,
       we.order,
       we.exercise_id,
@@ -50,6 +51,7 @@ export const retrieveWorkoutQuery = async (
       category: data.rows[0].category,
       workout_id: data.rows[0].workout_id,
       type: data.rows[0].type,
+      exercise_order: data.rows[0].exercise_order,
       workoutExercises,
     };
 

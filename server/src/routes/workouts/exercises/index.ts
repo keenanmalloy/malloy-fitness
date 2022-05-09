@@ -43,6 +43,7 @@ router.patch(
   authenticate,
   authorize,
   async (req, res) => {
+    console.log('this should be hit');
     await updateWorkoutExerciseMetadataMutation(
       res,
       req.body,
