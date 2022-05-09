@@ -6,7 +6,8 @@ CREATE TABLE IF NOT EXISTS workouts (
     description text,
     category character varying(30),
     type text, 
-    
+    exercise_order jsonb -- [1, 2, 3, 4, 5] // list of exercise ids in order
+
     -- Can be of either 'public' | 'private'
     -- Public view means anyone can see the exercise / view the exercise
     -- Private view means only the user who created the exercise can view the exercise

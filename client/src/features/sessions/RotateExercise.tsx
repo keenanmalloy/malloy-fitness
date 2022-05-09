@@ -4,6 +4,7 @@ import Modal from 'features/modal/Modal';
 import { Button } from 'features/common/Button';
 import { useRotateExercise } from './useRotateExercise';
 import { useRouter } from 'next/router';
+import { DefaultModal } from 'features/modal/DefaultModal';
 
 interface Props {
   sessionId: string;
@@ -20,7 +21,7 @@ export const RotateExercise = ({ sessionId, exerciseId, workoutId }: Props) => {
         <MdOutlineRotateRight className="w-10 h-5" />
       </button>
 
-      <Modal
+      <DefaultModal
         isOpen={isOpen}
         title="Rotate with similar exercise"
         description={'Are you sure you want rotate the exercise?'}
@@ -32,7 +33,7 @@ export const RotateExercise = ({ sessionId, exerciseId, workoutId }: Props) => {
           exerciseId={exerciseId}
           workoutId={workoutId}
         />
-      </Modal>
+      </DefaultModal>
     </div>
   );
 };

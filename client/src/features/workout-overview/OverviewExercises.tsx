@@ -41,13 +41,12 @@ export const OverviewExercises = ({ sessionId, setIsOpen }: Props) => {
       <ul className="pt-2 pb-2 divide-y">
         {data.session.exercises
           .sort((a, b) => {
-            if (a.order < b.order) {
-              return -1;
-            }
-            if (a.order > b.order) {
-              return 1;
-            }
-            return 0;
+            if (!data.session.exercise_order) return 0;
+            //sort exercises by exercise_order array
+            const exerciseOrder = data.session.exercise_order;
+            const aIndex = exerciseOrder.indexOf(a.exercise_id);
+            const bIndex = exerciseOrder.indexOf(b.exercise_id);
+            return aIndex - bIndex;
           })
           .map((ex, key) => {
             return (
@@ -63,6 +62,7 @@ export const OverviewExercises = ({ sessionId, setIsOpen }: Props) => {
             );
           })}
       </ul>
+
       <StartSession
         sessionId={sessionId}
         hasStarted={!!data.session.started_at}

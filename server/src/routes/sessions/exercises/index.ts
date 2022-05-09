@@ -5,6 +5,7 @@ import { rotateSessionExercise } from 'controllers/rotateSessionExercise';
 import { retrieveExerciseSessionQuery } from 'controllers/sessions/retrieveExerciseSessionQuery';
 import { changeSessionExercise } from 'controllers/sessions/changeSessionExercise';
 import { addExerciseToSession } from 'controllers/sessions/addExerciseToSession';
+import { removeExerciseInSession } from 'controllers/sessions/removeExerciseInSession';
 
 const router = Router();
 
@@ -52,13 +53,28 @@ router.post(
   }
 );
 
-// Create exercise in the session
+// Add exercise to the session
 router.post(
   '/:sessionId/exercises',
   authenticate,
   authorize,
   async (req, res) => {
     await addExerciseToSession(res, req.params.sessionId, req.body);
+  }
+);
+
+// Remove exercise in the session
+router.delete(
+  '/:sessionId/exercises/:exerciseId',
+  authenticate,
+  authorize,
+  async (req, res) => {
+    await removeExerciseInSession(
+      res,
+      req.params.sessionId,
+      req.params.exerciseId,
+      req.query.workoutId as string
+    );
   }
 );
 

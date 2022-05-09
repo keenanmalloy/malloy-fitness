@@ -29,7 +29,7 @@ interface Props {
   exerciseId: string;
 }
 
-export const useUpdateWorkoutExerciseMetadataMutation = ({
+export const useUpdateSessionExerciseMetadataMutation = ({
   workoutId,
   exerciseId,
 }: Props) => {

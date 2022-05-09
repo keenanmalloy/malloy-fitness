@@ -9,10 +9,9 @@ import { retrieveWorkoutsQuery } from 'controllers/workouts/retrieveWorkoutsQuer
 import { updateWorkoutMutation } from 'controllers/workouts/updateWorkoutMutation';
 
 import setsRouter from '../sessions/sets';
-import exercisesRouter from '../sessions/exercises';
+import exercisesRouter from '../workouts/exercises';
 
 import { cloneScheduleWorkoutMutation } from 'controllers/workouts/cloneScheduleMutation';
-import { createRestWorkoutMutation } from 'controllers/workouts/createRestWorkoutMutation';
 import { createDeloadWorkoutMutation } from 'controllers/workouts/createDeloadWorkoutMutation';
 import { createCardioWorkoutMutation } from 'controllers/workouts/createCardioWorkoutMutation';
 import { createTherapyWorkoutMutation } from 'controllers/workouts/createTherapyWorkoutMutation';
@@ -46,8 +45,6 @@ router.post('/', authenticate, authorize, async (req, res) => {
   switch (req.query.type) {
     case 'strength':
       return await createStrengthWorkoutMutation(res, req.body);
-    case 'rest':
-      return await createRestWorkoutMutation(res);
     case 'deload':
       return await createDeloadWorkoutMutation(res, req.body);
     case 'cardio':

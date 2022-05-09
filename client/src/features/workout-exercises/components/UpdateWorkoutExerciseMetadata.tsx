@@ -4,7 +4,7 @@ import { Input } from 'features/form/Input';
 import { useState } from 'react';
 import { useQueryClient } from 'react-query';
 import Modal from 'features/modal/Modal';
-import { useUpdateWorkoutExerciseMetadataMutation } from 'features/workout-exercises/api/useUpdateWorkoutExerciseMetadataMutation';
+import { useUpdateSessionExerciseMetadataMutation } from 'features/workout-exercises/api/useUpdateSessionExerciseMetadataMutation';
 import { REP_RANGES, REST_PERIODS } from 'features/environment';
 
 interface Props {
@@ -29,7 +29,7 @@ const UpdateWorkoutExerciseMetadata = (props: Props) => {
   const queryClient = useQueryClient();
 
   const { isLoading, mutate, isError } =
-    useUpdateWorkoutExerciseMetadataMutation({ workoutId, exerciseId });
+    useUpdateSessionExerciseMetadataMutation({ workoutId, exerciseId });
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();

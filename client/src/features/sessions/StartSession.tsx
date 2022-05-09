@@ -1,9 +1,9 @@
-import { Button } from 'features/common/Button';
 import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
 import { apiClient } from 'config/axios';
 import { GetSessionResponse } from './types';
+import { CgSpinner } from 'react-icons/cg';
 
 interface Props {
   sessionId: string;
@@ -83,22 +83,30 @@ const StartSession = ({ sessionId, hasStarted, hasEnded }: Props) => {
 
   if (hasStarted) {
     return (
-      <Button
-        className="w-full"
+      <button
         onClick={() => startOrContinueWorkout(sessionId)}
+        className={`w-full flex justify-center items-center text-center py-2 px-4 text-sm font-medium bg-white rounded-md border border-gray-200 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:ring-1 focus:ring-green-300 focus:text-green-700`}
       >
-        {isLoading ? 'Continuing...' : 'Continue'}
-      </Button>
+        {isLoading ? (
+          <CgSpinner className="w-6 h-6 animate-spin text-green-500" />
+        ) : (
+          'Continue Session'
+        )}
+      </button>
     );
   }
 
   return (
-    <Button
-      className="w-full"
+    <button
       onClick={() => startOrContinueWorkout(sessionId)}
+      className={`w-full flex justify-center items-center text-center py-2 px-4 text-sm font-medium bg-white rounded-md border border-gray-200 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:ring-1 focus:ring-green-300 focus:text-green-700`}
     >
-      {isLoading ? 'Starting...' : 'Start'}
-    </Button>
+      {isLoading ? (
+        <CgSpinner className="w-6 h-6 animate-spin text-green-500" />
+      ) : (
+        'Start Session'
+      )}
+    </button>
   );
 };
 

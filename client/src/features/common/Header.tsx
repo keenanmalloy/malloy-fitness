@@ -19,12 +19,12 @@ export const Header = () => {
           </Link>
 
           <Link href="/">
-            <div className="flex">
-              <h1 className="uppercase text-base">tr</h1>
-              <h1 className="uppercase text-base text-gray-400">a</h1>
-              <h1 className="uppercase text-base">ck</h1>
-              <h1 className="uppercase text-base text-gray-400">e</h1>
-              <h1 className="uppercase text-base">d</h1>
+            <div className="flex text-lg">
+              <h1 className="uppercase">tr</h1>
+              <h1 className="uppercase">a</h1>
+              <h1 className="uppercase">ck</h1>
+              <h1 className="uppercase">e</h1>
+              <h1 className="uppercase">d</h1>
             </div>
           </Link>
 

@@ -117,14 +117,28 @@ export const createDeloadWorkoutMutation = async (
       });
     }
 
+    const exerciseOrder = JSON.stringify(
+      exercises
+        .sort((a, b) => {
+          if (a.order && b.order) {
+            return a.order - b.order;
+          } else {
+            return 0;
+          }
+        })
+        .map((e) => {
+          return e.id;
+        })
+    );
+
     const query = `
       WITH 
-        data(name, description, category, created_by, type) AS (
+        data(name, description, category, created_by, type, exercise_order) AS (
           VALUES                           
-              ('${name}', '${description}', '${category}', ${accountId}, 'deload')
+              ('${name}', '${description}', '${category}', ${accountId}, 'deload', '${exerciseOrder}'::jsonb)
           )
-        INSERT INTO workouts (name, description, category, created_by, type)
-          SELECT name, description, category, created_by, type
+        INSERT INTO workouts (name, description, category, created_by, type, exercise_order)
+          SELECT name, description, category, created_by, type, exercise_order
             FROM data
           RETURNING *
       `;

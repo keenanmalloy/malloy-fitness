@@ -15,6 +15,7 @@ export interface Session {
   updated_at: string;
   started_at: string;
   ended_at: any;
+  exercise_order: string[];
   session_dt: string;
   completed: boolean;
   deload: boolean;
@@ -54,6 +55,7 @@ export interface SessionSummaryResponse extends SharedResponse {
     session_id: string;
     workout_id: string;
     started_at: string;
+    exercise_order: string;
     ended_at: any;
     completed: boolean;
     exercises: {
@@ -65,4 +67,34 @@ export interface SessionSummaryResponse extends SharedResponse {
       sets: Set[];
     }[];
   };
+}
+
+export interface GetSessionExerciseResponse extends SharedResponse {
+  exercise: ExtendedExercise;
+  record: any[];
+  next: {
+    order: Order;
+  };
+  prev: {
+    order: Order;
+  };
+}
+interface ExtendedExercise {
+  exercise_id: string;
+  name: string;
+  description: string;
+  category: string;
+  video: string;
+  profile: string;
+  view: string;
+  workout_id: string;
+  priority: number;
+  order: number;
+  notes: any;
+}
+
+interface Order {
+  exercise_id: string;
+  priority: number;
+  order: number;
 }
