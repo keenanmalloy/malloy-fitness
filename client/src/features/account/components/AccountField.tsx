@@ -1,6 +1,6 @@
 import React, { ChangeEventHandler, useEffect } from 'react';
 import { useAccountFieldMutation } from 'features/account/api/useAccountFieldMutation';
-import { Input } from 'features/form/Input';
+import { CustomInput } from 'features/form/CustomInput';
 import Select from 'react-select';
 
 interface AccountFieldProps {
@@ -12,12 +12,14 @@ interface AccountFieldProps {
   onChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
   isTextArea?: boolean;
   placeholder?: string;
+  className?: string;
 }
 
 export const AccountField = ({
   label,
   value,
   field,
+  className,
   placeholder,
   type,
   onChange,
@@ -46,11 +48,10 @@ export const AccountField = ({
 
   return (
     <div className="flex-1">
-      <Input
+      <CustomInput
         label={label}
         onChange={onChange}
         value={value}
-        isTextArea={isTextArea}
         isLoading={isLoading}
         type={type}
         placeholder={placeholder}
@@ -106,16 +107,45 @@ export const AccountSelectField = ({
 
   return (
     <div className="flex-1 py-2 relative w-full">
-      <label>{label}</label>
+      <label className={`text-gray-300 text-xs`}>{label}</label>
       <Select
         onChange={(data) => {
           onChange(data?.value ?? '');
         }}
         isSearchable={false}
-        className="flex-1"
         styles={{
           control: (base) => ({
             ...base,
+            border: 'none',
+            background: 'none',
+            boxShadow: 'none',
+          }),
+          singleValue: (base) => ({
+            ...base,
+            border: 'none',
+            color: 'white',
+          }),
+
+          menu: (base) => ({
+            ...base,
+            border: 'none',
+            color: 'white',
+            background: '#1f2937',
+          }),
+
+          option: (base) => ({
+            ...base,
+            border: 'none',
+            color: 'white',
+            background: '#1f2937',
+          }),
+
+          container: (base) => ({
+            ...base,
+            border: 'none',
+            color: 'white',
+            outline: 'none',
+            borderBottom: '2px solid #334155',
           }),
         }}
         defaultValue={{
