@@ -66,7 +66,7 @@ export default function AvatarUpload({
         ) : (
           <img
             src={value}
-            className="inline object-cover w-20 h-20 rounded-full p-1"
+            className="inline object-cover w-28 h-28 rounded-full p-1"
           />
         )}
       </button>

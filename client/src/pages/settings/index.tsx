@@ -2,6 +2,8 @@ import React from 'react';
 import Link from 'next/link';
 import { RiArrowLeftLine } from 'react-icons/ri';
 import { BsPerson, BsTrophy } from 'react-icons/bs';
+import { Skeleton } from 'features/common/Skeleton';
+import { useAccountQuery } from 'features/account/api/useAccountQuery';
 
 function SettingsPage() {
   return (
@@ -22,7 +24,9 @@ function SettingsPage() {
             </Link>
             <div>
               <h1 className="flex text-xl text-white">Settings</h1>
-              <span className="text-xs text-slate-300">@jacksonmalloy</span>
+              <span className="text-xs text-slate-300">
+                <GetAccount />
+              </span>
             </div>
           </div>
         </div>
@@ -90,4 +94,22 @@ const SettingPanel = ({
       </button>
     </Link>
   );
+};
+
+const GetAccount = () => {
+  const { data, isLoading, isError } = useAccountQuery();
+
+  if (isLoading) {
+    return <Skeleton className="w-32 h-4" />;
+  }
+
+  if (isError) {
+    return null;
+  }
+
+  if (!data) {
+    return null;
+  }
+
+  return <>{data.account.email}</>;
 };
