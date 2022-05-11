@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
-import { Input } from 'features/form/Input';
 import { Avatar } from 'features/account/components/Avatar';
 import {
   AccountField,
+  AccountPhoneField,
   AccountSelectField,
 } from 'features/account/components/AccountField';
-import { Logout } from 'features/account/components/Logout';
 import { Account } from 'features/account//types';
-
 interface Props {
   account: Account;
 }
@@ -16,7 +14,6 @@ export const AccountPanel = ({ account }: Props) => {
   const [givenName, setGivenName] = useState(account.given_name);
   const [familyName, setFamilyName] = useState(account.family_name);
   const [name, setName] = useState(account.name);
-  const [description, setDescription] = useState(account.description);
   const [phone, setPhone] = useState(account.phone);
   const [avatar, setAvatar] = useState(account.avatar_url);
   const [weight, setWeight] = useState<string | number>(account.weight);
@@ -28,24 +25,17 @@ export const AccountPanel = ({ account }: Props) => {
 
   return (
     <section className="px-5">
-      <div className="pt-2 flex justify-between">
+      <div className="pt-2 flex justify-center">
         <Avatar
           onChange={(url) => setAvatar(url)}
           value={avatar}
           field="avatar_url"
           prevValue={account.avatar_url}
         />
-        <AccountField
-          label="Description"
-          onChange={(e) => setDescription(e.target.value)}
-          value={description ?? ''}
-          field="description"
-          isTextArea
-          prevValue={account.description}
-        />
       </div>
-      <div className="flex">
+      <div className="flex space-x-2">
         <AccountField
+          className="text-white"
           label="First name"
           onChange={(e) => setGivenName(e.target.value)}
           value={givenName}
@@ -54,6 +44,7 @@ export const AccountPanel = ({ account }: Props) => {
         />
 
         <AccountField
+          className="text-white"
           label="Last name"
           onChange={(e) => setFamilyName(e.target.value)}
           value={familyName}
@@ -63,6 +54,7 @@ export const AccountPanel = ({ account }: Props) => {
       </div>
       <div>
         <AccountField
+          className="text-white"
           label="Username"
           onChange={(e) => setName(e.target.value)}
           value={name}
@@ -70,15 +62,7 @@ export const AccountPanel = ({ account }: Props) => {
           prevValue={account.name}
         />
       </div>
-      <div>
-        <Input
-          label={'Email'}
-          onChange={() => console.log('changed')}
-          value={account.email}
-          isDisabled
-        />
-      </div>
-      <div className="flex">
+      <div className="flex space-x-2">
         <AccountSelectField
           label="Gender"
           onChange={(value) => setGender(value)}
@@ -102,6 +86,7 @@ export const AccountPanel = ({ account }: Props) => {
         />
 
         <AccountField
+          className="text-white datepicker form-floating"
           label="Date of Birth"
           type="date"
           onChange={(e) => setDob(e.target.value)}
@@ -110,16 +95,29 @@ export const AccountPanel = ({ account }: Props) => {
           prevValue={account.dob}
         />
       </div>
-      <div className="flex">
+      <div className="flex space-x-2">
+        <div className="flex items-center flex-1 relative">
+          <AccountField
+            className="text-white"
+            label="Weight"
+            type="number"
+            onChange={(e) => setWeight(e.target.value)}
+            field="weight"
+            value={weight}
+            prevValue={account.weight}
+          />
+          <div
+            style={{
+              height: '36.75px',
+            }}
+            className="bg-slate-700 absolute right-0 top-6 px-5 flex items-center rounded-r-sm opacity-70"
+          >
+            <span className="text-white">lbs</span>
+          </div>
+        </div>
+
         <AccountField
-          label="Weight"
-          type="number"
-          onChange={(e) => setWeight(e.target.value)}
-          field="weight"
-          value={weight}
-          prevValue={account.weight}
-        />
-        <AccountField
+          className="text-white"
           label="Height"
           type="number"
           onChange={(e) => setHeight(e.target.value)}
@@ -128,7 +126,7 @@ export const AccountPanel = ({ account }: Props) => {
           prevValue={account.height}
         />
       </div>
-      <div className="flex">
+      <div className="flex space-x-2">
         <AccountSelectField
           label="Country"
           type="text"
@@ -148,6 +146,7 @@ export const AccountPanel = ({ account }: Props) => {
           ]}
         />
         <AccountField
+          className="text-white"
           label="City"
           type="text"
           onChange={(e) => setCity(e.target.value)}
@@ -157,15 +156,16 @@ export const AccountPanel = ({ account }: Props) => {
         />
       </div>
       <div>
-        <AccountField
+        <AccountPhoneField
+          className="text-white"
           label="Phone number"
-          onChange={(e) => setPhone(e.target.value)}
+          onChange={(phone) => setPhone(phone)}
           value={phone ?? ''}
           field="phone"
           prevValue={account.phone}
         />
       </div>
-      <small className="text-xs text-gray-500">
+      <small className="text-xs text-gray-300">
         Account created on{' '}
         {new Intl.DateTimeFormat('en-CA', {
           dateStyle: 'full',
@@ -173,9 +173,6 @@ export const AccountPanel = ({ account }: Props) => {
         }).format(new Date(account.created_at))}
         .
       </small>
-      <div className="mt-5 flex justify-end">
-        <Logout />
-      </div>
     </section>
   );
 };

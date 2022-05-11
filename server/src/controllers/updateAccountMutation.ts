@@ -4,16 +4,16 @@ import Joi from 'joi';
 import { update } from 'utils/update';
 
 const updateMuscleGroupSchema = Joi.object({
-  name: Joi.string().min(1).max(200).optional(),
-  given_name: Joi.string().min(1).max(200).optional(),
-  family_name: Joi.string().min(1).max(200).optional(),
+  name: Joi.string().max(200).optional(), // username not allowed to be empty
+  given_name: Joi.string().allow('').max(200).optional(),
+  family_name: Joi.string().allow('').max(200).optional(),
   description: Joi.string().max(500).allow('').optional(),
   avatar_url: Joi.string().max(200).allow('').optional(),
   phone: Joi.string().max(20).allow('').optional(),
   gender: Joi.string().allow('male', 'female', 'prefer not to say').optional(),
   dob: Joi.string().max(20).allow('').optional(),
-  weight: Joi.number().allow(null).optional(),
-  height: Joi.number().allow(null).optional(),
+  weight: Joi.number().allow('').allow(null).optional(),
+  height: Joi.number().allow('').allow(null).optional(),
   country: Joi.string().max(2).allow('').optional(),
   city: Joi.string().max(50).allow('').optional(),
 });

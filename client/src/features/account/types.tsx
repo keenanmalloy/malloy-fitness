@@ -22,11 +22,21 @@ export interface Account {
   gender: string;
   dob: string;
   weight: number;
-  height: number;
+  height: string;
   country: string;
   city: string;
 }
 
 export interface GetAccountResponse extends SharedResponse {
   account: Account;
+}
+
+export interface Goals {
+  daily_steps_goal: number;
+  weekly_cardio_minutes_goal: number;
+  body_weight_goal: number;
+}
+
+export interface GetGoalsResponse extends SharedResponse {
+  goals: Goals;
 }

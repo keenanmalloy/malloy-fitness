@@ -7,6 +7,7 @@ import storage from './storage';
 import workouts from './workouts';
 import sessions from './sessions';
 import overview from './overview';
+import account from './account';
 
 const router = Router();
 
@@ -18,6 +19,7 @@ auth(router);
 storage(router);
 sessions(router);
 overview(router);
+account(router);
 
 router.get('/health', (req, res) => res.send('OK'));
 

@@ -12,7 +12,25 @@ export const retrieveWorkoutsQuery = async (req: Request, res: Response) => {
 
   const accountId = res.locals.state.account.account_id;
   const query = `
-  SELECT * FROM workouts 
+  
+  WITH PreWorkouts as (
+    SELECT we.workout_id FROM workouts
+        JOIN workout_exercises we on workouts.workout_id = we.workout_id
+        JOIN exercises e on we.exercise_id = e.exercise_id
+    ),
+  ExerciseVideo as (
+      SELECT
+          distinct w.workout_id,
+          MAX(video) as video
+      FROM exercises
+      JOIN workout_exercises we on exercises.exercise_id = we.exercise_id
+      JOIN workouts w on we.workout_id = w.workout_id
+      WHERE w.workout_id IN(select workout_id from PreWorkouts)
+      GROUP BY 1
+  )
+
+  SELECT *, w.workout_id FROM workouts w
+  LEFT OUTER JOIN ExerciseVideo on ExerciseVideo.workout_id = w.workout_id
   WHERE created_by = ${accountId} 
   ${generateDateFilter(dateQuery)} 
   ${generateCategoryFilter(categoryQuery)}
@@ -164,6 +182,6 @@ const generateSortByFilter = (sortByQuery: string | undefined) => {
     case 'scheduled-desc':
       return `ORDER BY workout_dt DESC`;
     default:
-      return ``;
+      return `ORDER BY updated_at DESC`;
   }
 };

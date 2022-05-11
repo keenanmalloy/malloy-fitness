@@ -1,13 +1,17 @@
-import { AccountPanel } from 'features/account/components/AccountPanel';
-import { useAccountQuery } from 'features/account/api/useAccountQuery';
-import Link from 'next/link';
-import { RiArrowLeftLine } from 'react-icons/ri';
 import { Skeleton } from 'features/common/Skeleton';
+import Link from 'next/link';
+import React, { useState } from 'react';
+import { RiArrowLeftLine } from 'react-icons/ri';
+import { useAccountQuery } from '../api/useAccountQuery';
+import { useGoalsQuery } from '../api/useGoalsQuery';
+import { AccountField } from './AccountField';
+import { GoalPanel } from './GoalPanel';
 
-export const GetAccount = () => {
+export const GetGoals = () => {
   const { data, isLoading, isError } = useAccountQuery();
+  const goalQuery = useGoalsQuery();
 
-  if (isLoading) {
+  if (isLoading || goalQuery.isLoading) {
     return (
       <>
         <nav className="dark:bg-gray-900 bg-white shadow fixed top-0 left-0 w-full z-10 flex flex-col justify-center items-center border-b-2 border-slate-800 border-solid">
@@ -24,7 +28,7 @@ export const GetAccount = () => {
                 </button>
               </Link>
               <div>
-                <h1 className="flex text-xl text-white">Profile</h1>
+                <h1 className="flex text-xl text-white">Goals</h1>
                 <span className="text-xs text-slate-300">
                   <Skeleton className="w-32 h-4" />
                 </span>
@@ -42,7 +46,7 @@ export const GetAccount = () => {
     );
   }
 
-  if (isError) {
+  if (isError || goalQuery.isError) {
     return (
       <>
         <nav className="dark:bg-gray-900 bg-white shadow fixed top-0 left-0 w-full z-10 flex flex-col justify-center items-center border-b-2 border-slate-800 border-solid">
@@ -59,7 +63,7 @@ export const GetAccount = () => {
                 </button>
               </Link>
               <div>
-                <h1 className="flex text-xl text-white">Profile</h1>
+                <h1 className="flex text-xl text-white">Goals</h1>
                 <span className="text-xs text-slate-300">
                   <Skeleton className="w-32 h-12" />
                 </span>
@@ -79,7 +83,7 @@ export const GetAccount = () => {
     );
   }
 
-  if (!data) {
+  if (!data || !goalQuery.data) {
     return (
       <>
         <nav className="dark:bg-gray-900 bg-white shadow fixed top-0 left-0 w-full z-10 flex flex-col justify-center items-center border-b-2 border-slate-800 border-solid">
@@ -96,7 +100,7 @@ export const GetAccount = () => {
                 </button>
               </Link>
               <div>
-                <h1 className="flex text-xl text-white">Profile</h1>
+                <h1 className="flex text-xl text-white">Goals</h1>
                 <span className="text-xs text-slate-300">
                   <Skeleton className="w-32 h-12" />
                 </span>
@@ -132,7 +136,7 @@ export const GetAccount = () => {
               </button>
             </Link>
             <div>
-              <h1 className="flex text-xl text-white">Profile</h1>
+              <h1 className="flex text-xl text-white">Goals</h1>
               <span className="text-xs text-slate-300">
                 {data.account.email}
               </span>
@@ -144,9 +148,7 @@ export const GetAccount = () => {
       <section className="bg-slate-900 min-h-screen">
         <div style={{ height: '60px' }} />
 
-        <ul className="flex flex-col">
-          <AccountPanel account={data.account} />
-        </ul>
+        <GoalPanel goals={goalQuery.data.goals} />
       </section>
     </>
   );

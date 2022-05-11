@@ -11,6 +11,7 @@ import {
   retrieveAccountByProviderQuery,
 } from 'controllers/retrieveAccountQuery';
 import { setLoginSession } from 'sessions';
+import { createAccountSettings } from 'queries/createAccountSettings';
 
 interface Props {
   router: Router;
@@ -91,6 +92,11 @@ export const initProvider = ({ router, middleware }: Props): void => {
             name,
             familyName,
             givenName,
+          });
+
+          // create empty settings for the new account
+          await createAccountSettings({
+            accountId: account.account_id,
           });
 
           // send account instead of empty object
