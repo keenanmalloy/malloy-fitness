@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from 'features/common/Button';
 import { GetExerciseSets } from 'features/sets/components/GetExerciseSets';
 import { Notes } from './Notes';
 import Link from 'next/link';
 import { GetSessionExerciseResponse } from './types';
+import { MyTimer } from 'features/timers/Timer';
+import { TimerType } from 'features/timers/types';
 
 interface Props {
   sessionId: string;
@@ -64,30 +66,39 @@ interface SessionFooterProps {
 }
 
 const Footer = ({ prevEx, nextEx, sessionId }: SessionFooterProps) => {
-  console.log({ prevEx, nextEx });
+  const [timerType, setTimerType] = useState<TimerType>(null);
+  const time = new Date();
   return (
-    <div className="flex justify-between py-3 px-3 fixed bottom-0 bg-white left-0 right-0 ">
-      {!!prevEx.order.exercise_id && (
-        <Link
-          href={`/sessions/${sessionId}/exercises/${prevEx.order.exercise_id}`}
-        >
-          <Button className="w-full">Previous</Button>
-        </Link>
-      )}
+    <div>
+      <MyTimer
+        expiryTimestamp={time}
+        timerType={timerType}
+        setTimerType={setTimerType}
+      />
 
-      {!!nextEx.order.exercise_id && (
-        <Link
-          href={`/sessions/${sessionId}/exercises/${nextEx.order.exercise_id}`}
-        >
-          <Button className="w-full">Next</Button>
-        </Link>
-      )}
+      <div className="flex justify-between py-3 px-3 fixed bottom-0 bg-white left-0 right-0 ">
+        {!!prevEx.order.exercise_id && (
+          <Link
+            href={`/sessions/${sessionId}/exercises/${prevEx.order.exercise_id}`}
+          >
+            <Button className="w-full">Previous</Button>
+          </Link>
+        )}
 
-      {!nextEx.order.exercise_id && (
-        <Link href={`/sessions/${sessionId}/end`}>
-          <Button className="w-full">Finish Workout</Button>
-        </Link>
-      )}
+        {!!nextEx.order.exercise_id && (
+          <Link
+            href={`/sessions/${sessionId}/exercises/${nextEx.order.exercise_id}`}
+          >
+            <Button className="w-full">Next</Button>
+          </Link>
+        )}
+
+        {!nextEx.order.exercise_id && (
+          <Link href={`/sessions/${sessionId}/end`}>
+            <Button className="w-full">Finish Workout</Button>
+          </Link>
+        )}
+      </div>
     </div>
   );
 };
