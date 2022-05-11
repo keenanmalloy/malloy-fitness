@@ -1,10 +1,10 @@
 import React from 'react';
-import { Goals } from 'features/account/components/Goals';
+import { GetGoals } from 'features/account/components/GetGoals';
 
 function GoalsPage() {
   return (
     <main className="h-full min-h-screen">
-      <Goals />
+      <GetGoals />
     </main>
   );
 }

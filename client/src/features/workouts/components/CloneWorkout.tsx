@@ -34,23 +34,26 @@ export const CloneWorkout = ({ workoutId, hasSessions }: Props) => {
 
   return (
     <Modal
-      title="This workout has previous sessions. We recommend you clone it."
-      description="If you edit this workout without cloning, all sessions connected will be updated."
+      title="This workout has previous sessions. We recommend you copy it if you wish to change it."
+      description="If you edit this workout without copying, your past connected sessions will be updated."
       isOpen={isOpen}
       closeModal={closeModal}
     >
       <div className="flex flex-col">
         <div className="flex justify-between">
-          <Button className="mt-4" onClick={closeModal}>
+          <button
+            className="mt-4 bg-red-800 text-white px-4 py-2 rounded shadow"
+            onClick={closeModal}
+          >
             I understand
-          </Button>
+          </button>
 
           <Button
             className="mt-4"
             onClick={() => handleClick()}
             isDisabled={isLoading}
           >
-            {isLoading ? 'Cloning...' : 'Clone'}
+            {isLoading ? 'Copying...' : 'Copy'}
           </Button>
         </div>
         {isError && (

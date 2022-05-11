@@ -75,9 +75,11 @@ export const GetSingleWorkout = ({ workoutId }: Props) => {
             <p className="text-xs">{data.workout.description}</p>
           </div>
 
-          <span className="bg-blue-300 flex items-center text-white px-4 rounded-md max-h-7 h-7">
-            {data.workout.category}
-          </span>
+          {data.workout.category && (
+            <span className="bg-blue-300 flex items-center text-white px-4 rounded-md max-h-7 h-7">
+              {data.workout.category}
+            </span>
+          )}
         </div>
 
         <WorkoutExercises

@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Avatar } from 'features/account/components/Avatar';
 import {
   AccountField,
+  AccountPhoneField,
   AccountSelectField,
 } from 'features/account/components/AccountField';
 import { Account } from 'features/account//types';
-
 interface Props {
   account: Account;
 }
@@ -96,15 +96,26 @@ export const AccountPanel = ({ account }: Props) => {
         />
       </div>
       <div className="flex space-x-2">
-        <AccountField
-          className="text-white"
-          label="Weight"
-          type="number"
-          onChange={(e) => setWeight(e.target.value)}
-          field="weight"
-          value={weight}
-          prevValue={account.weight}
-        />
+        <div className="flex items-center flex-1 relative">
+          <AccountField
+            className="text-white"
+            label="Weight"
+            type="number"
+            onChange={(e) => setWeight(e.target.value)}
+            field="weight"
+            value={weight}
+            prevValue={account.weight}
+          />
+          <div
+            style={{
+              height: '36.75px',
+            }}
+            className="bg-slate-700 absolute right-0 top-6 px-5 flex items-center rounded-r-sm opacity-70"
+          >
+            <span className="text-white">lbs</span>
+          </div>
+        </div>
+
         <AccountField
           className="text-white"
           label="Height"
@@ -145,10 +156,10 @@ export const AccountPanel = ({ account }: Props) => {
         />
       </div>
       <div>
-        <AccountField
+        <AccountPhoneField
           className="text-white"
           label="Phone number"
-          onChange={(e) => setPhone(e.target.value)}
+          onChange={(phone) => setPhone(phone)}
           value={phone ?? ''}
           field="phone"
           prevValue={account.phone}
