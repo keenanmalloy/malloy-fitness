@@ -119,6 +119,19 @@ CREATE TABLE IF NOT EXISTS accounts (
     city text
 );
 
+CREATE TABLE IF NOT EXISTS settings (
+    setting_id bigserial PRIMARY KEY,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+    account_id bigint,
+    unit_preference text DEFAULT 'imperial', -- imperial | metric
+    appearance text DEFAULT 'light', -- light | dark
+
+    -- goals
+    daily_steps_goal int,
+    weekly_cardio_minutes_goal int,
+    body_weight_goal int
+);
+
 CREATE TABLE IF NOT EXISTS sleep (
     sleep_id bigserial PRIMARY KEY,
     account_id bigint,

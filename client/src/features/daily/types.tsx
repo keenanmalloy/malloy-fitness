@@ -1,6 +1,18 @@
 export interface GetDailyResponse extends SharedResponse {
   sessions: Session[];
   steps: number;
+  goals: Goals;
+}
+
+interface Goals {
+  setting_id: string;
+  updated_at: string;
+  account_id: string;
+  unit_preference: string;
+  appearance: string;
+  daily_steps_goal: number;
+  weekly_cardio_minutes_goal: number;
+  body_weight_goal: number;
 }
 
 interface SharedResponse {

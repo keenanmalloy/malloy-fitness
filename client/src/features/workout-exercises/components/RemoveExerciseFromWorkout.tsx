@@ -3,6 +3,8 @@ import Modal from 'features/modal/Modal';
 import { Button } from 'features/common/Button';
 import { useQueryClient } from 'react-query';
 import { useRemoveExerciseFromWorkoutMutation } from 'features/workout-exercises/api/useRemoveExerciseFromWorkoutMutation';
+import { DefaultModal } from 'features/modal/DefaultModal';
+import { BiX } from 'react-icons/bi';
 
 interface Props {
   workoutId: string;
@@ -35,23 +37,29 @@ export const RemoveExerciseFromWorkout = ({ workoutId, exerciseId }: Props) => {
 
   return (
     <div>
-      <Button
-        className="py-2 px-4 text-sm font-medium text-gray-900 bg-white rounded-md border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-2 focus:ring-blue-700 focus:text-blue-700 dark:bg-gray-700 dark:border-gray-600 dark:text-white dark:hover:text-white dark:hover:bg-gray-600 dark:focus:ring-blue-500 dark:focus:text-white"
-        onClick={openModal}
+      <button className="py-2 px-3" onClick={openModal}>
+        <BiX />
+      </button>
+      <DefaultModal
+        isOpen={isOpen}
+        closeModal={closeModal}
+        title="Remove exercise"
+        description="Are you sure you want to remove this exercise from your workout?"
       >
-        Remove
-      </Button>
-      <Modal isOpen={isOpen} closeModal={closeModal}>
-        <p>Are you sure you want to remove this exercise from your workout?</p>
         <form onSubmit={handleSubmit}>
-          <Button type="submit" isDisabled={isLoading}>
-            {isLoading ? 'Removing Exercise...' : 'Remove Exercise'}
-          </Button>
-          {isError && (
-            <small className="text-red-500">Something went wrong...</small>
-          )}
+          <div className="pt-3 w-full flex space-x-3">
+            <Button type="button" className="w-full" onClick={closeModal}>
+              Cancel
+            </Button>
+            <Button type="submit" className="w-full" isDisabled={isLoading}>
+              {isLoading ? 'Removing...' : 'Remove'}
+            </Button>
+            {isError && (
+              <small className="text-red-500">Something went wrong...</small>
+            )}
+          </div>
         </form>
-      </Modal>
+      </DefaultModal>
     </div>
   );
 };

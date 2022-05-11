@@ -23,26 +23,28 @@ const WorkoutExercises = ({ exercises, workoutId }: Props) => {
         })
         .map((ex) => {
           return (
-            <li key={ex.exercise_id} className="border-solid py-6">
-              <div className="flex justify-between">
-                <h3 className="text-lg">{ex.name}</h3>
-                <span className="pt-3 px-3 text-md">{ex.order}</span>
-              </div>
+            <li key={ex.exercise_id} className="border-solid py-6 flex w-full">
+              <div className="flex-1">
+                <div className="flex justify-between">
+                  <div className="flex flex-col w-full">
+                    <div className="flex justify-between">
+                      <h3 className="text-lg">{ex.name}</h3>
+                      <RemoveExerciseFromWorkout
+                        workoutId={workoutId}
+                        exerciseId={ex.exercise_id}
+                      />
+                    </div>
 
-              <h3 className="text-xs">{ex.description}</h3>
-
-              <div className="pt-5 pb-2 flex justify-between">
-                <div>
-                  <p>Repititions: {ex.repetitions}</p>
-                  <p>Sets: {ex.sets}</p>
-                  <p>RIR: {ex.repsInReserve}</p>
-                  <p>Rest: {ex.restPeriod}</p>
+                    <div className="py-4 flex justify-between text-xs w-full max-w-md">
+                      <p>Reps: {ex.repetitions}</p>
+                      <p>Sets: {ex.sets}</p>
+                      <p>RIR: {ex.repsInReserve}</p>
+                      <p>Rest: {ex.restPeriod}</p>
+                      <p></p>
+                    </div>
+                  </div>
                 </div>
-                <WorkoutOrder workoutId={workoutId} exercise={ex} />
-              </div>
 
-              {/* <WorkoutPriority workoutId={workoutId} exercise={ex} /> */}
-              <div className="flex justify-between">
                 <UpdateWorkoutExerciseMetadata
                   sets={ex.sets}
                   repetitions={ex.repetitions}
@@ -53,10 +55,9 @@ const WorkoutExercises = ({ exercises, workoutId }: Props) => {
                   workoutId={workoutId}
                   exerciseId={ex.exercise_id}
                 />
-                <RemoveExerciseFromWorkout
-                  workoutId={workoutId}
-                  exerciseId={ex.exercise_id}
-                />
+              </div>
+              <div className="pl-5 flex item-center">
+                <WorkoutOrder workoutId={workoutId} exercise={ex} />
               </div>
             </li>
           );

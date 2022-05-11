@@ -5,6 +5,7 @@ import { useQueryClient } from 'react-query';
 import { useDeleteWorkoutMutation } from 'features/workouts/api/useDeleteWorkoutMutation';
 import { MdDelete } from 'react-icons/md';
 import { useRouter } from 'next/router';
+import { DefaultModal } from 'features/modal/DefaultModal';
 
 interface Props {
   workoutId: string;
@@ -39,7 +40,7 @@ export const DeleteWorkout = ({ workoutId }: Props) => {
       <Button onClick={openModal} className="px-0 py-2">
         <MdDelete className="h-6 w-10" />
       </Button>
-      <Modal
+      <DefaultModal
         title="Are you sure?"
         description="This workout will be removed. This action is permanent."
         isOpen={isOpen}
@@ -63,7 +64,7 @@ export const DeleteWorkout = ({ workoutId }: Props) => {
             <small className="text-red-500">Something went wrong...</small>
           )}
         </div>
-      </Modal>
+      </DefaultModal>
     </>
   );
 };

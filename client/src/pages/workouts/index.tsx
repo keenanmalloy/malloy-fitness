@@ -14,18 +14,17 @@ const WorkoutsPage = () => {
 
   return (
     <Layout>
-      <section className="p-5">
-        <h1 className="pb-10">Workouts</h1>
-        <div className="flex justify-end">
-          <button
-            onClick={() => setIsFilterOpen(!isFilterOpen)}
-            className="bg-white mt-2 text-gray-800 font-semibold py-1 px-3 border border-gray-400 rounded shadow"
-          >
-            {isFilterOpen ? <FaChevronUp /> : <FaChevronDown />}
-          </button>
-        </div>
-
-        <div className="sticky top-10 bg-white">
+      <section>
+        <div className="sticky top-11 bg-white z-10 p-2">
+          <div className="flex justify-between">
+            <button
+              onClick={() => setIsFilterOpen(!isFilterOpen)}
+              className="bg-white mt-2 text-gray-800 font-semibold py-1 px-3 border border-gray-400 rounded shadow"
+            >
+              {isFilterOpen ? <FaChevronUp /> : <FaChevronDown />}
+            </button>
+            <h1 className="">Workouts</h1>
+          </div>
           <div className="py-2 w-full">
             {isFilterOpen && (
               <FilterWorkouts
@@ -42,12 +41,14 @@ const WorkoutsPage = () => {
           </div>
         </div>
 
-        <GetAllWorkouts
-          category={category}
-          type={type}
-          view={view}
-          sortBy={sortBy}
-        />
+        <div className="p-3">
+          <GetAllWorkouts
+            category={category}
+            type={type}
+            view={view}
+            sortBy={sortBy}
+          />
+        </div>
       </section>
     </Layout>
   );

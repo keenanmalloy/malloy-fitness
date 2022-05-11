@@ -3,15 +3,15 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { RiArrowLeftLine } from 'react-icons/ri';
 import { useAccountQuery } from '../api/useAccountQuery';
+import { useGoalsQuery } from '../api/useGoalsQuery';
 import { AccountField } from './AccountField';
-import { AccountPanel } from './AccountPanel';
+import { GoalPanel } from './GoalPanel';
 
-export const Goals = () => {
+export const GetGoals = () => {
   const { data, isLoading, isError } = useAccountQuery();
+  const goalQuery = useGoalsQuery();
 
-  const [dailyStepGoal, setDailyStepGoal] = useState(10000);
-
-  if (isLoading) {
+  if (isLoading || goalQuery.isLoading) {
     return (
       <>
         <nav className="dark:bg-gray-900 bg-white shadow fixed top-0 left-0 w-full z-10 flex flex-col justify-center items-center border-b-2 border-slate-800 border-solid">
@@ -46,7 +46,7 @@ export const Goals = () => {
     );
   }
 
-  if (isError) {
+  if (isError || goalQuery.isError) {
     return (
       <>
         <nav className="dark:bg-gray-900 bg-white shadow fixed top-0 left-0 w-full z-10 flex flex-col justify-center items-center border-b-2 border-slate-800 border-solid">
@@ -83,7 +83,7 @@ export const Goals = () => {
     );
   }
 
-  if (!data) {
+  if (!data || !goalQuery.data) {
     return (
       <>
         <nav className="dark:bg-gray-900 bg-white shadow fixed top-0 left-0 w-full z-10 flex flex-col justify-center items-center border-b-2 border-slate-800 border-solid">
@@ -148,19 +148,7 @@ export const Goals = () => {
       <section className="bg-slate-900 min-h-screen">
         <div style={{ height: '60px' }} />
 
-        <ul className="flex flex-col">
-          <div>
-            <AccountField
-              label={'Daily Steps'}
-              type="number"
-              onChange={(e) => setDailyStepGoal(+e.target.value)}
-              value={dailyStepGoal}
-              field="daily_step_goal"
-              placeholder="10,000"
-              prevValue={''} // prevValue={account.daily_step_goal}
-            />
-          </div>
-        </ul>
+        <GoalPanel goals={goalQuery.data.goals} />
       </section>
     </>
   );

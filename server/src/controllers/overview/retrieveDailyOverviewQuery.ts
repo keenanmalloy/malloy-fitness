@@ -1,6 +1,7 @@
 import { db } from 'config/db';
 import { Response, Request } from 'express';
 import { fetchGoogleFitSteps } from './fetchGoogleFitSteps';
+import { getGoalSettings } from '../../queries/getGoalSettings';
 
 export const retrieveDailyOverviewQuery = async (
   req: Request,
@@ -35,12 +36,15 @@ export const retrieveDailyOverviewQuery = async (
     const accountId = res.locals.state.account.account_id;
     const sessions = await getTodaysSessions(dateQuery, accountId);
 
+    const goals = await getGoalSettings({ accountId });
+
     return res.status(200).json({
       role: res.locals.state.account.role,
       status: 'success',
       message: 'Overview fetched successfully',
       sessions,
       steps: stepData,
+      goals,
     });
   } catch (error) {
     console.log({ error });

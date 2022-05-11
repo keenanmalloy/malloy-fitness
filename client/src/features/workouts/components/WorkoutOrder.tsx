@@ -45,13 +45,20 @@ const WorkoutOrder = ({ exercise, workoutId }: Props) => {
   };
 
   return (
-    <div className="flex flex-col w-12">
-      <Button isDisabled={exercise.order === 1} onClick={decrementOrder}>
-        <AiOutlineCaretUp />
-      </Button>
-      <Button onClick={incrementOrder}>
-        <AiOutlineCaretDown />
-      </Button>
+    <div className="flex flex-col">
+      <button
+        className="flex items-center justify-center w-full h-full p-2"
+        disabled={exercise.order === 1}
+        onClick={decrementOrder}
+      >
+        <AiOutlineCaretUp className="w-4 h-4" />
+      </button>
+      <button
+        className="flex items-center justify-center w-full h-full p-2"
+        onClick={incrementOrder}
+      >
+        <AiOutlineCaretDown className="w-4 h-4" />
+      </button>
     </div>
   );
 };

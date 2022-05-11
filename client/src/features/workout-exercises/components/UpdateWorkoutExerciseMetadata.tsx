@@ -46,7 +46,9 @@ const UpdateWorkoutExerciseMetadata = (props: Props) => {
   };
   return (
     <div>
-      <Button onClick={() => setIsOpen(true)}>Update</Button>
+      <Button className="w-full max-w-xs" onClick={() => setIsOpen(true)}>
+        Update
+      </Button>
 
       <Modal
         isOpen={isOpen}
