@@ -9,6 +9,10 @@ import { useSessionSummaryQuery } from 'features/sessions/useSessionSummaryQuery
 import { Range } from 'react-range';
 import FullPageModal from 'features/modal/FullPageModal';
 import { GetStaticPropsContext } from 'next';
+import { Divider } from 'features/feed/Divider';
+import { SessionFooter } from 'features/sessions/SessionFooter';
+import { BiX } from 'react-icons/bi';
+import { ChooseExerciseModal } from 'features/sessions/ChooseExerciseModal';
 
 export async function getStaticPaths() {
   return {
@@ -82,83 +86,94 @@ const EndPage = ({ sessionId }: Props) => {
   }
 
   return (
-    <div>
-      <div className="flex flex-col ">
-        {/* <SessionTimer
-          endedAt={data.session.ended_at}
-          startedAt={data.session.started_at}
-        /> 
-
-        {/* <pre className="text-xs">{JSON.stringify(data, null, 2)}</pre> */}
-      </div>
-      <div className="flex justify-center py-96 px-8 flex-col">
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="flex justify-center px-8 flex-col w-full">
         <Button onClick={() => setIsOpen(!isOpen)}>End Workout</Button>
-        <div className="text-center  divide-solid border-solid border-b py-5">
-          OR
+        <div className="pt-5">
+          <Divider label="OR" />
         </div>
+
         <div>
           <p className="text-center py-5">Want to add more?</p>
-          <div className="flex flex-col">
-            <button className="text-blue-500 mb-4">Add Exercise</button>
-            <button className="text-blue-500">Add Cardio</button>
-          </div>
+
+          {data && <ChooseExerciseModal data={data} shouldRedirect />}
         </div>
         <FullPageModal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
-          <div className="flex justify-center">
-            <div className="flex flex-col text-center">
-              <h2>INTENSITY</h2>
-              <h3>How hard was this session?</h3>
-              <p className="py-6">-</p>
-              <p>
-                {values} - {intensityByValue(values[0])}
-              </p>
-              <div>
-                <Range
-                  min={0}
-                  max={10}
-                  step={1}
-                  values={values}
-                  onChange={(values) => {
-                    setValues(values);
-                  }}
-                  renderTrack={({ props, children }) => (
-                    <div
-                      {...props}
-                      className="w-full h-4 pr-2 my-4 bg-gradient-to-r from-green-500 via-orange-500 to-red-600 rounded-lg"
-                    >
-                      {children}
-                    </div>
-                  )}
-                  renderThumb={({ props }) => (
-                    <div
-                      {...props}
-                      className="w-7 h-7 transform translate-x-10 bg-slate-700 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-white text-xs flex justify-center items-center"
-                    >
-                      {values}
-                    </div>
-                  )}
-                />
-              </div>
-              <div>
-                <h2 className="pb-1">SESSION REFELECTION</h2>
-                <textarea
-                  className="border-2 border-gray-400 rounded-md p-3
+          <button
+            onClick={() => setIsOpen(false)}
+            className="absolute right-0 top-0 p-3"
+          >
+            <BiX />
+          </button>
+          <div className="flex flex-col text-center justify-center w-full">
+            <h2>INTENSITY</h2>
+            <h3>How hard was this session?</h3>
+            <p className="py-6">-</p>
+            <p>
+              {values} - {intensityByValue(values[0])}
+            </p>
+            <div className="px-2">
+              <Range
+                min={0}
+                max={10}
+                step={1}
+                values={values}
+                onChange={(values) => {
+                  setValues(values);
+                }}
+                renderTrack={({ props, children }) => (
+                  <div
+                    {...props}
+                    className="w-full h-4 pr-2 my-4 bg-gradient-to-r from-green-500 via-orange-500 to-red-600 rounded-lg"
+                  >
+                    {children}
+                  </div>
+                )}
+                renderThumb={({ props }) => (
+                  <div
+                    {...props}
+                    className="w-7 h-7 transform translate-x-10 bg-slate-700 rounded-full focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 text-white text-xs flex justify-center items-center"
+                  >
+                    {values}
+                  </div>
+                )}
+              />
+            </div>
+            <div>
+              <h2 className="pb-1">SESSION REFELECTION</h2>
+              <textarea
+                className="border-2 border-gray-400 rounded-md p-3
                   w-full h-24"
-                  placeholder="How was todays session? Leave notes about your session here e.g any progressions, regressions, maintaining any sets, overall performance, injuries etc."
-                />
-              </div>
-              <div className="py-10 w-96">
-                <Button onClick={handleFinishSession} className="w-full mb-6">
-                  Finish Session
-                </Button>
-                <Button onClick={() => setIsOpen(false)} className="w-full">
-                  Back to Training
-                </Button>
-              </div>
+                placeholder="How was todays session? Leave notes about your session here e.g any progressions, regressions, maintaining any sets, overall performance, injuries etc."
+              />
+            </div>
+            <div className="py-10">
+              <Button onClick={handleFinishSession} className="w-full mb-6">
+                Finish Session
+              </Button>
+              <Button onClick={() => setIsOpen(false)} className="w-full">
+                Back to Training
+              </Button>
             </div>
           </div>
         </FullPageModal>
       </div>
+      <SessionFooter
+        sessionId={sessionId}
+        nextEx={{
+          order: {
+            exercise_id: null,
+          },
+        }}
+        prevEx={{
+          order: {
+            exercise_id:
+              data?.session.exercise_order[
+                data.session.exercise_order.length - 1
+              ] ?? null,
+          },
+        }}
+      />
     </div>
   );
 };

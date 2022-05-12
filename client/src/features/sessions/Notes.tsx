@@ -21,9 +21,9 @@ export const Notes = ({ exercise, exerciseId, exNotes, workoutId }: Props) => {
   }, [exNotes]);
 
   return (
-    <div className="p-5">
-      <section>
-        <pre className="text-sm">{notes}</pre>
+    <div className="px-5">
+      <section className="text-sm break-words">
+        <pre className="text-sm break-words whitespace-pre-wrap">{notes}</pre>
       </section>
       <button
         onClick={() => setIsOpen(!isOpen)}
