@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { AiOutlineMinusCircle, AiOutlinePlusCircle } from 'react-icons/ai';
 import { BsPlayCircle, BsStopwatch } from 'react-icons/bs';
 import { TimerType } from './types';
+import { useTimer } from 'react-timer-hook';
 
 interface Props {
   setTimerType: (timerType: TimerType) => void;
@@ -123,6 +124,47 @@ export const RestTimer = ({ setTimerType }: Props) => {
           <BsPlayCircle size={50} />
         </button>
       </div>
+      <div>
+        <Timer expiryTimestamp={Date} />
+      </div>
+    </div>
+  );
+};
+
+const Timer = ({ expiryTimestamp }) => {
+  const {
+    seconds,
+    minutes,
+    hours,
+    days,
+    isRunning,
+    start,
+    pause,
+    resume,
+    restart,
+  } = useTimer({
+    expiryTimestamp,
+    onExpire: () => console.warn('onExpire called'),
+  });
+  return (
+    <div>
+      <div style={{ fontSize: '25px' }}>
+        <span>{minutes}</span>:<span>{seconds}</span>
+      </div>
+      <p>{isRunning ? 'Running' : 'Not running'}</p>
+      <button onClick={start}>Start</button>
+      <button onClick={pause}>Pause</button>
+      <button onClick={resume}>Resume</button>
+      <button
+        onClick={() => {
+          // Restarts to 5 minutes timer
+          const time = new Date();
+          time.setSeconds(time.getSeconds() + 300);
+          restart(time);
+        }}
+      >
+        Restart
+      </button>
     </div>
   );
 };
