@@ -3,6 +3,13 @@ import { PROVIDERS } from 'config/providers';
 import { Response, Request } from 'express';
 import { getGoogleFitSession, setGoogleFitSession } from 'sessions';
 
+interface RefreshTokenResponse {
+  access_token: string;
+  expires_in: number;
+  scope: string;
+  token_type: 'Bearer';
+}
+
 export const fetchGoogleFitSteps = async (
   req: Request,
   res: Response,
@@ -29,9 +36,14 @@ export const fetchGoogleFitSteps = async (
           data: `refresh_token=${refreshToken}&client_id=${PROVIDERS.GOOGLE.clientID}&client_secret=${PROVIDERS.GOOGLE.clientSecret}&grant_type=refresh_token`,
         });
 
+        const refreshTokenResponse: RefreshTokenResponse = { ...data };
+
         await setGoogleFitSession(res, {
           refresh_token: refreshToken,
-          ...data,
+          access_token: refreshTokenResponse.access_token,
+          expiry_date: Date.now() + refreshTokenResponse.expires_in * 1000,
+          scope: refreshTokenResponse.scope,
+          token_type: refreshTokenResponse.token_type,
         });
 
         return data.access_token;
@@ -68,6 +80,7 @@ export const fetchGoogleFitSteps = async (
 
     return steps;
   } catch (error) {
+    console.log({ error });
     return null;
   }
 };

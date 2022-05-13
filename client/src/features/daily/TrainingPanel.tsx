@@ -2,6 +2,7 @@ import Modal from 'features/modal/Modal';
 import { useDeleteSessionMutation } from 'features/sessions/useDeleteSessionMutation';
 import Overview from 'features/workout-overview/Overview';
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { useState } from 'react';
 import { BiX } from 'react-icons/bi';
 import { CgSpinner } from 'react-icons/cg';
@@ -38,15 +39,19 @@ export const TrainingPanel = ({ data }: Props) => {
             ) : null}
 
             <div className="h-full w-full aspect-video relative">
-              {!session.video ? (
-                <div className="bg-gray-100 h-full w-full rounded-md" />
-              ) : (
-                <Image
-                  src={`https://thumbnails.trckd.ca/${session.video}-0.jpg`}
-                  layout="fill"
-                  className="-z-10  rounded-md"
-                />
-              )}
+              <Link href={`sessions/${session.session_id}`}>
+                <a>
+                  {!session.video ? (
+                    <div className="bg-gray-100 h-full w-full rounded-md" />
+                  ) : (
+                    <Image
+                      src={`https://thumbnails.trckd.ca/${session.video}-0.jpg`}
+                      layout="fill"
+                      className="-z-5  rounded-md"
+                    />
+                  )}
+                </a>
+              </Link>
             </div>
             <div className="w-full pt-3 px-3 flex flex-col justify-between relative">
               <div className="flex items-center overflow-hidden ">

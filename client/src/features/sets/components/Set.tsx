@@ -1,6 +1,7 @@
 import { useDebounce } from 'features/common/useDebounce';
 import { Input } from 'features/form/Input';
 import React, { useEffect, useState } from 'react';
+import { CgSpinner } from 'react-icons/cg';
 import { IoClose } from 'react-icons/io5';
 import { useDeleteSetMutation } from '../api/useDeleteSetMutation';
 import { useUpdateSetMutation } from '../api/useUpdateSetMutation';
@@ -35,15 +36,37 @@ export const Set = ({
 
   return (
     <div className="flex items-center">
-      <div
-        className="pr-3 text-md"
-        style={{
-          lineHeight: '0.2rem',
-        }}
-      >
-        Set <span className="flex text-xl ">{setNumber}</span>
+      <div className="pr-3 text-md">
+        <p className="-my-2">Set</p>
+        <span className="flex text-2xl -my-2">{setNumber}</span>
       </div>
-      <div className="relative pt-2">
+
+      <div className="relative pr-1">
+        <span
+          className="absolute top-1 right-0 italic text-gray-600"
+          style={{
+            fontSize: '0.55rem',
+          }}
+        >
+          {typeof setRecord !== 'undefined'
+            ? `set record ${setRecord?.weight}lbs`
+            : null}
+        </span>
+        <SavedInput
+          exerciseId={exerciseId}
+          sessionId={sessionId}
+          onChange={(e) => setWeight(e.target.value)}
+          value={weight}
+          weight={weight}
+          repetitions={repetitions}
+          placeholder="lbs"
+          name="weight"
+          id="weight"
+          setId={setId}
+        />
+      </div>
+
+      <div className="relative pl-1">
         <span
           className="absolute top-1 right-0 italic text-gray-600"
           style={{
@@ -67,33 +90,14 @@ export const Set = ({
           setId={setId}
         />
       </div>
-      <div className="relative pt-2">
-        <span
-          className="absolute top-1 right-0 italic text-gray-600"
-          style={{
-            fontSize: '0.55rem',
-          }}
-        >
-          {typeof setRecord !== 'undefined'
-            ? `set record ${setRecord?.weight}lbs`
-            : null}
-        </span>
-        <SavedInput
-          exerciseId={exerciseId}
-          sessionId={sessionId}
-          onChange={(e) => setWeight(e.target.value)}
-          value={weight}
-          weight={weight}
-          repetitions={repetitions}
-          placeholder="LBS"
-          name="weight"
-          id="weight"
-          setId={setId}
-        />
-      </div>
+
       <div className="pl-2">
         <button onClick={() => mutate()} className="bg-none">
-          <IoClose className="w-4 h-5" />
+          {isLoading ? (
+            <CgSpinner size={16} className="animate-spin text-green-500" />
+          ) : (
+            <IoClose className="w-4 h-5" />
+          )}
         </button>
       </div>
     </div>

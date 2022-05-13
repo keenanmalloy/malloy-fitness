@@ -4,6 +4,7 @@ import { useDebounce } from 'features/common/useDebounce';
 import { BiX } from 'react-icons/bi';
 import Modal from 'features/modal/Modal';
 import { useUpdateSessionExerciseMetadataMutation } from 'features/workout-exercises/api/useUpdateSessionExerciseMetadataMutation';
+import FullPageModal from 'features/modal/FullPageModal';
 
 interface Props {
   exercise: any;
@@ -21,17 +22,20 @@ export const Notes = ({ exercise, exerciseId, exNotes, workoutId }: Props) => {
   }, [exNotes]);
 
   return (
-    <div className="px-5">
-      <section className="text-sm break-words">
-        <pre className="text-sm break-words whitespace-pre-wrap">{notes}</pre>
-      </section>
+    <div className="px-3 flex flex-col items-center">
+      {!!notes && (
+        <section className="text-sm break-words py-5">
+          <pre className="text-sm break-words whitespace-pre-wrap">{notes}</pre>
+        </section>
+      )}
+
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-white mt-2 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-full"
+        className="bg-white text-gray-800 font-semibold py-2 border border-gray-400 rounded shadow w-full max-w-md"
       >
         Notes
       </button>
-      <Modal
+      <FullPageModal
         isOpen={isOpen}
         title={`Notes for ${exercise.name}`}
         description={`Your notes will be saved with this exercise.`}
@@ -51,7 +55,7 @@ export const Notes = ({ exercise, exerciseId, exNotes, workoutId }: Props) => {
           exNotes={exercise.notes}
         />
         <div className="h-20" />
-      </Modal>
+      </FullPageModal>
     </div>
   );
 };
