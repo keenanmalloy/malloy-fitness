@@ -26,8 +26,8 @@ export const SessionFooter = ({
   const [timerType, setTimerType] = useState<TimerType>(null);
   const time = new Date();
   return (
-    <div>
-      <div className="flex justify-between fixed bottom-0 bg-white left-0 right-0 items-center">
+    <div className="flex justify-center w-full  fixed bottom-0 left-0 right-0">
+      <div className="flex justify-between bg-white items-center max-w-md w-full">
         <Link
           href={`/sessions/${sessionId}/exercises/${prevEx.order.exercise_id}`}
         >

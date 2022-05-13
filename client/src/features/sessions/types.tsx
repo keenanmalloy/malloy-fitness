@@ -55,7 +55,7 @@ export interface SessionSummaryResponse extends SharedResponse {
     session_id: string;
     workout_id: string;
     started_at: string;
-    exercise_order: string;
+    exercise_order: string[];
     ended_at: any;
     completed: boolean;
     exercises: {

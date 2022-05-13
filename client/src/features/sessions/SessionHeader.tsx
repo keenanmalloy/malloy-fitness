@@ -44,8 +44,8 @@ const SessionHeader = ({ sessionId, exerciseId, workoutId }: Props) => {
   );
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-gray-50 z-10">
-      <section className="flex justify-between border-solid border-gray-600">
+    <header className="fixed top-0 left-0 right-0 bg-gray-50 z-10 flex flex-col items-center">
+      <section className="flex justify-between border-solid border-gray-600 max-w-md w-full">
         <div className="flex justify-between items-center w-full">
           <button
             onClick={() => router.push(`/sessions/${sessionId}`)}
@@ -82,7 +82,7 @@ const SessionHeader = ({ sessionId, exerciseId, workoutId }: Props) => {
           />
         </div>
       </section>
-      <div className="px-1 pt-0.5 border-solid border-gray-200 border-t">
+      <div className="px-1 pt-0.5 border-solid border-gray-200 border-t w-full max-w-md">
         <OverviewRow
           order={`${getLetter(currentExerciseIndex)}1`}
           name={currentExercise?.name ?? ''}

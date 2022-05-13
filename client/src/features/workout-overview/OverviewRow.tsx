@@ -33,7 +33,7 @@ export const OverviewRow = ({
         <div>
           <h3
             style={{
-              fontSize: '0.97rem',
+              fontSize: '0.87rem',
             }}
           >
             {name}
@@ -42,7 +42,7 @@ export const OverviewRow = ({
 
         <ul
           style={{
-            fontSize: '0.67rem',
+            fontSize: '0.57rem',
             maxWidth: '250px',
           }}
           className="flex justify-between pt-1 text-slate-600"
@@ -53,9 +53,11 @@ export const OverviewRow = ({
           <li className="">{rest}</li>
         </ul>
       </div>
-      <button className="p-2" onClick={() => setIsOpen(true)}>
-        <AiOutlineInfoCircle className="w-6 h-6" />
-      </button>
+      {!!video && (
+        <button className="p-2" onClick={() => setIsOpen(true)}>
+          <AiOutlineInfoCircle className="w-6 h-6" />
+        </button>
+      )}
 
       <FullPageModal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
         <button className="p-2" onClick={() => setIsOpen(false)}>

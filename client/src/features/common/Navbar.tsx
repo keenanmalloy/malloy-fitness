@@ -20,18 +20,18 @@ const navigation = [
       />
     ),
   },
-  {
-    name: 'Training',
-    href: '/training',
-    icon: (
-      <GiWeightLiftingUp
-        style={{
-          width: 20,
-          height: 20,
-        }}
-      />
-    ),
-  },
+  // {
+  //   name: 'Training',
+  //   href: '/training',
+  //   icon: (
+  //     <GiWeightLiftingUp
+  //       style={{
+  //         width: 20,
+  //         height: 20,
+  //       }}
+  //     />
+  //   ),
+  // },
   // {
   //   name: 'Diet',
   //   href: '/diet',
@@ -44,18 +44,18 @@ const navigation = [
   //     />
   //   ),
   // },
-  {
-    name: 'CheckIn',
-    href: '/check-in',
-    icon: (
-      <FaChalkboardTeacher
-        style={{
-          width: 20,
-          height: 20,
-        }}
-      />
-    ),
-  },
+  // {
+  //   name: 'CheckIn',
+  //   href: '/check-in',
+  //   icon: (
+  //     <FaChalkboardTeacher
+  //       style={{
+  //         width: 20,
+  //         height: 20,
+  //       }}
+  //     />
+  //   ),
+  // },
   {
     name: 'Library',
     href: '/library',
