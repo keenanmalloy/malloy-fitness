@@ -7,6 +7,7 @@ import { WORKOUT_CATEGORIES } from 'features/environment';
 import { WorkoutExercisesPreview } from 'features/workout-creation/WorkoutExercisesPreview';
 import { Button } from 'features/common/Button';
 import { useRouter } from 'next/router';
+import { useQueryClient } from 'react-query';
 
 export interface LocalExercise {
   id: string;
@@ -15,17 +16,22 @@ export interface LocalExercise {
   repsInReserve: number;
   restPeriod: number;
   sets: number;
+  superset?: string;
 }
 
-export const CreateWorkout = () => {
+export const CreateWorkout = ({
+  setIsOpen,
+}: {
+  setIsOpen: (isOpen: boolean) => void;
+}) => {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const { mutate, isLoading, isError } = useCreateWorkoutMutation();
   const [exercises, setExercises] = useState<LocalExercise[]>([]);
-  const [isCategoryError, setIsCategoryError] = useState(false);
 
-  const router = useRouter();
+  const [isCategoryError, setIsCategoryError] = useState(false);
+  const queryClient = useQueryClient();
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -36,18 +42,19 @@ export const CreateWorkout = () => {
       exercises: exercises.map((ex, key) => {
         return {
           id: ex.id,
-          order: key + 1,
           repetitions: ex.repetitions,
           repsInReserve: ex.repsInReserve,
           restPeriod: ex.restPeriod,
           sets: ex.sets,
+          // superset: ex.superset,
         };
       }),
     };
 
     mutate(workout, {
       onSuccess: () => {
-        router.push('/workouts');
+        setIsOpen(false);
+        queryClient.refetchQueries('workouts');
       },
     });
   };
@@ -77,6 +84,7 @@ export const CreateWorkout = () => {
             setCategory(data?.value ?? '');
             setIsCategoryError(false);
           }}
+          isSearchable={false}
           name="category"
           styles={{
             control: (base) => ({
@@ -113,6 +121,7 @@ export const CreateWorkout = () => {
       {isError && (
         <small className="text-red-500">Something went wrong...</small>
       )}
+      <div className="h-20" />
     </form>
   );
 };

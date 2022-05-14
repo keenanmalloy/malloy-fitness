@@ -4,6 +4,7 @@ import { Input } from 'features/form/Input';
 import React, { FormEvent, useState } from 'react';
 import { MdEdit } from 'react-icons/md';
 import { LocalExercise } from './CreateWorkout';
+import { DefaultModal } from 'features/modal/DefaultModal';
 
 interface Props {
   exercises: LocalExercise[];
@@ -71,10 +72,14 @@ export const EditWorkoutExerciseMetadataPreview = ({
 
   return (
     <>
-      <button className="ml-2" type="button" onClick={() => setIsOpen(true)}>
+      <button
+        className="ml-2 p-3"
+        type="button"
+        onClick={() => setIsOpen(true)}
+      >
         <MdEdit />
       </button>
-      <Modal
+      <DefaultModal
         closeModal={() => setIsOpen(false)}
         title={'Update exercise metadata'}
         description={''}
@@ -105,7 +110,7 @@ export const EditWorkoutExerciseMetadataPreview = ({
             Save
           </Button>
         </form>
-      </Modal>
+      </DefaultModal>
     </>
   );
 };
