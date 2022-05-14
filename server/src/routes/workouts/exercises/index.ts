@@ -4,7 +4,6 @@ import { authorize } from 'middlewares/authorize';
 import { addExerciseToWorkoutMutation } from 'controllers/addExerciseToWorkoutMutation';
 import { removeExerciseFromWorkoutMutation } from 'controllers/removeExerciseFromWorkoutMutation';
 import { updateWorkoutExerciseMetadataMutation } from 'controllers/updateWorkoutExerciseMetadataMutation';
-import { updateWorkoutExerciseMutation } from 'controllers/updateWorkoutExerciseMutation';
 
 const router = Router();
 
@@ -16,21 +15,6 @@ router.delete(
   async (req, res) => {
     await removeExerciseFromWorkoutMutation(
       res,
-      req.params.workoutId,
-      req.params.exerciseId
-    );
-  }
-);
-
-// Update exercise in the workout
-router.put(
-  '/:workoutId/exercises/:exerciseId',
-  authenticate,
-  authorize,
-  async (req, res) => {
-    await updateWorkoutExerciseMutation(
-      res,
-      req.body,
       req.params.workoutId,
       req.params.exerciseId
     );

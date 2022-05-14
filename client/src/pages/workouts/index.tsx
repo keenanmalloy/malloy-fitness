@@ -4,6 +4,9 @@ import Layout from 'features/common/Layout';
 import { Button } from 'features/common/Button';
 import { FaChevronUp, FaChevronDown } from 'react-icons/fa';
 import { FilterWorkouts } from 'features/workouts/components/FilterWorkouts';
+import FullPageModal from 'features/modal/FullPageModal';
+import { CreateWorkout } from 'features/workout-creation/CreateWorkout';
+import { BiX } from 'react-icons/bi';
 
 const WorkoutsPage = () => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
@@ -11,6 +14,8 @@ const WorkoutsPage = () => {
   const [type, setType] = useState('');
   const [view, setView] = useState('');
   const [sortBy, setSortBy] = useState('');
+
+  const [isOpen, setIsOpen] = useState(false);
 
   return (
     <Layout>
@@ -35,9 +40,19 @@ const WorkoutsPage = () => {
               />
             )}
 
-            <Button href="/workouts/create" className="w-full">
+            <Button className="w-full" onClick={() => setIsOpen(true)}>
               Create workout
             </Button>
+
+            <FullPageModal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
+              <button
+                className="right-0 top-0 p-3 absolute"
+                onClick={() => setIsOpen(false)}
+              >
+                <BiX size={24} />
+              </button>
+              <CreateWorkout setIsOpen={setIsOpen} />
+            </FullPageModal>
           </div>
         </div>
 

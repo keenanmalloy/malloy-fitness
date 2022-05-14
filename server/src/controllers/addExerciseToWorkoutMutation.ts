@@ -1,30 +1,20 @@
 import { db } from 'config/db';
 import Joi from 'joi';
+import { Response } from 'express';
 
 interface addExercise {
-  order?: number;
-  priority?: number;
   exerciseId: number | string;
 }
 
-interface Response {
-  status: string;
-  message: string;
-  exercise: any;
-  error?: any;
-}
-
 const addExerciseSchema = Joi.object({
-  order: Joi.alternatives(Joi.string(), Joi.number()).optional(),
-  priority: Joi.alternatives(Joi.string(), Joi.number()).optional(),
   exerciseId: Joi.alternatives(Joi.string(), Joi.number()).required(),
 });
 
 export const addExerciseToWorkoutMutation = async (
-  res: any,
+  res: Response,
   data: addExercise,
   workoutId: string
-): Promise<Response> => {
+) => {
   const { error, value, warning } = addExerciseSchema.validate(data);
 
   if (error) {
@@ -36,7 +26,7 @@ export const addExerciseToWorkoutMutation = async (
       error: error,
     });
   } else {
-    const { order, priority, exerciseId } = data;
+    const { exerciseId } = data;
 
     if (Number.isNaN(parseInt(exerciseId.toString()))) {
       return res.status(422).json({
@@ -49,12 +39,12 @@ export const addExerciseToWorkoutMutation = async (
 
     const query = `
       WITH 
-        data(workout_id, exercise_id, "order", priority) AS (
+        data(workout_id, exercise_id) AS (
           VALUES                           
-              (${workoutId}, ${exerciseId}, ${order ?? 0}, ${priority ?? 0})
+              (${workoutId}, ${exerciseId})
           )
-        INSERT INTO workout_exercises (workout_id, exercise_id, "order", priority)
-          SELECT workout_id, exercise_id, "order", priority
+        INSERT INTO workout_exercises (workout_id, exercise_id)
+          SELECT workout_id, exercise_id
             FROM data
           RETURNING *
       `;
@@ -71,7 +61,6 @@ export const addExerciseToWorkoutMutation = async (
       });
     } catch (error) {
       console.log({ error });
-
       return res.status(500).json({
         status: 'error',
         //@ts-ignore

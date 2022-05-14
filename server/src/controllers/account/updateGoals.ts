@@ -16,7 +16,6 @@ export const updateGoalsMutation = async (
   const accountId = res.locals.state.account.account_id;
   const { error, value, warning } = updateGoalsSchema.validate(data);
 
-  console.log({ data });
   if (error) {
     return res.status(422).json({
       role: res.locals.state.account.role,

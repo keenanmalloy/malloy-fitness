@@ -18,37 +18,15 @@ const WorkoutOrder = ({ exercise, workoutId }: Props) => {
 
   const queryClient = useQueryClient();
 
-  const incrementOrder = () => {
-    mutate(
-      {
-        order: exercise.order + 1,
-      },
-      {
-        onSuccess: () => {
-          queryClient.refetchQueries('fetchWorkout');
-        },
-      }
-    );
-  };
+  const incrementOrder = () => {};
 
-  const decrementOrder = () => {
-    mutate(
-      {
-        order: exercise.order - 1,
-      },
-      {
-        onSuccess: () => {
-          queryClient.refetchQueries('fetchWorkout');
-        },
-      }
-    );
-  };
+  const decrementOrder = () => {};
 
   return (
     <div className="flex flex-col">
       <button
         className="flex items-center justify-center w-full h-full p-2"
-        disabled={exercise.order === 1}
+        disabled={false}
         onClick={decrementOrder}
       >
         <AiOutlineCaretUp className="w-4 h-4" />

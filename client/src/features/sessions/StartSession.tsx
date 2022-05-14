@@ -36,21 +36,8 @@ const StartSession = ({ sessionId, hasStarted, hasEnded }: Props) => {
     if (data.status !== 'success') {
       return;
     }
-    const firstExercise = data.session.exercises.sort((a, b) => {
-      if (a.order < b.order) {
-        return -1;
-      }
-      if (a.order > b.order) {
-        return 1;
-      }
-      if (a.priority < b.priority) {
-        return -1;
-      }
-      if (a.priority > b.priority) {
-        return 1;
-      }
-      return 0;
-    })[0];
+
+    const firstExerciseId = data.session.exercise_order[0];
 
     const isStarted = data.session.started_at;
     if (isStarted) {
@@ -60,9 +47,9 @@ const StartSession = ({ sessionId, hasStarted, hasEnded }: Props) => {
       } catch (error) {
         // if error, then redirect to the first exercise in the session instead
         console.log({ error });
-        if (!firstExercise) return router.push(`/sessions/${sessionId}/`);
+        if (!firstExerciseId) return router.push(`/sessions/${sessionId}/`);
         return router.push(
-          `/sessions/${sessionId}/exercises/${firstExercise.exercise_id}`
+          `/sessions/${sessionId}/exercises/${firstExerciseId}`
         );
       }
     }
@@ -71,10 +58,8 @@ const StartSession = ({ sessionId, hasStarted, hasEnded }: Props) => {
       return;
     }
     queryClient.invalidateQueries('fetchSession');
-    if (!firstExercise) return router.push(`/sessions/${sessionId}/`);
-    router.push(
-      `/sessions/${sessionId}/exercises/${firstExercise.exercise_id}`
-    );
+    if (!firstExerciseId) return router.push(`/sessions/${sessionId}/`);
+    router.push(`/sessions/${sessionId}/exercises/${firstExerciseId}`);
   };
 
   if (hasEnded) {

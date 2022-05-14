@@ -53,95 +53,98 @@ export const SessionSummary = ({ data }: Props) => {
       </div>
 
       <ul className="flex flex-col divide-y-2 divide-gray-50 px-3 pb-5">
-        {data.session.exercise_order
-          .map((exerciseId) =>
-            data.session.exercises.find(
-              (exercise) => exercise.exercise_id === exerciseId
+        {data.session.exercise_order &&
+          data.session.exercise_order
+            .map((exerciseId) =>
+              data.session.exercises.find(
+                (exercise) => exercise.exercise_id === exerciseId
+              )
             )
-          )
-          .map((exercise, key) => {
-            if (!exercise) return null;
-            return (
-              <li
-                key={exercise.exercise_id}
-                className="flex flex-col justify-between border-solid "
-              >
-                <div className="flex justify-between">
-                  <div className="border-solid flex-1">
-                    <div className="text-left flex">
-                      <div className="flex flex-col items-center">
-                        <button className="-mb-1">
+            .map((exercise, key) => {
+              if (!exercise) return null;
+              return (
+                <li
+                  key={exercise.exercise_id}
+                  className="flex flex-col justify-between border-solid "
+                >
+                  <div className="flex justify-between">
+                    <div className="border-solid flex-1">
+                      <div className="text-left flex">
+                        <div className="flex flex-col items-center pt-6">
+                          {/* <button className="-mb-1">
                           <IoMdArrowDropup size={30} />
-                        </button>
-                        <div className="flex p-3 rounded-md bg-slate-900 text-white items-center max-h-10 min-h-10 ">
-                          <p>{getLetter(key)}1</p>
-                        </div>
-                        <button className="-mt-1">
+                        </button> */}
+                          <div className="flex p-3 rounded-md bg-slate-900 text-white items-center max-h-10 min-h-10 ">
+                            <p>{getLetter(key)}1</p>
+                          </div>
+                          {/* <button className="-mt-1">
                           <IoMdArrowDropdown size={30} />
-                        </button>
-                      </div>
+                        </button> */}
+                        </div>
 
-                      <div className="ml-2 w-full h-full pt-5 pb-2 flex flex-col">
-                        <Link
-                          href={`/sessions/${data.session.session_id}/exercises/${exercise.exercise_id}`}
-                        >
-                          <a className="w-full">
-                            <h3 className="text-lg">{exercise.name}</h3>
-                            <span className="text-sm text-green-500">
-                              {exercise.sets.length}{' '}
-                              {exercise.sets.length > 1 ||
-                              exercise.sets.length === 0
-                                ? 'sets'
-                                : 'set'}
-                            </span>
-                          </a>
-                        </Link>
-                        {!!exercise.sets.length && (
-                          <section className="py-1">
-                            <header className="flex justify-between text-slate-500 text-xs underline">
-                              <div className="flex-1"></div>
-                              <div className="flex-1">Weight</div>
-                              <div className="flex-1">Reps</div>
-                            </header>
-                            <main className="flex flex-col divide-y-2 divide-green-50">
-                              {exercise.sets.map((set, index) => {
-                                return (
-                                  <div className="flex justify-between items-center space-x-2 border-solid py-1 bg-gray-50 px-2 rounded-md mt-1">
-                                    <div className="flex flex-col flex-1 pt-1">
-                                      <p>Set</p>
-                                      <span className="text-xl -mt-2">
-                                        0{index + 1}
-                                      </span>
+                        <div className="ml-2 w-full h-full pt-5 pb-2 flex flex-col">
+                          <Link
+                            href={`/sessions/${data.session.session_id}/exercises/${exercise.exercise_id}`}
+                          >
+                            <a className="w-full">
+                              <h3 className="text-lg">{exercise.name}</h3>
+                              <span className="text-sm text-green-500">
+                                {exercise.sets.length}{' '}
+                                {exercise.sets.length > 1 ||
+                                exercise.sets.length === 0
+                                  ? 'sets'
+                                  : 'set'}
+                              </span>
+                            </a>
+                          </Link>
+                          {!!exercise.sets.length && (
+                            <section className="py-1">
+                              <header className="flex justify-between text-xs">
+                                <div className="flex-1"></div>
+                                <div className="flex-1">Weight</div>
+                                <div className="flex-1">Reps</div>
+                              </header>
+                              <main className="flex flex-col divide-y-2 divide-green-50">
+                                {exercise.sets.map((set, index) => {
+                                  return (
+                                    <div className="flex justify-between items-center space-x-2 border-solid py-1 bg-gray-50 px-2 rounded-md mt-1">
+                                      <div className="flex flex-col flex-1 pt-1">
+                                        <p>Set</p>
+                                        <span className="text-xl -mt-2">
+                                          0{index + 1}
+                                        </span>
+                                      </div>
+                                      <div className="flex-1">
+                                        {set.weight}lbs
+                                      </div>
+                                      <div className="flex-1">
+                                        {set.repetitions}
+                                      </div>
                                     </div>
-                                    <div className="flex-1">
-                                      {set.weight}lbs
-                                    </div>
-                                    <div className="flex-1">
-                                      {set.repetitions}
-                                    </div>
-                                  </div>
-                                );
-                              })}
-                            </main>
-                          </section>
-                        )}
+                                  );
+                                })}
+                              </main>
+                            </section>
+                          )}
+                        </div>
                       </div>
                     </div>
+                    {!data.session.ended_at && (
+                      <RemoveExerciseFromSession
+                        data={data}
+                        exerciseId={exercise.exercise_id}
+                      />
+                    )}
                   </div>
-                  {!data.session.ended_at && (
-                    <RemoveExerciseFromSession
-                      data={data}
-                      exerciseId={exercise.exercise_id}
-                    />
-                  )}
-                </div>
-              </li>
-            );
-          })}
+                </li>
+              );
+            })}
       </ul>
-      <div className="p-5">
-        <ChooseExerciseModal data={data} />
-      </div>
+      {!data.session.ended_at && (
+        <div className="p-5">
+          <ChooseExerciseModal data={data} />
+        </div>
+      )}
     </div>
   );
 };

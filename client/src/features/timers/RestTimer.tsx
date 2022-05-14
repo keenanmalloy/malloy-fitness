@@ -125,13 +125,13 @@ export const RestTimer = ({ setTimerType }: Props) => {
         </button>
       </div>
       <div>
-        <Timer expiryTimestamp={Date} />
+        <Timer expiryTimestamp={new Date()} />
       </div>
     </div>
   );
 };
 
-const Timer = ({ expiryTimestamp }) => {
+const Timer = ({ expiryTimestamp }: { expiryTimestamp: Date }) => {
   const {
     seconds,
     minutes,

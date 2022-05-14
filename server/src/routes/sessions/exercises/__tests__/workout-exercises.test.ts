@@ -45,8 +45,6 @@ describe('GET /workouts/:pk/exercises:pk', function () {
     await request
       .post('/workouts/1000/exercises')
       .send({
-        order: 1,
-        priority: 1,
         exerciseId: 1000,
       })
       .set('Accept', 'application/json')
@@ -55,8 +53,6 @@ describe('GET /workouts/:pk/exercises:pk', function () {
     await request
       .post('/workouts/1000/exercises')
       .send({
-        order: 2,
-        priority: 1,
         exerciseId: 1001,
       })
       .set('Accept', 'application/json')
@@ -65,8 +61,6 @@ describe('GET /workouts/:pk/exercises:pk', function () {
     await request
       .post('/workouts/1000/exercises')
       .send({
-        order: 3,
-        priority: 1,
         exerciseId: 1002,
       })
       .set('Accept', 'application/json')
@@ -99,65 +93,6 @@ describe('GET /workouts/:pk/exercises:pk', function () {
     expect(ex3.body.prev).not.toBeNull();
     expect(ex3.status).toEqual(200);
   });
-
-  it('responds with 200 - Confirms next/prev priority on exercise workout', async function () {
-    await request
-      .post('/workouts/1001/exercises')
-      .send({
-        order: 1,
-        priority: 1,
-        exerciseId: 1000,
-      })
-      .set('Accept', 'application/json')
-      .set('Cookie', [`token=${token}`]);
-
-    await request
-      .post('/workouts/1001/exercises')
-      .send({
-        order: 1,
-        priority: 2,
-        exerciseId: 1001,
-      })
-      .set('Accept', 'application/json')
-      .set('Cookie', [`token=${token}`]);
-
-    await request
-      .post('/workouts/1001/exercises')
-      .send({
-        order: 1,
-        priority: 3,
-        exerciseId: 1002,
-      })
-      .set('Accept', 'application/json')
-      .set('Cookie', [`token=${token}`]);
-
-    const ex1 = await request
-      .get('/workouts/1001/exercises/1000')
-      .set('Accept', 'application/json')
-      .set('Cookie', [`token=${token}`]);
-
-    expect(ex1.body.next.priority).not.toBeNull();
-    expect(ex1.body.prev.priority).toBeNull();
-    expect(ex1.status).toEqual(200);
-
-    const ex2 = await request
-      .get('/workouts/1001/exercises/1001')
-      .set('Accept', 'application/json')
-      .set('Cookie', [`token=${token}`]);
-
-    expect(ex2.body.next.priority).not.toBeNull();
-    expect(ex2.body.prev.priority).not.toBeNull();
-    expect(ex2.status).toEqual(200);
-
-    const ex3 = await request
-      .get('/workouts/1001/exercises/1002')
-      .set('Accept', 'application/json')
-      .set('Cookie', [`token=${token}`]);
-
-    expect(ex3.body.next.priority).toBeNull();
-    expect(ex3.body.prev.priority).not.toBeNull();
-    expect(ex3.status).toEqual(200);
-  });
 });
 
 describe('POST /workouts/:pk/exercises', function () {
@@ -165,8 +100,6 @@ describe('POST /workouts/:pk/exercises', function () {
     const res = await request
       .post('/workouts/1000/exercises')
       .send({
-        order: 1,
-        priority: 1,
         exerciseId: 1000,
       })
       .set('Accept', 'application/json');
@@ -178,8 +111,6 @@ describe('POST /workouts/:pk/exercises', function () {
     const res = await request
       .post('/workouts/1000/exercises')
       .send({
-        order: 1,
-        priority: 1,
         exerciseId: 'invalid exercise id',
       })
       .set('Accept', 'application/json')
@@ -192,8 +123,6 @@ describe('POST /workouts/:pk/exercises', function () {
     const res = await request
       .post('/workouts/1000/exercises')
       .send({
-        order: 1,
-        priority: 1,
         exerciseId: 1006,
       })
       .set('Accept', 'application/json')
@@ -209,10 +138,7 @@ describe('PATCH /workouts/:pk/exercises/:pk - update workout-exercise metadata',
   it('responds with 401 Unauthenticated', async function () {
     const res = await request
       .patch(`/workouts/1000/exercises/${deletable}`)
-      .send({
-        order: 2,
-        priority: 2,
-      })
+      .send({})
       .set('Accept', 'application/json');
 
     expect(res.status).toEqual(401);
@@ -221,10 +147,7 @@ describe('PATCH /workouts/:pk/exercises/:pk - update workout-exercise metadata',
   it('responds with 403 Unauthorized', async function () {
     const res = await request
       .patch(`/workouts/1003/exercises/${deletable}`)
-      .send({
-        order: 2,
-        priority: 2,
-      })
+      .send({})
       .set('Accept', 'application/json')
       .set('Cookie', [`token=${token}`]);
 
@@ -264,10 +187,7 @@ describe('PUT /workouts/:pk/exercises/:pk', function () {
   it('responds with 401 Unauthenticated', async function () {
     const res = await request
       .put(`/workouts/1000/exercises/${deletable}`)
-      .send({
-        order: 2,
-        priority: 2,
-      })
+      .send({})
       .set('Accept', 'application/json');
 
     expect(res.status).toEqual(401);
@@ -276,10 +196,7 @@ describe('PUT /workouts/:pk/exercises/:pk', function () {
   it('responds with 403 Unauthorized', async function () {
     const res = await request
       .put(`/workouts/1003/exercises/${deletable}`)
-      .send({
-        order: 2,
-        priority: 2,
-      })
+      .send({})
       .set('Accept', 'application/json')
       .set('Cookie', [`token=${token}`]);
 
@@ -299,10 +216,7 @@ describe('PUT /workouts/:pk/exercises/:pk', function () {
   it('responds with 200 successfully updated', async function () {
     const res = await request
       .put(`/workouts/1000/exercises/${deletable}`)
-      .send({
-        order: 2,
-        priority: 2,
-      })
+      .send({})
       .set('Accept', 'application/json')
       .set('Cookie', [`token=${token}`]);
 
@@ -312,10 +226,7 @@ describe('PUT /workouts/:pk/exercises/:pk', function () {
   it('responds with 404 not found', async function () {
     const res = await request
       .put(`/workouts/1000/exercises/99999`)
-      .send({
-        order: 2,
-        priority: 2,
-      })
+      .send({})
       .set('Accept', 'application/json')
       .set('Cookie', [`token=${token}`]);
 

@@ -1,17 +1,11 @@
 import { db } from 'config/db';
-
-interface Response {
-  status: string;
-  message: string;
-  exercise: any;
-  error?: any;
-}
+import { Response } from 'express';
 
 export const removeExerciseFromWorkoutMutation = async (
-  res: any,
+  res: Response,
   workoutId: string,
   exerciseId: string
-): Promise<Response> => {
+) => {
   const query = `DELETE FROM workout_exercises WHERE workout_id = $1 AND exercise_id = $2 RETURNING *;`;
   const params = [workoutId, exerciseId];
   try {

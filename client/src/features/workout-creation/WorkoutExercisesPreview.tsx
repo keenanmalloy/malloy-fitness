@@ -2,9 +2,9 @@ import { useExerciseIdsQuery } from 'features/exercises/api/useExerciseIdsQuery'
 import React, { useState } from 'react';
 import { EditWorkoutExerciseMetadataPreview } from 'features/workout-creation/EditWorkoutExerciseMetadataPreview';
 import { RemoveWorkoutExerciseFromPreview } from './RemoveWorkoutExerciseFromPreview';
-import { OrderWorkoutExercisePreview } from './OrderWorkoutExercisePreview';
 import { LocalExercise } from './CreateWorkout';
 import { GetExercisesResponse } from 'features/exercises/types';
+import { Skeleton } from 'features/common/Skeleton';
 
 interface Props {
   exercises: LocalExercise[];
@@ -17,38 +17,72 @@ export const WorkoutExercisesPreview = ({ exercises, setExercises }: Props) => {
   );
 
   if (isLoading) {
-    return <p className="py-2">Loading...</p>;
+    return (
+      <ul className="py-2">
+        <h3>Selected Exercises</h3>
+        <div className="flex flex-col space-y-2">
+          <Skeleton className="h-12 w-full" />
+          <Skeleton className="h-12 w-full" />
+          <Skeleton className="h-12 w-full" />
+          <Skeleton className="h-12 w-full" />
+        </div>
+      </ul>
+    );
   }
 
   if (isError) {
-    return <p className="py-2">Error...</p>;
+    return (
+      <ul className="py-2">
+        <h3>Selected Exercises</h3>
+      </ul>
+    );
   }
 
   if (!data) {
-    return <p className="py-2">No exercises selected</p>;
+    return (
+      <ul className="py-2">
+        <h3>Selected Exercises</h3>
+      </ul>
+    );
   }
 
+  const exerciseOrder = exercises.map((ex) => ex.id);
+
   return (
-    <ul className="divide-y-2 divide-solid divide-gray-200 py-2">
+    <ul className="py-2">
+      <h3>Selected Exercises</h3>
       {data.exercises
-        .sort((a, b) => {
-          const aIndex = exercises.find((ex) => ex.id === a.exercise_id);
-          const bIndex = exercises.find((ex) => ex.id === b.exercise_id);
-          if (aIndex && bIndex) {
-            return aIndex.order - bIndex.order;
-          } else {
-            return 0;
-          }
-        })
-        .map((exercise, key) => (
-          <ExercisePreviewRow
-            key={exercise.exercise_id}
-            order={key}
-            exercise={exercise}
-            exercises={exercises}
-            setExercises={setExercises}
-          />
-        ))}
+        .sort((a, b) =>
+          exerciseOrder.indexOf(a.exercise_id) >
+          exerciseOrder.indexOf(b.exercise_id)
+            ? 1
+            : -1
+        )
+        .map((exercise, key) => {
+          // get previous exercise in array
+          const previousExercise = key > 0 ? data.exercises[key - 1] : null;
+          const previousExerciseSuperset = exercises.find(
+            (ex) => ex.id === previousExercise?.exercise_id
+          )?.superset;
+          const currentExerciseSuperset = exercises.find(
+            (ex) => ex.id === exercise?.exercise_id
+          )?.superset;
+
+          return (
+            <ExercisePreviewRow
+              key={exercise.exercise_id}
+              order={key}
+              exercise={exercise}
+              exercises={exercises}
+              setExercises={setExercises}
+              isInPreviousSuperset={
+                !!previousExerciseSuperset &&
+                !!currentExerciseSuperset &&
+                previousExerciseSuperset === currentExerciseSuperset
+              }
+            />
+          );
+        })}
     </ul>
   );
 };
@@ -58,6 +92,7 @@ interface ExercisePreviewRowProps {
   exercise: GetExercisesResponse['exercises'][0];
   exercises: LocalExercise[];
   setExercises: (exercises: LocalExercise[]) => void;
+  isInPreviousSuperset: boolean;
 }
 
 const ExercisePreviewRow = ({
@@ -65,80 +100,64 @@ const ExercisePreviewRow = ({
   exercises,
   setExercises,
   exercise,
+  isInPreviousSuperset,
 }: ExercisePreviewRowProps) => {
-  const [isOrdering, setIsOrdering] = useState(false);
-
-  return (
-    <li className="flex items-center justify-between py-1">
-      <div className="flex items-center">
-        <button
-          className="p-2 bg-blue-500 text-white rounded-sm"
-          type="button"
-          onClick={() => setIsOrdering(!isOrdering)}
-        >
-          {order + 1}
-        </button>
-        <div>
-          <p className="capitalize pl-2">{exercise.name}</p>
-          <div
-            style={{
-              fontSize: '0.5rem',
-              paddingTop: '0.2rem',
-            }}
-            className="uppercase pl-2 flex space-x-3"
+  if (isInPreviousSuperset) {
+    return (
+      <li className="flex items-center justify-between mb-2">
+        <div className="flex items-center w-full">
+          <button
+            className={` 
+            ${
+              exercises.find((ex) => ex.id === exercise.exercise_id)?.superset
+                ? 'bg-green-500'
+                : 'bg-blue-500'
+            }
+           text-white rounded-sm min-w-10 w-10 h-10
+           `}
+            type="button"
           >
-            <p>
-              sets:
-              {exercises.filter((ex) => ex.id === exercise.exercise_id)[0].sets}
-            </p>
-            <p>
-              reps:
-              {
-                exercises.filter((ex) => ex.id === exercise.exercise_id)[0]
-                  .repetitions
-              }
-            </p>
-            <p>
-              rir:
-              {
-                exercises.filter((ex) => ex.id === exercise.exercise_id)[0]
-                  .repsInReserve
-              }
-            </p>
-            <p>
-              rest:
-              {
-                exercises.filter((ex) => ex.id === exercise.exercise_id)[0]
-                  .restPeriod
-              }
-            </p>
+            <p>{order + 1}</p>
+          </button>
+          <div className="w-full">
+            <p className="capitalize pl-2">{exercise.name}</p>
           </div>
         </div>
+        <RemoveWorkoutExerciseFromPreview
+          exercises={exercises}
+          setExercises={setExercises}
+          exercise={exercise}
+        />
+      </li>
+    );
+  }
+
+  return (
+    <li className="flex items-center justify-between py-2 mt-1 border-t-2 border-solid border-gray-100">
+      <div className="flex items-center w-full">
+        <button
+          className={` 
+            ${
+              exercises.find((ex) => ex.id === exercise.exercise_id)?.superset
+                ? 'bg-green-500'
+                : 'bg-blue-500'
+            }
+           text-white rounded-sm min-w-10 w-10 h-10
+           `}
+          type="button"
+        >
+          <p>{order + 1}</p>
+        </button>
+        <div className="w-full">
+          <p className="capitalize pl-2">{exercise.name}</p>
+        </div>
       </div>
-      <div className="flex">
-        {isOrdering ? (
-          <>
-            <OrderWorkoutExercisePreview
-              exercises={exercises}
-              setExercises={setExercises}
-              exercise={exercise}
-            />
-          </>
-        ) : (
-          <>
-            <EditWorkoutExerciseMetadataPreview
-              exercises={exercises}
-              setExercises={setExercises}
-              exerciseId={exercise.exercise_id}
-            />
-            <RemoveWorkoutExerciseFromPreview
-              exercises={exercises}
-              setExercises={setExercises}
-              exercise={exercise}
-            />
-          </>
-        )}
-      </div>
+
+      <RemoveWorkoutExerciseFromPreview
+        exercises={exercises}
+        setExercises={setExercises}
+        exercise={exercise}
+      />
     </li>
   );
 };

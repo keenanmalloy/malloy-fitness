@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useDeleteExerciseMutation } from 'features/exercises/api/useDeleteExerciseMutation';
 import { MdDelete } from 'react-icons/md';
+import { DefaultModal } from 'features/modal/DefaultModal';
 
 interface Props {
   exerciseId: string;
@@ -26,6 +27,7 @@ export const DeleteExercise = ({ exerciseId }: Props) => {
     mutate(undefined, {
       onSuccess: () => {
         queryCLient.refetchQueries('fetchExercise');
+        setIsOpen(false);
       },
     });
   };
@@ -35,7 +37,7 @@ export const DeleteExercise = ({ exerciseId }: Props) => {
       <Button onClick={openModal} className="px-0 py-0">
         <MdDelete className="h-6 w-10" />
       </Button>
-      <Modal isOpen={isOpen} closeModal={closeModal}>
+      <DefaultModal isOpen={isOpen} closeModal={closeModal}>
         <div className="flex flex-col">
           <h2 className="text-3xl font-bold">Are you sure?</h2>
           <p>
@@ -58,7 +60,7 @@ export const DeleteExercise = ({ exerciseId }: Props) => {
             </Button>
           </div>
         </div>
-      </Modal>
+      </DefaultModal>
     </>
   );
 };
