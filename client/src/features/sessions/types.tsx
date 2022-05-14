@@ -35,9 +35,7 @@ export interface Exercise {
   reps_in_reserve: any;
   sets: any;
   rest_period: any;
-  order: number;
-  priority: number;
-  notes: any;
+  notes: string;
 }
 
 export interface Set {
@@ -55,7 +53,7 @@ export interface SessionSummaryResponse extends SharedResponse {
     session_id: string;
     workout_id: string;
     started_at: string;
-    exercise_order: string;
+    exercise_order: string[];
     ended_at: any;
     completed: boolean;
     exercises: {
@@ -73,10 +71,14 @@ export interface GetSessionExerciseResponse extends SharedResponse {
   exercise: ExtendedExercise;
   record: any[];
   next: {
-    order: Order;
+    order: {
+      exercise_id: string;
+    };
   };
   prev: {
-    order: Order;
+    order: {
+      exercise_id: string;
+    };
   };
 }
 interface ExtendedExercise {
@@ -88,13 +90,5 @@ interface ExtendedExercise {
   profile: string;
   view: string;
   workout_id: string;
-  priority: number;
-  order: number;
   notes: any;
-}
-
-interface Order {
-  exercise_id: string;
-  priority: number;
-  order: number;
 }

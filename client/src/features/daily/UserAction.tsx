@@ -31,12 +31,8 @@ export const UserAction = ({ selected }: Props) => {
         ).toISOString(),
       },
       {
-        onSuccess: (data) => {
-          if (!data.session) {
-            console.log('missing session');
-            return;
-          }
-          Router.push(`/sessions/${data.session.session_id}`);
+        onSuccess: () => {
+          setIsOpen(false);
         },
       }
     );
@@ -60,7 +56,7 @@ export const UserAction = ({ selected }: Props) => {
           onClick={createSession}
         >
           {isLoading && (
-            <CgSpinner className="w-6 h-6 animate-spin absolute top-6 -left-2 text-blue-50" />
+            <CgSpinner className="w-6 h-6 animate-spin absolute top-6 -left-2 text-green-400" />
           )}
           {isError && <span className="text-red-500">{error.message}</span>}
           Create session

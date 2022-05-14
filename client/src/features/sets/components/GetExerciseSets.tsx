@@ -4,6 +4,7 @@ import { Button } from 'features/common/Button';
 import { Set } from 'features/sets/components/Set';
 import { useCreateSetMutation } from '../api/useCreateSetMutation';
 import { Skeleton } from 'features/common/Skeleton';
+import { CgSpinner } from 'react-icons/cg';
 
 interface Props {
   sessionId: string;
@@ -65,8 +66,17 @@ const SetsList = ({ sets, sessionId, exerciseId, record }: SetsListProps) => {
   const { isLoading, mutate, isError } = useCreateSetMutation(sessionId);
 
   return (
-    <section className="px-3">
-      <ul>
+    <section className="px-3 w-full flex flex-col items-center py-5">
+      <div
+        className="text-xs text-slate-500 flex items-center justify-between w-full text-right underline"
+        style={{ maxWidth: '480px' }}
+      >
+        <div className="" style={{ width: '41px' }} />
+        <p className="flex-1 pr-1">Weight (lbs)</p>
+        <p className="flex-1 pr-2">Reps</p>
+        <div className="" style={{ width: '24px' }} />
+      </div>
+      <ul className="pb-3 max-w-md">
         {sets
           .sort((a, b) => a.set_order - b.set_order)
           .map((set, key) => {
@@ -83,22 +93,24 @@ const SetsList = ({ sets, sessionId, exerciseId, record }: SetsListProps) => {
             );
           })}
       </ul>
-      <div className="flex justify-end py-5">
-        <Button
-          onClick={() =>
-            mutate({
-              exercise_id: exerciseId,
-              set_order: !!sets.length
-                ? sets.sort((a, b) => b.set_order - a.set_order)[0].set_order +
-                  1
-                : 1,
-            })
-          }
-          className="w-full mx-2"
-        >
-          + Add Set
-        </Button>
-      </div>
+
+      <Button
+        onClick={() =>
+          mutate({
+            exercise_id: exerciseId,
+            set_order: !!sets.length
+              ? sets.sort((a, b) => b.set_order - a.set_order)[0].set_order + 1
+              : 1,
+          })
+        }
+        className="w-full max-w-md flex justify-center"
+      >
+        {isLoading ? (
+          <CgSpinner size={20} className="animate-spin text-blue-50" />
+        ) : (
+          'Add Set'
+        )}
+      </Button>
     </section>
   );
 };

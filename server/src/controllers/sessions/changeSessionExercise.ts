@@ -149,18 +149,10 @@ const onExerciseChangeSwap = async ({
       ...oldWorkout.workoutExercises.filter(
         (e) => e.exerciseId !== oldExerciseId
       ),
-      { exerciseId: newExerciseId, order: workoutExercise.order },
-    ]
-      .sort((a, b) => {
-        if (a.order && b.order) {
-          return a.order - b.order;
-        } else {
-          return 0;
-        }
-      })
-      .map((e) => {
-        return e.exerciseId;
-      })
+      { exerciseId: newExerciseId },
+    ].map((e) => {
+      return e.exerciseId;
+    })
   );
 
   await updateWorkoutExerciseOrder({

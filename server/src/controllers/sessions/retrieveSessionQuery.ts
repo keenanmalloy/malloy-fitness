@@ -52,8 +52,6 @@ const fetchSessionExercises = async (sessionId: string) => {
     reps_in_reserve,
     sets,
     rest_period,
-    "order",
-    priority,
     notes
   FROM exercises e
   JOIN workout_exercises we on e.exercise_id = we.exercise_id

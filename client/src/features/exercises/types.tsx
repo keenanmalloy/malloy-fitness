@@ -12,7 +12,6 @@ export interface Exercise {
   description: string;
   view: string;
   type: string;
-  order: number;
   primary: MuscleGroup[];
   secondary: MuscleGroup[];
 }

@@ -1,5 +1,5 @@
 import { apiClient } from 'config/axios';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { GetDailyResponse } from 'features/daily/types';
 
 const initializeSession = async (date: string) => {
@@ -10,7 +10,9 @@ const initializeSession = async (date: string) => {
 };
 
 export const useInitSessionMutation = () => {
-  return useMutation<any, any, { date: string }>(({ date }) =>
-    initializeSession(date)
+  const queryClient = useQueryClient();
+  return useMutation<any, any, { date: string }>(
+    ({ date }) => initializeSession(date),
+    { onSuccess: () => queryClient.refetchQueries('fetchDailyOverview') }
   );
 };

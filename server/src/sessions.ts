@@ -2,6 +2,7 @@ import Iron from '@hapi/iron';
 import { getTokenCookie, MAX_AGE, setTokenCookie } from './cookies';
 import { Request, Response } from 'express';
 import { toTimestampz, toUnix } from './time';
+import { Auth } from 'googleapis';
 
 const TOKEN_SECRET = `6SZ=3f<Gtxd3E^7J=.sfxX238nf27o3fnGd!9pKhcq`;
 
@@ -22,7 +23,7 @@ interface Session {
   maxAge: number;
 }
 
-export const generateAuthToken = async (obj: Session) => {
+export const generateAuthToken = async (obj: any) => {
   return await Iron.seal(obj, TOKEN_SECRET, Iron.defaults);
 };
 
@@ -62,7 +63,7 @@ interface GoogleFitSession {
 
 export async function setGoogleFitSession(
   res: Response,
-  session: any
+  session: Auth.Credentials
 ): Promise<void> {
   const createdAt = new Date();
   const obj = { ...session, createdAt, maxAge: MAX_AGE };

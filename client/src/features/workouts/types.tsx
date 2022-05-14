@@ -26,7 +26,7 @@ interface CommonWorkoutFields {
 }
 
 export interface EditableWorkoutFields
-  extends Omit<CommonWorkoutFields, 'workout_id' | 'type'> {}
+  extends Partial<Omit<CommonWorkoutFields, 'workout_id' | 'type'>> {}
 
 export interface WorkoutInList extends CommonWorkoutFields {
   created_at: string;
@@ -42,8 +42,6 @@ interface Exercise {
   category: string;
   profile: string;
   video: string;
-  order: number;
-  priority: number;
   notes: any;
   sets: any;
   repetitions: any;

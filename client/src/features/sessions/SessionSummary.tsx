@@ -1,26 +1,23 @@
-import FullPageModal from 'features/modal/FullPageModal';
-import React, { useState } from 'react';
+import React, {
+  ChangeEventHandler,
+  FocusEvent,
+  FocusEventHandler,
+  useEffect,
+  useState,
+} from 'react';
 import { AiOutlineClockCircle } from 'react-icons/ai';
-import { CgCalendarDates } from 'react-icons/cg';
-import {
-  FaWeightHanging,
-  FaRegTired,
-  FaChevronDown,
-  FaChevronUp,
-} from 'react-icons/fa';
+import { CgCalendarDates, CgSpinner } from 'react-icons/cg';
+import { FaWeightHanging, FaRegTired } from 'react-icons/fa';
 import { GiTrafficLightsReadyToGo } from 'react-icons/gi';
 import { SessionSummaryResponse } from './types';
 import Image from 'next/image';
-import { BiX } from 'react-icons/bi';
-import { SelectableExerciseList } from './SelectableExercistList';
-import { CreateExercise } from 'features/exercises/components/CreateExercise';
-import { FilterExercises } from 'features/exercises/components/FilterExercises';
-import { Input } from 'features/form/Input';
-import { useAddExerciseToSessionMutation } from './useAddExerciseToSession';
-import { useRouter } from 'next/router';
 import Link from 'next/link';
 import { RemoveExerciseFromSession } from './RemoveExerciseFromSession';
 import StartSession from './StartSession';
+import { ChooseExerciseModal } from './ChooseExerciseModal';
+import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
+import { useUpdateWorkoutMutation } from 'features/workouts/api/useUpdateWorkoutMutation';
+import { CustomInput } from 'features/form/CustomInput';
 
 interface Props {
   data: SessionSummaryResponse;
@@ -32,10 +29,18 @@ export const SessionSummary = ({ data }: Props) => {
     return letters[index];
   };
 
+  const [workoutTitle, setWorkoutTitle] = useState(data.session.name);
+
   return (
     <div className="py-1">
       <div className="p-3 text-center">
-        <h1 className="text-2xl">{data.session.name}</h1>
+        <SessionWorkoutTitle
+          value={workoutTitle}
+          prevValue={data.session.name}
+          field={'workout_title'}
+          onChange={(e) => setWorkoutTitle(e.target.value)}
+          workoutId={data.session.workout_id}
+        />
       </div>
 
       <SessionEndStats endedAt={data.session.ended_at} />
@@ -47,39 +52,99 @@ export const SessionSummary = ({ data }: Props) => {
         />
       </div>
 
-      <ul className="flex flex-col divide-y-2 divide-gray-50 px-3">
-        {data.session.exercises.map((exercise, key) => (
-          <li
-            key={exercise.exercise_id}
-            className="flex justify-between border-solid "
-          >
-            <Link
-              href={`/sessions/${data.session.session_id}/exercises/${exercise.exercise_id}`}
-            >
-              <button className="border-solid py-6 flex-1" onClick={() => {}}>
-                <div className="text-left flex">
-                  <div className="flex p-3 rounded-md bg-slate-900 text-white items-center max-h-10 min-h-10 mr-3">
-                    <p>{getLetter(key)}1</p>
-                  </div>
-                  <div>
-                    <h3 className="text-lg">{exercise.name}</h3>
-                    <span className="text-sm text-green-500">
-                      {exercise.sets.length}{' '}
-                      {exercise.sets.length > 1 ? 'sets' : 'set'}
-                    </span>
-                  </div>
-                </div>
-              </button>
-            </Link>
+      <ul className="flex flex-col divide-y-2 divide-gray-50 px-3 pb-5">
+        {data.session.exercise_order &&
+          data.session.exercise_order
+            .map((exerciseId) =>
+              data.session.exercises.find(
+                (exercise) => exercise.exercise_id === exerciseId
+              )
+            )
+            .map((exercise, key) => {
+              if (!exercise) return null;
+              return (
+                <li
+                  key={exercise.exercise_id}
+                  className="flex flex-col justify-between border-solid "
+                >
+                  <div className="flex justify-between">
+                    <div className="border-solid flex-1">
+                      <div className="text-left flex">
+                        <div className="flex flex-col items-center pt-6">
+                          {/* <button className="-mb-1">
+                          <IoMdArrowDropup size={30} />
+                        </button> */}
+                          <div className="flex p-3 rounded-md bg-slate-900 text-white items-center max-h-10 min-h-10 ">
+                            <p>{getLetter(key)}1</p>
+                          </div>
+                          {/* <button className="-mt-1">
+                          <IoMdArrowDropdown size={30} />
+                        </button> */}
+                        </div>
 
-            <RemoveExerciseFromSession
-              data={data}
-              exerciseId={exercise.exercise_id}
-            />
-          </li>
-        ))}
+                        <div className="ml-2 w-full h-full pt-5 pb-2 flex flex-col">
+                          <Link
+                            href={`/sessions/${data.session.session_id}/exercises/${exercise.exercise_id}`}
+                          >
+                            <a className="w-full">
+                              <h3 className="text-lg">{exercise.name}</h3>
+                              <span className="text-sm text-green-500">
+                                {exercise.sets.length}{' '}
+                                {exercise.sets.length > 1 ||
+                                exercise.sets.length === 0
+                                  ? 'sets'
+                                  : 'set'}
+                              </span>
+                            </a>
+                          </Link>
+                          {!!exercise.sets.length && (
+                            <section className="py-1">
+                              <header className="flex justify-between text-xs">
+                                <div className="flex-1"></div>
+                                <div className="flex-1">Weight</div>
+                                <div className="flex-1">Reps</div>
+                              </header>
+                              <main className="flex flex-col divide-y-2 divide-green-50">
+                                {exercise.sets.map((set, index) => {
+                                  return (
+                                    <div className="flex justify-between items-center space-x-2 border-solid py-1 bg-gray-50 px-2 rounded-md mt-1">
+                                      <div className="flex flex-col flex-1 pt-1">
+                                        <p>Set</p>
+                                        <span className="text-xl -mt-2">
+                                          0{index + 1}
+                                        </span>
+                                      </div>
+                                      <div className="flex-1">
+                                        {set.weight}lbs
+                                      </div>
+                                      <div className="flex-1">
+                                        {set.repetitions}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </main>
+                            </section>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    {!data.session.ended_at && (
+                      <RemoveExerciseFromSession
+                        data={data}
+                        exerciseId={exercise.exercise_id}
+                      />
+                    )}
+                  </div>
+                </li>
+              );
+            })}
       </ul>
-      <ChooseExerciseModal data={data} />
+      {!data.session.ended_at && (
+        <div className="p-5">
+          <ChooseExerciseModal data={data} />
+        </div>
+      )}
     </div>
   );
 };
@@ -139,153 +204,69 @@ const SessionEndStats = ({ endedAt }: SessionEndStatsProps) => {
   );
 };
 
-interface ChooseExerciseModalProps {
-  data: SessionSummaryResponse;
+interface AccountFieldProps {
+  value: string;
+  prevValue: string;
+  field: string;
+  type?: string;
+  onChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
+  isTextArea?: boolean;
+  placeholder?: string;
+  className?: string;
+  workoutId: string;
 }
 
-const ChooseExerciseModal = ({ data }: ChooseExerciseModalProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [query, setQuery] = useState('');
-  const [category, setCategory] = useState('');
-  const [view, setView] = useState('');
-  const [profile, setProfile] = useState('');
-  const [sortBy, setSortBy] = useState('');
-  const [isFilterOpen, setIsFilterOpen] = useState(false);
+const SessionWorkoutTitle = ({
+  value,
+  field,
+  placeholder,
+  type,
+  onChange,
+  prevValue,
+  workoutId,
+}: AccountFieldProps) => {
+  const { mutate, isLoading, isError } = useUpdateWorkoutMutation(workoutId);
 
-  const router = useRouter();
-
-  const { mutate, isLoading, isError } = useAddExerciseToSessionMutation(
-    data.session.session_id
-  );
-
-  const handleQuery = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setQuery(e.target.value);
-  };
-
-  const handleExerciseSelection = (exerciseId: string) => {
-    mutate(
-      { workoutId: data.session.workout_id, exerciseId: exerciseId },
-      {
-        onSuccess: (data) => {
-          setIsOpen(false);
-        },
+  useEffect(() => {
+    const delayDebounceFn = setTimeout(() => {
+      if (value !== prevValue) {
+        mutate({
+          workout: {
+            name: value,
+          },
+        });
       }
-    );
-  };
+    }, 500);
+
+    return () => clearTimeout(delayDebounceFn);
+  }, [value, field]);
+
+  const handleFocus = (event: FocusEvent<HTMLInputElement>) =>
+    event.target.select();
 
   return (
-    <div className="flex justify-center">
-      <div className="flex px-5 w-full">
-        <button
-          className={`w-full py-2 px-4 text-sm font-medium bg-white rounded-md border border-gray-200 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:ring-1 focus:ring-green-300 focus:text-green-700`}
-          onClick={() => setIsOpen(true)}
-        >
-          Add Exercise
-        </button>
-
-        <button
-          className={`w-full py-2 px-4 text-sm font-medium bg-white rounded-md border border-gray-200 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:ring-1 focus:ring-green-300 focus:text-green-700`}
-          onClick={() => setIsOpen(true)}
-        >
-          Add Cardio
-        </button>
-      </div>
-
-      <FullPageModal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
-        <div className="sticky top-0 bg-white z-50">
-          <div className="flex justify-start">
-            <button
-              onClick={() => setIsFilterOpen(!isFilterOpen)}
-              className="bg-white mt-2 text-gray-800 font-semibold py-1 px-3 border border-gray-400 rounded shadow"
-            >
-              {isFilterOpen ? <FaChevronUp /> : <FaChevronDown />}
-            </button>
-          </div>
-          <button
-            onClick={() => setIsOpen(false)}
-            className="absolute top-0 right-0 p-3"
-          >
-            <BiX className="h-6 w-6" />
-          </button>
-
-          <div className="pt-2 w-full">
-            {isFilterOpen && (
-              <FilterExercises
-                setSortBy={setSortBy}
-                setCategory={setCategory}
-                setView={setView}
-                setProfile={setProfile}
-              />
-            )}
-          </div>
-          <Input
-            onChange={handleQuery}
-            value={query}
-            type="search"
-            label={'search'}
-          />
-          <div className="pb-2 w-full">
-            <CreateExercise />
-          </div>
-        </div>
-
-        <SelectableExerciseList
-          query={query}
-          category={category}
-          view={view}
-          profile={profile}
-          sortBy={sortBy}
-          exercises={data.session.exercises}
-          handleExerciseSelection={handleExerciseSelection}
+    <div className="flex-1 text-2xl relative">
+      <input
+        onChange={onChange}
+        value={value}
+        type={type}
+        placeholder={placeholder}
+        className="text-center"
+        onFocus={handleFocus}
+      />
+      {isLoading && (
+        <CgSpinner
+          size={28}
+          className="animate-spin text-green-500 absolute top-0 right-0"
         />
-        <div className="h-20" />
-      </FullPageModal>
-    </div>
-  );
-};
-
-interface SessionOverviewProps {
-  data: SessionSummaryResponse;
-}
-
-const SessionOverview = ({ data }: SessionOverviewProps) => {
-  return (
-    <div className="flex flex-col justify-center items-center">
-      <h1>Session Overview</h1>
-      {data.session.exercises.map((ex) => {
-        return (
-          <div className="flex flex-col">
-            <div className="mb-5 w-full aspect-video relative">
-              <Image
-                src={`https://thumbnails.trckd.ca/${ex.video}-0.jpg`}
-                layout="fill"
-                className="-z-10"
-              />
-            </div>
-            <p>{ex.name}</p>
-            <section className="py-5">
-              <header className="flex justify-between">
-                <div className="flex-1"></div>
-                <div className="flex-1">Reps</div>
-                <div className="flex-1">Weight (LBS)</div>
-              </header>
-              <main>
-                {ex.sets.map((set, index) => {
-                  return (
-                    <div className="flex justify-between items-center">
-                      <div className="flex flex-col flex-1">
-                        Set <span>0{index + 1}</span>
-                      </div>
-                      <div className="flex-1">{set.repetitions}</div>
-                      <div className="flex-1">{set.weight}</div>
-                    </div>
-                  );
-                })}
-              </main>
-            </section>
-          </div>
-        );
-      })}
+      )}
+      {isError && (
+        <div className=" w-full pb-1 text-center">
+          <small className="text-red-600 text-xs">
+            Error updating workout title
+          </small>
+        </div>
+      )}
     </div>
   );
 };

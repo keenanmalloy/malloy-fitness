@@ -4,8 +4,6 @@ interface CloneParams {
   workoutId: string;
   workoutExercises: {
     exerciseId: string;
-    order: number;
-    priority: number;
     repetitions: number;
     reps_in_reserve: number;
     rest_period: number;
@@ -24,8 +22,6 @@ export const cloneWorkoutExercises = async ({
         (we) =>
           `(${workoutId}, 
                     ${we.exerciseId}, 
-                    ${we.priority}, 
-                    ${we.order}, 
                     ${we.notes ?? null}, 
                     ${we.sets ?? null}, 
                     ${we.repetitions ?? null}, 
@@ -37,12 +33,12 @@ export const cloneWorkoutExercises = async ({
 
   const weQuery = `
               WITH
-                wedata(workout_id, exercise_id, priority, "order", notes, sets, repetitions, reps_in_reserve, rest_period) AS (
+                wedata(workout_id, exercise_id, notes, sets, repetitions, reps_in_reserve, rest_period) AS (
                     VALUES 
                       ${generateWeValues()}
                   )
-                INSERT INTO workout_exercises (workout_id, exercise_id, priority, "order", notes, sets, repetitions, reps_in_reserve, rest_period)
-                  SELECT workout_id, exercise_id, priority, "order", notes, sets, repetitions, reps_in_reserve, rest_period
+                INSERT INTO workout_exercises (workout_id, exercise_id, notes, sets, repetitions, reps_in_reserve, rest_period)
+                  SELECT workout_id, exercise_id, notes, sets, repetitions, reps_in_reserve, rest_period
                     FROM wedata
                   RETURNING *
             `;

@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
-import Modal from 'features/modal/Modal';
 import { Button } from 'features/common/Button';
 import { LocalExercise } from './CreateWorkout';
 import { GetExercisesResponse } from 'features/exercises/types';
+import { DefaultModal } from 'features/modal/DefaultModal';
 
 interface Props {
   exercise: GetExercisesResponse['exercises'][0];
@@ -20,10 +20,14 @@ export const RemoveWorkoutExerciseFromPreview = ({
 
   return (
     <div>
-      <button className="ml-2" type="button" onClick={() => setIsOpen(true)}>
+      <button
+        className="ml-2 p-3"
+        type="button"
+        onClick={() => setIsOpen(true)}
+      >
         <IoMdClose />
       </button>
-      <Modal
+      <DefaultModal
         closeModal={() => setIsOpen(false)}
         title={'Remove exercise'}
         description={'Would you like to remove this exercise from the workout?'}
@@ -55,7 +59,7 @@ export const RemoveWorkoutExerciseFromPreview = ({
             Confirm
           </Button>
         </div>
-      </Modal>
+      </DefaultModal>
     </div>
   );
 };

@@ -88,8 +88,6 @@ const onExerciseChangeClone = async ({
 
   const formattedNewExercise = {
     exerciseId,
-    order: oldWorkout.workoutExercises.length,
-    priority: 1,
     notes: '',
     sets: '',
     repetitions: 0,
@@ -103,21 +101,9 @@ const onExerciseChangeClone = async ({
   ];
 
   const exerciseOrder = JSON.stringify(
-    newWorkoutExercises
-      .sort((a, b) => {
-        if (a.order && b.order) {
-          return a.order - b.order;
-        } else if (a.order) {
-          return -1;
-        } else if (b.order) {
-          return 1;
-        } else {
-          return 0;
-        }
-      })
-      .map((e) => {
-        return e.exerciseId;
-      })
+    newWorkoutExercises.map((e) => {
+      return e.exerciseId;
+    })
   );
 
   await updateWorkoutExerciseOrder({
@@ -162,17 +148,9 @@ const onExerciseAdd = async ({
     [
       ...oldWorkout.workoutExercises,
       { exerciseId, order: oldWorkout.workoutExercises.length },
-    ]
-      .sort((a, b) => {
-        if (a.order && b.order) {
-          return a.order - b.order;
-        } else {
-          return 0;
-        }
-      })
-      .map((e) => {
-        return e.exerciseId;
-      })
+    ].map((e) => {
+      return e.exerciseId;
+    })
   );
 
   await updateWorkoutExerciseOrder({

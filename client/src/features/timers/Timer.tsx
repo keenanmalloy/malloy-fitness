@@ -40,13 +40,12 @@ export const MyTimer = ({
   return (
     <div>
       <div className="flex justify-center">
-        <button onClick={() => setIsOpen(true)} className="flex items-center">
-          <MdOutlineTimer
-            size={30}
-            onClick={() => setIsOpen(true)}
-            className="mr-1"
-          />
-          <span>Select Timer</span>
+        <button
+          onClick={() => setIsOpen(true)}
+          className="flex flex-col items-center"
+        >
+          <MdOutlineTimer size={20} onClick={() => setIsOpen(true)} />
+          <span className="text-sm">Select Timer</span>
         </button>
       </div>
 
