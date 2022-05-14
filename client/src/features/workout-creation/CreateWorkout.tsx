@@ -11,7 +11,6 @@ import { useRouter } from 'next/router';
 export interface LocalExercise {
   id: string;
   order: number;
-  priority: number;
   repetitions: number;
   repsInReserve: number;
   restPeriod: number;
@@ -38,7 +37,6 @@ export const CreateWorkout = () => {
         return {
           id: ex.id,
           order: key + 1,
-          priority: ex.priority,
           repetitions: ex.repetitions,
           repsInReserve: ex.repsInReserve,
           restPeriod: ex.restPeriod,

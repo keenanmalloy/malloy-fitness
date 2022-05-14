@@ -4,8 +4,6 @@ import { Response } from 'express';
 
 type Exercises = {
   id: string | number;
-  priority?: number;
-  order?: number;
 }[];
 
 interface createWorkout {
@@ -24,8 +22,6 @@ const createWorkoutSchema = Joi.object({
     .items(
       Joi.object().keys({
         id: Joi.any().required(),
-        order: Joi.number().optional().allow(null),
-        priority: Joi.number().optional().allow(null),
         repetitions: Joi.any().optional().allow(null),
         repsInReserve: Joi.any().optional().allow(null),
         restPeriod: Joi.any().optional().allow(null),
@@ -42,21 +38,19 @@ const createWorkoutExercisesLink = async (
   const preparePrimaryValues = () => {
     return exercises
       .map((exercise) => {
-        return `(${workoutId}, ${exercise.id}, ${exercise.order ?? 0}, ${
-          exercise.priority ?? 0
-        })`;
+        return `(${workoutId}, ${exercise.id})`;
       })
       .join(',');
   };
 
   const data = await db.query(`
     WITH     
-    data(workout_id, exercise_id, "order", priority) AS (
+    data(workout_id, exercise_id) AS (
       VALUES 
         ${preparePrimaryValues()}
       )
-    INSERT INTO workout_exercises (workout_id, exercise_id, "order", priority)
-      SELECT workout_id, exercise_id, "order", priority
+    INSERT INTO workout_exercises (workout_id, exercise_id)
+      SELECT workout_id, exercise_id
         FROM data
       RETURNING *
     `);
@@ -78,13 +72,7 @@ export const createDeloadWorkoutMutation = async (
         name: 'My Workout',
         description: '',
         category: 'Legs',
-        exercises: [
-          { id: 1, order: 1 },
-          { id: 2, order: 2 },
-          { id: 3, order: 3, priority: 1 },
-          { id: 4, order: 3, priority: 2 },
-          { id: 5, order: 3, priority: 3 },
-        ],
+        exercises: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }, { id: 5 }],
       },
     });
   }
@@ -118,17 +106,9 @@ export const createDeloadWorkoutMutation = async (
     }
 
     const exerciseOrder = JSON.stringify(
-      exercises
-        .sort((a, b) => {
-          if (a.order && b.order) {
-            return a.order - b.order;
-          } else {
-            return 0;
-          }
-        })
-        .map((e) => {
-          return e.id;
-        })
+      exercises.map((e) => {
+        return e.id;
+      })
     );
 
     const query = `

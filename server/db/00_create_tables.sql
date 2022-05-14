@@ -52,14 +52,18 @@ CREATE TABLE IF NOT EXISTS workout_exercises (
     workout_exercise_id bigserial PRIMARY KEY,
     workout_id bigint REFERENCES workouts(workout_id) ON DELETE CASCADE,
     exercise_id bigint REFERENCES exercises(exercise_id) ON DELETE CASCADE,
-    priority int DEFAULT 1,
-    "order" int DEFAULT 1,
     notes text,
     sets text,
     repetitions text,
     reps_in_reserve text,
     rest_period text,
+    superset_id bigint,
     UNIQUE (workout_id, exercise_id)
+);
+
+CREATE TABLE IF NOT EXISTS supersets (
+    superset_id bigserial PRIMARY KEY,
+    workout_id bigint REFERENCES workouts(workout_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS muscle_groups (

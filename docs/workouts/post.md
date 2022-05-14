@@ -17,7 +17,7 @@ Provide name, category and array of exercise IDs for the Workout to be created.
   "name": "*REQUIRED* [unicode 3 chars min, 64 chars max]",
   "description": "*REQUIRED* [unicode 250 chars max]",
   "category": "[unlimited chars]",
-  "exercises": "*REQUIRED* [Array of objects with keys of id, priority, and order]"
+  "exercises": "*REQUIRED* [Array of objects with keys of id]"
 }
 ```
 
@@ -28,13 +28,7 @@ Provide name, category and array of exercise IDs for the Workout to be created.
   "name": "Upper body day",
   "description": "Workout that includes arms, shoulders, chest and back exercises.",
   "category": "Arms",
-  "exercises": [
-    { "id": 1, "order": 5, "priority": 2 },
-    { "id": 2, "order": 5, "priority": 1 },
-    { "id": 3, "order": 4, "priority": 1 },
-    { "id": 4, "order": 1, "priority": 1 },
-    { "id": 5, "order": 2, "priority": 1 }
-  ]
+  "exercises": [{ "id": 1 }, { "id": 2 }, { "id": 3 }, { "id": 4 }, { "id": 5 }]
 }
 ```
 

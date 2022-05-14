@@ -12,8 +12,6 @@
 
 ```json
 {
-  "order": 5,
-  "priority": 3,
   "exerciseId": 4
 }
 ```

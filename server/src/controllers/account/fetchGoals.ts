@@ -1,22 +1,12 @@
-import { db } from 'config/db';
 import { Response } from 'express';
+import { queryGoalSettings } from 'queries/goals';
 
 export const fetchGoalsQuery = async (res: Response) => {
   const accountId = res.locals.state.account.account_id;
-  const query = `SELECT 
-    daily_steps_goal,
-    weekly_cardio_minutes_goal,
-    body_weight_goal
-  FROM settings WHERE account_id = $1`;
-  const params = [accountId];
 
   try {
-    const data = await db.query(query, params);
-    if (!data.rows.length) {
-      throw new Error('Could not fetch goals');
-    }
+    const goals = await queryGoalSettings(accountId);
 
-    const goals = data.rows[0];
     return res.status(200).json({
       role: res.locals.state.account.role,
       status: 'success',

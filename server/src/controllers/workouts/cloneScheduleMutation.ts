@@ -31,17 +31,9 @@ export const cloneScheduleWorkoutMutation = async (
     };
 
     const exerciseOrder = JSON.stringify(
-      workout.workoutExercises
-        .sort((a, b) => {
-          if (a.order && b.order) {
-            return a.order - b.order;
-          } else {
-            return 0;
-          }
-        })
-        .map((e) => {
-          return e.exerciseId;
-        })
+      workout.workoutExercises.map((e) => {
+        return e.exerciseId;
+      })
     );
 
     const workoutQuery = `
@@ -72,8 +64,6 @@ export const cloneScheduleWorkoutMutation = async (
           (we) =>
             `(${createdWorkoutId}, 
               ${we.exerciseId}, 
-              ${we.priority}, 
-              ${we.order}, 
               ${we.notes ?? null}, 
               ${we.sets ?? null}, 
               ${we.repetitions ?? null}, 
@@ -92,12 +82,12 @@ export const cloneScheduleWorkoutMutation = async (
 
     const weQuery = `
         WITH
-          wedata(workout_id, exercise_id, priority, "order", notes, sets, repetitions, reps_in_reserve, rest_period) AS (
+          wedata(workout_id, exercise_id, notes, sets, repetitions, reps_in_reserve, rest_period) AS (
               VALUES 
                 ${generateWeValues()}
             )
-          INSERT INTO workout_exercises (workout_id, exercise_id, priority, "order", notes, sets, repetitions, reps_in_reserve, rest_period)
-            SELECT workout_id, exercise_id, priority, "order", notes, sets, repetitions, reps_in_reserve, rest_period
+          INSERT INTO workout_exercises (workout_id, exercise_id, notes, sets, repetitions, reps_in_reserve, rest_period)
+            SELECT workout_id, exercise_id, notes, sets, repetitions, reps_in_reserve, rest_period
               FROM wedata
             RETURNING *
       `;
@@ -125,8 +115,6 @@ const retrieveWorkoutQuery = async (workoutId: string, accountId: string) => {
   workouts.workout_id,
   workouts.created_by,
   workouts.exercise_order,
-  we.priority,
-  we.order,
   we.exercise_id
 FROM workouts
 LEFT OUTER JOIN workout_exercises we on workouts.workout_id = we.workout_id
@@ -146,8 +134,6 @@ WHERE workouts.workout_id = $1`;
       : data.rows.map((we) => {
           return {
             exerciseId: we.exercise_id,
-            order: we.order,
-            priority: we.priority,
             notes: data.rows[0].created_by === accountId ? we.notes : null,
             sets: we.sets,
             repetitions: we.repetitions,

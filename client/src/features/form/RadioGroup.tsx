@@ -3,7 +3,7 @@ import React from 'react';
 interface Props {
   label: string;
   onChange: (data: any) => void;
-  checked: boolean;
+  checked: string;
   isRequired: boolean;
   options: any[];
   name: string;

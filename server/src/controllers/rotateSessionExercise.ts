@@ -126,8 +126,6 @@ const onRelatedExerciseChangeClone = async ({
   const formattedRandomRelatedExercise = {
     ...randomRelatedExercise,
     exerciseId: randomRelatedExercise.exercise_id,
-    order: workoutExercise.order,
-    priority: workoutExercise.priority,
     repetitions: workoutExercise.repetitions,
     reps_in_reserve: workoutExercise.reps_in_reserve,
     rest_period: workoutExercise.rest_period,
@@ -149,8 +147,6 @@ const onRelatedExerciseChangeClone = async ({
         (we) =>
           `(${newWorkoutId}, 
                 ${we.exerciseId}, 
-                ${we.priority}, 
-                ${we.order}, 
                 ${we.notes ?? null}, 
                 ${we.sets ?? null}, 
                 ${we.repetitions ?? null}, 
@@ -166,12 +162,12 @@ const onRelatedExerciseChangeClone = async ({
 
   const weQuery = `
           WITH
-            wedata(workout_id, exercise_id, priority, "order", notes, sets, repetitions, reps_in_reserve, rest_period) AS (
+            wedata(workout_id, exercise_id, notes, sets, repetitions, reps_in_reserve, rest_period) AS (
                 VALUES 
                   ${generateWeValues()}
               )
-            INSERT INTO workout_exercises (workout_id, exercise_id, priority, "order", notes, sets, repetitions, reps_in_reserve, rest_period)
-              SELECT workout_id, exercise_id, priority, "order", notes, sets, repetitions, reps_in_reserve, rest_period
+            INSERT INTO workout_exercises (workout_id, exercise_id, notes, sets, repetitions, reps_in_reserve, rest_period)
+              SELECT workout_id, exercise_id, notes, sets, repetitions, reps_in_reserve, rest_period
                 FROM wedata
               RETURNING *
         `;
@@ -244,18 +240,10 @@ const onRelatedExerciseChangeSwap = async ({
   const exerciseOrder = JSON.stringify(
     [
       ...oldWorkout.workoutExercises.filter((e) => e.exerciseId !== exerciseId),
-      { exerciseId: newExerciseId, order: workoutExercise.order },
-    ]
-      .sort((a, b) => {
-        if (a.order && b.order) {
-          return a.order - b.order;
-        } else {
-          return 0;
-        }
-      })
-      .map((e) => {
-        return e.exerciseId;
-      })
+      { exerciseId: newExerciseId },
+    ].map((e) => {
+      return e.exerciseId;
+    })
   );
 
   await updateWorkoutExerciseOrder({

@@ -42,8 +42,6 @@ interface Exercise {
   category: string;
   profile: string;
   video: string;
-  order: number;
-  priority: number;
   notes: any;
   sets: any;
   repetitions: any;

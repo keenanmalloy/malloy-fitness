@@ -12,8 +12,6 @@ export const retrieveWorkoutQuery = async (
       workouts.type,
       workouts.created_by,
       workouts.exercise_order,
-      we.priority,
-      we.order,
       we.exercise_id,
       we.workout_exercise_id
     FROM workouts
@@ -34,8 +32,6 @@ export const retrieveWorkoutQuery = async (
       : data.rows.map((we) => {
           return {
             exerciseId: we.exercise_id,
-            order: we.order,
-            priority: we.priority,
             notes: data.rows[0].created_by === accountId ? we.notes : null,
             sets: we.sets,
             repetitions: we.repetitions,

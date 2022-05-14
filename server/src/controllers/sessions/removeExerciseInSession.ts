@@ -127,21 +127,9 @@ const onExerciseDelete = async ({
       ...oldWorkout.workoutExercises.filter(
         (we) => we.exerciseId !== exerciseId
       ),
-    ]
-      .sort((a, b) => {
-        if (a.order && b.order) {
-          return a.order - b.order;
-        } else if (a.order) {
-          return -1;
-        } else if (b.order) {
-          return 1;
-        } else {
-          return 0;
-        }
-      })
-      .map((e) => {
-        return e.exerciseId;
-      })
+    ].map((e) => {
+      return e.exerciseId;
+    })
   );
 
   await updateWorkoutExerciseOrder({

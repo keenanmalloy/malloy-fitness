@@ -184,7 +184,7 @@ export const CreateTherapyExerciseForm = ({
               onChange={(option) => {
                 return setProfile(option);
               }}
-              checked={!!profile}
+              checked={profile}
               isRequired={true}
               options={['short', 'mid', 'long']}
               name="resistance-range"
