@@ -21,7 +21,7 @@ export const Header = () => {
 
           <Link href="/">
             <a className="flex items-center justify-center ">
-              <Logo />
+              <Logo className="w-4 fill-green-500" />
               <div className="flex text-lg px-1">
                 <h1 className="uppercase">tr</h1>
                 <h1 className="uppercase">a</h1>
