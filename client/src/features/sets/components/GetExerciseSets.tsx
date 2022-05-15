@@ -26,26 +26,7 @@ export const GetExerciseSets = ({ sessionId, exerciseId, record }: Props) => {
   }
 
   if (isLoading) {
-    return (
-      <div>
-        <div className="flex w-full items-stretch pt-2">
-          <div className="flex w-full pl-5">
-            <Skeleton className="h-10 rounded-md w-full items-stretch" />
-          </div>
-          <div className="flex w-full pr-5">
-            <Skeleton className="h-10 rounded-md w-full items-stretch" />
-          </div>
-        </div>
-        <div className="flex w-full items-stretch pt-2">
-          <div className="flex w-full pl-5">
-            <Skeleton className="h-10 rounded-md w-full items-stretch" />
-          </div>
-          <div className="flex w-full pr-5">
-            <Skeleton className="h-10 rounded-md w-full items-stretch" />
-          </div>
-        </div>
-      </div>
-    );
+    return <div></div>;
   }
 
   return (
@@ -67,15 +48,18 @@ const SetsList = ({ sets, sessionId, exerciseId, record }: SetsListProps) => {
 
   return (
     <section className="px-3 w-full flex flex-col items-center py-5">
-      <div
-        className="text-xs text-slate-500 flex items-center justify-between w-full text-right underline"
-        style={{ maxWidth: '480px' }}
-      >
-        <div className="" style={{ width: '41px' }} />
-        <p className="flex-1 pr-1">Weight (lbs)</p>
-        <p className="flex-1 pr-2">Reps</p>
-        <div className="" style={{ width: '24px' }} />
-      </div>
+      {!!sets.length && (
+        <div
+          className="text-xs flex items-center justify-between w-full text-right"
+          style={{ maxWidth: '480px' }}
+        >
+          <div className="" style={{ width: '41px' }} />
+          <p className="flex-1 pr-1">Weight (lbs)</p>
+          <p className="flex-1 pr-2">Reps</p>
+          <div className="" style={{ width: '24px' }} />
+        </div>
+      )}
+
       <ul className="pb-3 max-w-md">
         {sets
           .sort((a, b) => a.set_order - b.set_order)

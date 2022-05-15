@@ -1,5 +1,7 @@
+import { Logo } from 'features/common/Logo';
 import { useRouter } from 'next/router';
 import React from 'react';
+import { FcGoogle } from 'react-icons/fc';
 
 const Login = () => {
   const router = useRouter();
@@ -10,18 +12,18 @@ const Login = () => {
   };
 
   return (
-    <div>
-      <div className="relative flex h-screen justify-center items-center flex-col">
-        <h1 className="text-3xl">Welcome to</h1>
-        <div className="flex">
-          <h1 className="uppercase text-3xl">tr</h1>
-          <h1 className="uppercase text-3xl text-gray-400">a</h1>
-          <h1 className="uppercase text-3xl">ck</h1>
-          <h1 className="uppercase text-3xl text-gray-400">e</h1>
-          <h1 className="uppercase text-3xl">d</h1>
-        </div>
-        <button className="flex drop-shadow-md" onClick={handleSubmit}>
-          <img src="googleSignin.png" />
+    <div className=" flex min-h-screen justify-center items-center flex-col bg-slate-900 ">
+      <div className="flex space-x-4">
+        <Logo className="w-14 fill-green-500 mt-10" />
+      </div>
+
+      <div className="flex justify-center pt-3">
+        <button
+          className=" bg-slate-800 text-white flex items-center px-6 py-2 rounded-md shadow-md justify-center"
+          onClick={handleSubmit}
+        >
+          <FcGoogle className="text-3xl" />{' '}
+          <p className="px-2 text-sm">Login with Google</p>
         </button>
       </div>
     </div>

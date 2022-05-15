@@ -4,7 +4,7 @@ import { update } from 'utils/update';
 import { Response } from 'express';
 
 const updateWorkoutExerciseSchema = Joi.object({
-  notes: Joi.string().optional(),
+  notes: Joi.string().allow('').optional(),
   sets: Joi.string().optional(),
   repetitions: Joi.string().optional(),
   reps_in_reserve: Joi.string().optional(),

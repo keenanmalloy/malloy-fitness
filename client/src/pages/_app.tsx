@@ -1,5 +1,6 @@
 import '../styles/globals.css';
 import '../styles/calendar.css';
+import Head from 'next/head';
 
 import { QueryClient, QueryClientProvider } from 'react-query';
 import Router from 'next/router';

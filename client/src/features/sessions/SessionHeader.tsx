@@ -90,6 +90,7 @@ const SessionHeader = ({ sessionId, exerciseId, workoutId }: Props) => {
           reps="reps 10-12"
           rir="rir 1"
           rest="REST 90 seconds"
+          exerciseId={currentExercise?.exercise_id ?? ''}
         />
       </div>
     </header>
