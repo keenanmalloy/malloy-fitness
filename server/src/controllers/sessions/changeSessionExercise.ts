@@ -115,6 +115,22 @@ const onExerciseChangeClone = async ({
     workoutId,
   });
 
+  const exerciseOrder = JSON.stringify(
+    [
+      ...oldWorkout.workoutExercises.filter(
+        (e) => e.exerciseId !== oldExerciseId
+      ),
+      { exerciseId: newExerciseId },
+    ].map((e) => {
+      return e.exerciseId;
+    })
+  );
+
+  await updateWorkoutExerciseOrder({
+    exerciseOrder,
+    workoutId,
+  });
+
   await cloneWorkoutExercises({
     workoutId: newWorkoutId,
     workoutExercises: newWorkoutExercises,
@@ -144,19 +160,14 @@ const onExerciseChangeSwap = async ({
   );
   if (!workoutExercise) throw new Error('WorkoutExercise not found');
 
-  const exerciseOrder = JSON.stringify(
-    [
-      ...oldWorkout.workoutExercises.filter(
-        (e) => e.exerciseId !== oldExerciseId
-      ),
-      { exerciseId: newExerciseId },
-    ].map((e) => {
-      return e.exerciseId;
+  const newExerciseOrder = JSON.stringify(
+    oldWorkout.exercise_order.map((id: string) => {
+      return id === oldExerciseId ? newExerciseId : id;
     })
   );
 
   await updateWorkoutExerciseOrder({
-    exerciseOrder,
+    exerciseOrder: newExerciseOrder,
     workoutId,
   });
 

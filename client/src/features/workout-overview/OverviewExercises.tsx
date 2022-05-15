@@ -73,6 +73,7 @@ export const OverviewExercises = ({ sessionId, setIsOpen }: Props) => {
         sessionId={sessionId}
         hasStarted={!!data.session.started_at}
         hasEnded={!!data.session.ended_at}
+        hasExercises={!data.session.exercises.length}
       />
     </div>
   );

@@ -56,6 +56,7 @@ export const UserAction = ({ selected }: Props) => {
         <button
           className="bg-gray-50 px-4 py-2 rounded-md"
           onClick={createSession}
+          disabled={isLoading}
         >
           {isLoading && (
             <CgSpinner className="w-6 h-6 animate-spin absolute top-6 -left-2 text-green-400" />

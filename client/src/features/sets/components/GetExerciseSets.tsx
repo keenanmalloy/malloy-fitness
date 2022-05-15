@@ -25,10 +25,6 @@ export const GetExerciseSets = ({ sessionId, exerciseId, record }: Props) => {
     return <div>Error!</div>;
   }
 
-  if (isLoading) {
-    return <div></div>;
-  }
-
   return (
     <SetsList
       sets={data?.sets ?? []}

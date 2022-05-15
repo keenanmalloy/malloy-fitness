@@ -4,6 +4,7 @@ import { SessionExercise } from 'features/sessions/SessionExercise';
 import SessionHeader from 'features/sessions/SessionHeader';
 import { Skeleton } from 'features/common/Skeleton';
 import { GetStaticPropsContext } from 'next';
+import { CgSpinner } from 'react-icons/cg';
 
 export async function getStaticPaths() {
   arguments;
@@ -34,15 +35,9 @@ const SessionExercisePage = ({ exerciseId, sessionId }: Props) => {
   if (isLoading) {
     return (
       <div className="py-5">
-        <Skeleton className="h-20 w-full mt-7" />
-        <Skeleton className="h-44 w-full mt-1" />
-        <Skeleton className="h-28 w-full mt-10" />
-        <div className="flex justify-end">
-          <Skeleton className="h-10 w-24 mt-8 mr-4 rounded-md" />
-        </div>
-
-        <div className="flex justify-end">
-          <Skeleton className="h-10 w-full mt-8 mx-4 rounded-md" />
+        <Skeleton className="h-14 w-full mt-7" />
+        <div className="flex justify-center items-center py-10">
+          <CgSpinner className="animate-spin text-green-500" size={30} />
         </div>
       </div>
     );

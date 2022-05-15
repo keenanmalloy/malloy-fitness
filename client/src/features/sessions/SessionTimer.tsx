@@ -88,14 +88,17 @@ const SessionTimer = ({ startedAt, workoutId, endedAt }: Props) => {
   }
 
   return (
-    <div className="flex">
+    <div
+      className="flex"
+      style={{ fontFamily: 'monospace', fontWeight: 'bold' }}
+    >
       <div className="px-1">
         <h2>{formatTime(time)}</h2>
       </div>
       <div className="flex">
-        <button onClick={() => setIsOpen(!isOpen)}>
+        {/* <button onClick={() => setIsOpen(!isOpen)}>
           <BsFillStopFill />
-        </button>
+        </button> */}
         <DefaultModal
           isOpen={isOpen}
           title="Finish workout"

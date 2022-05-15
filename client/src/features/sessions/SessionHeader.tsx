@@ -58,13 +58,15 @@ const SessionHeader = ({ sessionId, exerciseId, workoutId }: Props) => {
             {data.session.name}
           </h2>
 
-          <div className="flex px-2">
-            <RiTimerFill />
-            <SessionTimer
-              endedAt={data.session.ended_at}
-              startedAt={data.session.started_at}
-              workoutId={''}
-            />
+          <div className="flex px-2 relative flex-1 items-center justify-end">
+            <div className="absolute right-5 flex items-center">
+              <RiTimerFill size={18} />
+              <SessionTimer
+                endedAt={data.session.ended_at}
+                startedAt={data.session.started_at}
+                workoutId={''}
+              />
+            </div>
           </div>
         </div>
 

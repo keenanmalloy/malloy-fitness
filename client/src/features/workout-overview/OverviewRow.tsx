@@ -33,7 +33,7 @@ export const OverviewRow = ({
         <p>{order}</p>
       </div>
 
-      <div className="px-2 w-full text-base flex-1">
+      <div className="px-2 w-full text-base flex-1 ">
         <h3 style={{ lineHeight: '1.2rem' }}>{name}</h3>
         <ul
           style={{
