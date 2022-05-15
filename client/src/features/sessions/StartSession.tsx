@@ -4,14 +4,21 @@ import { useQueryClient } from 'react-query';
 import { apiClient } from 'config/axios';
 import { GetSessionResponse } from './types';
 import { CgSpinner } from 'react-icons/cg';
+import Link from 'next/link';
 
 interface Props {
   sessionId: string;
   hasStarted: boolean;
   hasEnded: boolean;
+  hasExercises?: boolean;
 }
 
-const StartSession = ({ sessionId, hasStarted, hasEnded }: Props) => {
+const StartSession = ({
+  sessionId,
+  hasStarted,
+  hasEnded,
+  hasExercises,
+}: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -62,34 +69,31 @@ const StartSession = ({ sessionId, hasStarted, hasEnded }: Props) => {
     router.push(`/sessions/${sessionId}/exercises/${firstExerciseId}`);
   };
 
-  if (hasEnded) {
-    return null;
-  }
-
-  if (hasStarted) {
+  if (hasEnded || hasExercises) {
     return (
-      <button
-        onClick={() => startOrContinueWorkout(sessionId)}
-        className={`w-full flex justify-center items-center text-center py-2 px-4 text-sm font-medium bg-white rounded-md border border-gray-200 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:ring-1 focus:ring-green-300 focus:text-green-700`}
-      >
-        {isLoading ? (
-          <CgSpinner className="w-6 h-6 animate-spin text-green-500" />
-        ) : (
-          'Continue Session'
-        )}
-      </button>
+      <Link href={`/sessions/${sessionId}`}>
+        <button
+          className={`w-full flex justify-center items-center text-center py-2 px-4 text-sm font-medium  rounded-md border border-slate-700 focus:z-10 focus:ring-2 focus:ring-slate-600`}
+        >
+          {isLoading ? (
+            <CgSpinner className="w-6 h-6 animate-spin text-green-500" />
+          ) : (
+            <>{hasEnded ? 'View Session' : 'Build Session'}</>
+          )}
+        </button>
+      </Link>
     );
   }
 
   return (
     <button
       onClick={() => startOrContinueWorkout(sessionId)}
-      className={`w-full flex justify-center items-center text-center py-2 px-4 text-sm font-medium bg-white rounded-md border border-gray-200 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:ring-1 focus:ring-green-300 focus:text-green-700`}
+      className={`w-full flex justify-center items-center text-center py-2 px-4 text-sm font-medium  rounded-md border border-slate-700 focus:z-10 focus:ring-2 focus:ring-slate-600`}
     >
       {isLoading ? (
         <CgSpinner className="w-6 h-6 animate-spin text-green-500" />
       ) : (
-        'Start Session'
+        <>{hasStarted ? 'Continue Session' : 'Start Session'}</>
       )}
     </button>
   );

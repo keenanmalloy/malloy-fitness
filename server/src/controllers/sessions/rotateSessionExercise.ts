@@ -237,17 +237,14 @@ const onRelatedExerciseChangeSwap = async ({
     workoutExerciseId: workoutExercise.workout_exercise_id,
   });
 
-  const exerciseOrder = JSON.stringify(
-    [
-      ...oldWorkout.workoutExercises.filter((e) => e.exerciseId !== exerciseId),
-      { exerciseId: newExerciseId },
-    ].map((e) => {
-      return e.exerciseId;
+  const newExerciseOrder = JSON.stringify(
+    oldWorkout.exercise_order.map((id: string) => {
+      return id === exerciseId ? newExerciseId : id;
     })
   );
 
   await updateWorkoutExerciseOrder({
-    exerciseOrder,
+    exerciseOrder: newExerciseOrder,
     workoutId,
   });
 

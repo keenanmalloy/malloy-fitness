@@ -1,7 +1,6 @@
 import React, {
   ChangeEventHandler,
   FocusEvent,
-  FocusEventHandler,
   useEffect,
   useState,
 } from 'react';
@@ -10,14 +9,11 @@ import { CgCalendarDates, CgSpinner } from 'react-icons/cg';
 import { FaWeightHanging, FaRegTired } from 'react-icons/fa';
 import { GiTrafficLightsReadyToGo } from 'react-icons/gi';
 import { SessionSummaryResponse } from './types';
-import Image from 'next/image';
 import Link from 'next/link';
 import { RemoveExerciseFromSession } from './RemoveExerciseFromSession';
 import StartSession from './StartSession';
 import { ChooseExerciseModal } from './ChooseExerciseModal';
-import { IoMdArrowDropdown, IoMdArrowDropup } from 'react-icons/io';
 import { useUpdateWorkoutMutation } from 'features/workouts/api/useUpdateWorkoutMutation';
-import { CustomInput } from 'features/form/CustomInput';
 
 interface Props {
   data: SessionSummaryResponse;
@@ -30,6 +26,28 @@ export const SessionSummary = ({ data }: Props) => {
   };
 
   const [workoutTitle, setWorkoutTitle] = useState(data.session.name);
+
+  if (!data.session.exercises.length) {
+    return (
+      <div className="py-1">
+        <div className="p-3 text-center">
+          <SessionWorkoutTitle
+            value={workoutTitle}
+            prevValue={data.session.name}
+            field={'workout_title'}
+            onChange={(e) => setWorkoutTitle(e.target.value)}
+            workoutId={data.session.workout_id}
+          />
+        </div>
+
+        {!data.session.ended_at && (
+          <div className="py-5">
+            <ChooseExerciseModal data={data} />
+          </div>
+        )}
+      </div>
+    );
+  }
 
   return (
     <div className="py-1">
@@ -83,10 +101,8 @@ export const SessionSummary = ({ data }: Props) => {
                         </div>
 
                         <div className="ml-2 w-full h-full pt-5 pb-2 flex flex-col">
-                          <Link
-                            href={`/sessions/${data.session.session_id}/exercises/${exercise.exercise_id}`}
-                          >
-                            <a className="w-full">
+                          {!data.session.started_at ? (
+                            <>
                               <h3 className="text-lg">{exercise.name}</h3>
                               <span className="text-sm text-green-500">
                                 {exercise.sets.length}{' '}
@@ -95,8 +111,24 @@ export const SessionSummary = ({ data }: Props) => {
                                   ? 'sets'
                                   : 'set'}
                               </span>
-                            </a>
-                          </Link>
+                            </>
+                          ) : (
+                            <Link
+                              href={`/sessions/${data.session.session_id}/exercises/${exercise.exercise_id}`}
+                            >
+                              <a className="w-full">
+                                <h3 className="text-lg">{exercise.name}</h3>
+                                <span className="text-sm text-green-500">
+                                  {exercise.sets.length}{' '}
+                                  {exercise.sets.length > 1 ||
+                                  exercise.sets.length === 0
+                                    ? 'sets'
+                                    : 'set'}
+                                </span>
+                              </a>
+                            </Link>
+                          )}
+
                           {!!exercise.sets.length && (
                             <section className="py-1">
                               <header className="flex justify-between text-xs">
@@ -140,8 +172,9 @@ export const SessionSummary = ({ data }: Props) => {
               );
             })}
       </ul>
+
       {!data.session.ended_at && (
-        <div className="p-5">
+        <div className="py-5">
           <ChooseExerciseModal data={data} />
         </div>
       )}

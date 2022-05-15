@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { authenticate } from 'middlewares/authenticate';
 import { authorize } from 'middlewares/authorize';
-import { rotateSessionExercise } from 'controllers/rotateSessionExercise';
+import { rotateSessionExercise } from 'controllers/sessions/rotateSessionExercise';
 import { retrieveExerciseSessionQuery } from 'controllers/sessions/retrieveExerciseSessionQuery';
 import { changeSessionExercise } from 'controllers/sessions/changeSessionExercise';
 import { addExerciseToSession } from 'controllers/sessions/addExerciseToSession';
