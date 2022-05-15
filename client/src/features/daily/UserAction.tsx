@@ -43,7 +43,9 @@ export const UserAction = ({ selected }: Props) => {
       <div className="fixed bottom-16 right-0 z-40 p-5">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="p-4 rounded-full bg-green-300  z-50 "
+          className="p-4 rounded-full bg-green-300 z-50 
+          focus:ring-4 focus:ring-green-100 
+          "
         >
           <IoAdd
             className={`h-6 w-6 text-slate-800 ${isOpen ? 'rotate-45' : ''} `}

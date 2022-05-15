@@ -145,44 +145,42 @@ export default function Navbar() {
           </div>
         </nav>
       )}
-      <nav className="dark:bg-gray-900 py-2 bg-white shadow flex items-center z-40 justify-between fixed bottom-0 left-0 right-0 w-full">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex-1 flex items-center justify-center">
-            {navigation.map((item) => {
-              if (item.name === 'Library') {
-                return (
-                  <button
-                    key={item.name}
-                    onClick={() => setIsOpen(!isOpen)}
-                    className={classNames(
-                      item.href === asPath
-                        ? 'bg-gray-900 text-white'
-                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                      'px-3 py-2 rounded-md text-xs font-medium'
-                    )}
-                  >
-                    <div className="flex justify-center">{item.icon}</div>
-                    <p>{item.name}</p>
-                  </button>
-                );
-              }
+      <nav className="bg-gray-900 py-2 shadow flex items-center z-40 justify-between fixed bottom-0 left-0 right-0 w-full">
+        <div className="flex-1 flex items-center justify-evenly w-full">
+          {navigation.map((item) => {
+            if (item.name === 'Library') {
               return (
-                <Link key={item.name} href={item.href}>
-                  <a
-                    className={classNames(
-                      item.href === asPath
-                        ? 'bg-gray-900 text-white'
-                        : 'text-gray-300 hover:bg-gray-700 hover:text-white',
-                      'px-3 py-2 rounded-md text-xs font-medium'
-                    )}
-                  >
-                    <div className="flex justify-center">{item.icon}</div>
-                    <p>{item.name}</p>
-                  </a>
-                </Link>
+                <button
+                  key={item.name}
+                  onClick={() => setIsOpen(!isOpen)}
+                  className={classNames(
+                    item.href === asPath
+                      ? 'bg-gray-900 text-white'
+                      : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                    'px-3 py-2 rounded-md text-xs font-medium'
+                  )}
+                >
+                  <div className="flex justify-center">{item.icon}</div>
+                  <p>{item.name}</p>
+                </button>
               );
-            })}
-          </div>
+            }
+            return (
+              <Link key={item.name} href={item.href}>
+                <a
+                  className={classNames(
+                    item.href === asPath
+                      ? 'bg-gray-900 text-white'
+                      : 'text-gray-300 hover:bg-gray-700 hover:text-white',
+                    'px-3 py-2 rounded-md text-xs font-medium'
+                  )}
+                >
+                  <div className="flex justify-center">{item.icon}</div>
+                  <p>{item.name}</p>
+                </a>
+              </Link>
+            );
+          })}
         </div>
       </nav>
     </>

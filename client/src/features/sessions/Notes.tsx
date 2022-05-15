@@ -5,6 +5,7 @@ import { BiX } from 'react-icons/bi';
 import Modal from 'features/modal/Modal';
 import { useUpdateSessionExerciseMetadataMutation } from 'features/workout-exercises/api/useUpdateSessionExerciseMetadataMutation';
 import FullPageModal from 'features/modal/FullPageModal';
+import { useQueryClient } from 'react-query';
 
 interface Props {
   exercise: any;
@@ -89,15 +90,38 @@ const SaveNotes = ({
     }
   }, [debouncedNotes]);
 
+  const queryClient = useQueryClient();
+
   return (
-    <Input
-      onChange={(e) => setNotes(e.target.value)}
-      value={notes}
-      placeholder="Add all your notes here: execution, setup, goals, ideas etc."
-      isTextArea
-      isLoading={isLoading}
-      label={''}
-      autoFocus
-    />
+    <div className="relative">
+      <Input
+        onChange={(e) => setNotes(e.target.value)}
+        value={notes}
+        placeholder="Add all your notes here: execution, setup, goals, ideas etc."
+        isTextArea
+        isLoading={isLoading}
+        label={''}
+        autoFocus
+      />
+      <button
+        onClick={() => {
+          console.log('clear notes');
+          mutate(
+            {
+              notes: '',
+            },
+            {
+              onSuccess: () => {
+                queryClient.refetchQueries('fetchSessionExercise');
+                setNotes('');
+              },
+            }
+          );
+        }}
+        className="absolute top-2 right-0 p-1 text-slate-400"
+      >
+        <BiX />
+      </button>
+    </div>
   );
 };

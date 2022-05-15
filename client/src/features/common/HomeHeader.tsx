@@ -6,6 +6,7 @@ import { usePreviewWorkoutsQuery } from 'features/date-scroll/usePreviewWorkouts
 import { generateCalendarState } from 'features/date-scroll/generateCalendarState';
 import { SelectedDate } from 'features/daily/types';
 import { BiCog } from 'react-icons/bi';
+import { Logo } from './Logo';
 
 const ScrollDatePicker = dynamic(
   // @ts-ignore
@@ -54,13 +55,16 @@ export const HomeHeader = ({ selected, setSelected }: Props) => {
           </Link>
 
           <Link href="/">
-            <div className="flex text-lg">
-              <h1 className="uppercase">tr</h1>
-              <h1 className="uppercase">a</h1>
-              <h1 className="uppercase">ck</h1>
-              <h1 className="uppercase">e</h1>
-              <h1 className="uppercase">d</h1>
-            </div>
+            <a className="flex items-center justify-center ">
+              <Logo />
+              <div className="flex text-lg px-1">
+                <h1 className="uppercase">tr</h1>
+                <h1 className="uppercase">a</h1>
+                <h1 className="uppercase">ck</h1>
+                <h1 className="uppercase">e</h1>
+                <h1 className="uppercase">d</h1>
+              </div>
+            </a>
           </Link>
 
           <div />

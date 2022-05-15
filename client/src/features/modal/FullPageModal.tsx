@@ -45,7 +45,7 @@ const FullPageModal: React.FC<ModalPropsShared> = ({
             >
               <Dialog.Title
                 as="h3"
-                className="text-lg font-medium leading-6 text-gray-900"
+                className="text-lg font-medium leading-6 text-gray-900 pr-4"
               >
                 {title}
               </Dialog.Title>

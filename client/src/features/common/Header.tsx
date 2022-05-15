@@ -1,6 +1,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { BiCog } from 'react-icons/bi';
+import { Logo } from './Logo';
 
 export const Header = () => {
   return (
@@ -19,13 +20,16 @@ export const Header = () => {
           </Link>
 
           <Link href="/">
-            <div className="flex text-lg">
-              <h1 className="uppercase">tr</h1>
-              <h1 className="uppercase">a</h1>
-              <h1 className="uppercase">ck</h1>
-              <h1 className="uppercase">e</h1>
-              <h1 className="uppercase">d</h1>
-            </div>
+            <a className="flex items-center justify-center ">
+              <Logo />
+              <div className="flex text-lg px-1">
+                <h1 className="uppercase">tr</h1>
+                <h1 className="uppercase">a</h1>
+                <h1 className="uppercase">ck</h1>
+                <h1 className="uppercase">e</h1>
+                <h1 className="uppercase">d</h1>
+              </div>
+            </a>
           </Link>
 
           <div></div>

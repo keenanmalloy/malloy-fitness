@@ -8,7 +8,7 @@ import { useUpdateSetMutation } from '../api/useUpdateSetMutation';
 
 interface Props {
   set: any;
-  setNumber: number | string;
+  setNumber: string;
   sessionId: string;
   exerciseId: string;
   setRecord: {
@@ -84,7 +84,13 @@ export const Set = ({
           value={repetitions}
           weight={weight}
           repetitions={repetitions}
-          placeholder="6-8"
+          placeholder={
+            parseInt(setNumber, 10) === 1
+              ? '6-8'
+              : parseInt(setNumber, 10) === 2
+              ? '8-12'
+              : '12-20'
+          }
           name="repetitions"
           id="repetitions"
           setId={setId}
