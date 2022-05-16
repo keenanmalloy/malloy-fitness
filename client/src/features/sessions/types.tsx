@@ -54,6 +54,11 @@ export interface SessionSummaryResponse extends SharedResponse {
     workout_id: string;
     started_at: string;
     exercise_order: string[];
+    readiness_energy: number | null;
+    readiness_mood: number | null;
+    readiness_stress: number | null;
+    readiness_soreness: number | null;
+    readiness_sleep: number | null;
     ended_at: any;
     completed: boolean;
     exercises: {

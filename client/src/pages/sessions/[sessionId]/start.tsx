@@ -1,17 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Layout from 'features/common/Layout';
 import { useSessionSummaryQuery } from 'features/sessions/useSessionSummaryQuery';
-import { AiOutlineClockCircle } from 'react-icons/ai';
-import { CgCalendarDates } from 'react-icons/cg';
-import { GiTrafficLightsReadyToGo } from 'react-icons/gi';
-import { FaRegTired, FaWeightHanging } from 'react-icons/fa';
-import { Button } from 'features/common/Button';
 import { Skeleton } from 'features/common/Skeleton';
-import FullPageModal from 'features/modal/FullPageModal';
-import Image from 'next/image';
 import { GetStaticPropsContext } from 'next';
-import { SessionSummary } from 'features/sessions/SessionSummary';
 import { Survey } from 'features/survey/Survey';
+import { Header } from 'features/common/Header';
 
 export async function getStaticPaths() {
   arguments;
@@ -32,39 +25,48 @@ interface Props {
   sessionId: string;
 }
 
-const SummaryPage = ({ sessionId }: Props) => {
+const StartSessionSurvey = ({ sessionId }: Props) => {
   const { data, isError, isLoading } = useSessionSummaryQuery(sessionId);
 
   if (isLoading) {
     return (
-      <Layout>
-        <Skeleton className="h-20 w-full mt-7" />
-        <Skeleton className="h-44 w-full mt-1" />
-      </Layout>
+      <main className="py-5 bg-slate-900 min-h-screen">
+        <Header />
+      </main>
     );
   }
 
   if (isError) {
     return (
-      <Layout>
+      <main className="py-5 bg-slate-900 min-h-screen">
+        <Header />
         <p>Something went wrong</p>
-      </Layout>
+      </main>
     );
   }
 
   if (!data || !data.session) {
     return (
-      <Layout>
+      <main className="py-5 bg-slate-900 min-h-screen">
+        <Header />
         <p>No session found</p>
-      </Layout>
+      </main>
     );
   }
 
   return (
-    <Layout>
-      <SessionSummary data={data} />
-    </Layout>
+    <Survey
+      sessionId={sessionId}
+      data={{
+        readiness_energy: data.session.readiness_energy,
+        readiness_mood: data.session.readiness_mood,
+        readiness_stress: data.session.readiness_stress,
+        readiness_soreness: data.session.readiness_soreness,
+        readiness_sleep: data.session.readiness_sleep,
+      }}
+      firstExerciseId={data.session.exercise_order[0]}
+    />
   );
 };
 
-export default SummaryPage;
+export default StartSessionSurvey;

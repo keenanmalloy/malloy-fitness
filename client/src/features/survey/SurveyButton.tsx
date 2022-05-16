@@ -15,14 +15,14 @@ export function SurveyButton({
 }: SurveyButtonProps) {
   return (
     <button
-      className={`h-12 w-1/5 border-solid border-2 border-slate-500 flex flex-col justify-center items-center ${textColor} ${bgColor}`}
+      className={`h-12 w-1/5 rounded-md flex flex-col justify-center items-center ${textColor} ${bgColor} focus:ring-2 focus:ring-green-200`}
       onClick={onClick}
     >
       <p>{number}</p>
       <span
-        className="flex"
+        className="flex uppercase pt-1"
         style={{
-          fontSize: '0.7rem',
+          fontSize: '0.6rem',
         }}
       >
         {text}

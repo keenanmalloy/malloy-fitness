@@ -13,7 +13,7 @@ interface Props {
 export const SessionExercise = ({ sessionId, exerciseId, data }: Props) => {
   return (
     <main className="pb-20 pt-16">
-      <div className="px-3 py-5 bg-gray-50" />
+      <div className="px-3 py-5 " />
 
       <GetExerciseSets
         sessionId={sessionId}

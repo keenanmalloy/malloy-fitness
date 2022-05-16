@@ -100,14 +100,13 @@ const onExerciseChangeClone = async ({
     formattedNewExercise,
   ];
 
-  const exerciseOrder = JSON.stringify(
-    newWorkoutExercises.map((e) => {
-      return e.exerciseId;
-    })
-  );
+  const newExerciseOrder = JSON.stringify([
+    ...oldWorkout.exercise_order,
+    exerciseId,
+  ]);
 
   await updateWorkoutExerciseOrder({
-    exerciseOrder,
+    exerciseOrder: newExerciseOrder,
     workoutId,
   });
 

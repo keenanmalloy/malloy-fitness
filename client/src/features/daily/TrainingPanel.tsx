@@ -18,12 +18,12 @@ export const TrainingPanel = ({ data }: Props) => {
     <section className="flex flex-col justify-center w-full rounded-sm py-3 space-y-2 pl-3">
       {data.sessions.map((session) => {
         return (
-          <article className="flex relative" key={session.session_id}>
+          <article className="flex relative " key={session.session_id}>
             {!session.completed && !!session.started_at ? (
               <DeleteSesssionConfirmation session={session} />
             ) : !session.completed ? (
               <button
-                className="absolute top-0 z-10 right-0 p-1"
+                className="absolute top-0 z-10 right-0 p-1 "
                 onClick={() =>
                   mutate({
                     sessionId: session.session_id,
@@ -77,11 +77,11 @@ export const TrainingPanel = ({ data }: Props) => {
                 )}
 
                 <div className="pt-3">
-                  <h2 className="text-lg font-medium text-ellipsis truncate overflow-hidden leading-tight">
+                  <h2 className="text-lg font-medium text-ellipsis truncate overflow-hidden leading-tight text-green-400">
                     {session.name}
                   </h2>
 
-                  <p className="text-xs text-gray-500 pb-2">
+                  <p className="text-xs pb-2 text-green-400">
                     {session.description}
                   </p>
                 </div>

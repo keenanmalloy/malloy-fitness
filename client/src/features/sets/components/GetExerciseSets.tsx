@@ -43,7 +43,7 @@ const SetsList = ({ sets, sessionId, exerciseId, record }: SetsListProps) => {
   const { isLoading, mutate, isError } = useCreateSetMutation(sessionId);
 
   return (
-    <section className="px-3 w-full flex flex-col items-center py-5">
+    <section className="px-3 w-full flex flex-col items-center py-5 text-white">
       {!!sets.length && (
         <div
           className="text-xs flex items-center justify-between w-full text-right"
@@ -74,7 +74,7 @@ const SetsList = ({ sets, sessionId, exerciseId, record }: SetsListProps) => {
           })}
       </ul>
 
-      <Button
+      <button
         onClick={() =>
           mutate({
             exercise_id: exerciseId,
@@ -83,14 +83,14 @@ const SetsList = ({ sets, sessionId, exerciseId, record }: SetsListProps) => {
               : 1,
           })
         }
-        className="w-full max-w-md flex justify-center"
+        className="w-full max-w-md flex justify-center bg-slate-700 py-3 rounded-md"
       >
         {isLoading ? (
           <CgSpinner size={20} className="animate-spin text-blue-50" />
         ) : (
           'Add Set'
         )}
-      </Button>
+      </button>
     </section>
   );
 };

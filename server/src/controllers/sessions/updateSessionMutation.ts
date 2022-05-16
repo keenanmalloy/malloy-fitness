@@ -8,6 +8,11 @@ const updateSessionSchema = Joi.object({
   ended_at: Joi.string().optional(),
   session_dt: Joi.string().optional(),
   deload: Joi.boolean().optional(),
+  readiness_energy: Joi.number().min(1).max(5).optional(),
+  readiness_mood: Joi.number().min(1).max(5).optional(),
+  readiness_stress: Joi.number().min(1).max(5).optional(),
+  readiness_soreness: Joi.number().min(1).max(5).optional(),
+  readiness_sleep: Joi.number().min(1).max(5).optional(),
 });
 
 export const updateSessionMutation = async (

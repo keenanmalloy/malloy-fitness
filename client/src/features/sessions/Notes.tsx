@@ -23,7 +23,7 @@ export const Notes = ({ exercise, exerciseId, exNotes, workoutId }: Props) => {
   }, [exNotes]);
 
   return (
-    <div className="px-3 flex flex-col items-center">
+    <div className="px-3 flex flex-col items-center text-white">
       {!!notes && (
         <section className="text-sm break-words py-5">
           <pre className="text-sm break-words whitespace-pre-wrap">{notes}</pre>
@@ -32,7 +32,7 @@ export const Notes = ({ exercise, exerciseId, exNotes, workoutId }: Props) => {
 
       <button
         onClick={() => setIsOpen(!isOpen)}
-        className="bg-white text-gray-800 font-semibold py-2 border border-gray-400 rounded shadow w-full max-w-md"
+        className="w-full max-w-md flex justify-center bg-slate-700 py-3 rounded-md"
       >
         Notes
       </button>

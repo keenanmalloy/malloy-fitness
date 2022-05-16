@@ -66,7 +66,7 @@ const StartSession = ({
     }
     queryClient.invalidateQueries('fetchSession');
     if (!firstExerciseId) return router.push(`/sessions/${sessionId}/`);
-    router.push(`/sessions/${sessionId}/exercises/${firstExerciseId}`);
+    router.push(`/sessions/${sessionId}/start`);
   };
 
   if (hasEnded || hasExercises) {

@@ -29,7 +29,7 @@ export const SessionSummary = ({ data }: Props) => {
 
   if (!data.session.exercises.length) {
     return (
-      <div className="py-1">
+      <main className="py-1 bg-slate-900 min-h-screen">
         <div className="p-3 text-center">
           <SessionWorkoutTitle
             value={workoutTitle}
@@ -45,12 +45,12 @@ export const SessionSummary = ({ data }: Props) => {
             <ChooseExerciseModal data={data} />
           </div>
         )}
-      </div>
+      </main>
     );
   }
 
   return (
-    <div className="py-1">
+    <main className="py-1 bg-slate-900 min-h-screen text-white">
       <div className="p-3 text-center">
         <SessionWorkoutTitle
           value={workoutTitle}
@@ -92,7 +92,7 @@ export const SessionSummary = ({ data }: Props) => {
                           {/* <button className="-mb-1">
                           <IoMdArrowDropup size={30} />
                         </button> */}
-                          <div className="flex p-3 rounded-md bg-slate-900 text-white items-center max-h-10 min-h-10 ">
+                          <div className="flex p-3 rounded-md bg-slate-800 text-white items-center max-h-10 min-h-10 ">
                             <p>{getLetter(key)}1</p>
                           </div>
                           {/* <button className="-mt-1">
@@ -139,7 +139,7 @@ export const SessionSummary = ({ data }: Props) => {
                               <main className="flex flex-col divide-y-2 divide-green-50">
                                 {exercise.sets.map((set, index) => {
                                   return (
-                                    <div className="flex justify-between items-center space-x-2 border-solid py-1 bg-gray-50 px-2 rounded-md mt-1">
+                                    <div className="flex justify-between items-center space-x-2 py-1 bg-slate-700 px-2 rounded-md mt-1">
                                       <div className="flex flex-col flex-1 pt-1">
                                         <p>Set</p>
                                         <span className="text-xl -mt-2">
@@ -178,7 +178,7 @@ export const SessionSummary = ({ data }: Props) => {
           <ChooseExerciseModal data={data} />
         </div>
       )}
-    </div>
+    </main>
   );
 };
 
@@ -278,13 +278,13 @@ const SessionWorkoutTitle = ({
     event.target.select();
 
   return (
-    <div className="flex-1 text-2xl relative">
+    <div className="flex-1 text-2xl relative text-white px-2 py-1">
       <input
         onChange={onChange}
         value={value}
         type={type}
         placeholder={placeholder}
-        className="text-center"
+        className="text-center bg-slate-800 rounded-md w-full py-1"
         onFocus={handleFocus}
       />
       {isLoading && (
