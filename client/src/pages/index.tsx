@@ -19,7 +19,7 @@ function HomePage() {
 
       <GetSelectedDailyOverview selected={selected as SelectedDate} />
 
-      {/* Empty div to cover the height of the navbar */}
+      {/* Empty div to cover the height of the navbar. */}
       <div style={{ height: '70px' }} />
       <Navbar />
     </main>
