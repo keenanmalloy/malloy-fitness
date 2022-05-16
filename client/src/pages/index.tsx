@@ -9,7 +9,7 @@ function HomePage() {
   const [selected, setSelected] = useState<SelectedDate | {}>({});
 
   return (
-    <main>
+    <main className="bg-slate-900 min-h-screen ">
       {/* Empty div to cover the height of the navbar */}
       <div style={{ height: '40px' }} />
       <HomeHeader

@@ -44,7 +44,7 @@ export const UserAction = ({ selected }: Props) => {
         <button
           onClick={() => setIsOpen(!isOpen)}
           className="p-4 rounded-full bg-green-300 z-50 
-          focus:ring-4 focus:ring-green-100 
+          focus:ring-4 focus:ring-slate-700 
           "
         >
           <IoAdd

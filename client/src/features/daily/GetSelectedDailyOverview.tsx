@@ -23,7 +23,7 @@ export const GetSelectedDailyOverview = ({ selected }: Props) => {
 
   return (
     <section className="flex w-100 items-center justify-center">
-      <ul className="max-w-xl flex-col flex-1 divider-y">
+      <ul className="max-w-xl flex-col flex-1 divider-y text-white">
         <div className="h-28" />
         {/* <li>
           <Divider label="Nutrition" />

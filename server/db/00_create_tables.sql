@@ -25,6 +25,11 @@ CREATE TABLE IF NOT EXISTS sessions (
     session_dt timestamp with time zone,
     completed boolean default false NOT NULL,
     deload boolean default false NOT NULL,
+    readiness_energy integer,
+    readiness_mood integer,
+    readiness_stress integer,
+    readiness_soreness integer,
+    readiness_sleep integer,
     created_by bigint
 );
 

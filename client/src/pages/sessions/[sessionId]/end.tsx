@@ -86,10 +86,15 @@ const EndPage = ({ sessionId }: Props) => {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <main className="min-h-screen flex items-center justify-center bg-slate-800 text-white">
       <div className="flex justify-center px-8 flex-col w-full">
-        <Button onClick={() => setIsOpen(!isOpen)}>End Workout</Button>
-        <div className="pt-5">
+        <button
+          className="py-3 rounded-md w-full bg-slate-600"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          End Workout
+        </button>
+        <div className="pt-5 ">
           <Divider label="OR" />
         </div>
 
@@ -174,7 +179,7 @@ const EndPage = ({ sessionId }: Props) => {
           },
         }}
       />
-    </div>
+    </main>
   );
 };
 

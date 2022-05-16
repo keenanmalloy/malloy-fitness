@@ -2,7 +2,6 @@ import React from 'react';
 import { useSessionExerciseQuery } from 'features/sessions/useSessionExerciseQuery';
 import { SessionExercise } from 'features/sessions/SessionExercise';
 import SessionHeader from 'features/sessions/SessionHeader';
-import { Skeleton } from 'features/common/Skeleton';
 import { GetStaticPropsContext } from 'next';
 import { CgSpinner } from 'react-icons/cg';
 
@@ -34,25 +33,26 @@ const SessionExercisePage = ({ exerciseId, sessionId }: Props) => {
 
   if (isLoading) {
     return (
-      <div className="py-5">
-        <Skeleton className="h-14 w-full mt-7" />
+      <main className="bg-slate-800 min-h-screen py-5">
         <div className="flex justify-center items-center py-10">
           <CgSpinner className="animate-spin text-green-500" size={30} />
         </div>
-      </div>
+      </main>
     );
   }
 
   if (isError) {
-    return <div>Error!</div>;
+    return <main className="bg-slate-800 min-h-screen">Error!</main>;
   }
 
   if (!data) {
-    return <div>No session exercise</div>;
+    return (
+      <main className="bg-slate-800 min-h-screen">No session exercise</main>
+    );
   }
 
   return (
-    <>
+    <main className="bg-slate-800 min-h-screen">
       <SessionHeader
         sessionId={sessionId}
         exerciseId={exerciseId}
@@ -63,7 +63,7 @@ const SessionExercisePage = ({ exerciseId, sessionId }: Props) => {
         sessionId={sessionId}
         exerciseId={exerciseId}
       />
-    </>
+    </main>
   );
 };
 

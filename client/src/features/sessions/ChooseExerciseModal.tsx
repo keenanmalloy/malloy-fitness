@@ -55,16 +55,16 @@ export const ChooseExerciseModal = ({
 
   return (
     <div className="flex justify-center">
-      <div className="flex px-5 w-full">
+      <div className="flex px-5 w-full space-x-2">
         <button
-          className={`w-full py-2 px-4 text-sm font-medium bg-white rounded-md border border-gray-200 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:ring-1 focus:ring-green-300 focus:text-green-700`}
+          className={`w-full py-2 px-4 text-sm font-medium bg-slate-600 rounded-md focus:z-10 focus:ring-1 focus:ring-green-300 `}
           onClick={() => setIsOpen(true)}
         >
           Add Exercise
         </button>
 
         <button
-          className={`w-full py-2 px-4 text-sm font-medium bg-white rounded-md border border-gray-200 hover:bg-gray-100 hover:text-green-700 focus:z-10 focus:ring-1 focus:ring-green-300 focus:text-green-700`}
+          className={`w-full py-2 px-4 text-sm font-medium bg-slate-600 rounded-md focus:z-10 focus:ring-1 focus:ring-green-300 `}
           onClick={() => setIsOpen(true)}
         >
           Add Cardio
