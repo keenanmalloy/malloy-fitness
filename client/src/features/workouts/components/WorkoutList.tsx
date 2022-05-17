@@ -9,18 +9,18 @@ interface Props {
 
 export const WorkoutList = ({ workouts }: Props) => {
   return (
-    <ul className="flex flex-col divide-y-2 divide-gray-100">
+    <ul className="flex flex-col divide-y-2 divide-slate-700">
       {workouts.map((workout) => (
         <li className="border-solid py-6" key={workout.workout_id}>
           <Link href={`/workouts/${workout.workout_id}`}>
             {!workout.video ? (
-              <div className="mb-5 w-full aspect-video relative bg-slate-100  rounded-sm flex justify-center items-center">
+              <div className="mb-5 w-full aspect-video relative bg-slate-700  rounded-sm flex justify-center items-center">
                 <div className="text-2xl px-6 py-2 m-2 relative">
-                  <h1 className="text-slate-900">{workout.name}</h1>
+                  <h1 className="text-white">{workout.name}</h1>
                 </div>
               </div>
             ) : (
-              <div className="mb-5 w-full aspect-video relative flex justify-center items-center">
+              <div className="mb-5 w-full aspect-video relative flex justify-center items-center z-10">
                 <Image
                   src={`https://thumbnails.trckd.ca/${workout.video}-0.jpg`}
                   layout="fill"

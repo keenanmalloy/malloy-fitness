@@ -121,7 +121,7 @@ export default function Navbar() {
   return (
     <>
       {isOpen && (
-        <nav className=" p-2 bg-white shadow fixed bottom-16 left-0 w-full">
+        <nav className=" p-2 bg-slate-800 shadow fixed bottom-16 left-0 w-full z-30">
           <div className="max-w-7xl mx-auto px-2">
             <div className="flex-1 flex items-center justify-center">
               {libraryNavigation.map((item) => {
@@ -130,8 +130,8 @@ export default function Navbar() {
                     <a
                       className={classNames(
                         item.href === asPath
-                          ? 'bg-gray-700 text-white'
-                          : 'text-gray-800 hover:bg-gray-700 hover:text-white',
+                          ? 'bg-slate-700 text-white'
+                          : 'text-white hover:bg-gray-700 hover:text-white',
                         'px-3 py-2 rounded-md text-xs font-medium'
                       )}
                     >
@@ -170,7 +170,7 @@ export default function Navbar() {
                 <a
                   className={classNames(
                     item.href === asPath
-                      ? 'bg-gray-900 text-white'
+                      ? 'bg-slate-900 text-white'
                       : 'text-gray-300 hover:bg-gray-700 hover:text-white',
                     'px-3 py-2 rounded-md text-xs font-medium'
                   )}

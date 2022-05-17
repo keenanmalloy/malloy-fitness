@@ -1,6 +1,7 @@
 import React from 'react';
 import Select from 'react-select';
 import { WORKOUT_CATEGORIES, WORKOUT_TYPES } from 'features/environment';
+import { selectStyles } from 'features/common/selectStyles';
 
 interface Props {
   setCategory: (category: string) => void;
@@ -17,7 +18,7 @@ export const FilterWorkouts = ({
 }: Props) => {
   return (
     <>
-      <div className="flex flex-1 w-full">
+      <div className="flex flex-1 w-full text-xs space-x-2">
         <div className="pb-2 flex-1 w-full">
           <label>Category</label>
           <Select
@@ -26,6 +27,7 @@ export const FilterWorkouts = ({
             placeholder="Select"
             isSearchable={false}
             options={[{ label: 'all', value: '' }, ...WORKOUT_CATEGORIES]}
+            styles={selectStyles}
           />
         </div>
         <div className="pb-2 flex-1 w-full">
@@ -36,11 +38,12 @@ export const FilterWorkouts = ({
             placeholder="Select"
             isSearchable={false}
             options={[{ label: 'all', value: '' }, ...WORKOUT_TYPES]}
+            styles={selectStyles}
           />
         </div>
       </div>
 
-      <div className="flex flex-1 w-full">
+      <div className="flex flex-1 w-full text-xs space-x-2">
         <div className="pb-2 flex-1 w-full">
           <label>View</label>
           <Select
@@ -62,6 +65,7 @@ export const FilterWorkouts = ({
                 value: 'private',
               },
             ]}
+            styles={selectStyles}
           />
         </div>
         <div className="pb-2 flex-1 w-full">
@@ -78,6 +82,7 @@ export const FilterWorkouts = ({
               { label: 'updated asc', value: 'updated-asc' },
               { label: 'updated desc', value: 'updated-desc' },
             ]}
+            styles={selectStyles}
           />
         </div>
       </div>

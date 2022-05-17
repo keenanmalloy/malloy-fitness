@@ -56,7 +56,7 @@ export const GetRelatedExercises = ({
   return (
     <section className="py-5">
       <h2 className="py-3 text-lg underline">Related exercises</h2>
-      <ul className="flex flex-col divide-gray-100  space-y-1">
+      <ul className="flex flex-col space-y-1">
         {data.exercises.map((e) => {
           return (
             <Link
@@ -64,7 +64,7 @@ export const GetRelatedExercises = ({
               as={`/exercises/${e.exercise_id}`}
               key={e.exercise_id}
             >
-              <li className="border-solid py-4 bg-gray-50 flex justify-between px-3 rounded-sm">
+              <li className="border-solid py-4 bg-slate-800 flex justify-between px-3 rounded-sm">
                 <p>{e.name}</p>
                 <IoIosArrowRoundForward />
               </li>

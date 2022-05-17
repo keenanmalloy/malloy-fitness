@@ -8,9 +8,25 @@ interface Props {
   setTimerType: (timerType: TimerType) => void;
 }
 
-export const RestTimer = ({ setTimerType }: Props) => {
+export const RestTimer = ({ setTimerType, expiryTimestamp }: any) => {
   const handleFocus = (event: any) => event.target.select();
   const [value, setValue] = useState({ min: 0, sec: '00' });
+
+  const {
+    seconds,
+    minutes,
+    hours,
+    days,
+    isRunning,
+    start,
+    pause,
+    resume,
+    restart,
+  } = useTimer({
+    expiryTimestamp,
+    autoStart: false,
+    onExpire: () => console.warn('onExpire called'),
+  });
 
   const decrement = () => {
     if (value.min === 0 && value.sec === '00') {
@@ -116,7 +132,7 @@ export const RestTimer = ({ setTimerType }: Props) => {
           </div>
         </div>
         <button onClick={increment} className="p-3">
-          <AiOutlinePlusCircle size={30} />
+          <AiOutlinePlusCircle size={30} onClick={start} />
         </button>
       </div>
       <div className="flex justify-center pt-5">
@@ -125,46 +141,28 @@ export const RestTimer = ({ setTimerType }: Props) => {
         </button>
       </div>
       <div>
-        <Timer expiryTimestamp={new Date()} />
+        <div>
+          <div className="flex justify-center items-center pt-28">
+            <div style={{ fontSize: '25px' }}>
+              <span>{minutes}</span>:<span>{seconds}</span>
+            </div>
+          </div>
+          <div className="flex justify-center pt-20">
+            <button onClick={pause}>Pause</button>
+            <button onClick={resume}>Resume</button>
+            <button
+              onClick={() => {
+                // Restarts to 5 minutes timer
+                const time = new Date();
+                time.setSeconds(time.getSeconds() + 300);
+                restart(time);
+              }}
+            >
+              Restart
+            </button>
+          </div>
+        </div>
       </div>
-    </div>
-  );
-};
-
-const Timer = ({ expiryTimestamp }: { expiryTimestamp: Date }) => {
-  const {
-    seconds,
-    minutes,
-    hours,
-    days,
-    isRunning,
-    start,
-    pause,
-    resume,
-    restart,
-  } = useTimer({
-    expiryTimestamp,
-    onExpire: () => console.warn('onExpire called'),
-  });
-  return (
-    <div>
-      <div style={{ fontSize: '25px' }}>
-        <span>{minutes}</span>:<span>{seconds}</span>
-      </div>
-      <p>{isRunning ? 'Running' : 'Not running'}</p>
-      <button onClick={start}>Start</button>
-      <button onClick={pause}>Pause</button>
-      <button onClick={resume}>Resume</button>
-      <button
-        onClick={() => {
-          // Restarts to 5 minutes timer
-          const time = new Date();
-          time.setSeconds(time.getSeconds() + 300);
-          restart(time);
-        }}
-      >
-        Restart
-      </button>
     </div>
   );
 };

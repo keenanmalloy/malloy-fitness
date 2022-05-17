@@ -21,16 +21,15 @@ export const SearchMuscleGroups = ({
 
   return (
     <>
-      <div className="flex justify-end">
-        <button
-          onClick={() => setIsFilterOpen(!isFilterOpen)}
-          className="bg-white mt-2 text-gray-800 font-semibold py-1 px-3 border border-gray-400 rounded shadow"
-        >
-          {isFilterOpen ? <FaChevronUp /> : <FaChevronDown />}
-        </button>
-      </div>
-
-      <div className="sticky top-10 bg-white">
+      <div className="sticky top-10 bg-slate-900">
+        <div className="flex justify-start">
+          <button
+            onClick={() => setIsFilterOpen(!isFilterOpen)}
+            className="bg-white mt-2 text-gray-800 font-semibold py-1 px-3 border border-gray-400 rounded shadow"
+          >
+            {isFilterOpen ? <FaChevronUp /> : <FaChevronDown />}
+          </button>
+        </div>
         <div className="pt-2 w-full">
           {isFilterOpen && <FilterMuscleGroups setSortBy={setSortBy} />}
         </div>

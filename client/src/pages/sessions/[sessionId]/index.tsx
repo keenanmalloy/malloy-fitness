@@ -1,17 +1,9 @@
-import React, { useState } from 'react';
-import Layout from 'features/common/Layout';
+import React from 'react';
 import { useSessionSummaryQuery } from 'features/sessions/useSessionSummaryQuery';
-import { AiOutlineClockCircle } from 'react-icons/ai';
-import { CgCalendarDates } from 'react-icons/cg';
-import { GiTrafficLightsReadyToGo } from 'react-icons/gi';
-import { FaRegTired, FaWeightHanging } from 'react-icons/fa';
-import { Button } from 'features/common/Button';
-import { Skeleton } from 'features/common/Skeleton';
-import FullPageModal from 'features/modal/FullPageModal';
-import Image from 'next/image';
+import { CgSpinner } from 'react-icons/cg';
 import { GetStaticPropsContext } from 'next';
 import { SessionSummary } from 'features/sessions/SessionSummary';
-import { Survey } from 'features/survey/Survey';
+import { Header } from 'features/common/Header';
 
 export async function getStaticPaths() {
   arguments;
@@ -37,33 +29,37 @@ const SummaryPage = ({ sessionId }: Props) => {
 
   if (isLoading) {
     return (
-      <Layout>
-        <Skeleton className="h-20 w-full mt-7" />
-        <Skeleton className="h-44 w-full mt-1" />
-      </Layout>
+      <main className="min-h-screen pt-10 bg-slate-900 flex justify-center items-center">
+        <Header />
+        <div className="h-10" />
+        <CgSpinner size={32} className="animate-spin text-green-500" />
+      </main>
     );
   }
 
   if (isError) {
     return (
-      <Layout>
+      <main className="min-h-screen pt-10 bg-slate-900">
+        <Header />
         <p>Something went wrong</p>
-      </Layout>
+      </main>
     );
   }
 
   if (!data || !data.session) {
     return (
-      <Layout>
+      <main className="min-h-screen pt-10 bg-slate-900">
+        <Header />
         <p>No session found</p>
-      </Layout>
+      </main>
     );
   }
 
   return (
-    <Layout>
+    <main className="min-h-screen pt-10 bg-slate-900">
+      <Header />
       <SessionSummary data={data} />
-    </Layout>
+    </main>
   );
 };
 

@@ -68,7 +68,7 @@ export const MuscleGroups = () => {
         setQuery={setQuery}
         role={data?.role}
       />
-      <ul className="flex flex-col divide-y-2 divide-gray-100">
+      <ul className="flex flex-col divide-y-2 divide-slate-700">
         {
           /* Results with search */
           query ? (
@@ -110,7 +110,7 @@ export const MuscleGroups = () => {
 
                       <footer className="flex justify-between justify-self-stretch place-content-stretch justify-items-stretch">
                         <Link href={`/muscle-groups/${mg.muscle_group_id}`}>
-                          <button className="bg-white mt-2 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-32">
+                          <button className="bg-slate-700 mt-2 text-white font-semibold py-2 px-4 border border-gray-400 rounded shadow w-32">
                             Visit
                           </button>
                         </Link>
@@ -167,7 +167,7 @@ export const MuscleGroups = () => {
 
                       <footer className="flex justify-between justify-self-stretch place-content-stretch justify-items-stretch">
                         <Link href={`/muscle-groups/${mg.muscle_group_id}`}>
-                          <button className="bg-white mt-2 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-32">
+                          <button className="bg-slate-700 mt-2 text-white font-semibold py-2 px-4 rounded shadow w-32">
                             Visit
                           </button>
                         </Link>

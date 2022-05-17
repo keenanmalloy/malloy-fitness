@@ -85,7 +85,7 @@ export default function Upload({
     <section className="py-2 relative">
       <div className="flex flex-col">
         <label className="">{title}</label>
-        <small className="text-xs text-gray-500">(max 5GB).</small>
+        <small className="text-xs text-gray-300">(max 5GB).</small>
       </div>
 
       <input
@@ -99,13 +99,13 @@ export default function Upload({
         px-2
         py-1.5
         font-normal
-        text-gray-700
-        bg-white bg-clip-padding
-        border border-solid border-gray-300
+        text-white
+        bg-clip-padding
+        border border-solid border-slate-500
         rounded
         transition
         ease-in-out
-        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+        focus:text-slate-700 focus:bg-slate-300 focus:border-green-300 focus:outline-none"
       />
 
       <button

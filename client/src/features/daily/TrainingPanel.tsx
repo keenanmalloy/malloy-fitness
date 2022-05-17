@@ -42,7 +42,7 @@ export const TrainingPanel = ({ data }: Props) => {
               <Link href={`sessions/${session.session_id}`}>
                 <a>
                   {!session.video ? (
-                    <div className="bg-gray-100 h-full w-full rounded-md" />
+                    <div className="bg-slate-700 h-full w-full rounded-md" />
                   ) : (
                     <Image
                       src={`https://thumbnails.trckd.ca/${session.video}-0.jpg`}
