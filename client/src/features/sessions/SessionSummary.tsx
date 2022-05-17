@@ -29,7 +29,7 @@ export const SessionSummary = ({ data }: Props) => {
 
   if (!data.session.exercises.length) {
     return (
-      <main className="py-1 bg-slate-900 min-h-screen">
+      <main>
         <div className="p-3 text-center">
           <SessionWorkoutTitle
             value={workoutTitle}
@@ -41,7 +41,7 @@ export const SessionSummary = ({ data }: Props) => {
         </div>
 
         {!data.session.ended_at && (
-          <div className="py-5">
+          <div className="py-5 text-white">
             <ChooseExerciseModal data={data} />
           </div>
         )}
@@ -70,7 +70,7 @@ export const SessionSummary = ({ data }: Props) => {
         />
       </div>
 
-      <ul className="flex flex-col divide-y-2 divide-gray-50 px-3 pb-5">
+      <ul className="flex flex-col divide-y-2 divide-slate-700 px-3 pb-5">
         {data.session.exercise_order &&
           data.session.exercise_order
             .map((exerciseId) =>

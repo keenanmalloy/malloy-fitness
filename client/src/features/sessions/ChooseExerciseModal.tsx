@@ -72,7 +72,7 @@ export const ChooseExerciseModal = ({
       </div>
 
       <FullPageModal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
-        <div className="sticky top-0 bg-white z-50">
+        <div className="sticky top-0 bg-slate-900 text-white z-50 ">
           <div className="flex justify-start">
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}

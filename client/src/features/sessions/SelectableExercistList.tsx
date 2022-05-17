@@ -75,7 +75,7 @@ export const SelectableExerciseList = ({
   });
 
   return (
-    <ul className="flex flex-col divide-y-2 divide-gray-100">
+    <ul className="flex flex-col divide-y-2 divide-slate-700 text-white">
       {filteredExercises.map((exercise) => (
         <button
           className="border-solid py-6"

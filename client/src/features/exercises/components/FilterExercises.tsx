@@ -18,7 +18,7 @@ export const FilterExercises = ({
   return (
     <>
       <div className="flex flex-1 w-full">
-        <div className="pb-2 flex-1 w-full">
+        <div className="pb-2 flex-1 w-full ">
           <label>Category</label>
           <Select
             onChange={(data) => setCategory(data?.value ?? '')}
@@ -41,6 +41,12 @@ export const FilterExercises = ({
               { label: 'mid', value: 'mid' },
               { label: 'long', value: 'long' },
             ]}
+            styles={{
+              container: (base) => ({
+                ...base,
+                width: '100%',
+              }),
+            }}
           />
         </div>
       </div>
