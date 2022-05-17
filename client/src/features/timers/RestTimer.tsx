@@ -8,7 +8,7 @@ interface Props {
   setTimerType: (timerType: TimerType) => void;
 }
 
-export const RestTimer = ({ setTimerType, expiryTimestamp }) => {
+export const RestTimer = ({ setTimerType, expiryTimestamp }: any) => {
   const handleFocus = (event: any) => event.target.select();
   const [value, setValue] = useState({ min: 0, sec: '00' });
 
