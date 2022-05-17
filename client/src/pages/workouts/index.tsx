@@ -20,7 +20,7 @@ const WorkoutsPage = () => {
   return (
     <Layout>
       <section>
-        <div className="sticky top-11 bg-white z-10 p-2">
+        <div className="sticky top-11 bg-slate-900 z-20 p-2">
           <div className="flex justify-between">
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
@@ -30,7 +30,7 @@ const WorkoutsPage = () => {
             </button>
             <h1 className="">Workouts</h1>
           </div>
-          <div className="py-2 w-full">
+          <div className="py-2 w-full ">
             {isFilterOpen && (
               <FilterWorkouts
                 setCategory={setCategory}

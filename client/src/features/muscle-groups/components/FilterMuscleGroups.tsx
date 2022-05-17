@@ -1,3 +1,4 @@
+import { selectStyles } from 'features/common/selectStyles';
 import React from 'react';
 import Select from 'react-select';
 
@@ -21,6 +22,7 @@ export const FilterMuscleGroups = ({ setSortBy }: Props) => {
               { label: 'alphabetical A-Z', value: 'A-Z' },
               { label: 'alphabetical Z-A', value: 'Z-A' },
             ]}
+            styles={selectStyles}
           />
         </div>
       </div>

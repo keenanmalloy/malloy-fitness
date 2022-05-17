@@ -31,8 +31,11 @@ export const UpdateExercise = ({ exercise, queryKey }: Props) => {
 
   return (
     <>
-      <Button onClick={() => setIsOpen(!isOpen)} className="px-0 py-0">
-        <MdEdit className="h-6 w-10" />
+      <Button
+        onClick={() => setIsOpen(!isOpen)}
+        className="flex justify-center items-center"
+      >
+        <MdEdit size={18} />
       </Button>
 
       <Modal

@@ -17,8 +17,8 @@ export const FilterExercises = ({
 }: Props) => {
   return (
     <>
-      <div className="flex flex-1 w-full">
-        <div className="pb-2 flex-1 w-full ">
+      <div className="flex flex-1 w-full space-x-2 text-xs">
+        <div className="pb-2 flex-1 w-full">
           <label>Category</label>
           <Select
             onChange={(data) => setCategory(data?.value ?? '')}
@@ -26,6 +26,7 @@ export const FilterExercises = ({
             placeholder="Select"
             isSearchable={false}
             options={[{ label: 'all', value: '' }, ...EXERCISE_CATEGORIES]}
+            styles={selectStyles}
           />
         </div>
         <div className="pb-2 flex-1 w-full">
@@ -41,17 +42,12 @@ export const FilterExercises = ({
               { label: 'mid', value: 'mid' },
               { label: 'long', value: 'long' },
             ]}
-            styles={{
-              container: (base) => ({
-                ...base,
-                width: '100%',
-              }),
-            }}
+            styles={selectStyles}
           />
         </div>
       </div>
 
-      <div className="flex flex-1 w-full">
+      <div className="flex flex-1 w-full space-x-2 text-xs">
         <div className="pb-2 flex-1 w-full">
           <label>View</label>
           <Select
@@ -73,6 +69,7 @@ export const FilterExercises = ({
                 value: 'private',
               },
             ]}
+            styles={selectStyles}
           />
         </div>
         <div className="pb-2 flex-1 w-full">
@@ -89,9 +86,38 @@ export const FilterExercises = ({
               { label: 'updated asc', value: 'updated-asc' },
               { label: 'updated desc', value: 'updated-desc' },
             ]}
+            styles={selectStyles}
           />
         </div>
       </div>
     </>
   );
+};
+
+const selectStyles: any = {
+  control: (base: any, state: string) => ({
+    ...base,
+    background: '#1e293b',
+    color: 'white',
+    borderColor: '#334155',
+  }),
+  menu: (base: any, state: string) => ({
+    ...base,
+    background: '#1e293b',
+    borderColor: '#334155',
+  }),
+  singleValue: (base: any, state: string) => ({
+    ...base,
+    color: 'white',
+  }),
+  placeholder: (base: any, state: string) => ({
+    ...base,
+    color: 'white',
+  }),
+  option: (base: any, state: string) => ({
+    ...base,
+    color: 'white',
+    background: '#1e293b',
+    borderColor: '#1e293b',
+  }),
 };

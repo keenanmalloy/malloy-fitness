@@ -41,7 +41,7 @@ export const SessionSummary = ({ data }: Props) => {
         </div>
 
         {!data.session.ended_at && (
-          <div className="py-5 text-white">
+          <div className="p-5 text-white">
             <ChooseExerciseModal data={data} />
           </div>
         )}
@@ -174,7 +174,7 @@ export const SessionSummary = ({ data }: Props) => {
       </ul>
 
       {!data.session.ended_at && (
-        <div className="py-5">
+        <div className="p-5">
           <ChooseExerciseModal data={data} />
         </div>
       )}
