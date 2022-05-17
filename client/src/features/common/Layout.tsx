@@ -4,7 +4,7 @@ import { Header } from './Header';
 
 const Layout: React.FC = ({ children }) => {
   return (
-    <main>
+    <main className="bg-slate-900 text-white min-h-screen">
       {/* Empty div to cover the height of the navbar */}
       <div style={{ height: '40px' }} />
       <Header />

@@ -67,12 +67,12 @@ export const ExerciseList = ({
   }
 
   return (
-    <ul className="flex flex-col divide-y-2 divide-gray-100">
+    <ul className="flex flex-col divide-y-2 divide-slate-700">
       {data.exercises.map((exercise) => (
         <li className="border-solid py-6" key={exercise.exercise_id}>
           {!!exercise.video && (
             <Link href={`/exercises/${exercise.exercise_id}`}>
-              <div className="mb-5 w-full aspect-video relative">
+              <div className="mb-5 w-full aspect-video relative z-10">
                 <Image
                   src={`https://thumbnails.trckd.ca/${exercise.video}-0.jpg`}
                   layout="fill"
@@ -92,7 +92,7 @@ export const ExerciseList = ({
 
           <footer className="flex pt-2 justify-between justify-self-stretch place-content-stretch justify-items-stretch">
             <Link href={`/exercises/${exercise.exercise_id}`}>
-              <button className="bg-white mt-2 text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-32">
+              <button className="bg-slate-700 mt-2 text-white font-semibold py-2 px-4 rounded shadow w-32">
                 Visit
               </button>
             </Link>

@@ -16,7 +16,7 @@ const FullPageModal: React.FC<ModalPropsShared> = ({
         className="fixed inset-0 z-10 overflow-y-auto"
         onClose={closeModal}
       >
-        <section className={`min-h-screen text-center  h-100 bg-white`}>
+        <section className={`min-h-screen text-center  h-100`}>
           <Transition.Child
             as={Fragment}
             enter="ease-out duration-300"
@@ -41,18 +41,18 @@ const FullPageModal: React.FC<ModalPropsShared> = ({
             leaveTo="opacity-0 scale-95"
           >
             <div
-              className={`inline-block min-h-screen w-full max-w-md px-3 py-2 text-left align-middle transition-all transform bg-white rounded-2xl`}
+              className={`inline-block min-h-screen w-full max-w-md px-3 py-2 text-left align-middle transition-all transform bg-slate-900`}
             >
               <Dialog.Title
                 as="h3"
-                className="text-lg font-medium leading-6 text-gray-900 pr-4"
+                className="text-lg font-medium leading-6 text-white pr-4"
               >
                 {title}
               </Dialog.Title>
               {description && (
                 <Dialog.Description
                   as="p"
-                  className="mt-2 text-sm leading-5 text-gray-500"
+                  className="mt-2 text-sm leading-5 text-white"
                 >
                   {description}
                 </Dialog.Description>

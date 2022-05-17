@@ -13,6 +13,8 @@ import { Divider } from 'features/feed/Divider';
 import { SessionFooter } from 'features/sessions/SessionFooter';
 import { BiX } from 'react-icons/bi';
 import { ChooseExerciseModal } from 'features/sessions/ChooseExerciseModal';
+import { useEndSessionMutation } from 'features/sessions/useEndSessionMutation';
+import { CgSpinner } from 'react-icons/cg';
 
 export async function getStaticPaths() {
   return {
@@ -41,31 +43,18 @@ const EndPage = ({ sessionId }: Props) => {
 
   const { data, isError, isLoading } = useSessionSummaryQuery(sessionId);
 
-  const endWorkout = async (id: string) => {
-    const { data } = await apiClient.patch(`/sessions/${id}/end`);
-    return data;
-  };
-
-  const handleStop = () => {
-    endWorkout(sessionId)
-      .then(() => {
-        router.push('/');
-      })
-      .catch((e) => {
-        console.log({ e });
-        setError(true);
-      });
-  };
+  const { mutate, isLoading: isEndingSession } =
+    useEndSessionMutation(sessionId);
 
   const handleFinishSession = () => {
-    endWorkout(sessionId)
-      .then(() => {
-        router.push(`/sessions/${sessionId}/`);
-      })
-      .catch((e) => {
-        console.log({ e });
-        setError(true);
-      });
+    mutate(
+      {},
+      {
+        onSuccess: () => {
+          router.push(`/sessions/${sessionId}/`);
+        },
+      }
+    );
   };
 
   if (isLoading) {
@@ -106,11 +95,11 @@ const EndPage = ({ sessionId }: Props) => {
         <FullPageModal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
           <button
             onClick={() => setIsOpen(false)}
-            className="absolute right-0 top-0 p-3"
+            className="absolute right-0 top-0 p-3 text-white"
           >
             <BiX />
           </button>
-          <div className="flex flex-col text-center justify-center w-full">
+          <div className="flex flex-col text-center justify-center w-full text-white">
             <h2>INTENSITY</h2>
             <h3>How hard was this session?</h3>
             <p className="py-6">-</p>
@@ -153,12 +142,25 @@ const EndPage = ({ sessionId }: Props) => {
               />
             </div>
             <div className="py-10">
-              <Button onClick={handleFinishSession} className="w-full mb-6">
-                Finish Session
-              </Button>
-              <Button onClick={() => setIsOpen(false)} className="w-full">
+              <button
+                onClick={handleFinishSession}
+                className="w-full mb-6 py-3 bg-slate-700 rounded-md flex items-center justify-center"
+              >
+                {isEndingSession ? (
+                  <CgSpinner
+                    size={16}
+                    className="animate-spin text-green-500"
+                  />
+                ) : (
+                  'Finish Session'
+                )}
+              </button>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="w-full mb-6 py-3 bg-slate-700 rounded-md"
+              >
                 Back to Training
-              </Button>
+              </button>
             </div>
           </div>
         </FullPageModal>

@@ -55,7 +55,7 @@ export const ChooseExerciseModal = ({
 
   return (
     <div className="flex justify-center">
-      <div className="flex px-5 w-full space-x-2">
+      <div className="flex w-full space-x-2">
         <button
           className={`w-full py-2 px-4 text-sm font-medium bg-slate-600 rounded-md focus:z-10 focus:ring-1 focus:ring-green-300 `}
           onClick={() => setIsOpen(true)}
@@ -72,7 +72,7 @@ export const ChooseExerciseModal = ({
       </div>
 
       <FullPageModal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
-        <div className="sticky top-0 bg-white z-50">
+        <div className="sticky top-0 bg-slate-900 text-white z-50 ">
           <div className="flex justify-start">
             <button
               onClick={() => setIsFilterOpen(!isFilterOpen)}
@@ -117,6 +117,7 @@ export const ChooseExerciseModal = ({
           sortBy={sortBy}
           exercises={data.session.exercises}
           handleExerciseSelection={handleExerciseSelection}
+          isLoading={isLoading}
         />
         <div className="h-20" />
       </FullPageModal>

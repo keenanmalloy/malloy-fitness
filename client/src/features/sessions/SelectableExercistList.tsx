@@ -3,6 +3,7 @@ import { useExercisesQuery } from 'features/exercises/api/useExercisesQuery';
 import { Skeleton } from 'features/common/Skeleton';
 import Image from 'next/image';
 import { useDebounce } from 'features/common/useDebounce';
+import { CgSpinner } from 'react-icons/cg';
 
 interface Props {
   query: string;
@@ -10,6 +11,7 @@ interface Props {
   view: string;
   profile: string;
   sortBy: string;
+  isLoading?: boolean;
   exercises: any[];
   handleExerciseSelection: (exerciseId: string) => void;
 }
@@ -21,17 +23,22 @@ export const SelectableExerciseList = ({
   profile,
   sortBy,
   exercises,
+  isLoading,
   handleExerciseSelection,
 }: Props) => {
   const debouncedSearchQuery = useDebounce(query, 600);
-  const { data, isError, isLoading } = useExercisesQuery({
+  const {
+    data,
+    isError,
+    isLoading: isExercisesLoading,
+  } = useExercisesQuery({
     query: debouncedSearchQuery,
     category,
     view,
     profile,
     sortBy,
   });
-  if (isLoading) {
+  if (isExercisesLoading) {
     return (
       <section>
         <Skeleton className="h-28 w-full mt-2" />
@@ -74,13 +81,22 @@ export const SelectableExerciseList = ({
     return true;
   });
 
+  if (isLoading) {
+    return (
+      <div className="flex justify-center items-center h-full">
+        <CgSpinner size={30} className=" animate-spin text-green-500" />
+      </div>
+    );
+  }
+
   return (
-    <ul className="flex flex-col divide-y-2 divide-gray-100">
+    <ul className="flex flex-col divide-y-2 divide-slate-700 text-white">
       {filteredExercises.map((exercise) => (
         <button
           className="border-solid py-6"
           key={exercise.exercise_id}
           onClick={() => handleExerciseSelection(exercise.exercise_id)}
+          disabled={isLoading}
         >
           {!!exercise.video && (
             <div className="mb-5 w-full aspect-video relative">

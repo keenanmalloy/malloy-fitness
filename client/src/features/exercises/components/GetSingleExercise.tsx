@@ -9,7 +9,6 @@ import { useUpdateExerciseMutation } from '../api/useUpdateExerciseMutation';
 import { useQueryClient } from 'react-query';
 import { GetRelatedExercises } from './GetRelatedExercises';
 import { IoIosArrowRoundForward } from 'react-icons/io';
-import { useRouter } from 'next/router';
 
 interface Props {
   id: string;
@@ -18,7 +17,6 @@ interface Props {
 export const GetSingleExercise = ({ id }: Props) => {
   const { data, isError, isLoading } = useExerciseQuery(id);
   const queryClient = useQueryClient();
-  const router = useRouter();
   const {
     data: mgData,
     isError: mgIsError,
@@ -64,25 +62,25 @@ export const GetSingleExercise = ({ id }: Props) => {
 
   return (
     <section className="p-5 relative">
-      <header className="flex justify-between">
-        <button
-          className="bg-white  text-gray-800 font-semibold py-2 px-4 border border-gray-400 rounded shadow w-32"
-          onClick={() => router.back()}
-        >
-          Back
-        </button>
-        {(data.role === 'developer' || data.exercise.view === 'private') && (
-          <UpdateExercise exercise={data.exercise} queryKey="fetchExercise" />
-        )}
-      </header>
-
       <main className="pt-5">
         <div className="flex justify-between">
           <h1 className="text-2xl pr-2 pb-2">{data.exercise.name}</h1>
-          <span className="bg-blue-300 flex items-center text-white px-4 rounded-md max-h-8">
-            {data.exercise.category ?? 'other'}
-          </span>
+          <div className="flex flex-col space-y-2 items-end">
+            <span className="bg-blue-300 flex-1 flex items-center text-white px-4 py-2 rounded-md max-h-8">
+              {data.exercise.category ?? 'other'}
+            </span>
+            <div>
+              {(data.role === 'developer' ||
+                data.exercise.view === 'private') && (
+                <UpdateExercise
+                  exercise={data.exercise}
+                  queryKey="fetchExercise"
+                />
+              )}
+            </div>
+          </div>
         </div>
+
         <p>{data.exercise.description}</p>
 
         {!!data.exercise.video && (
@@ -125,40 +123,40 @@ export const GetSingleExercise = ({ id }: Props) => {
             <h2 className="text-lg">Profile</h2>
 
             <div className="relative flex justify-between py-5">
-              <div>
+              <div className="z-10">
                 <div
-                  className={`p-2 ${
+                  className={`p-2 z-50 ${
                     data.exercise.profile?.toLowerCase() === 'short'
-                      ? 'bg-blue-300'
+                      ? 'bg-green-300'
                       : 'bg-gray-200'
                   } rounded-full w-5 h-5 z-10`}
                 />
                 <p className="pt-2 text-xs">Short</p>
               </div>
 
-              <div>
+              <div className="z-10">
                 <div
-                  className={`p-2 ${
+                  className={`p-2 z-50 ${
                     data.exercise.profile?.toLowerCase() === 'mid'
-                      ? 'bg-blue-300'
+                      ? 'bg-green-300'
                       : 'bg-gray-200'
                   } rounded-full w-5 h-5 z-10`}
                 />
                 <p className="pt-2 text-xs">Mid</p>
               </div>
 
-              <div>
+              <div className="z-10">
                 <div
-                  className={`p-2 ${
+                  className={`p-2 z-50 ${
                     data.exercise.profile?.toLowerCase() === 'long'
-                      ? 'bg-blue-300'
+                      ? 'bg-green-300'
                       : 'bg-gray-200'
                   } rounded-full w-5 h-5 z-10`}
                 />
                 <p className="pt-2 text-xs">Long</p>
               </div>
 
-              <div className="absolute top-7 right-4 left-4 border-2 h-0.5 bg-black -z-50"></div>
+              <div className="absolute top-7 right-4 left-4 border-2 h-0.5 bg-white text-white"></div>
             </div>
           </div>
         )}
@@ -168,7 +166,7 @@ export const GetSingleExercise = ({ id }: Props) => {
           <ul className="pl-5 flex-col space-y-1">
             <h3 className="py-3 text-sm underline capitalize">primary</h3>
             {!data.exercise.primary.length && (
-              <li className="border-solid py-4 bg-gray-50 flex justify-between px-3 rounded-sm">
+              <li className="border-solid py-4 bg-slate-800 flex justify-between px-3 rounded-sm">
                 <p>None</p>
               </li>
             )}
@@ -178,7 +176,7 @@ export const GetSingleExercise = ({ id }: Props) => {
                 as={`/muscle-groups/${group.muscle_group_id}`}
                 key={group.muscle_group_id}
               >
-                <li className="border-solid py-4 bg-gray-50 flex justify-between px-3 rounded-sm">
+                <li className="border-solid py-4 bg-slate-800 flex justify-between px-3 rounded-sm">
                   <p>{group.name}</p>
                   <IoIosArrowRoundForward />
                 </li>
@@ -189,7 +187,7 @@ export const GetSingleExercise = ({ id }: Props) => {
           <ul className="pl-5 flex-col space-y-1">
             <h3 className="py-3 text-sm underline capitalize">secondary</h3>
             {!data.exercise.secondary.length && (
-              <li className="border-solid py-4 bg-gray-50 flex justify-between px-3 rounded-sm">
+              <li className="border-solid py-4 bg-slate-800 flex justify-between px-3 rounded-sm">
                 <p>None</p>
               </li>
             )}
@@ -199,7 +197,7 @@ export const GetSingleExercise = ({ id }: Props) => {
                 as={`/muscle-groups/${group.muscle_group_id}`}
                 key={group.muscle_group_id}
               >
-                <li className="border-solid py-4 bg-gray-50 flex justify-between px-3 rounded-sm">
+                <li className="border-solid py-4 bg-slate-800 flex justify-between px-3 rounded-sm">
                   <p>{group.name}</p>
                   <IoIosArrowRoundForward />
                 </li>
