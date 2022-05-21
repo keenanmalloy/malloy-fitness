@@ -1,16 +1,13 @@
-import { db } from 'config/db';
 import { Response } from 'express';
+import { deleteSetsByExercise } from 'queries/sets';
 
 export const deleteSetsByExerciseMutation = async (
   res: Response,
   sessionId: string,
   exerciseId: string
 ): Promise<Response> => {
-  const query = `DELETE FROM sets WHERE session_id = $1 AND exercise_id = $2 RETURNING *;`;
-  const params = [sessionId, exerciseId];
-
   try {
-    const data = await db.query(query, params);
+    const data = await deleteSetsByExercise(sessionId, exerciseId);
 
     if (!data.rowCount) {
       return res.status(404).json({

@@ -1,8 +1,8 @@
+import { addMuscleGroupToExercise } from 'controllers/exercises/addMuscleGroupToExercise';
+import { removeMuscleGroupFromExercise } from 'controllers/exercises/removeMuscleGroupFromExercise';
 import { Router } from 'express';
 import { authenticate } from 'middlewares/authenticate';
 import { authorize } from 'middlewares/authorize';
-import { addMuscleGroupToExercise } from 'controllers/addMuscleGroupToExercise';
-import { removeMuscleGroupFromExercise } from 'controllers/removeMuscleGroupFromExercise';
 
 const router = Router();
 

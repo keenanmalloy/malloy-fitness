@@ -38,7 +38,7 @@ export const cloneScheduleWorkoutMutation = async (
 
     const workoutQuery = `
       WITH
-        workoutdata(name, description, category, created_by, workout_dt, exercise_order) AS (
+        workoutdata(name, description, category, created_by, workout_dt, task_order) AS (
           VALUES
             (
                 '${workout.name}', 
@@ -49,7 +49,7 @@ export const cloneScheduleWorkoutMutation = async (
                 '${exerciseOrder}'::jsonb
             )
         )
-        INSERT INTO workouts (name, description, category, created_by, workout_dt, exercise_order)
+        INSERT INTO workouts (name, description, category, created_by, workout_dt, task_order)
           SELECT *
             FROM workoutdata
           RETURNING *
@@ -114,7 +114,7 @@ const retrieveWorkoutQuery = async (workoutId: string, accountId: string) => {
   workouts.category as category,
   workouts.workout_id,
   workouts.created_by,
-  workouts.exercise_order,
+  workouts.task_order,
   we.exercise_id
 FROM workouts
 LEFT OUTER JOIN workout_exercises we on workouts.workout_id = we.workout_id
@@ -147,7 +147,7 @@ WHERE workouts.workout_id = $1`;
       description: data.rows[0].description,
       category: data.rows[0].category,
       workout_id: data.rows[0].workout_id,
-      exercise_order: data.rows[0].exercise_order,
+      task_order: data.rows[0].task_order,
       workoutExercises,
     };
 

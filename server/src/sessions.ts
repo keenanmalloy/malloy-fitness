@@ -1,7 +1,7 @@
 import Iron from '@hapi/iron';
 import { getTokenCookie, MAX_AGE, setTokenCookie } from './cookies';
 import { Request, Response } from 'express';
-import { toTimestampz, toUnix } from './time';
+import { toTimestampz, toUnix } from './utils/time';
 import { Auth } from 'googleapis';
 
 const TOKEN_SECRET = `6SZ=3f<Gtxd3E^7J=.sfxX238nf27o3fnGd!9pKhcq`;

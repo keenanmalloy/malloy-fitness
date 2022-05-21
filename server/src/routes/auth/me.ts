@@ -1,7 +1,7 @@
+import { retrieveMeQuery } from 'controllers/account/retrieveAccountQuery';
+import { updateAccountMutation } from 'controllers/account/updateAccountMutation';
 import { Router } from 'express';
 import { authenticate } from 'middlewares/authenticate';
-import { retrieveMeQuery } from 'controllers/retrieveAccountQuery';
-import { updateAccountMutation } from 'controllers/updateAccountMutation';
 
 const router = Router();
 

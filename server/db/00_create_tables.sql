@@ -1,3 +1,36 @@
+CREATE TABLE IF NOT EXISTS exercises (
+    exercise_id bigserial PRIMARY KEY,
+    created_at timestamp with time zone DEFAULT now() NOT NULL,
+    updated_at timestamp with time zone DEFAULT now() NOT NULL,
+
+    -- Can be of either 'public' | 'private'
+    -- Public view means anyone can see the exercise / view the exercise
+    -- Private view means only the user who created the exercise can view the exercise
+    view text DEFAULT 'private',
+    name text,
+    description text,
+    category character varying(30),
+    video text,
+    profile character varying(30),
+    primary_tracker character varying(30),
+    secondary_tracker character varying(30),
+    type text, -- hypertrophy, strength, cardio, physiotherapy
+    created_by bigint
+);
+
+CREATE TABLE IF NOT EXISTS muscle_groups (
+    muscle_group_id bigserial PRIMARY KEY,
+    name text,
+    description text,
+    image text
+);
+
+CREATE TABLE IF NOT EXISTS exercise_muscle_groups (
+    "group" character varying(30), -- primary || secondary
+    muscle_group_id bigint REFERENCES muscle_groups(muscle_group_id),
+    exercise_id bigint REFERENCES exercises(exercise_id) ON DELETE CASCADE
+);
+
 CREATE TABLE IF NOT EXISTS workouts (
     workout_id bigserial PRIMARY KEY,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
@@ -6,7 +39,7 @@ CREATE TABLE IF NOT EXISTS workouts (
     description text,
     category character varying(30),
     type text, 
-    exercise_order jsonb -- [1, 2, 3, 4, 5] // list of exercise ids in order
+    task_order jsonb, -- [1, 2, 3, 4, 5] // list of workout_task_id's in order
 
     -- Can be of either 'public' | 'private'
     -- Public view means anyone can see the exercise / view the exercise
@@ -30,58 +63,45 @@ CREATE TABLE IF NOT EXISTS sessions (
     readiness_stress integer,
     readiness_soreness integer,
     readiness_sleep integer,
+    name text,
     created_by bigint
 );
 
-CREATE TABLE IF NOT EXISTS exercises (
-    exercise_id bigserial PRIMARY KEY,
+CREATE TABLE IF NOT EXISTS exercise_notes (
+    exercise_note_id bigserial PRIMARY KEY,
+    session_id bigint NOT NULL REFERENCES sessions(session_id) ON DELETE CASCADE,
+    exercise_id bigint NOT NULL REFERENCES exercises(exercise_id) ON DELETE CASCADE,
+
     created_at timestamp with time zone DEFAULT now() NOT NULL,
     updated_at timestamp with time zone DEFAULT now() NOT NULL,
 
-    -- Can be of either 'public' | 'private'
-    -- Public view means anyone can see the exercise / view the exercise
-    -- Private view means only the user who created the exercise can view the exercise
-    view text DEFAULT 'private',
-    name text,
-    description text,
-    category character varying(30),
+    notes text,
     video text,
-    profile character varying(30),
-    primary_tracker character varying(30),
-    secondary_tracker character varying(30),
-    type text, -- hypertrophy, strength, cardio, physiotherapy
-    created_by bigint
+    image text
 );
 
-CREATE TABLE IF NOT EXISTS workout_exercises (
-    workout_exercise_id bigserial PRIMARY KEY,
-    workout_id bigint REFERENCES workouts(workout_id) ON DELETE CASCADE,
-    exercise_id bigint REFERENCES exercises(exercise_id) ON DELETE CASCADE,
-    notes text,
+-- We use this table to link /sessions/:session_id/task/:workout_task_id 
+-- This is so we can have supersets of exercises in a session
+CREATE TABLE IF NOT EXISTS workout_tasks (
+    workout_task_id bigserial PRIMARY KEY,
+    exercise_order jsonb, -- [1, 2, 3, 4, 5] // list of exercise_id's in order
+    workout_id bigint NOT NULL REFERENCES workouts(workout_id) ON DELETE CASCADE
+);
+
+CREATE TABLE IF NOT EXISTS workout_task_exercises (
+    workout_task_exercise_id bigserial PRIMARY KEY,
+    workout_task_id bigint NOT NULL REFERENCES workout_tasks(workout_task_id) ON DELETE CASCADE,
+    exercise_id bigint NOT NULL REFERENCES exercises(exercise_id) ON DELETE CASCADE,
+    workout_id bigint NOT NULL REFERENCES workouts(workout_id) ON DELETE CASCADE,
+
+    -- metadata to show instructions to the user
+    -- ex reps 2, sets 3, rest 2minutes, 2RIR
     sets text,
     repetitions text,
     reps_in_reserve text,
     rest_period text,
-    superset_id bigint,
+
     UNIQUE (workout_id, exercise_id)
-);
-
-CREATE TABLE IF NOT EXISTS supersets (
-    superset_id bigserial PRIMARY KEY,
-    workout_id bigint REFERENCES workouts(workout_id) ON DELETE CASCADE
-);
-
-CREATE TABLE IF NOT EXISTS muscle_groups (
-    muscle_group_id bigserial PRIMARY KEY,
-    name text,
-    description text,
-    image text
-);
-
-CREATE TABLE IF NOT EXISTS exercise_muscle_groups (
-    "group" character varying(30), -- primary || secondary
-    muscle_group_id bigint REFERENCES muscle_groups(muscle_group_id),
-    exercise_id bigint REFERENCES exercises(exercise_id) ON DELETE CASCADE
 );
 
 CREATE TABLE IF NOT EXISTS sets (
@@ -91,17 +111,14 @@ CREATE TABLE IF NOT EXISTS sets (
     repetitions int DEFAULT 0,
     weight int DEFAULT 0,
     session_id bigint REFERENCES sessions(session_id) ON DELETE CASCADE,
-    exercise_id bigint REFERENCES exercises(exercise_id),
-    set_order int DEFAULT 1
+    exercise_id bigint REFERENCES exercises(exercise_id)
 );
 
 CREATE TABLE IF NOT EXISTS rest_periods (
     rest_period_id bigserial PRIMARY KEY,
     set_id bigint REFERENCES sets(set_id) ON DELETE CASCADE,
-    started_at timestamp with time zone DEFAULT now() NOT NULL,
-    ended_at timestamp with time zone
+    seconds int DEFAULT 0
 );
-
 
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TABLE IF NOT EXISTS accounts (

@@ -23,14 +23,14 @@ export const retrieveWorkoutQuery = async (
   e.video,
   e.profile,
   e.exercise_id,
-  we.notes,
-  we.sets,
-  we.repetitions,
-  we.reps_in_reserve,
-  we.rest_period
+  wc.notes,
+  wc.sets,
+  wc.repetitions,
+  wc.reps_in_reserve,
+  wc.rest_period
 FROM workouts
-LEFT OUTER JOIN workout_exercises we on workouts.workout_id = we.workout_id
-LEFT OUTER JOIN exercises e on we.exercise_id = e.exercise_id
+LEFT OUTER JOIN workout_tasks wc on workouts.workout_id = wc.workout_id
+LEFT OUTER JOIN exercises e on wc.exercise_id = e.exercise_id
 WHERE workouts.workout_id = $1`;
   const params = [id];
 

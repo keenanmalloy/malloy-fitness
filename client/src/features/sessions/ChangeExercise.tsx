@@ -50,7 +50,7 @@ export const ChangeExercise = ({
       {
         onSuccess: (data) => {
           setIsOpen(false);
-          router.push(`/sessions/${sessionId}/exercises/${data.exerciseId}`);
+          router.push(`/sessions/${sessionId}/tasks/${data.exerciseId}`);
         },
       }
     );

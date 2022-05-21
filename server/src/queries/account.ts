@@ -1,4 +1,19 @@
 import { db } from 'config/db';
+import { accounts_table, account_providers_table } from 'utils/databaseTypes';
+
+interface CreateAccountSettings {
+  accountId: string;
+}
+
+export const createAccountSettings = async ({
+  accountId,
+}: CreateAccountSettings) => {
+  const query = `INSERT INTO settings (account_id) VALUES ($1) RETURNING account_id`;
+  const data = await db.query<Pick<accounts_table, 'account_id'>>(query, [
+    accountId,
+  ]);
+  return data.rows[0];
+};
 
 interface createAccountProvider {
   account_id: string;
@@ -24,9 +39,8 @@ export const createAccountProviderMutation = async (
       `;
 
   try {
-    const data = await db.query(query);
+    const data = await db.query<account_providers_table>(query);
     const accountProvider = data.rows[0];
-
     return accountProvider;
   } catch (error) {
     console.log({ error });
@@ -72,7 +86,9 @@ export const createAccountWithProviderMutation = async (
         `;
 
   try {
-    const data = await db.query(query);
+    const data = await db.query<Pick<account_providers_table, 'account_id'>>(
+      query
+    );
     const account = data.rows[0];
     return {
       account_id: account.account_id,
@@ -80,6 +96,88 @@ export const createAccountWithProviderMutation = async (
       avatarUrl,
       email,
     };
+  } catch (error) {
+    console.log({ error });
+    return null;
+  }
+};
+
+export const retrieveAccountByProviderQuery = async (
+  providerUniqueId: string,
+  provider: 'google'
+) => {
+  const query = `
+SELECT
+  name,
+  email,
+  active,
+  avatar_url,
+  accounts.account_id as account_id,
+  role,
+  ticket,
+  ticket_expiry
+FROM accounts
+JOIN account_providers ap
+   on accounts.account_id = ap.account_id
+WHERE ap.auth_provider_unique_id = $1
+AND auth_provider = $2
+  `;
+
+  const params = [providerUniqueId, provider];
+
+  try {
+    const data = await db.query<
+      Pick<
+        accounts_table,
+        | 'name'
+        | 'email'
+        | 'active'
+        | 'avatar_url'
+        | 'account_id'
+        | 'role'
+        | 'ticket'
+        | 'ticket_expiry'
+      >
+    >(query, params);
+    return data.rows[0];
+  } catch (error) {
+    console.log({ error });
+    return null;
+  }
+};
+
+export const retrievAccountByEmailQuery = async (email: string) => {
+  const query = `
+SELECT
+  name,
+  account_id,
+  email,
+  active,
+  avatar_url,
+  role,
+  ticket,
+  ticket_expiry
+FROM accounts
+WHERE email = $1
+  `;
+
+  const params = [email];
+
+  try {
+    const data = await db.query<
+      Pick<
+        accounts_table,
+        | 'name'
+        | 'email'
+        | 'active'
+        | 'avatar_url'
+        | 'account_id'
+        | 'role'
+        | 'ticket'
+        | 'ticket_expiry'
+      >
+    >(query, params);
+    return data.rows[0];
   } catch (error) {
     console.log({ error });
     return null;

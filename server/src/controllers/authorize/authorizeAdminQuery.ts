@@ -8,7 +8,7 @@ export const authorizeAdminQuery = async (
 }> => {
   const accountId = res.locals.state.account.account_id;
 
-  const query = `SELECT * FROM accounts WHERE account_id = $1 AND role = 'developer'`;
+  const query = `SELECT account_id FROM accounts WHERE account_id = $1 AND role = 'developer'`;
   const params = [accountId];
 
   try {

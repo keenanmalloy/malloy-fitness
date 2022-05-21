@@ -3,15 +3,14 @@ import { Request, RequestHandler, Response, Router } from 'express';
 import passport from 'passport';
 import { Strategy } from 'passport-google-oauth20';
 import {
+  retrieveAccountByProviderQuery,
+  retrievAccountByEmailQuery,
   createAccountProviderMutation,
   createAccountWithProviderMutation,
-} from 'controllers/createAccountMutation';
-import {
-  retrievAccountByEmailQuery,
-  retrieveAccountByProviderQuery,
-} from 'controllers/retrieveAccountQuery';
+  createAccountSettings,
+} from 'queries/account';
+
 import { setLoginSession } from 'sessions';
-import { createAccountSettings } from 'queries/createAccountSettings';
 
 interface Props {
   router: Router;
@@ -63,7 +62,7 @@ export const initProvider = ({ router, middleware }: Props): void => {
             const account = await retrievAccountByEmailQuery(email);
 
             // if we're unable to fetch the account using the email we'll throw out of this try/catch
-            if (!account) {
+            if (!account || !account.account_id) {
               throw new Error('Account does not exist.');
             }
 
@@ -94,9 +93,13 @@ export const initProvider = ({ router, middleware }: Props): void => {
             givenName,
           });
 
+          if (!newAccount || !newAccount.account_id) {
+            throw new Error('Unable to create account');
+          }
+
           // create empty settings for the new account
           await createAccountSettings({
-            accountId: account.account_id,
+            accountId: newAccount.account_id,
           });
 
           // send account instead of empty object

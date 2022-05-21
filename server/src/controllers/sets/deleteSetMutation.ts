@@ -1,28 +1,15 @@
-import { db } from 'config/db';
+import { Response } from 'express';
+import { deleteSet } from 'queries/sets';
 
-interface Response {
-  status: string;
-  message: string;
-  set: any;
-  error?: any;
-}
-
-export const deleteSetMutation = async (
-  res: any,
-  id: string
-): Promise<Response> => {
-  const query = `DELETE FROM sets WHERE set_id = $1 RETURNING *;`;
-  const params = [id];
-
+export const deleteSetMutation = async (res: Response, id: string) => {
   try {
-    const data = await db.query(query, params);
+    const data = await deleteSet(id);
 
     if (!data.rowCount) {
       return res.status(404).json({
         role: res.locals.state.account.role,
         status: 'error',
         message: 'Set does not exist',
-        set: null,
       });
     }
 
@@ -30,14 +17,12 @@ export const deleteSetMutation = async (
       role: res.locals.state.account.role,
       status: 'success',
       message: 'Set deleted successfully',
-      set: data.rows[0],
     });
   } catch (error) {
     console.log({ error });
     return res.status(500).json({
       status: 'error',
       message: 'Database error',
-      set: null,
     });
   }
 };

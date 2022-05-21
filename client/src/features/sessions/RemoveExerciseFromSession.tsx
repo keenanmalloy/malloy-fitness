@@ -7,10 +7,10 @@ import { useRemoveExerciseFromSession } from './useRemoveExerciseFromSession';
 
 interface Props {
   data: SessionSummaryResponse;
-  exerciseId: string;
+  workoutTaskId: string;
 }
 
-export const RemoveExerciseFromSession = ({ data, exerciseId }: Props) => {
+export const RemoveExerciseFromSession = ({ data, workoutTaskId }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const { mutate, isLoading, isError } = useRemoveExerciseFromSession(
     data.session.session_id,
@@ -34,7 +34,7 @@ export const RemoveExerciseFromSession = ({ data, exerciseId }: Props) => {
               className="flex justify-center items-center p-3 w-full"
               onClick={() => {
                 mutate(
-                  { exerciseId },
+                  { workoutTaskId },
                   {
                     onSuccess: (data) => {
                       setIsOpen(false);

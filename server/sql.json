@@ -1,0 +1,12 @@
+{
+  "client": "postgres",
+  "connection": {
+    "host": "localhost",
+    "user": "postgres",
+    "password": "password",
+    "database": "postgres",
+    "port": 45432
+  },
+  "filename": "./src/utils/databaseTypes",
+  "interfaceNameFormat": "${table}_table"
+}

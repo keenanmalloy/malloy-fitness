@@ -1,10 +1,11 @@
 import { db } from 'config/db';
 import Joi from 'joi';
 import { Response } from 'express';
+import { createSet } from 'queries/sets';
 
 interface createSet {
   session_id: string | number;
-  exercise_id: string | number;
+  exercise_id: string;
   repetitions?: number;
   weight?: number;
   set_order?: number;
@@ -47,23 +48,13 @@ export const createSetMutation = async (
       });
     }
 
-    const query = `
-      WITH 
-        data(exercise_id, repetitions, weight, session_id, set_order) AS (
-          VALUES                           
-              (${exercise_id}, ${repetitions ?? 0}, ${
-      weight ?? 0
-    }, ${sessionId}, ${set_order ?? 0})
-          )
-        INSERT INTO sets (exercise_id, repetitions, weight, session_id, set_order)
-          SELECT exercise_id, repetitions, weight, session_id, set_order
-            FROM data
-          RETURNING *
-      `;
-
     try {
-      const data = await db.query(query);
-      const set = data.rows[0];
+      const set = await createSet({
+        sessionId,
+        exerciseId: exercise_id,
+        repetitions: repetitions,
+        weight: weight,
+      });
 
       return res.status(200).json({
         role: res.locals.state.account.role,

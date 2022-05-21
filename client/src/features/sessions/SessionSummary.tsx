@@ -73,9 +73,9 @@ export const SessionSummary = ({ data }: Props) => {
       <ul className="flex flex-col divide-y-2 divide-slate-700 px-3 pb-5">
         {data.session.exercise_order &&
           data.session.exercise_order
-            .map((exerciseId) =>
+            .map((workoutTaskId) =>
               data.session.exercises.find(
-                (exercise) => exercise.exercise_id === exerciseId
+                (task) => task.workout_task_id === workoutTaskId
               )
             )
             .map((exercise, key) => {
@@ -164,7 +164,7 @@ export const SessionSummary = ({ data }: Props) => {
                     {!data.session.ended_at && (
                       <RemoveExerciseFromSession
                         data={data}
-                        exerciseId={exercise.exercise_id}
+                        workoutTaskId={exercise.workout_task_id}
                       />
                     )}
                   </div>

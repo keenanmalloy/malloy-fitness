@@ -105,7 +105,7 @@ export const createTherapyWorkoutMutation = async (
       });
     }
 
-    const exerciseOrder = JSON.stringify(
+    const taskOrder = JSON.stringify(
       exercises.map((e) => {
         return e.id;
       })
@@ -113,12 +113,12 @@ export const createTherapyWorkoutMutation = async (
 
     const query = `
       WITH 
-        data(name, description, category, created_by, type, exercise_order) AS (
+        data(name, description, category, created_by, type, task_order) AS (
           VALUES                           
-              ('${name}', '${description}', '${category}', ${accountId}, 'therapy', '${exerciseOrder}'::jsonb)
+              ('${name}', '${description}', '${category}', ${accountId}, 'therapy', '${taskOrder}'::jsonb)
           )
-        INSERT INTO workouts (name, description, category, created_by, type, exercise_order)
-          SELECT name, description, category, created_by, type, exercise_order
+        INSERT INTO workouts (name, description, category, created_by, type, task_order)
+          SELECT name, description, category, created_by, type, task_order
             FROM data
           RETURNING *
       `;

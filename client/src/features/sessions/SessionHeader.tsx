@@ -10,13 +10,16 @@ import { ChangeExercise } from './ChangeExercise';
 
 interface Props {
   sessionId: string;
-  exerciseId: string;
+  workoutTaskId: string;
   workoutId: string;
 }
 
-const SessionHeader = ({ sessionId, exerciseId, workoutId }: Props) => {
+const SessionHeader = ({ sessionId, workoutTaskId, workoutId }: Props) => {
   const router = useRouter();
-  const { data, isError, isLoading } = useSessionQuery(sessionId, exerciseId);
+  const { data, isError, isLoading } = useSessionQuery(
+    sessionId,
+    workoutTaskId
+  );
 
   if (isLoading) {
     return <div className="pt-1"></div>;
@@ -30,17 +33,19 @@ const SessionHeader = ({ sessionId, exerciseId, workoutId }: Props) => {
     return <p>none available...</p>;
   }
 
-  const currentExercise = data.session.exercises.find(
-    (ex) => ex.exercise_id === exerciseId
+  const currentTask = data.session.exercises.find(
+    (ex) => ex.exercise_id === workoutTaskId
   );
+
+  console.log({ data });
 
   const getLetter = (index: number) => {
     const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
     return letters[index];
   };
 
-  const currentExerciseIndex = data.session.exercise_order.findIndex(
-    (id: string) => id === exerciseId
+  const currentTaskIndex = data.session.exercise_order.findIndex(
+    (id: string) => id === workoutTaskId
   );
 
   return (
@@ -73,12 +78,12 @@ const SessionHeader = ({ sessionId, exerciseId, workoutId }: Props) => {
         <div className="flex">
           <ChangeExercise
             exercises={data.session.exercises}
-            exerciseId={exerciseId}
+            workoutTaskId={workoutTaskId}
             sessionId={sessionId}
             workoutId={workoutId}
           />
           <RotateExercise
-            exerciseId={exerciseId}
+            workoutTaskId={workoutTaskId}
             sessionId={sessionId}
             workoutId={workoutId}
           />
@@ -86,13 +91,13 @@ const SessionHeader = ({ sessionId, exerciseId, workoutId }: Props) => {
       </section>
       <div className="px-1 pt-0.5 border-solid border-slate-700 border-t w-full max-w-md">
         <OverviewRow
-          order={`${getLetter(currentExerciseIndex)}1`}
-          name={currentExercise?.name ?? ''}
+          order={`${getLetter(currentTaskIndex)}1`}
+          name={currentTask?.name ?? ''}
           sets="sets 3"
           reps="reps 10-12"
           rir="rir 1"
           rest="REST 90 seconds"
-          exerciseId={currentExercise?.exercise_id ?? ''}
+          workoutTaskId={currentTask?.exercise_id ?? ''}
         />
       </div>
     </header>

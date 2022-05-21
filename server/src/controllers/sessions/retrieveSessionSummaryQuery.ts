@@ -1,5 +1,7 @@
-import { db } from 'config/db';
 import { Response } from 'express';
+import { queryExercisesBySession } from 'queries/sessionExercises';
+import { querySessionWorkoutById } from 'queries/sessions';
+import { querySetsBySession } from 'queries/sets';
 
 export const retrieveSessionSummaryQuery = async (
   res: Response,
@@ -27,7 +29,7 @@ export const retrieveSessionSummaryQuery = async (
       readiness_sleep: sessionData.readiness_sleep,
       ended_at: sessionData.ended_at,
       completed: sessionData.completed,
-      exercise_order: sessionData.exercise_order,
+      task_order: sessionData.task_order,
       exercises: !hasExercises
         ? []
         : exercises.map((row) => {
@@ -37,6 +39,8 @@ export const retrieveSessionSummaryQuery = async (
               video: row.video,
               primary_tracker: row.primary_tracker,
               secondary_tracker: row.secondary_tracker,
+              workout_task_id: row.workout_task_id,
+              workout_task_exercise_id: row.workout_task_exercise_id,
               sets: !hasSets
                 ? []
                 : sets
@@ -44,7 +48,6 @@ export const retrieveSessionSummaryQuery = async (
                     .map((set) => {
                       return {
                         set_id: set.set_id,
-                        set_order: set.set_order,
                         repetitions: set.repetitions,
                         weight: set.weight,
                       };
@@ -67,67 +70,4 @@ export const retrieveSessionSummaryQuery = async (
       session: null,
     });
   }
-};
-
-const querySessionWorkoutById = async (sessionId: string) => {
-  const query = `
-  SELECT
-  sessions.session_id,
-  sessions.workout_id,
-  readiness_energy,
-  readiness_mood,
-  readiness_stress,
-  readiness_soreness,
-  readiness_sleep,
-  started_at,
-  ended_at,
-  completed,
-  workouts.name workout_name,
-  workouts.category,
-  workouts.exercise_order,
-  workouts.type
-FROM sessions
-  LEFT JOIN workouts ON workouts.workout_id = sessions.workout_id
-WHERE sessions.session_id = $1`;
-
-  const params = [sessionId];
-  const data = await db.query(query, params);
-  return data.rows[0];
-};
-
-const queryExercisesBySession = async (sessionId: string) => {
-  const query = `
-    SELECT
-      e.exercise_id,
-      e.name,
-      e.video,
-      primary_tracker,
-      secondary_tracker
-    FROM sessions
-      LEFT JOIN workouts ON workouts.workout_id = sessions.workout_id
-      LEFT JOIN workout_exercises ON workouts.workout_id = workout_exercises.workout_id
-      LEFT JOIN exercises e on workout_exercises.exercise_id = e.exercise_id
-    WHERE sessions.session_id = $1 ORDER BY workout_exercises.order ASC`;
-  const params = [sessionId];
-  const data = await db.query(query, params);
-  return data.rows;
-};
-
-const querySetsBySession = async (sessionId: string) => {
-  const query = `
-  SELECT 
-      s.set_id,
-      s.repetitions,
-      s.weight,
-      s.set_order,
-      e.exercise_id
-    FROM sessions
-  LEFT JOIN sets s on s.session_id = sessions.session_id
-  LEFT JOIN exercises e on s.exercise_id = e.exercise_id
-  WHERE sessions.session_id = $1  
-  ORDER BY s.set_order ASC
-  `;
-  const params = [sessionId];
-  const data = await db.query(query, params);
-  return data.rows;
 };

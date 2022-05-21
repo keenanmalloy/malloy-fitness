@@ -13,7 +13,7 @@ const FullPageModal: React.FC<ModalPropsShared> = ({
     <Transition show={isOpen} as={Fragment}>
       <Dialog
         as="div"
-        className="fixed inset-0 z-10 overflow-y-auto"
+        className="fixed inset-0 z-50 overflow-y-auto"
         onClose={closeModal}
       >
         <section className={`min-h-screen text-center  h-100`}>

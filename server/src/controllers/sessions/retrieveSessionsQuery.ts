@@ -1,6 +1,7 @@
 import { db } from 'config/db';
 import { Request, Response } from 'express';
-import { isValidDate } from 'time';
+import { sessions_table } from 'utils/databaseTypes';
+import { isValidDate } from 'utils/time';
 
 export const retrieveSessionsQuery = async (req: Request, res: Response) => {
   const dateQuery = req.query.date as string | undefined;
@@ -21,7 +22,7 @@ export const retrieveSessionsQuery = async (req: Request, res: Response) => {
   LIMIT 20`;
 
   try {
-    const data = await db.query(query);
+    const data = await db.query<sessions_table>(query);
 
     return res.status(200).json({
       role: res.locals.state.account.role,

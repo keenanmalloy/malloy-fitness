@@ -1,6 +1,6 @@
 import { db } from 'config/db';
 import { Request, Response } from 'express';
-import { isValidDate } from 'time';
+import { isValidDate } from 'utils/time';
 
 export const retrieveWorkoutsQuery = async (req: Request, res: Response) => {
   const dateQuery = req.query.date as string | undefined;
@@ -14,17 +14,18 @@ export const retrieveWorkoutsQuery = async (req: Request, res: Response) => {
   const query = `
   
   WITH PreWorkouts as (
-    SELECT we.workout_id FROM workouts
-        JOIN workout_exercises we on workouts.workout_id = we.workout_id
-        JOIN exercises e on we.exercise_id = e.exercise_id
+    SELECT wc.workout_id FROM workouts
+        JOIN workout_tasks wc on workouts.workout_id = wc.workout_id
+        JOIN workout_task_exercises wce on wc.workout_task_id = wce.workout_task_id
+        JOIN exercises e on wce.exercise_id = e.exercise_id
     ),
   ExerciseVideo as (
       SELECT
           distinct w.workout_id,
           MAX(video) as video
       FROM exercises
-      JOIN workout_exercises we on exercises.exercise_id = we.exercise_id
-      JOIN workouts w on we.workout_id = w.workout_id
+      JOIN workout_task_exercises wce on exercises.exercise_id = wce.exercise_id
+      JOIN workouts w on wce.workout_id = w.workout_id
       WHERE w.workout_id IN(select workout_id from PreWorkouts)
       GROUP BY 1
   )

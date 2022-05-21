@@ -4,7 +4,6 @@ import { update } from 'utils/update';
 import { Response } from 'express';
 
 const updateWorkoutExerciseSchema = Joi.object({
-  notes: Joi.string().allow('').optional(),
   sets: Joi.string().optional(),
   repetitions: Joi.string().optional(),
   reps_in_reserve: Joi.string().optional(),
@@ -18,6 +17,7 @@ export const updateWorkoutExerciseMetadataMutation = async (
   exerciseId: string
 ) => {
   const { error, value, warning } = updateWorkoutExerciseSchema.validate(data);
+
   if (error) {
     return res.status(422).json({
       role: res.locals.state.account.role,
@@ -28,7 +28,7 @@ export const updateWorkoutExerciseMetadataMutation = async (
     });
   } else {
     const { query, params } = update({
-      tableName: 'workout_exercises',
+      tableName: 'workout_task_exercises',
       conditions: {
         workout_id: workoutId,
         exercise_id: exerciseId,

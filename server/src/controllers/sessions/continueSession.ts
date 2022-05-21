@@ -1,5 +1,5 @@
 import { Response } from 'express';
-import { queryExerciseToContinueFrom } from 'queries/queryExerciseToContinueFrom';
+import { queryExerciseToContinueFrom } from 'queries/sets';
 
 export const continueSession = async (res: Response, id: string) => {
   try {

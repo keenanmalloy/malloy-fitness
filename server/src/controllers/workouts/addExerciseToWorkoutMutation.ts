@@ -1,9 +1,10 @@
 import { db } from 'config/db';
 import Joi from 'joi';
 import { Response } from 'express';
+import { createWorkoutTaskWithExercises } from 'queries/workoutTasks';
 
 interface addExercise {
-  exerciseId: number | string;
+  exerciseId: string;
 }
 
 const addExerciseSchema = Joi.object({
@@ -32,32 +33,22 @@ export const addExerciseToWorkoutMutation = async (
       return res.status(422).json({
         role: res.locals.state.account.role,
         status: 'error',
-        //@ts-ignore
         message: 'Invalid exercise ID',
       });
     }
 
-    const query = `
-      WITH 
-        data(workout_id, exercise_id) AS (
-          VALUES                           
-              (${workoutId}, ${exerciseId})
-          )
-        INSERT INTO workout_exercises (workout_id, exercise_id)
-          SELECT workout_id, exercise_id
-            FROM data
-          RETURNING *
-      `;
-
     try {
-      const data = await db.query(query);
-      const exercise = data.rows[0];
+      await createWorkoutTaskWithExercises({
+        workoutId,
+        payload: {
+          exercise_id: exerciseId,
+        },
+      });
 
       return res.status(201).json({
         role: res.locals.state.account.role,
         status: 'success',
         message: 'Exercise added successfully',
-        exercise,
       });
     } catch (error) {
       console.log({ error });
@@ -65,7 +56,6 @@ export const addExerciseToWorkoutMutation = async (
         status: 'error',
         //@ts-ignore
         message: error && error.message ? error.message : 'Database error',
-        exercise: null,
       });
     }
   }

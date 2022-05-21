@@ -1,24 +1,24 @@
 import { Response } from 'express';
-import { queryGoalSettings } from 'queries/settings';
+import { deleteWorkoutTask } from 'queries/workoutTasks';
 
-export const fetchGoalsQuery = async (res: Response) => {
-  const accountId = res.locals.state.account.account_id;
-
+export const removeExerciseFromWorkoutMutation = async (
+  res: Response,
+  workoutTaskId: string
+) => {
   try {
-    const goals = await queryGoalSettings(accountId);
+    await deleteWorkoutTask(workoutTaskId);
 
     return res.status(200).json({
       role: res.locals.state.account.role,
       status: 'success',
-      message: 'Goals fetched successfully',
-      goals,
+      message: 'Exercise removed successfully',
     });
   } catch (error) {
     console.log({ error });
     return res.status(500).json({
       status: 'error',
       message: 'Database error',
-      goals: null,
+      exercise: null,
     });
   }
 };

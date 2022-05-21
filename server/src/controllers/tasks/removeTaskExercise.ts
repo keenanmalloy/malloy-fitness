@@ -1,18 +1,27 @@
 import { Response } from 'express';
-import { cloneWorkout } from 'queries/cloneWorkout';
-import { cloneWorkoutExercises } from 'queries/cloneWorkoutExercises';
-import { deleteSetsBySessionExercise } from 'queries/deleteSetsbySessionExercise';
-import { deleteWorkoutExercise } from 'queries/deleteWorkoutExercise';
-import { doesWorkoutHaveSessions } from 'queries/doesWorkoutHaveSessions';
-import { retrieveWorkoutQuery } from 'queries/retrieveWorkoutQuery';
-import { updateSessionWorkout } from 'queries/updateSessionWorkout';
-import { updateWorkoutExerciseOrder } from 'queries/updateWorkoutExerciseOrder';
+import {
+  doesWorkoutHaveSessions,
+  updateSessionWorkout,
+} from 'queries/sessions';
+import { deleteSetsByExercise } from 'queries/sets';
 
-export const removeExerciseInSession = async (
+import {
+  cloneWorkoutTasksWithExercises,
+  deleteWorkoutTask,
+} from 'queries/workoutTasks';
+import {
+  cloneWorkout,
+  retrieveWorkoutQuery,
+  updateWorkoutTaskOrder,
+} from 'queries/workouts';
+import { deleteTaskExerciseById } from 'queries/workoutTaskExercises';
+
+export const removeTaskExercise = async (
   res: Response,
   sessionId: string,
   exerciseId: string,
-  workoutId: string
+  workoutId: string,
+  workoutTaskExerciseId: string
 ): Promise<Response> => {
   const accountId = res.locals.state.account.account_id;
 
@@ -34,6 +43,7 @@ export const removeExerciseInSession = async (
         accountId,
         exerciseId,
         sessionId,
+        workoutTaskExerciseId,
       });
 
       return res.status(200).json({
@@ -50,6 +60,7 @@ export const removeExerciseInSession = async (
       accountId,
       sessionId,
       exerciseId,
+      workoutTaskExerciseId,
     });
 
     return res.status(200).json({
@@ -72,6 +83,7 @@ interface CloneMutationParams {
   accountId: string;
   exerciseId: string;
   sessionId: string;
+  workoutTaskExerciseId: string;
 }
 
 const onExerciseDeleteClone = async ({
@@ -79,24 +91,38 @@ const onExerciseDeleteClone = async ({
   accountId,
   sessionId,
   exerciseId,
+  workoutTaskExerciseId,
 }: CloneMutationParams) => {
-  const oldWorkout = await retrieveWorkoutQuery(workoutId, accountId);
+  const oldWorkout = await retrieveWorkoutQuery(workoutId);
   if (!oldWorkout) throw new Error('Workout not found');
-
-  const newWorkoutExercises = [
-    ...oldWorkout.workoutExercises.filter(
-      (exercise) => exercise.exerciseId !== exerciseId
-    ),
-  ];
 
   const { newWorkoutId } = await cloneWorkout({
     accountId,
     workoutId,
   });
 
-  await cloneWorkoutExercises({
-    workoutId: newWorkoutId,
-    workoutExercises: newWorkoutExercises,
+  const mappedTasks = oldWorkout.tasks
+    .filter((task) => task.workout_task_exercise_id !== workoutTaskExerciseId)
+    .map((task, index, array) => {
+      return {
+        workout_task_id: task.workout_task_id,
+        exercises: array
+          .filter((t) => t.workout_task_id === task.workout_task_id)
+          .map((t) => {
+            return {
+              exercise_id: t.exercise_id,
+              sets: t.sets,
+              repetitions: t.repetitions,
+              reps_in_reserve: t.reps_in_reserve,
+              rest_period: t.rest_period,
+            };
+          }),
+      };
+    });
+
+  await cloneWorkoutTasksWithExercises({
+    newWorkoutId,
+    payload: [...mappedTasks],
   });
 
   await updateSessionWorkout({
@@ -112,39 +138,21 @@ const onExerciseDelete = async ({
   accountId,
   exerciseId,
   sessionId,
+  workoutTaskExerciseId,
 }: CloneMutationParams) => {
-  const oldWorkout = await retrieveWorkoutQuery(workoutId, accountId);
+  const oldWorkout = await retrieveWorkoutQuery(workoutId);
   if (!oldWorkout) throw new Error('Workout not found');
 
-  // get workout exercise with id
-  const workoutExercise = oldWorkout.workoutExercises.find(
-    (we) => we.exerciseId === exerciseId
+  const taskExercise = oldWorkout.tasks.find(
+    (task) => task.workout_task_exercise_id === workoutTaskExerciseId
   );
-  if (!workoutExercise) throw new Error('WorkoutExercise not found');
+  if (!taskExercise || !taskExercise.workout_task_exercise_id)
+    throw new Error('WorkoutExercise not found');
 
-  const exerciseOrder = JSON.stringify(
-    [
-      ...oldWorkout.workoutExercises.filter(
-        (we) => we.exerciseId !== exerciseId
-      ),
-    ].map((e) => {
-      return e.exerciseId;
-    })
+  const deletedExerciseId = await deleteTaskExerciseById(
+    taskExercise.workout_task_exercise_id
   );
 
-  await updateWorkoutExerciseOrder({
-    exerciseOrder,
-    workoutId,
-  });
-
-  const changedExerciseId = await deleteWorkoutExercise({
-    workoutExerciseId: workoutExercise.workout_exercise_id,
-  });
-
-  await deleteSetsBySessionExercise({
-    sessionId,
-    exerciseId,
-  });
-
-  return changedExerciseId;
+  await deleteSetsByExercise(sessionId, exerciseId);
+  return deletedExerciseId;
 };

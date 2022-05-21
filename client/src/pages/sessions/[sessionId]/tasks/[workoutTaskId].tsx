@@ -14,20 +14,20 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }: GetStaticPropsContext) {
-  const exerciseId = params && params.exerciseId;
+  const workoutTaskId = params && params.workoutTaskId;
   const sessionId = params && params.sessionId;
 
   return {
-    props: { exerciseId, sessionId },
+    props: { workoutTaskId, sessionId },
   };
 }
 interface Props {
-  exerciseId: string;
+  workoutTaskId: string;
   sessionId: string;
 }
-const SessionExercisePage = ({ exerciseId, sessionId }: Props) => {
+const SessionExercisePage = ({ workoutTaskId, sessionId }: Props) => {
   const { data, isError, isLoading } = useSessionExerciseQuery(
-    exerciseId,
+    workoutTaskId,
     sessionId
   );
 
@@ -55,13 +55,13 @@ const SessionExercisePage = ({ exerciseId, sessionId }: Props) => {
     <main className="bg-slate-800 min-h-screen">
       <SessionHeader
         sessionId={sessionId}
-        exerciseId={exerciseId}
+        workoutTaskId={workoutTaskId}
         workoutId={data.exercise.workout_id}
       />
       <SessionExercise
         data={data}
         sessionId={sessionId}
-        exerciseId={exerciseId}
+        workoutTaskId={workoutTaskId}
       />
     </main>
   );
