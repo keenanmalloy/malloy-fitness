@@ -7,17 +7,19 @@ import { useState } from 'react';
 import { BiX } from 'react-icons/bi';
 import { FaChevronUp, FaChevronDown } from 'react-icons/fa';
 import { SelectableExerciseList } from './SelectableExercistList';
-import { SessionSummaryResponse } from './types';
-import { useAddExerciseToSessionMutation } from './useAddExerciseToSession';
+import { useAddTaskToSessionMutation } from './useAddTaskToSession';
+import { SessionSchema } from './useSessionSummaryQuery';
 
 interface ChooseExerciseModalProps {
-  data: SessionSummaryResponse;
+  data: SessionSchema;
   shouldRedirect?: boolean;
+  isMultiSelectable?: boolean;
 }
 
 export const ChooseExerciseModal = ({
   data,
   shouldRedirect,
+  isMultiSelectable,
 }: ChooseExerciseModalProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -27,9 +29,11 @@ export const ChooseExerciseModal = ({
   const [sortBy, setSortBy] = useState('');
   const [isFilterOpen, setIsFilterOpen] = useState(false);
 
+  const [selectedExercises, setSelectedExercises] = useState<string[]>([]);
+
   const router = useRouter();
 
-  const { mutate, isLoading, isError } = useAddExerciseToSessionMutation(
+  const { mutate, isLoading, isError } = useAddTaskToSessionMutation(
     data.session.session_id
   );
 
@@ -38,13 +42,46 @@ export const ChooseExerciseModal = ({
   };
 
   const handleExerciseSelection = (exerciseId: string) => {
+    if (!isMultiSelectable) {
+      const sessionId = data.session.session_id;
+      mutate(
+        { workoutId: data.session.workout_id, exerciseIds: [exerciseId] },
+        {
+          onSuccess: (data) => {
+            console.log({ data });
+            setSelectedExercises([]);
+
+            if (shouldRedirect) {
+              router.push(
+                `/sessions/${sessionId}/tasks/${data.workout_task_id}`
+              );
+            } else {
+              setIsOpen(false);
+            }
+          },
+        }
+      );
+    } else {
+      setSelectedExercises((prevSelectedExercises) => {
+        if (prevSelectedExercises.includes(exerciseId)) {
+          return prevSelectedExercises.filter((id) => id !== exerciseId);
+        } else {
+          return [...prevSelectedExercises, exerciseId];
+        }
+      });
+    }
+  };
+
+  const handleExerciseSubmission = () => {
     const sessionId = data.session.session_id;
     mutate(
-      { workoutId: data.session.workout_id, exerciseId: exerciseId },
+      { workoutId: data.session.workout_id, exerciseIds: selectedExercises },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
+          console.log({ data });
+          setSelectedExercises([]);
           if (shouldRedirect) {
-            router.push(`/sessions/${sessionId}/exercises/${exerciseId}`);
+            router.push(`/sessions/${sessionId}/tasks/${data.workout_task_id}`);
           } else {
             setIsOpen(false);
           }
@@ -52,6 +89,18 @@ export const ChooseExerciseModal = ({
       }
     );
   };
+
+  /**
+   * Flattens exerciseIds nested within exercises in tasks.
+   * Used to filter out exercises that have already been added to the session.
+   */
+  const flattenedExerciseIds = data.session.tasks.reduce(
+    (acc, task) => [
+      ...acc,
+      ...task.exercises.map((exercise) => exercise.exercise_id),
+    ],
+    [] as string[]
+  );
 
   return (
     <div className="flex justify-center">
@@ -71,7 +120,13 @@ export const ChooseExerciseModal = ({
         </button>
       </div>
 
-      <FullPageModal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
+      <FullPageModal
+        isOpen={isOpen}
+        closeModal={() => {
+          setSelectedExercises([]);
+          setIsOpen(false);
+        }}
+      >
         <div className="sticky top-0 bg-slate-900 text-white z-50 ">
           <div className="flex justify-start">
             <button
@@ -115,9 +170,12 @@ export const ChooseExerciseModal = ({
           view={view}
           profile={profile}
           sortBy={sortBy}
-          exercises={data.session.exercises}
+          exerciseIds={flattenedExerciseIds}
           handleExerciseSelection={handleExerciseSelection}
           isLoading={isLoading}
+          selectedExercises={selectedExercises}
+          setSelectedExercises={setSelectedExercises}
+          handleExerciseSubmission={handleExerciseSubmission}
         />
         <div className="h-20" />
       </FullPageModal>

@@ -1,4 +1,5 @@
 import { db } from 'config/db';
+import { workouts_table } from 'utils/databaseTypes';
 import { inferCloneName } from 'utils/inferCloneName';
 import { queryTaskExercisesByWorkoutId } from './workoutTaskExercises';
 
@@ -17,7 +18,7 @@ export const cloneWorkout = async ({
           WITH
             workoutdata(name, description, category, created_by, type) AS (
               VALUES
-                  ('${inferCloneName(workout.name)}', '${
+                  ('${inferCloneName(workout.name as string)}', '${
     workout.description
   }', '${workout.category}', ${accountId}, '${workout.type}')
               )
@@ -48,7 +49,18 @@ export const queryWorkoutById = async (workoutId: string) => {
   WHERE workout_id = $1`;
   const params = [workoutId];
 
-  const data = await db.query(query, params);
+  const data = await db.query<
+    Pick<
+      workouts_table,
+      | 'name'
+      | 'description'
+      | 'category'
+      | 'workout_id'
+      | 'type'
+      | 'created_by'
+      | 'task_order'
+    >
+  >(query, params);
   return data.rows[0];
 };
 
@@ -63,7 +75,7 @@ export const retrieveWorkoutQuery = async (workoutId: string) => {
       category: workout.category,
       workout_id: workout.workout_id,
       type: workout.type,
-      task_order: workout.task_order,
+      task_order: workout.task_order as string[],
       tasks: taskExercises,
     };
 

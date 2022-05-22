@@ -1,6 +1,49 @@
 import { apiClient } from 'config/axios';
 import { useQuery } from 'react-query';
-import { GetDailyResponse, SelectedDate } from './types';
+import { z } from 'zod';
+
+export type SelectedDate = {
+  day: number;
+  month: number;
+  year: number;
+  id: string;
+};
+
+const getDailyOverviewSchema = z.object({
+  status: z.string(),
+  message: z.string(),
+  sessions: z.array(
+    z.object({
+      workout_id: z.string(),
+      created_by: z.string(),
+      name: z.string(),
+      description: z.nullable(z.string()),
+      category: z.nullable(z.string()),
+      type: z.string(),
+      view: z.string(),
+      session_id: z.string(),
+      started_at: z.nullable(z.string()),
+      ended_at: z.nullable(z.string()),
+      session_dt: z.string(),
+      completed: z.boolean(),
+      video: z.nullable(z.string()),
+      deload: z.boolean(),
+    })
+  ),
+  steps: z.nullable(z.number()),
+  goals: z.object({
+    setting_id: z.string(),
+    updated_at: z.string(),
+    account_id: z.string(),
+    unit_preference: z.string(),
+    appearance: z.string(),
+    daily_steps_goal: z.number(),
+    weekly_cardio_minutes_goal: z.number(),
+    body_weight_goal: z.number(),
+  }),
+});
+
+export type GetDailyOverviewSchema = z.infer<typeof getDailyOverviewSchema>;
 
 const fetchDailyOverview = async ({
   date,
@@ -15,7 +58,8 @@ const fetchDailyOverview = async ({
     `/overview?date=${date}&startTime=${start}&endTime=${end}`
   );
 
-  return data;
+  const result = getDailyOverviewSchema.parse(data);
+  return result;
 };
 
 export const useDailyOverviewQuery = (selected: SelectedDate) => {
@@ -55,7 +99,7 @@ export const useDailyOverviewQuery = (selected: SelectedDate) => {
     )
   ).toISOString();
 
-  return useQuery<GetDailyResponse, any>(['fetchDailyOverview', date], () =>
+  return useQuery<GetDailyOverviewSchema>(['fetchDailyOverview', date], () =>
     fetchDailyOverview({ date, start, end })
   );
 };

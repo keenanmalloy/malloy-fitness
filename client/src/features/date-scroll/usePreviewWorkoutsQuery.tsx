@@ -1,9 +1,25 @@
 import { useQuery } from 'react-query';
 import { apiClient } from 'config/axios';
+import { z } from 'zod';
+
+const getPreviewWorkoutsSchema = z.object({
+  status: z.string(),
+  message: z.string(),
+  sessions: z.array(
+    z.object({
+      session_id: z.string(),
+      session_dt: z.string(),
+      type: z.string(),
+    })
+  ),
+});
+
+export type GetPreviewWorkoutsSchema = z.infer<typeof getPreviewWorkoutsSchema>;
 
 const fetchPreviewWorkouts = async (date: string) => {
   const { data } = await apiClient.get(`/sessions/preview?date=${date}`);
-  return data;
+  const result = getPreviewWorkoutsSchema.parse(data);
+  return result;
 };
 
 interface UsePreviewWorkoutsQueryParams {
@@ -24,7 +40,8 @@ export const usePreviewWorkoutsQuery = ({
 
   const doesItemNotExist = !filteredItem.length;
 
-  return useQuery(['fetchPreviewWorkouts', doesItemNotExist, items], () =>
-    fetchPreviewWorkouts(date)
+  return useQuery<GetPreviewWorkoutsSchema>(
+    ['fetchPreviewWorkouts', doesItemNotExist, items],
+    () => fetchPreviewWorkouts(date)
   );
 };

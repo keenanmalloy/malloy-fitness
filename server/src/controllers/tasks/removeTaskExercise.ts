@@ -101,24 +101,25 @@ const onExerciseDeleteClone = async ({
     workoutId,
   });
 
-  const mappedTasks = oldWorkout.tasks
-    .filter((task) => task.workout_task_exercise_id !== workoutTaskExerciseId)
-    .map((task, index, array) => {
-      return {
-        workout_task_id: task.workout_task_id,
-        exercises: array
-          .filter((t) => t.workout_task_id === task.workout_task_id)
-          .map((t) => {
-            return {
-              exercise_id: t.exercise_id,
-              sets: t.sets,
-              repetitions: t.repetitions,
-              reps_in_reserve: t.reps_in_reserve,
-              rest_period: t.rest_period,
-            };
-          }),
-      };
-    });
+  const mappedTasks = oldWorkout.task_order.map((taskId) => {
+    const exercises = oldWorkout.tasks.filter(
+      (t) => t.workout_task_id === taskId
+    );
+    return {
+      workout_task_id: taskId,
+      exercises: exercises
+        .filter((ex) => ex.exercise_id === exerciseId)
+        .map((t) => {
+          return {
+            exercise_id: t.exercise_id,
+            sets: t.sets,
+            repetitions: t.repetitions,
+            reps_in_reserve: t.reps_in_reserve,
+            rest_period: t.rest_period,
+          };
+        }),
+    };
+  });
 
   await cloneWorkoutTasksWithExercises({
     newWorkoutId,

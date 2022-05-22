@@ -1,6 +1,6 @@
 import { db } from 'config/db';
 
-export const MAX_EXERCISES_IN_SUPERSET = 3;
+export const MAX_EXERCISES_IN_SUPERSET = 5;
 
 /**
  * Returns the workout_task_id after inserting the row

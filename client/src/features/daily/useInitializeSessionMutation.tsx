@@ -1,9 +1,8 @@
 import { apiClient } from 'config/axios';
 import { useMutation, useQueryClient } from 'react-query';
-import { GetDailyResponse } from 'features/daily/types';
 
 const initializeSession = async (date: string) => {
-  const { data } = await apiClient.post<GetDailyResponse>(`/sessions/init`, {
+  const { data } = await apiClient.post(`/sessions/init`, {
     session_dt: date,
   });
   return data;

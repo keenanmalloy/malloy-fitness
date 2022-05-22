@@ -10,7 +10,7 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       onError: (error) => {
-        console.log({ error });
+        console.log(`------- ERROR FROM _APP: `, { error });
         Router.push('/login');
       },
     },

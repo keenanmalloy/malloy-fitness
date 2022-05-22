@@ -1,12 +1,25 @@
 import { useQuery } from 'react-query';
 import { apiClient } from 'config/axios';
-import { GetGoalsResponse } from 'features/account/types';
+import { z } from 'zod';
+
+const getGoalsSchema = z.object({
+  status: z.string(),
+  message: z.string(),
+  goals: z.object({
+    daily_steps_goal: z.number(),
+    weekly_cardio_minutes_goal: z.number(),
+    body_weight_goal: z.number(),
+  }),
+});
+
+export type GetGoalsSchema = z.infer<typeof getGoalsSchema>;
 
 const fetchGoals = async () => {
   const { data } = await apiClient.get(`/account/goals`);
-  return data;
+  const result = getGoalsSchema.parse(data);
+  return result;
 };
 
 export const useGoalsQuery = () => {
-  return useQuery<GetGoalsResponse>('fetchGoals', fetchGoals);
+  return useQuery<GetGoalsSchema>('fetchGoals', fetchGoals);
 };

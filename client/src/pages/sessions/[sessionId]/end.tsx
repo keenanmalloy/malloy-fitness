@@ -90,7 +90,9 @@ const EndPage = ({ sessionId }: Props) => {
         <div>
           <p className="text-center py-5">Want to add more?</p>
 
-          {data && <ChooseExerciseModal data={data} shouldRedirect />}
+          {data && (
+            <ChooseExerciseModal data={data} shouldRedirect isMultiSelectable />
+          )}
         </div>
         <FullPageModal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
           <button

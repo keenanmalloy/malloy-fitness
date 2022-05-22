@@ -1,10 +1,9 @@
 import { useMutation } from 'react-query';
 import { apiClient } from 'config/axios';
-import { Exercise } from '../types';
 
 interface Params {
   id: string;
-  exercise: Exercise;
+  exercise: any;
 }
 
 const updateExercise = async ({ id, exercise }: Params) => {

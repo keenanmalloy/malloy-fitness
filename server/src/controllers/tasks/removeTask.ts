@@ -102,21 +102,22 @@ const onTaskDeleteClone = async ({
     workoutId,
   });
 
-  const mappedTasks = oldWorkout.tasks
-    .map((task, index, array) => {
+  const mappedTasks = oldWorkout.task_order
+    .map((taskId) => {
+      const exercises = oldWorkout.tasks.filter(
+        (t) => t.workout_task_id === taskId
+      );
       return {
-        workout_task_id: task.workout_task_id,
-        exercises: array
-          .filter((t) => t.workout_task_id === task.workout_task_id)
-          .map((t) => {
-            return {
-              exercise_id: t.exercise_id,
-              sets: t.sets,
-              repetitions: t.repetitions,
-              reps_in_reserve: t.reps_in_reserve,
-              rest_period: t.rest_period,
-            };
-          }),
+        workout_task_id: taskId,
+        exercises: exercises.map((t) => {
+          return {
+            exercise_id: t.exercise_id,
+            sets: t.sets,
+            repetitions: t.repetitions,
+            reps_in_reserve: t.reps_in_reserve,
+            rest_period: t.rest_period,
+          };
+        }),
       };
     })
     // remove the deleted task from the array
@@ -162,15 +163,9 @@ const onTaskDelete = async ({
 
   if (!task) throw new Error('Task not found');
 
-  const taskOrder = JSON.stringify(
-    [
-      ...oldWorkout.tasks.filter(
-        (task) => task.workout_task_id !== workoutTaskId
-      ),
-    ].map((t) => {
-      return t.workout_task_id;
-    })
-  );
+  const taskOrder = JSON.stringify([
+    ...oldWorkout.task_order.filter((id: string) => id !== workoutTaskId),
+  ]);
 
   await updateWorkoutTaskOrder({
     taskOrder,

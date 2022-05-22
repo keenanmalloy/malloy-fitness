@@ -37,6 +37,21 @@ router.delete(
   }
 );
 
+// Remove task in the session
+router.delete(
+  '/:sessionId/tasks/:workoutTaskId',
+  authenticate,
+  authorize,
+  async (req, res) => {
+    await removeTask(
+      res,
+      req.params.sessionId,
+      req.params.workoutTaskId,
+      req.query.workoutId as string
+    );
+  }
+);
+
 export default (parentRouter: Router) => {
   parentRouter.use('/', router);
 };

@@ -48,7 +48,7 @@ router.delete(
       req.params.sessionId,
       req.params.exerciseId,
       req.query.workoutId as string,
-      req.query.workoutTaskId as string
+      req.query.workoutTaskExerciseId as string
     );
   }
 );

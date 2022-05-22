@@ -1,6 +1,5 @@
 import { apiClient } from 'config/axios';
 import { useQuery } from 'react-query';
-import { GetExercisesResponse } from '../types';
 
 const fetchExercises = async (ids: string[]) => {
   // fetch the data, the fetch call returns a promise of a response.
@@ -12,11 +11,7 @@ const fetchExercises = async (ids: string[]) => {
 };
 
 export const useExerciseIdsQuery = (ids: string[]) => {
-  return useQuery<GetExercisesResponse>(
-    ['fetchExerciseByIds', ids],
-    () => fetchExercises(ids),
-    {
-      enabled: !!ids.length,
-    }
-  );
+  return useQuery(['fetchExerciseByIds', ids], () => fetchExercises(ids), {
+    enabled: !!ids.length,
+  });
 };

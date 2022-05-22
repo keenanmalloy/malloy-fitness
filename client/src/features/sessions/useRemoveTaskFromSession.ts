@@ -1,31 +1,30 @@
 import { apiClient } from 'config/axios';
 import { useMutation, useQueryClient } from 'react-query';
 
-interface RemoveSessionParams {
+interface RemoveSessionTaskParams {
   workoutId: string;
   workoutTaskId: string;
   sessionId: string;
 }
 
-const removeSession = async ({
+const removeTask = async ({
   workoutId,
   workoutTaskId,
   sessionId,
-}: RemoveSessionParams) => {
+}: RemoveSessionTaskParams) => {
   const { data } = await apiClient.delete(
     `/sessions/${sessionId}/tasks/${workoutTaskId}?workoutId=${workoutId}`
   );
   return data;
 };
 
-export const useRemoveExerciseFromSession = (
+export const useRemoveTaskFromSession = (
   sessionId: string,
   workoutId: string
 ) => {
   const queryClient = useQueryClient();
   return useMutation<any, any, { workoutTaskId: string }>(
-    ({ workoutTaskId }) =>
-      removeSession({ workoutId, sessionId, workoutTaskId }),
+    ({ workoutTaskId }) => removeTask({ workoutId, sessionId, workoutTaskId }),
     {
       onSuccess: () => {
         queryClient.refetchQueries('fetchSession');
