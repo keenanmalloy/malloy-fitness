@@ -7,6 +7,7 @@ import Select from 'react-select';
 import { useQueryClient } from 'react-query';
 import { EXERCISE_CATEGORIES, EXERCISE_TRACKERS } from 'features/environment';
 import { MuscleGroup } from 'features/muscle-groups/types';
+import { selectStyles } from 'features/common/selectStyles';
 
 interface Props {
   setIsOpen: (type: boolean) => void;
@@ -86,7 +87,7 @@ export const CreateTherapyExerciseForm = ({
   };
 
   return (
-    <section>
+    <section className="text-white">
       <h1 className="py-3 text-lg text-center">
         Creating Physiotherapy Exercise
       </h1>
@@ -119,6 +120,7 @@ export const CreateTherapyExerciseForm = ({
                   control: (base) => ({
                     ...base,
                   }),
+                  ...selectStyles,
                 }}
                 defaultValue={{
                   label: primaryTracker,
@@ -138,6 +140,7 @@ export const CreateTherapyExerciseForm = ({
                   control: (base) => ({
                     ...base,
                   }),
+                  ...selectStyles,
                 }}
                 defaultValue={{
                   label: secondaryTracker,
@@ -170,6 +173,7 @@ export const CreateTherapyExerciseForm = ({
                         }
                       : {}),
                   }),
+                  ...selectStyles,
                 }}
                 options={EXERCISE_CATEGORIES}
               />
@@ -200,6 +204,7 @@ export const CreateTherapyExerciseForm = ({
               control: (base) => ({
                 ...base,
               }),
+              ...selectStyles,
             }}
             onChange={(data) => {
               setPrimary([...data]);
@@ -226,6 +231,7 @@ export const CreateTherapyExerciseForm = ({
                 value: muscleGroup.muscle_group_id,
               };
             })}
+            styles={selectStyles}
           />
         </div>
 

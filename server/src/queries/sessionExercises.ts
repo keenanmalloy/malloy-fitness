@@ -16,7 +16,6 @@ export const queryMainExercise = async (workoutTaskId: string) => {
         profile,
         exercises.view,
         sessions.workout_id,
-        notes,
         wc.workout_task_id,
         wce.workout_task_exercise_id
     FROM exercises
@@ -45,18 +44,28 @@ export const fetchSessionExercises = async (sessionId: string) => {
       reps_in_reserve,
       sets,
       rest_period,
-      notes,
-      wc.workout_task_id,
-      wce.workout_task_exercise_id
+      wt.workout_task_id,
+      wte.workout_task_exercise_id
     FROM exercises e
-    JOIN workout_task_exercises we on e.exercise_id = we.exercise_id
-    JOIN workout_tasks wc on wc.workout_task_id = we.workout_task_id
-    JOIN workouts w on we.workout_id = w.workout_id
+    JOIN workout_task_exercises wte on e.exercise_id = wte.exercise_id
+    JOIN workout_tasks wt on wt.workout_task_id = wte.workout_task_id
+    JOIN workouts w on wte.workout_id = w.workout_id
     JOIN sessions s on s.workout_id = w.workout_id
     WHERE session_id = $1`;
 
   const params = [sessionId];
-  const data = await db.query(query, params);
+  const data = await db.query<
+    Pick<exercises_table, 'exercise_id' | 'name'> &
+      Pick<
+        workout_task_exercises_table,
+        | 'repetitions'
+        | 'reps_in_reserve'
+        | 'rest_period'
+        | 'sets'
+        | 'workout_task_exercise_id'
+        | 'workout_task_id'
+      >
+  >(query, params);
   return data.rows;
 };
 
@@ -68,13 +77,13 @@ export const queryExercisesBySession = async (sessionId: string) => {
       e.video,
       primary_tracker,
       secondary_tracker,
-      wc.workout_task_id,
-      wce.workout_task_exercise_id
+      wt.workout_task_id,
+      wte.workout_task_exercise_id
     FROM sessions
       LEFT JOIN workouts ON workouts.workout_id = sessions.workout_id
-      LEFT JOIN workout_tasks wc ON workouts.workout_id = wc.workout_id
-      LEFT JOIN workout_task_exercises wce ON wc.workout_task_id = wce.workout_task_id
-      LEFT JOIN exercises e on wce.exercise_id = e.exercise_id
+      LEFT JOIN workout_tasks wt ON workouts.workout_id = wt.workout_id
+      LEFT JOIN workout_task_exercises wte ON wt.workout_task_id = wte.workout_task_id
+      LEFT JOIN exercises e on wte.exercise_id = e.exercise_id
     WHERE sessions.session_id = $1`;
   const params = [sessionId];
   const data = await db.query<

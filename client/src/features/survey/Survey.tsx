@@ -21,10 +21,10 @@ export interface ReadinessData {
 interface Props {
   sessionId: string;
   data: ReadinessData;
-  firstExerciseId: string;
+  firstTaskId: string;
 }
 
-export const Survey = ({ sessionId, data, firstExerciseId }: Props) => {
+export const Survey = ({ sessionId, data, firstTaskId }: Props) => {
   return (
     <main className="py-5 bg-slate-900 min-h-screen">
       <Header />
@@ -77,7 +77,7 @@ export const Survey = ({ sessionId, data, firstExerciseId }: Props) => {
 
       <SurveyFooter
         data={data}
-        firstExerciseId={firstExerciseId}
+        firstTaskId={firstTaskId}
         sessionId={sessionId}
       />
     </main>

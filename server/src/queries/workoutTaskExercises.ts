@@ -46,6 +46,22 @@ export const queryTaskExercisesByWorkoutId = async (workoutId: string) => {
 };
 
 /**
+ * Query ```exercise_id```'s within a workout by ```workout_id```
+ */
+export const queryExerciseIdsByWorkoutId = async (workoutId: string) => {
+  const query = `SELECT 
+        exercise_id
+    FROM workout_task_exercises
+    WHERE workout_id = $1`;
+  const params = [workoutId];
+
+  const data = await db.query<
+    Pick<workout_task_exercises_table, 'exercise_id'>
+  >(query, params);
+  return data.rows;
+};
+
+/**
  * Delete exercise within a workout by ```workout_task_exercise_id```
  */
 export const deleteTaskExerciseById = async (
@@ -124,7 +140,7 @@ export const queryWorkoutTaskExercisesByWorkoutTaskId = async (
     JOIN workouts 
       ON workouts.workout_id = sessions.workout_id
     WHERE
-      workout_tasks = $1
+      wt.workout_task_id = $1
     `;
 
   const data = await db.query<

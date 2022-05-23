@@ -48,13 +48,10 @@ export const ChooseExerciseModal = ({
         { workoutId: data.session.workout_id, exerciseIds: [exerciseId] },
         {
           onSuccess: (data) => {
-            console.log({ data });
             setSelectedExercises([]);
 
             if (shouldRedirect) {
-              router.push(
-                `/sessions/${sessionId}/tasks/${data.workout_task_id}`
-              );
+              router.push(`/sessions/${sessionId}/tasks/${data.taskId}`);
             } else {
               setIsOpen(false);
             }
@@ -78,10 +75,9 @@ export const ChooseExerciseModal = ({
       { workoutId: data.session.workout_id, exerciseIds: selectedExercises },
       {
         onSuccess: (data) => {
-          console.log({ data });
           setSelectedExercises([]);
           if (shouldRedirect) {
-            router.push(`/sessions/${sessionId}/tasks/${data.workout_task_id}`);
+            router.push(`/sessions/${sessionId}/tasks/${data.taskId}`);
           } else {
             setIsOpen(false);
           }
@@ -94,13 +90,15 @@ export const ChooseExerciseModal = ({
    * Flattens exerciseIds nested within exercises in tasks.
    * Used to filter out exercises that have already been added to the session.
    */
-  const flattenedExerciseIds = data.session.tasks.reduce(
-    (acc, task) => [
-      ...acc,
-      ...task.exercises.map((exercise) => exercise.exercise_id),
-    ],
-    [] as string[]
-  );
+  const flattenedExerciseIds =
+    data.session.tasks &&
+    data.session.tasks.reduce(
+      (acc, task) => [
+        ...acc,
+        ...task.exercises.map((exercise) => exercise.exercise_id),
+      ],
+      [] as string[]
+    );
 
   return (
     <div className="flex justify-center">
@@ -170,7 +168,7 @@ export const ChooseExerciseModal = ({
           view={view}
           profile={profile}
           sortBy={sortBy}
-          exerciseIds={flattenedExerciseIds}
+          exerciseIds={flattenedExerciseIds ?? []}
           handleExerciseSelection={handleExerciseSelection}
           isLoading={isLoading}
           selectedExercises={selectedExercises}

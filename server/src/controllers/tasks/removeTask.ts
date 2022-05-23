@@ -123,25 +123,21 @@ const onTaskDeleteClone = async ({
     // remove the deleted task from the array
     .filter((task) => task.workout_task_id !== workoutTaskId);
 
-  await cloneWorkoutTasksWithExercises({
+  const newWorkoutTasks = await cloneWorkoutTasksWithExercises({
     newWorkoutId,
     payload: [...mappedTasks],
+  });
+
+  await updateWorkoutTaskOrder({
+    workoutId: newWorkoutId,
+    taskOrder: JSON.stringify([
+      ...new Set(newWorkoutTasks.map((task) => task.workout_task_id)),
+    ]),
   });
 
   await updateSessionWorkout({
     sessionId,
     workoutId: newWorkoutId,
-  });
-
-  const newtaskOrder = JSON.stringify(
-    [...(oldWorkout.task_order ? oldWorkout.task_order : [])].filter(
-      (id) => id !== workoutTaskId
-    )
-  );
-
-  await updateWorkoutTaskOrder({
-    taskOrder: newtaskOrder,
-    workoutId,
   });
 
   return workoutTaskId;

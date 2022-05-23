@@ -54,6 +54,15 @@ const StartSessionSurvey = ({ sessionId }: Props) => {
     );
   }
 
+  if (!data.session.task_order) {
+    return (
+      <main className="py-5 bg-slate-900 min-h-screen">
+        <Header />
+        <p>No task order found</p>
+      </main>
+    );
+  }
+
   return (
     <Survey
       sessionId={sessionId}
@@ -64,7 +73,7 @@ const StartSessionSurvey = ({ sessionId }: Props) => {
         readiness_soreness: data.session.readiness_soreness,
         readiness_sleep: data.session.readiness_sleep,
       }}
-      firstExerciseId={data.session.exercise_order[0]}
+      firstTaskId={data.session.task_order[0]}
     />
   );
 };

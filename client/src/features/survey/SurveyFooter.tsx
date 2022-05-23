@@ -5,11 +5,11 @@ import { ReadinessData } from './Survey';
 
 export const SurveyFooter = ({
   data,
-  firstExerciseId,
+  firstTaskId,
   sessionId,
 }: {
   data: ReadinessData;
-  firstExerciseId: string;
+  firstTaskId: string;
   sessionId: string;
 }) => {
   // count not null values in data object
@@ -26,7 +26,7 @@ export const SurveyFooter = ({
 
         <div>Completed {count} / 5</div>
 
-        <Link href={`/sessions/${sessionId}/exercises/${firstExerciseId}`}>
+        <Link href={`/sessions/${sessionId}/tasks/${firstTaskId}`}>
           <button className="p-4 ">
             <IoMdArrowForward />
           </button>

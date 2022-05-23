@@ -17,7 +17,7 @@ interface Props {
   handleExerciseSelection: (exerciseId: string) => void;
   selectedExercises?: string[];
   setSelectedExercises?: (exerciseId: string[]) => void;
-  handleExerciseSubmission: () => void;
+  handleExerciseSubmission?: () => void;
 }
 
 export const SelectableExerciseList = ({
@@ -82,7 +82,7 @@ export const SelectableExerciseList = ({
   }
 
   const filteredExercises = data.exercises.filter((exercise) => {
-    if (exerciseIds.find((id) => id === exercise.exercise_id)) {
+    if (exerciseIds.some((id) => id === exercise.exercise_id)) {
       return false;
     }
     return true;
@@ -115,7 +115,7 @@ export const SelectableExerciseList = ({
             </div>
           )}
 
-          <div className="flex justify-between">
+          <div className="flex justify-between text-left">
             <h3
               className={`text-lg ${
                 selectedExercises &&
@@ -136,7 +136,7 @@ export const SelectableExerciseList = ({
               {exercise.category || 'other'}
             </span>
           </div>
-          <p className="text-xs">{exercise.description}</p>
+          <p className="text-xs text-left">{exercise.description}</p>
 
           {/* SVG checkmark icon top right */}
           {!!exercise.video &&

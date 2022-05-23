@@ -26,7 +26,7 @@ const CardButton = ({ label, setType }: CardButtonProps) => {
   return (
     <button
       onClick={() => setType(label)}
-      className="bg-gray-50 mt-2 text-gray-800 text-lg py-10 px-4 border border-gray-400 rounded shadow w-full capitalize"
+      className="bg-slate-800 mt-2 text-white text-lg py-10 px-4 rounded shadow w-full capitalize"
     >
       {label}
     </button>

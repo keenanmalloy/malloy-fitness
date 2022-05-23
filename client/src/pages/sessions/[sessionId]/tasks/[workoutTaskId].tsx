@@ -4,6 +4,7 @@ import { SessionExercise } from 'features/sessions/SessionExercise';
 import SessionHeader from 'features/sessions/SessionHeader';
 import { GetStaticPropsContext } from 'next';
 import { CgSpinner } from 'react-icons/cg';
+import { SessionFooter } from 'features/sessions/SessionFooter';
 
 export async function getStaticPaths() {
   arguments;
@@ -56,12 +57,28 @@ const SessionExercisePage = ({ workoutTaskId, sessionId }: Props) => {
       <SessionHeader
         sessionId={sessionId}
         workoutTaskId={workoutTaskId}
-        workoutId={data.exercise.workout_id}
+        workoutId={data.task[0].workout_id}
       />
-      <SessionExercise
-        data={data}
+
+      {data.task.map((exercise, index) => {
+        return (
+          <SessionExercise
+            key={exercise.workout_task_exercise_id}
+            data={exercise}
+            sessionId={sessionId}
+            workoutTaskId={workoutTaskId}
+            number={index + 1}
+            exerciseIds={data.exerciseIds}
+          />
+        );
+      })}
+
+      <div className="h-16" />
+
+      <SessionFooter
+        nextEx={data.next}
+        prevEx={data.prev}
         sessionId={sessionId}
-        workoutTaskId={workoutTaskId}
       />
     </main>
   );

@@ -19,7 +19,7 @@ export const SessionSummary = ({ data }: Props) => {
 
   const [workoutTitle, setWorkoutTitle] = useState(data.session.name);
 
-  if (!data.session.tasks.length) {
+  if (!data.session.tasks) {
     return (
       <main>
         <div className="p-3 text-center">
@@ -59,6 +59,7 @@ export const SessionSummary = ({ data }: Props) => {
           sessionId={data.session.session_id}
           hasStarted={!!data.session.started_at}
           hasEnded={!!data.session.ended_at}
+          taskOrder={data.session.task_order ?? []}
         />
       </div>
 
@@ -108,7 +109,7 @@ export const SessionSummary = ({ data }: Props) => {
                             </>
                           ) : (
                             <Link
-                              href={`/sessions/${data.session.session_id}/exercises/${exercise.exercise_id}`}
+                              href={`/sessions/${data.session.session_id}/tasks/${exercise.workout_task_id}`}
                             >
                               <a className="w-full">
                                 <h3 className="text-lg">{exercise.name}</h3>
@@ -143,7 +144,9 @@ export const SessionSummary = ({ data }: Props) => {
                                       <div className="flex-1">
                                         {set.weight}lbs
                                       </div>
-                                      <div className="flex-1">{set.reps}</div>
+                                      <div className="flex-1">
+                                        {set.repetitions}
+                                      </div>
                                     </div>
                                   );
                                 })}

@@ -1,6 +1,9 @@
 import { Response } from 'express';
 import { queryWorkoutExerciseRecord } from 'queries/sets';
-import { queryWorkoutTaskExercisesByWorkoutTaskId } from 'queries/workoutTaskExercises';
+import {
+  queryExerciseIdsByWorkoutId,
+  queryWorkoutTaskExercisesByWorkoutTaskId,
+} from 'queries/workoutTaskExercises';
 
 export const retrieveTask = async (
   res: Response,
@@ -9,7 +12,7 @@ export const retrieveTask = async (
 ) => {
   try {
     const task = await queryWorkoutTaskExercisesByWorkoutTaskId(workoutTaskId);
-
+    const taskExercises = await queryExerciseIdsByWorkoutId(task[0].workout_id);
     if (!task || !task.length) {
       return res.status(404).json({
         status: 'error',
@@ -36,6 +39,7 @@ export const retrieveTask = async (
       status: 'success',
       task: task,
       record: null,
+      exerciseIds: taskExercises.map((e) => e.exercise_id),
       next: {
         order: {
           workoutTaskId: taskOrder[currentExerciseIndex + 1],

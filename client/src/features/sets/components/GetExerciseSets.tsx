@@ -78,9 +78,6 @@ const SetsList = ({ sets, sessionId, exerciseId, record }: SetsListProps) => {
         onClick={() =>
           mutate({
             exercise_id: exerciseId,
-            set_order: !!sets.length
-              ? sets.sort((a, b) => b.set_order - a.set_order)[0].set_order + 1
-              : 1,
           })
         }
         className="w-full max-w-md flex justify-center bg-slate-700 py-3 rounded-md"

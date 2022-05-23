@@ -115,12 +115,19 @@ const onTaskChangeClone = async ({
     };
   });
 
-  await cloneWorkoutTasksWithExercises({
+  const newWorkoutTasks = await cloneWorkoutTasksWithExercises({
     newWorkoutId,
     payload: [...mappedTasks],
   });
 
-  const newWorkoutTaskId = await createWorkoutTaskWithExercises({
+  await updateWorkoutTaskOrder({
+    workoutId: newWorkoutId,
+    taskOrder: JSON.stringify([
+      ...new Set(newWorkoutTasks.map((task) => task.workout_task_id)),
+    ]),
+  });
+
+  await createWorkoutTaskWithExercises({
     workoutId: newWorkoutId,
     payload: exerciseIds.map((id) => {
       return {
@@ -132,16 +139,6 @@ const onTaskChangeClone = async ({
   await updateSessionWorkout({
     sessionId,
     workoutId: newWorkoutId,
-  });
-
-  const newtaskOrder = JSON.stringify([
-    ...(oldWorkout.task_order ? oldWorkout.task_order : []),
-    newWorkoutTaskId,
-  ]);
-
-  await updateWorkoutTaskOrder({
-    taskOrder: newtaskOrder,
-    workoutId,
   });
 };
 

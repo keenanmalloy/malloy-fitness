@@ -41,7 +41,7 @@ router.get('/:workoutId', authenticate, authorize, async (req, res) => {
 
 // Create new workout ----- /?type=cardio
 router.post('/', authenticate, authorize, async (req, res) => {
-  // 'strength', 'rest', 'deload', 'cardio', 'therapy'
+  // 'strength', 'deload', 'cardio', 'therapy'
   switch (req.query.type) {
     case 'strength':
       return await createStrengthWorkoutMutation(res, req.body);

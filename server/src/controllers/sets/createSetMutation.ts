@@ -8,14 +8,12 @@ interface createSet {
   exercise_id: string;
   repetitions?: number;
   weight?: number;
-  set_order?: number;
 }
 
 const createSetSchema = Joi.object({
   exercise_id: Joi.number().required(),
   repetitions: Joi.number().optional(),
   weight: Joi.number().optional(),
-  set_order: Joi.number().optional(),
 });
 
 export const createSetMutation = async (
@@ -34,7 +32,7 @@ export const createSetMutation = async (
       error: error,
     });
   } else {
-    const { exercise_id, repetitions, weight, set_order } = data;
+    const { exercise_id, repetitions, weight } = data;
 
     if (
       (typeof repetitions === 'number' && repetitions < 0) ||

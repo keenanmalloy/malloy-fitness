@@ -8,21 +8,86 @@ interface CloneWorkoutParams {
   accountId: string;
 }
 
+/**
+ * Clones the workout on the workouts table.
+ * To clone the exercises:
+ * Pass the new workoutId to the ```cloneWorkoutTasksWithExercises```
+ */
 export const cloneWorkout = async ({
   workoutId,
   accountId,
 }: CloneWorkoutParams) => {
   const workout = await retrieveWorkoutQuery(workoutId);
   if (!workout) throw new Error('Workout not found');
+
+  const clonedName = inferCloneName(workout.name as string);
   const workoutQuery = `
           WITH
             workoutdata(name, description, category, created_by, type) AS (
               VALUES
-                  ('${inferCloneName(workout.name as string)}', '${
-    workout.description
-  }', '${workout.category}', ${accountId}, '${workout.type}')
+                  (
+                    '${clonedName}', 
+                    '${workout.description}', 
+                    '${workout.category}', 
+                    ${accountId}, 
+                    '${workout.type}'
+                  )
               )
             INSERT INTO workouts (name, description, category, created_by, type)
+              SELECT *
+                FROM workoutdata
+              RETURNING *
+          `;
+
+  const data = await db.query(workoutQuery);
+  const createdWorkoutId = data.rows[0].workout_id;
+  return {
+    oldWorkout: workout,
+    newWorkoutId: createdWorkoutId,
+  };
+};
+
+/**
+ * Clones and schedules the workout.
+ * To clone the exercises:
+ * Pass the new workoutId to the ```cloneWorkoutTasksWithExercises```
+ */
+export const cloneScheduleWorkout = async ({
+  workoutId,
+  accountId,
+  date,
+}: CloneWorkoutParams & { date: string }) => {
+  const workout = await retrieveWorkoutQuery(workoutId);
+  if (!workout) throw new Error('Workout not found');
+
+  const distinguishDate = (date: string) => {
+    switch (date) {
+      case 'today':
+        return 'CURRENT_DATE';
+      case 'tomorrow':
+        return "CURRENT_DATE + INTERVAL '1 day'";
+      default:
+        return `TO_TIMESTAMP('${date}', 'YYYY-MM-DD')`;
+    }
+  };
+
+  const clonedName = inferCloneName(workout.name as string);
+  const workoutDt = distinguishDate(date);
+
+  const workoutQuery = `
+          WITH
+            workoutdata(name, description, category, created_by, type, workout_dt) AS (
+              VALUES
+                  (
+                    '${clonedName}', 
+                    '${workout.description}', 
+                    '${workout.category}', 
+                    ${accountId}, 
+                    '${workout.type}',
+                    ${workoutDt}
+                  )
+              )
+            INSERT INTO workouts (name, description, category, created_by, type, workout_dt)
               SELECT *
                 FROM workoutdata
               RETURNING *
@@ -50,15 +115,17 @@ export const queryWorkoutById = async (workoutId: string) => {
   const params = [workoutId];
 
   const data = await db.query<
-    Pick<
-      workouts_table,
-      | 'name'
-      | 'description'
-      | 'category'
-      | 'workout_id'
-      | 'type'
-      | 'created_by'
-      | 'task_order'
+    Required<
+      Pick<
+        workouts_table,
+        | 'name'
+        | 'description'
+        | 'category'
+        | 'workout_id'
+        | 'type'
+        | 'created_by'
+        | 'task_order'
+      >
     >
   >(query, params);
   return data.rows[0];

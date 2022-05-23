@@ -1,5 +1,9 @@
 import { db } from 'config/db';
-import { sets_table } from 'utils/databaseTypes';
+import {
+  exercises_table,
+  sets_table,
+  workout_task_exercises_table,
+} from 'utils/databaseTypes';
 
 export const querySetsBySession = async (sessionId: string) => {
   const query = `
@@ -40,23 +44,28 @@ interface QueryParams {
   sessionId: string;
 }
 
-export const queryExerciseToContinueFrom = async ({
-  sessionId,
-}: QueryParams) => {
+export const queryTaskToContinueFrom = async ({ sessionId }: QueryParams) => {
   const query = `
     SELECT
-      sets.updated_at,
-      e.exercise_id,
-          sets.session_id
+        sets.updated_at,
+        e.exercise_id,
+        sets.session_id,
+        wte.workout_task_id
       FROM sets
       JOIN exercises e
           on sets.exercise_id = e.exercise_id
+      JOIN workout_task_exercises wte
+          on e.exercise_id = wte.exercise_id
       WHERE session_id = $1
       ORDER BY sets.updated_at DESC LIMIT 1;
     `;
 
   const params = [sessionId];
-  const data = await db.query(query, params);
+  const data = await db.query<
+    Pick<sets_table, 'updated_at' | 'session_id'> &
+      Pick<exercises_table, 'exercise_id'> &
+      Pick<workout_task_exercises_table, 'workout_task_id'>
+  >(query, params);
   if (!data.rowCount) throw new Error('No exercise to continue from');
   return data.rows[0];
 };

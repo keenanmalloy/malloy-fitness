@@ -32,14 +32,14 @@ const generateValues = (
 ) => {
   return payload
     .map(
-      (we) =>
+      (wte) =>
         `(${workoutId}, 
-          ${we.exercise_id}, 
+          ${wte.exercise_id}, 
           ${workoutTaskId},
-          ${we.sets ?? null}, 
-          ${we.repetitions ?? null}, 
-          ${we.reps_in_reserve ?? null}, 
-          ${we.rest_period ?? null})`
+          ${wte.sets ?? null}, 
+          ${wte.repetitions ?? null}, 
+          ${wte.reps_in_reserve ?? null}, 
+          ${wte.rest_period ?? null})`
     )
     .join(',');
 };
@@ -138,7 +138,7 @@ interface CloneWorkoutTaskWithExercisesParams {
 export const cloneWorkoutTasksWithExercises = async ({
   newWorkoutId,
   payload,
-}: CloneWorkoutTaskWithExercisesParams): Promise<string> => {
+}: CloneWorkoutTaskWithExercisesParams) => {
   const workoutTaskIds = await createWorkoutTaskBatch(
     newWorkoutId,
     payload.length
@@ -157,7 +157,7 @@ export const cloneWorkoutTasksWithExercises = async ({
   `;
 
   const data = await db.query(query);
-  return data.rows[0].workout_task_id;
+  return data.rows;
 };
 
 const generateCloneValues = (

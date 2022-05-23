@@ -8,12 +8,12 @@ interface SessionFooterProps {
   sessionId: string;
   nextEx: {
     order: {
-      workoutTaskId: string | null;
+      workoutTaskId?: string | null | undefined;
     };
   };
   prevEx: {
     order: {
-      workoutTaskId: string | null;
+      workoutTaskId?: string | null | undefined;
     };
   };
 }

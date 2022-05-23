@@ -10,9 +10,17 @@ interface Props {
   sessionId: string;
   exerciseId: string;
   workoutId: string;
+  workoutTaskExerciseId: string;
+  workoutTaskId: string;
 }
 
-export const RotateExercise = ({ sessionId, exerciseId, workoutId }: Props) => {
+export const RotateExercise = ({
+  sessionId,
+  exerciseId,
+  workoutId,
+  workoutTaskExerciseId,
+  workoutTaskId,
+}: Props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   return (
@@ -32,6 +40,8 @@ export const RotateExercise = ({ sessionId, exerciseId, workoutId }: Props) => {
           sessionId={sessionId}
           exerciseId={exerciseId}
           workoutId={workoutId}
+          workoutTaskExerciseId={workoutTaskExerciseId}
+          workoutTaskId={workoutTaskId}
         />
       </DefaultModal>
     </div>
@@ -43,6 +53,8 @@ interface RotateConfirmationPanelProps {
   sessionId: string;
   exerciseId: string;
   workoutId: string;
+  workoutTaskExerciseId: string;
+  workoutTaskId: string;
 }
 
 const RotateConfirmationPanel = ({
@@ -50,8 +62,9 @@ const RotateConfirmationPanel = ({
   sessionId,
   exerciseId,
   workoutId,
+  workoutTaskExerciseId,
+  workoutTaskId,
 }: RotateConfirmationPanelProps) => {
-  const router = useRouter();
   const { isError, isLoading, mutate, error } = useRotateExercise({
     exerciseId,
     sessionId,
@@ -59,11 +72,10 @@ const RotateConfirmationPanel = ({
 
   const handleRotation = async () => {
     mutate(
-      { workoutId },
+      { workoutId, workoutTaskExerciseId, workoutTaskId },
       {
-        onSuccess: (data) => {
+        onSuccess: () => {
           setIsOpen(false);
-          router.push(`/sessions/${sessionId}/exercises/${data.exerciseId}`);
         },
       }
     );
@@ -71,14 +83,17 @@ const RotateConfirmationPanel = ({
 
   return (
     <>
-      <div className="flex justify-between py-5">
+      <div className="flex justify-between pt-5 space-x-2">
         <Button
-          className="flex justify-between px-10"
+          className="flex justify-center w-full "
           onClick={() => setIsOpen(false)}
         >
           No
         </Button>
-        <Button className="flex justify-between px-10" onClick={handleRotation}>
+        <Button
+          className="flex justify-center w-full "
+          onClick={handleRotation}
+        >
           {isLoading ? 'Rotating...' : 'Yes'}
         </Button>
       </div>

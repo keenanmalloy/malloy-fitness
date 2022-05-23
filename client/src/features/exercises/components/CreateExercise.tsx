@@ -3,6 +3,7 @@ import { useMuscleGroupsQuery } from 'features/muscle-groups/api/useMuscleGroups
 import FullPageModal from 'features/modal/FullPageModal';
 import { useState } from 'react';
 import { CreateExerciseForms } from './CreateExerciseForms';
+import { BiX } from 'react-icons/bi';
 
 export const CreateExercise = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,6 +32,13 @@ export const CreateExercise = () => {
         description=""
         closeModal={() => setIsOpen(false)}
       >
+        <button
+          className="absolute top-0 right-0 p-3 text-white"
+          onClick={() => setIsOpen(false)}
+        >
+          <BiX size={24} />
+        </button>
+        <div className="h-12" />
         <CreateExerciseForms
           muscleGroups={data.muscleGroups}
           setIsOpen={setIsOpen}
