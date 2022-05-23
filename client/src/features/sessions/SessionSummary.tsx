@@ -55,12 +55,14 @@ export const SessionSummary = ({ data }: Props) => {
 
       <SessionEndStats endedAt={data.session.ended_at} />
       <div className="px-5 w-full">
-        <StartSession
-          sessionId={data.session.session_id}
-          hasStarted={!!data.session.started_at}
-          hasEnded={!!data.session.ended_at}
-          taskOrder={data.session.task_order ?? []}
-        />
+        {!data.session.ended_at && (
+          <StartSession
+            sessionId={data.session.session_id}
+            hasStarted={!!data.session.started_at}
+            hasEnded={!!data.session.ended_at}
+            taskOrder={data.session.task_order ?? []}
+          />
+        )}
       </div>
 
       <ul className="flex flex-col divide-y-2 divide-slate-700 px-3 pb-5">

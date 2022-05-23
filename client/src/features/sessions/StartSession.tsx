@@ -10,7 +10,7 @@ interface Props {
   hasStarted: boolean;
   hasEnded: boolean;
   hasExercises?: boolean;
-  taskOrder: string[];
+  taskOrder: string[] | null;
 }
 
 const StartSession = ({
@@ -32,6 +32,22 @@ const StartSession = ({
       console.log({ error });
     }
   };
+
+  if (hasEnded || hasExercises || !taskOrder) {
+    return (
+      <Link href={`/sessions/${sessionId}`}>
+        <button
+          className={`w-full flex justify-center items-center text-center py-2 px-4 text-sm font-medium  rounded-md border border-slate-700 focus:z-10 focus:ring-2 focus:ring-slate-600`}
+        >
+          {isLoading ? (
+            <CgSpinner className="w-6 h-6 animate-spin text-green-500" />
+          ) : (
+            <>{hasEnded ? 'View Session' : 'Build Session'}</>
+          )}
+        </button>
+      </Link>
+    );
+  }
 
   const startOrContinueWorkout = async (sessionId: string) => {
     setIsLoading(true);
@@ -57,22 +73,6 @@ const StartSession = ({
     if (!firstTaskId) return router.push(`/sessions/${sessionId}/`);
     router.push(`/sessions/${sessionId}/start`);
   };
-
-  if (hasEnded || hasExercises) {
-    return (
-      <Link href={`/sessions/${sessionId}`}>
-        <button
-          className={`w-full flex justify-center items-center text-center py-2 px-4 text-sm font-medium  rounded-md border border-slate-700 focus:z-10 focus:ring-2 focus:ring-slate-600`}
-        >
-          {isLoading ? (
-            <CgSpinner className="w-6 h-6 animate-spin text-green-500" />
-          ) : (
-            <>{hasEnded ? 'View Session' : 'Build Session'}</>
-          )}
-        </button>
-      </Link>
-    );
-  }
 
   return (
     <button

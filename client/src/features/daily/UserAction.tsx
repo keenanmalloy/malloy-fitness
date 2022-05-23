@@ -1,9 +1,8 @@
 import HomeModal from 'features/modal/HomeModal';
-import Router from 'next/router';
 import React, { useState } from 'react';
 import { CgSpinner } from 'react-icons/cg';
 import { IoAdd } from 'react-icons/io5';
-import { SelectedDate } from './types';
+import { SelectedDate } from './useDailyOverviewQuery';
 import { useInitSessionMutation } from './useInitializeSessionMutation';
 
 interface Props {

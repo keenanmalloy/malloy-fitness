@@ -1,9 +1,9 @@
-import { useExerciseIdsQuery } from 'features/exercises/api/useExerciseIdsQuery';
-import React, { useState } from 'react';
-import { EditWorkoutExerciseMetadataPreview } from 'features/workout-creation/EditWorkoutExerciseMetadataPreview';
+import {
+  GetExercisesByIdsSchema,
+  useExerciseIdsQuery,
+} from 'features/exercises/api/useExerciseIdsQuery';
 import { RemoveWorkoutExerciseFromPreview } from './RemoveWorkoutExerciseFromPreview';
 import { LocalExercise } from './CreateWorkout';
-import { GetExercisesResponse } from 'features/exercises/types';
 import { Skeleton } from 'features/common/Skeleton';
 
 interface Props {
@@ -89,7 +89,7 @@ export const WorkoutExercisesPreview = ({ exercises, setExercises }: Props) => {
 
 interface ExercisePreviewRowProps {
   order: number;
-  exercise: GetExercisesResponse['exercises'][0];
+  exercise: GetExercisesByIdsSchema['exercises'][0];
   exercises: LocalExercise[];
   setExercises: (exercises: LocalExercise[]) => void;
   isInPreviousSuperset: boolean;

@@ -46,7 +46,7 @@ export const EditableSessionWorkoutTitle = ({
     <div className="flex-1 text-2xl relative text-white px-2 py-1">
       <input
         onChange={onChange}
-        value={value}
+        value={value ?? ''}
         type={type}
         placeholder={placeholder}
         className="text-center bg-slate-800 rounded-md w-full py-1"

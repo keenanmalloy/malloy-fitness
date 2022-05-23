@@ -9,12 +9,9 @@ import { EXERCISE_CATEGORIES, EXERCISE_TRACKERS } from 'features/environment';
 import { useAddMuscleGroupToExerciseMutation } from 'features/exercises/api/useAddMuscleGroupToExerciseMutation';
 import { useRemoveMuscleGroupFromExerciseMutation } from 'features/exercises/api/useRemoveMuscleGroupFromExerciseMutation';
 import { GetMuscleGroupsResponse } from 'features/muscle-groups/types';
-import { GetExercisesResponse, GetSingleExerciseResponse } from '../types';
 
 interface Props {
-  exercise:
-    | GetSingleExerciseResponse['exercise']
-    | GetExercisesResponse['exercises'][0];
+  exercise: any;
   queryKey: string;
   setIsOpen: (type: boolean) => void;
   muscleGroups: GetMuscleGroupsResponse['muscleGroups'];
@@ -87,14 +84,14 @@ export const UpdateExerciseForm = ({
     // get the muscle groups that are not in the primary array
     const newPrimary = data.map((object) => object.value);
     const oldPrimary = exercise[group as 'primary' | 'secondary'].map(
-      (object) => object.muscle_group_id
+      (object: any) => object.muscle_group_id
     );
 
     // get difference array values in newPrimary and oldPrimary
     const difference =
       newPrimary.length > oldPrimary.length
         ? newPrimary.filter((x) => !oldPrimary.includes(x))
-        : oldPrimary.filter((x) => !newPrimary.includes(x));
+        : oldPrimary.filter((x: any) => !newPrimary.includes(x));
 
     const isAddition = newPrimary.length > oldPrimary.length;
     const isRemove = newPrimary.length < oldPrimary.length;

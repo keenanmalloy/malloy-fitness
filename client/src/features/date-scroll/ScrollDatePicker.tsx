@@ -7,7 +7,8 @@ import {
 import useDrag from './useDrag';
 import { CalendarComponent } from 'features/date-scroll/Calendar';
 import { generateCalendarState } from './generateCalendarState';
-import { SelectedDate, Session } from 'features/daily/types';
+import { SelectedDate } from 'features/daily/useDailyOverviewQuery';
+import { Session } from 'features/sessions/types';
 
 interface Props {
   displayDate: SelectedDate;

@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { GetDailyResponse } from './types';
 
 interface DietPanelProps {
-  data: GetDailyResponse;
+  data: any;
 }
 
 export const DietPanel = ({ data }: DietPanelProps) => {

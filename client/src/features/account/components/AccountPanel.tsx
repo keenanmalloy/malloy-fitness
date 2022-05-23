@@ -5,9 +5,8 @@ import {
   AccountPhoneField,
   AccountSelectField,
 } from 'features/account/components/AccountField';
-import { Account } from 'features/account//types';
 interface Props {
-  account: Account;
+  account: any;
 }
 
 export const AccountPanel = ({ account }: Props) => {

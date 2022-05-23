@@ -153,8 +153,8 @@ CREATE TABLE IF NOT EXISTS settings (
     appearance text DEFAULT 'light', -- light | dark
 
     -- goals
-    daily_steps_goal int,
-    weekly_cardio_minutes_goal int,
+    daily_steps_goal int DEFAULT 5000,
+    weekly_cardio_minutes_goal int DEFAULT 150,
     body_weight_goal int
 );
 
@@ -169,7 +169,6 @@ CREATE TABLE IF NOT EXISTS sleep (
     updated_at timestamp with time zone DEFAULT now() NOT NULL
 );
 
-
 CREATE TABLE IF NOT EXISTS account_providers (
     account_provider_id bigserial PRIMARY KEY,
     created_at timestamp with time zone DEFAULT now() NOT NULL,
@@ -180,4 +179,4 @@ CREATE TABLE IF NOT EXISTS account_providers (
 );
 
 -- Create dummy user
-INSERT INTO accounts (account_id, created_at, updated_at, name, email, active, avatar_url, role, ticket, ticket_expiry, locale) VALUES (1, '2022-03-25 14:57:10.384907', '2022-03-25 14:57:10.384907', 'tester', 'tester@malloyfit.ca', false, null, null, '37f879ec-7b9b-40a9-97a3-5266d9653ea4', '2022-03-25 14:57:10.384907', 'ca');
+INSERT INTO accounts (account_id, created_at, updated_at, name, email, active, avatar_url, role, ticket, ticket_expiry, locale) VALUES (1, '2022-03-25 14:57:10.384907', '2022-03-25 14:57:10.384907', 'tester', 'tester@malloyfit.ca', false, null, 'developer', '37f879ec-7b9b-40a9-97a3-5266d9653ea4', '2022-03-25 14:57:10.384907', 'ca');

@@ -6,17 +6,16 @@ import Link from 'next/link';
 import React, { useState } from 'react';
 import { BiX } from 'react-icons/bi';
 import { CgSpinner } from 'react-icons/cg';
-import { GetDailyResponse } from './types';
 
 interface Props {
-  data: GetDailyResponse;
+  data: any;
 }
 
 export const TrainingPanel = ({ data }: Props) => {
   const { mutate, isError, isLoading } = useDeleteSessionMutation();
   return (
     <section className="flex flex-col justify-center w-full rounded-sm py-3 space-y-2 pl-3">
-      {data.sessions.map((session) => {
+      {data.sessions.map((session: any) => {
         return (
           <article className="flex relative " key={session.session_id}>
             {!session.completed && !!session.started_at ? (
@@ -97,11 +96,7 @@ export const TrainingPanel = ({ data }: Props) => {
   );
 };
 
-const DeleteSesssionConfirmation = ({
-  session,
-}: {
-  session: GetDailyResponse['sessions'][0];
-}) => {
+const DeleteSesssionConfirmation = ({ session }: { session: any }) => {
   const { mutate, isError, isLoading } = useDeleteSessionMutation();
   const [isOpen, setIsOpen] = useState(false);
 
