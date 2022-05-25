@@ -14,7 +14,7 @@ const getAccountSchema = z.object({
     name: z.string(),
     email: z.string(),
     active: z.boolean(),
-    dob: z.string(),
+    dob: z.nullable(z.string()),
     avatar_url: z.string(),
     role: z.string(),
     ticket: z.string(),

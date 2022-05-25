@@ -177,6 +177,3 @@ CREATE TABLE IF NOT EXISTS account_providers (
     auth_provider text,
     auth_provider_unique_id text
 );
-
--- Create dummy user
-INSERT INTO accounts (account_id, created_at, updated_at, name, email, active, avatar_url, role, ticket, ticket_expiry, locale) VALUES (1, '2022-03-25 14:57:10.384907', '2022-03-25 14:57:10.384907', 'tester', 'tester@malloyfit.ca', false, null, 'developer', '37f879ec-7b9b-40a9-97a3-5266d9653ea4', '2022-03-25 14:57:10.384907', 'ca');

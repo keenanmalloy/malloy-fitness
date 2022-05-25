@@ -6,9 +6,9 @@ const getGoalsSchema = z.object({
   status: z.string(),
   message: z.string(),
   goals: z.object({
-    daily_steps_goal: z.number(),
-    weekly_cardio_minutes_goal: z.number(),
-    body_weight_goal: z.number(),
+    daily_steps_goal: z.nullable(z.number()),
+    weekly_cardio_minutes_goal: z.nullable(z.number()),
+    body_weight_goal: z.nullable(z.number()),
   }),
 });
 

@@ -1,210 +1,111 @@
-import { MAX_AGE } from "cookies";
-import { generateAuthToken } from "sessions";
-import { request } from "test/server";
+import axios, { AxiosInstance } from 'axios';
+import { initializeWebServer } from 'test/server';
 
-let token: string | null = null;
-let deletable: string | null = null;
+let axiosAPIClient: AxiosInstance;
 
 beforeAll(async () => {
-  token = await generateAuthToken({
-    createdAt: new Date().toString(),
-    maxAge: MAX_AGE,
-    account: {
-      account_id: "1",
-      name: "Tester",
-      email: "tester@malloyfit.ca",
-      active: false,
-      avatar_url:
-        "https://lh3.googleusercontent.com/a-/AOh14GgumKfRBh0AY4W13SE5EtwiFavA-FFGwxYTZkeX9Q=s96-c",
-      role: null,
-      ticket: "ticket-goes-here",
-      ticket_expiry: new Date().toString(),
-    },
+  const apiConnection: any = await initializeWebServer();
+  const axiosConfig = {
+    baseURL: `http://127.0.0.1:${apiConnection.port}`,
+    validateStatus: () => true,
+  };
+  axiosAPIClient = axios.create(axiosConfig);
+});
+
+describe('GET /exercises', function () {
+  it('responds with 200 successfully fetched list of exercises', async function () {
+    const response = await axiosAPIClient.get('/exercises');
+    expect(response.status).toBe(200);
+    expect(response.data).toHaveLength(1);
+    expect(response.data[0]).toHaveProperty('id');
+    expect(response.data[0]).toHaveProperty('name');
+    expect(response.data[0]).toHaveProperty('description');
+    expect(response.data[0]).toHaveProperty('createdAt');
+    expect(response.data[0]).toHaveProperty('updatedAt');
+  });
+
+  it('responds with 200 where query shows no results', async function () {
+    const response = await axiosAPIClient.get(
+      '/exercises?name=non-existant-exercise'
+    );
+    expect(response.status).toBe(200);
+    expect(response.data).toHaveLength(0);
   });
 });
 
-describe("GET /exercises", function () {
-  it("responds with 200 successfully fetched list of exercises", async function () {
-    const res = await request
-      .get("/exercises")
-      .set("Accept", "application/json");
+describe('GET /exercises/:pk', function () {
+  it('responds with 200 successfully fetched list of exercises', async function () {
+    const response = await axiosAPIClient.get('/exercises/1');
+    expect(response.status).toBe(200);
+    expect(response.data).toHaveProperty('id');
+    expect(response.data).toHaveProperty('name');
+    expect(response.data).toHaveProperty('description');
+    expect(response.data).toHaveProperty('createdAt');
+    expect(response.data).toHaveProperty('updatedAt');
+  });
+});
 
-    expect(res.status).toEqual(200);
-    expect(res.body.message).toEqual("Exercises fetched successfully");
+describe('POST /exercises/', function () {
+  it('responds with 401 Unauthenticated', async function () {
+    const response = await axiosAPIClient.post('/exercises');
+    expect(response.status).toBe(401);
   });
 
-  it("responds with 200 where query shows no results", async function () {
-    const res = await request
-      .get("/exercises?q=this-does-not-exist")
-      .set("Accept", "application/json");
+  it('responds with 422 unprocessable entity', async function () {
+    const response = await axiosAPIClient.post('/exercises', {});
+    expect(response.status).toBe(422);
+  });
 
-    expect(res.status).toEqual(200);
-    expect(res.body.message).toEqual("Exercises fetched successfully");
-    expect(res.body).toMatchObject({
-      status: expect.any(String),
-      message: expect.any(String),
-      exercises: expect.arrayContaining([]),
+  it('responds with 201 success', async function () {
+    const response = await axiosAPIClient.post('/exercises', {
+      name: 'test exercise',
+      description: 'test description',
     });
+    expect(response.status).toBe(201);
   });
 });
 
-describe("GET /exercises/:pk", function () {
-  it("responds with 200 successfully fetched list of exercises", async function () {
-    const res = await request
-      .get("/exercises/1000")
-      .set("Accept", "application/json");
+describe('PUT /exercises/:exerciseId', function () {
+  it('responds with 401 Unauthenticated', async function () {
+    const response = await axiosAPIClient.put('/exercises/1');
+    expect(response.status).toBe(401);
+  });
 
-    expect(res.status).toEqual(200);
-    expect(res.body.message).toEqual("Exercise fetched successfully");
+  it('responds with 403 Unauthorized', async function () {
+    const response = await axiosAPIClient.put('/exercises/1', {
+      name: 'test exercise',
+      description: 'test description',
+    });
+    expect(response.status).toBe(403);
+  });
+
+  it('responds with 422 unprocessable entity', async function () {
+    const response = await axiosAPIClient.put('/exercises/1', {});
+    expect(response.status).toBe(422);
+  });
+
+  it('responds with 200 successfully updated', async function () {
+    const response = await axiosAPIClient.put('/exercises/1', {
+      name: 'test exercise',
+      description: 'test description',
+    });
+    expect(response.status).toBe(200);
   });
 });
 
-describe("POST /exercises/", function () {
-  it("responds with 401 Unauthenticated", async function () {
-    const res = await request
-      .post("/exercises/")
-      .send({
-        name: "Exercise - Integration Test",
-        description: "Description - Integration Test",
-        category: "Category - Integration Test",
-        primary: [],
-        secondary: [],
-        video: null,
-        profile: "short",
-      })
-      .set("Accept", "application/json");
-
-    expect(res.status).toEqual(401);
+describe('DELETE /exercises/:pk', function () {
+  it('responds with 401 Unauthenticated', async function () {
+    const response = await axiosAPIClient.delete('/exercises/1');
+    expect(response.status).toBe(401);
   });
 
-  it("responds with 422 unprocessable entity", async function () {
-    const res = await request
-      .post("/exercises/")
-      .send({
-        name: "Exercise - Integration Test",
-        description: "Description - Integration Test",
-        category: "Category - Integration Test",
-        primary: [],
-        secondary: [],
-        video: null,
-        profile: "unprocessable",
-      })
-      .set("Accept", "application/json")
-      .set("Cookie", [`token=${token}`]);
-
-    expect(res.status).toEqual(422);
+  it('responds with 403 Unauthorized', async function () {
+    const response = await axiosAPIClient.delete('/exercises/1');
+    expect(response.status).toBe(403);
   });
 
-  it("responds with 201 success", async function () {
-    const res = await request
-      .post("/exercises/")
-      .send({
-        name: "Exercise - Integration Test",
-        description: "Description - Integration Test",
-        category: "Category - Integration Test",
-        primary: [1000, 1001],
-        secondary: [1002],
-        video: null,
-        profile: "short",
-      })
-      .set("Accept", "application/json")
-      .set("Cookie", [`token=${token}`]);
-
-    deletable = res.body.exercise.exercise_id;
-
-    expect(res.status).toEqual(201);
-  });
-});
-
-describe("PUT /exercises/:exerciseId", function () {
-  it("responds with 401 Unauthenticated", async function () {
-    const res = await request
-      .put(`/exercises/${deletable}`)
-      .send({
-        name: "Edited - Integration Test",
-        description: "Edited - Integration Test",
-        category: "Edited - Integration Test",
-        video: null,
-        profile: "unprocessable",
-      })
-      .set("Accept", "application/json");
-
-    expect(res.status).toEqual(401);
-  });
-
-  it("responds with 403 Unauthorized", async function () {
-    const res = await request
-      .put(`/exercises/1003`)
-      .send({
-        name: "Edited - Integration Test",
-        description: "Edited - Integration Test",
-        category: "Edited - Integration Test",
-        video: null,
-        profile: "short",
-      })
-      .set("Accept", "application/json")
-      .set("Cookie", [`token=${token}`]);
-
-    expect(res.status).toEqual(403);
-  });
-
-  it("responds with 422 unprocessable entity", async function () {
-    const res = await request
-      .put(`/exercises/1000`)
-      .send({
-        name: "Edited - Integration Test",
-        description: "Edited - Integration Test",
-        category: "Edited - Integration Test",
-        video: null,
-        profile: "unprocessable",
-      })
-      .set("Accept", "application/json")
-      .set("Cookie", [`token=${token}`]);
-
-    expect(res.status).toEqual(422);
-  });
-
-  it("responds with 200 successfully updated", async function () {
-    const res = await request
-      .put(`/exercises/1000`)
-      .send({
-        name: "Edited - Integration Test",
-        description: "Edited - Integration Test",
-        category: "Edited - Integration Test",
-        video: null,
-        profile: "long",
-      })
-      .set("Accept", "application/json")
-      .set("Cookie", [`token=${token}`]);
-
-    expect(res.status).toEqual(200);
-  });
-});
-
-describe("DELETE /exercises/:pk", function () {
-  it("responds with 401 Unauthenticated", async function () {
-    const res = await request
-      .delete("/exercises/0")
-      .set("Accept", "application/json");
-
-    expect(res.status).toEqual(401);
-  });
-
-  it("responds with 403 Unauthorized", async function () {
-    const res = await request
-      .delete("/exercises/1003")
-      .set("Accept", "application/json")
-      .set("Cookie", [`token=${token}`]);
-
-    expect(res.status).toEqual(403);
-  });
-
-  it("responds with 200 - successfully deleted", async function () {
-    const res = await request
-      .delete(`/exercises/${deletable}`)
-      .set("Accept", "application/json")
-      .set("Cookie", [`token=${token}`]);
-
-    expect(res.status).toEqual(200);
+  it('responds with 200 - successfully deleted', async function () {
+    const response = await axiosAPIClient.delete('/exercises/1');
+    expect(response.status).toBe(200);
   });
 });
