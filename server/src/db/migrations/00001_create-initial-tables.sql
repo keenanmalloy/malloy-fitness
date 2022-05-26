@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS exercises (
     -- Can be of either 'public' | 'private'
     -- Public view means anyone can see the exercise / view the exercise
     -- Private view means only the user who created the exercise can view the exercise
-    view text DEFAULT 'private',
+    "view" text DEFAULT 'private',
     name text,
     description text,
     category character varying(30),

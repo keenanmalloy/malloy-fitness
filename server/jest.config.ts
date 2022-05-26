@@ -13,4 +13,4 @@ export default {
   moduleDirectories: ['node_modules', 'src'],
   testPathIgnorePatterns: ['<rootDir>/dist/', '<rootDir>/node_modules/'],
   preset: 'ts-jest',
-}
+};

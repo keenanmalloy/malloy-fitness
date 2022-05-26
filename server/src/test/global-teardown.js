@@ -10,5 +10,6 @@ module.exports = async () => {
     // if (Math.ceil(Math.random() * 10) === 10) {
     //   @@todo clean data
     // }
+    return;
   }
 };
