@@ -17,7 +17,7 @@ router.get('/', authenticate, async (req, res) => {
 // Retrieve muscle group
 router.get('/:id', authenticate, async (req, res) => {
   // if exerciseId is not a number, return 404
-  if (isNaN(+req.params.exerciseId)) {
+  if (isNaN(+req.params.id)) {
     return res.status(404).send('Muscle-group not found');
   }
   await retrieveMuscleGroupQuery(res, req.params.id);
