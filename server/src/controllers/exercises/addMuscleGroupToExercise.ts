@@ -8,7 +8,7 @@ interface addMuscleGroup {
 }
 
 const addMuscleGroupSchema = Joi.object({
-  group: Joi.string().valid('primary', 'secondary').optional(),
+  group: Joi.string().valid('primary', 'secondary'),
   muscleGroupId: Joi.alternatives(Joi.string(), Joi.number()).required(),
 });
 

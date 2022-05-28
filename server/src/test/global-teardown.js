@@ -1,5 +1,6 @@
 const isCI = require('is-ci');
 const dockerCompose = require('docker-compose');
+const { deleteAllTestExercises } = require('./helpers/exercise');
 
 module.exports = async () => {
   if (isCI) {
@@ -7,9 +8,9 @@ module.exports = async () => {
     dockerCompose.down();
   } else {
     // ✅ Best Practice: Clean the database occasionally
-    // if (Math.ceil(Math.random() * 10) === 10) {
-    //   @@todo clean data
-    // }
+    if (Math.ceil(Math.random() * 10) === 10) {
+      await deleteAllTestExercises();
+    }
     return;
   }
 };

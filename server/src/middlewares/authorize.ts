@@ -12,6 +12,10 @@ export const authorize = async (
   res: Response,
   next: NextFunction
 ) => {
+  // if exerciseId is not a number, return 404
+  if (isNaN(+req.params.exerciseId)) {
+    return res.status(404).send();
+  }
   const requestUrl = res.locals.state.requestUrl;
   const workoutId = res.locals.state.workoutId;
   const exerciseId = res.locals.state.exerciseId;

@@ -14,8 +14,6 @@ export const retrieveExercisesQuery = async (req: Request, res: Response) => {
   try {
     const { q, ids } = req.query;
 
-    console.log({ state: res.locals.state });
-
     if (q) {
       const exercises = await searchExercises(req, res);
       return res.status(200).json({

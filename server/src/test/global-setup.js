@@ -3,6 +3,8 @@ const path = require('path');
 const dockerCompose = require('docker-compose');
 const { execSync } = require('child_process');
 
+require('module-alias/register');
+
 module.exports = async () => {
   console.time('global-setup');
 

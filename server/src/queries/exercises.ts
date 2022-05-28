@@ -185,6 +185,7 @@ interface CreateExerciseParams {
   description: string;
   createdBy: string;
   primaryTracker: string;
+  video: string;
   secondaryTracker: string;
 }
 
@@ -198,11 +199,12 @@ export const createExercise = async (payload: CreateExerciseParams) => {
     secondaryTracker,
     type,
     createdBy,
+    video,
   } = payload;
 
   const query = `
     WITH 
-      data(name, description, category, profile, created_by, primary_tracker, secondary_tracker, type) AS (
+      data(name, description, category, profile, created_by, primary_tracker, secondary_tracker, type, video) AS (
         VALUES                           
             (
               '${name}', 
@@ -212,11 +214,12 @@ export const createExercise = async (payload: CreateExerciseParams) => {
               ${createdBy}, 
               '${primaryTracker}', 
               ${!!secondaryTracker ? `'${secondaryTracker}'` : null},
-              '${type}'
+              '${type}',
+              '${video}'
             )
         )
-      INSERT INTO exercises (name, description, category, profile, created_by, primary_tracker, secondary_tracker, type)
-        SELECT name, description, category, profile, created_by, primary_tracker, secondary_tracker, type
+      INSERT INTO exercises (name, description, category, profile, created_by, primary_tracker, secondary_tracker, type, video)
+        SELECT name, description, category, profile, created_by, primary_tracker, secondary_tracker, type, video
           FROM data
         RETURNING *
     `;

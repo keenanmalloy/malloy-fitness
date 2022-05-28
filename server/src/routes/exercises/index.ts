@@ -29,6 +29,10 @@ router.get('/', authenticate, async (req, res) => {
 
 // Retrieve exercise
 router.get('/:exerciseId', authenticate, async (req, res) => {
+  // if exerciseId is not a number, return 404
+  if (isNaN(+req.params.exerciseId)) {
+    return res.status(404).send('Exercise not found');
+  }
   await retrieveExerciseQuery(res, req.params.exerciseId);
 });
 

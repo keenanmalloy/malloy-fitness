@@ -63,3 +63,30 @@ export const createExerciseMuscleGroups = async (
 
   return data.rows;
 };
+
+interface CreateMuscleGroup {
+  name: string;
+  description: string;
+  image: string;
+}
+
+export const createMuscleGroup = async ({
+  name,
+  description,
+  image,
+}: CreateMuscleGroup) => {
+  const query = `
+  WITH 
+    data(name, description, image) AS (
+      VALUES                           
+          ('${name}', '${description}', '${image}')
+      )
+    INSERT INTO muscle_groups (name, description, image)
+      SELECT name, description, image
+        FROM data
+      RETURNING *
+  `;
+
+  const data = await db.query<muscle_groups_table>(query);
+  return data.rows[0];
+};

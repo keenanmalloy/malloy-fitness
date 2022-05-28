@@ -8,7 +8,7 @@ describe('Root', function () {
 
   beforeAll(async () => {
     // ️️️✅ Best Practice: Place the backend under test within the same process
-    const apiConnection: any = await initializeWebServer();
+    const apiConnection = await initializeWebServer();
     const axiosConfig = {
       baseURL: `http://localhost:${apiConnection.port}`,
       validateStatus: () => true, //Don't throw HTTP exceptions. Delegate to the tests to decide which error is acceptable

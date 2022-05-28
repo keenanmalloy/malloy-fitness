@@ -1,6 +1,7 @@
 import { db } from 'config/db';
 import { Response } from 'express';
 import Joi from 'joi';
+import { createMuscleGroup } from 'queries/muscle-groups';
 
 interface CreateMuscleGroup {
   name: string;
@@ -31,26 +32,18 @@ export const createMuscleGroupMutation = async (
   } else {
     const { name, description, image } = data;
 
-    const query = `
-      WITH 
-        data(name, description, image) AS (
-          VALUES                           
-              ('${name}', '${description}', '${image}')
-          )
-        INSERT INTO muscle_groups (name, description, image)
-          SELECT name, description, image
-            FROM data
-          RETURNING *
-      `;
-
     try {
-      const data = await db.query(query);
+      const data = await createMuscleGroup({
+        name,
+        description,
+        image,
+      });
 
       return res.status(201).json({
         role: res.locals.state.account.role,
         status: 'success',
         message: 'Muscle-group created successfully',
-        muscleGroup: data.rows[0],
+        muscleGroup: data,
       });
     } catch (error) {
       console.log({ error });

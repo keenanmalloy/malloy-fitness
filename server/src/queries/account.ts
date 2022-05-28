@@ -86,9 +86,9 @@ export const createAccountWithProviderMutation = async (
         `;
 
   try {
-    const data = await db.query<Pick<account_providers_table, 'account_id'>>(
-      query
-    );
+    const data = await db.query<
+      NonNullable<Pick<account_providers_table, 'account_id'>>
+    >(query);
     const account = data.rows[0];
     return {
       account_id: account.account_id,

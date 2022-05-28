@@ -6,7 +6,7 @@ import { Auth } from 'googleapis';
 
 const TOKEN_SECRET = `6SZ=3f<Gtxd3E^7J=.sfxX238nf27o3fnGd!9pKhcq`;
 
-interface Account {
+export interface Account {
   name: string;
   account_id: string;
   email: string;
@@ -17,7 +17,7 @@ interface Account {
   ticket_expiry: string;
 }
 
-interface Session {
+export interface Session {
   account: Account;
   createdAt: string;
   maxAge: number;

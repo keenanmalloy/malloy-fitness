@@ -1,15 +1,16 @@
 import { app } from '../server';
 import { Server } from 'http';
 import getPort from 'get-port';
+import { AddressInfo } from 'net';
 
 export let connection: Server;
 
-export const initializeWebServer = async () => {
+export const initializeWebServer = async (): Promise<AddressInfo> => {
   const port = await getPort();
 
   return new Promise((resolve, reject) => {
     connection = app.listen(port, () => {
-      resolve(connection.address());
+      resolve(connection.address() as AddressInfo);
     });
   });
 };

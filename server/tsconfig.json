@@ -12,7 +12,8 @@
         "src/controllers/*",
         "src/queries/*",
         "src/config/*",
-        "src/utils/*"
+        "src/utils/*",
+        "src/*"
       ]
     },
     "module": "commonjs",

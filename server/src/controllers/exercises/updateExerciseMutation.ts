@@ -13,6 +13,12 @@ const updateExerciseSchema = Joi.object({
     .allow('')
     .valid('short', 'mid', 'long')
     .optional(),
+  type: Joi.string().valid(
+    'strength',
+    'hypertrophy',
+    'physiotherapy',
+    'cardio'
+  ),
   primary_tracker: Joi.string().max(200).optional(),
   secondary_tracker: Joi.string().allow('').max(200).optional(),
 });
@@ -23,7 +29,8 @@ export const updateExerciseMutation = async (
   id: string
 ) => {
   const { error, value, warning } = updateExerciseSchema.validate(data);
-  if (error) {
+
+  if (error || Object.keys(data).length === 0) {
     return res.status(422).json({
       role: res.locals.state.account.role,
       status: 'error',

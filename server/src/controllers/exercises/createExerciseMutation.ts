@@ -14,6 +14,7 @@ interface createExercise {
   primaryTracker: string;
   secondaryTracker: string;
   type: string;
+  video: string;
 }
 
 const createExerciseSchema = Joi.object({
@@ -25,6 +26,7 @@ const createExerciseSchema = Joi.object({
   primary: Joi.array().items(Joi.string(), Joi.number()).optional(),
   secondary: Joi.array().items(Joi.string(), Joi.number()).optional(),
   profile: Joi.string().allow('').valid('short', 'mid', 'long').optional(),
+  video: Joi.string().allow('').optional(),
   type: Joi.string()
     .valid('strength', 'hypertrophy', 'physiotherapy', 'cardio')
     .required(),
@@ -54,6 +56,7 @@ export const createExerciseMutation = async (
       profile,
       primaryTracker,
       secondaryTracker,
+      video,
       type,
     } = data;
 
@@ -69,6 +72,7 @@ export const createExerciseMutation = async (
         secondaryTracker,
         type,
         createdBy,
+        video,
       });
       const exerciseId = data.exercise_id;
       if (!exerciseId) {
