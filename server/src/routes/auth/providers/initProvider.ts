@@ -4,7 +4,7 @@ import passport from 'passport';
 import { Strategy } from 'passport-google-oauth20';
 import {
   retrieveAccountByProviderQuery,
-  retrievAccountByEmailQuery,
+  retrieveAccountByEmailQuery,
   createAccountProviderMutation,
   createAccountWithProviderMutation,
   createAccountSettings,
@@ -59,7 +59,7 @@ export const initProvider = ({ router, middleware }: Props): void => {
           // if email exist, merge this provider with the current user.
           try {
             // try fetching the account using email
-            const account = await retrievAccountByEmailQuery(email);
+            const account = await retrieveAccountByEmailQuery(email);
 
             // if we're unable to fetch the account using the email we'll throw out of this try/catch
             if (!account || !account.account_id) {

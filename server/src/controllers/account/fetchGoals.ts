@@ -6,7 +6,6 @@ export const fetchGoalsQuery = async (res: Response) => {
 
   try {
     const goals = await queryGoalSettings(accountId);
-
     return res.status(200).json({
       role: res.locals.state.account.role,
       status: 'success',

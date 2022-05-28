@@ -1,19 +1,16 @@
-import { db } from 'config/db';
 import { Request, Response } from 'express';
+import { getAccountById } from 'queries/account';
 
 export const retrieveMeQuery = async (req: Request, res: Response) => {
   try {
     const accountId = res.locals.state.account.account_id;
-    const data = await db.query(
-      `SELECT * FROM accounts WHERE account_id = $1`,
-      [accountId]
-    );
+    const account = await getAccountById(accountId);
 
     return res.status(200).json({
       role: res.locals.state.account.role,
       status: 'success',
       message: 'User logged in',
-      account: data.rows[0],
+      account,
     });
   } catch (error) {
     console.log({ error });

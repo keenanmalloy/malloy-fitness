@@ -11,7 +11,7 @@ const updateMuscleGroupSchema = Joi.object({
   avatar_url: Joi.string().max(200).allow('').optional(),
   phone: Joi.string().max(20).allow('').optional(),
   gender: Joi.string().allow('male', 'female', 'prefer not to say').optional(),
-  dob: Joi.string().max(20).allow('').optional(),
+  dob: Joi.string().max(30).allow('').optional(),
   weight: Joi.number().allow('').allow(null).optional(),
   height: Joi.number().allow('').allow(null).optional(),
   country: Joi.string().max(2).allow('').optional(),
@@ -32,6 +32,7 @@ export const updateAccountMutation = async (
   }
 
   const { error, value, warning } = updateMuscleGroupSchema.validate(data);
+
   if (error) {
     return res.status(422).json({
       role: res.locals.state.account.role,

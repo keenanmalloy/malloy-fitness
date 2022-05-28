@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { initializeWebServer, stopWebServer } from 'test/server';
 
-describe('Root', function () {
+describe('Root API', function () {
   // Configuring file-level HTTP client with base URL will allow
   // all the tests to approach with a shortened syntax
   let axiosAPIClient: AxiosInstance;

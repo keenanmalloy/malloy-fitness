@@ -146,7 +146,7 @@ AND auth_provider = $2
   }
 };
 
-export const retrievAccountByEmailQuery = async (email: string) => {
+export const retrieveAccountByEmailQuery = async (email: string) => {
   const query = `
 SELECT
   name,
@@ -182,4 +182,12 @@ WHERE email = $1
     console.log({ error });
     return null;
   }
+};
+
+export const getAccountById = async (accountId: string) => {
+  const data = await db.query<accounts_table>(
+    `SELECT * FROM accounts WHERE account_id = $1`,
+    [accountId]
+  );
+  return data.rows[0];
 };

@@ -1,7 +1,7 @@
 import axios, { AxiosInstance } from 'axios';
 import { initializeWebServer, stopWebServer } from 'test/server';
 
-describe('Logout', function () {
+describe('Logout API', function () {
   let axiosAPIClient: AxiosInstance;
 
   beforeAll(async () => {
