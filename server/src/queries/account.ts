@@ -77,7 +77,7 @@ export const createAccountWithProviderMutation = async (
   const query = `
         WITH ins1 AS (
             INSERT INTO accounts(name, avatar_url, email, family_name, given_name, locale, role)
-            VALUES ('${name}', '${avatarUrl}', '${email}', '${familyName}', '${givenName}', '${locale}', 'user')
+            VALUES ($1, $2, $3, $4, $5, $6, 'user')
             RETURNING account_id
         )
         INSERT INTO account_providers (account_id, auth_provider, auth_provider_unique_id)
@@ -88,7 +88,7 @@ export const createAccountWithProviderMutation = async (
   try {
     const data = await db.query<
       NonNullable<Pick<account_providers_table, 'account_id'>>
-    >(query);
+    >(query, [name, avatarUrl, email, familyName, givenName, locale]);
     const account = data.rows[0];
     return {
       account_id: account.account_id,

@@ -11,6 +11,5 @@ module.exports = async () => {
     if (Math.ceil(Math.random() * 10) === 10) {
       await deleteAllTestExercises();
     }
-    return;
   }
 };

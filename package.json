@@ -1,7 +1,7 @@
 {
-  "name": "malloy-fitness",
+  "name": "trckd.ca",
   "version": "1.0.0",
-  "description": "",
+  "description": "A tracking application built by the Malloys",
   "scripts": {
     "start-client": "cd client && npm run dev",
     "start-server": "cd server && npm run dev",
@@ -15,9 +15,9 @@
     "build-server": "cd server && npm run build",
     "build-client": "cd client && npm run build"
   },
-  "author": "K&J",
+  "author": "Malloys",
   "license": "ISC",
   "devDependencies": {
-    "concurrently": "^7.0.0"
+    "concurrently": "^7.2.1"
   }
 }
