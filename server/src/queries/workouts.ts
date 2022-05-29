@@ -1,5 +1,9 @@
 import { db } from 'config/db';
-import { workouts_table } from 'utils/databaseTypes';
+import {
+  exercises_table,
+  workouts_table,
+  workout_task_exercises_table,
+} from 'utils/databaseTypes';
 import { inferCloneName } from 'utils/inferCloneName';
 import { queryTaskExercisesByWorkoutId } from './workoutTaskExercises';
 
@@ -164,4 +168,120 @@ export const updateWorkoutTaskOrder = async ({
   const query = `UPDATE workouts SET task_order = $1 WHERE workout_id = $2 RETURNING workout_id`;
   const data = await db.query(query, [taskOrder, workoutId]);
   return data.rows[0].workout_id;
+};
+
+interface CreateEmptyWorkout {
+  accountId: string;
+  session_dt: string;
+  category: string;
+}
+
+/**
+ * Creates a nameless workout with no exercises.
+ * Useful for when initializing a new session.
+ * Defaults: ```type: 'strength'```
+ */
+export const createEmptyWorkout = async ({
+  accountId,
+  session_dt,
+  category,
+}: CreateEmptyWorkout) => {
+  const date = new Date(session_dt).toISOString();
+  const formattedDate = new Intl.DateTimeFormat('en-US').format(new Date(date));
+  const workoutName = `Workout ${formattedDate}`;
+
+  const query = `
+        WITH
+        data(name, view, created_by, type, category) AS (
+            VALUES ($1, 'private', ${accountId}, 'strength', $2)
+            )
+        INSERT INTO workouts (name, view, created_by, type, category)
+            SELECT name, view, created_by, type, category
+            FROM data
+        RETURNING workout_id
+    `;
+
+  const data = await db.query<Required<Pick<workouts_table, 'workout_id'>>>(
+    query,
+    [workoutName, category]
+  );
+  if (!data.rowCount) throw new Error('Failed to create workout');
+  return data.rows[0].workout_id;
+};
+
+interface CreateWorkout {
+  accountId: string;
+  category: string;
+  name: string;
+  description: string;
+  type: string;
+}
+
+export const createWorkout = async ({
+  name,
+  description,
+  category,
+  accountId,
+  type,
+}: CreateWorkout) => {
+  const query = `
+  WITH 
+    data(name, description, category, created_by, type) AS (
+      VALUES                           
+          ('${name}', '${description}', '${category}', ${accountId}, '${type}')
+      )
+    INSERT INTO workouts (name, description, category, created_by, type)
+      SELECT name, description, category, created_by, type
+        FROM data
+      RETURNING workout_id
+  `;
+
+  const data = await db.query<Required<Pick<workouts_table, 'workout_id'>>>(
+    query
+  );
+  if (!data.rowCount) throw new Error('Failed to create workout');
+  return data.rows[0].workout_id;
+};
+
+export const queryExercisesByWorkoutId = async (workoutId: string) => {
+  const query = `SELECT
+  e.name,
+  e.description,
+  e.category,
+  e.video,
+  e.profile,
+  e.exercise_id,
+  wte.sets,
+  wte.repetitions,
+  wte.reps_in_reserve,
+  wte.rest_period,
+  wte.workout_task_id
+  FROM workout_task_exercises wte
+  JOIN exercises e on wte.exercise_id = e.exercise_id
+  WHERE wte.workout_id = $1`;
+
+  const params = [workoutId];
+  const data = await db.query<
+    Pick<
+      exercises_table,
+      'name' | 'description' | 'category' | 'video' | 'exercise_id' | 'profile'
+    > &
+      Pick<
+        workout_task_exercises_table,
+        | 'sets'
+        | 'repetitions'
+        | 'reps_in_reserve'
+        | 'rest_period'
+        | 'workout_task_id'
+      >
+  >(query, params);
+  return data.rows;
+};
+
+export const doesWorkoutHaveSessions = async (workoutId: string) => {
+  const query = `SELECT * FROM sessions WHERE workout_id = $1`;
+  const params = [workoutId];
+  const data = await db.query(query, params);
+  if (!data) return false;
+  return !!data.rows.length;
 };

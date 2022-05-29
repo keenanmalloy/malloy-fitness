@@ -25,7 +25,7 @@ interface CreateWorkoutTaskWithExercisesParams {
   payload: Exercise | Exercise[];
 }
 
-const generateValues = (
+const generateTaskExerciseValues = (
   payload: Exercise[],
   workoutId: string,
   workoutTaskId: string
@@ -69,7 +69,7 @@ export const createWorkoutTaskWithExercises = async ({
       WITH
         data(workout_id, exercise_id, workout_task_id, sets, repetitions, reps_in_reserve, rest_period) AS (
           VALUES
-            ${generateValues(payload, workoutId, workoutTaskId)}
+            ${generateTaskExerciseValues(payload, workoutId, workoutTaskId)}
           )
         INSERT INTO workout_task_exercises (workout_id, exercise_id, workout_task_id, sets, repetitions, reps_in_reserve, rest_period)
           SELECT workout_id, exercise_id, workout_task_id, sets, repetitions, reps_in_reserve, rest_period
@@ -198,4 +198,43 @@ const createWorkoutTaskBatch = async (
   const data = await db.query(query);
   if (!data.rowCount) throw new Error('Error inserting data for workout Task');
   return data.rows.map((row) => row.workout_task_id);
+};
+
+interface CreateTasksAndTaskExercises {
+  workoutId: string;
+  tasks: {
+    id: string;
+    exercises: Exercise[];
+  }[];
+}
+
+/**
+ * Creates a batch of workout_tasks and workout_task_exercises
+ * Returns an array of `workout_task_ids`
+ */
+export const createTasksAndTaskExercises = async ({
+  workoutId,
+  tasks,
+}: CreateTasksAndTaskExercises) => {
+  const workoutTaskIds = await createWorkoutTaskBatch(workoutId, tasks.length);
+  const query = `
+    WITH
+      data(workout_id, exercise_id, workout_task_id, sets, repetitions, reps_in_reserve, rest_period) AS (
+        VALUES
+          ${workoutTaskIds.map((id, index) => {
+            return generateTaskExerciseValues(
+              tasks[index].exercises,
+              workoutId,
+              id
+            );
+          })}
+        )
+      INSERT INTO workout_task_exercises (workout_id, exercise_id, workout_task_id, sets, repetitions, reps_in_reserve, rest_period)
+        SELECT workout_id, exercise_id, workout_task_id, sets, repetitions, reps_in_reserve, rest_period
+          FROM data
+        RETURNING *
+  `;
+
+  await db.query(query);
+  return workoutTaskIds;
 };

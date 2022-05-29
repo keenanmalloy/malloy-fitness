@@ -1,6 +1,7 @@
 import { db } from 'config/db';
 import { Response } from 'express';
 import Joi from 'joi';
+import { createEmptyWorkout } from 'queries/workouts';
 
 interface CreateSession {
   session_dt: string;
@@ -14,7 +15,6 @@ export const initializeSessionMutation = async (
   res: Response,
   data: CreateSession
 ) => {
-  console.log({ data });
   const { error, value, warning } = createSessionSchema.validate(data);
 
   if (error) {
@@ -29,10 +29,11 @@ export const initializeSessionMutation = async (
   const { session_dt } = data;
 
   try {
-    const workoutId = await createEmptyWorkout(
-      res.locals.state.account.account_id,
-      session_dt
-    );
+    const workoutId = await createEmptyWorkout({
+      accountId: res.locals.state.account.account_id,
+      session_dt,
+      category: 'unknown',
+    });
 
     const newSession = await createSession(
       session_dt,
@@ -55,28 +56,6 @@ export const initializeSessionMutation = async (
       session: null,
     });
   }
-};
-
-const createEmptyWorkout = async (accountId: string, session_dt: string) => {
-  const date = new Date(session_dt).toISOString();
-  const formattedDate = new Intl.DateTimeFormat('en-US').format(new Date(date));
-
-  const query = `
-        WITH
-        data(name, view, created_by, type) AS (
-            VALUES
-                ('${formattedDate} a', 'private', ${accountId}, 'strength')
-            )
-        INSERT INTO workouts (name, view, created_by, type)
-            SELECT name, view, created_by, type
-            FROM data
-        RETURNING workout_id
-        
-    `;
-
-  const data = await db.query(query);
-  if (!data.rowCount) throw new Error('Failed to create workout');
-  return data.rows[0].workout_id;
 };
 
 const createSession = async (

@@ -23,3 +23,15 @@ export const EXERCISE_TRACKERS = [
 ];
 
 export const EXERCISE_PROFILES = ['short', 'mid', 'long'];
+
+export const WORKOUT_CATEGORIES = [
+  'full body',
+  'pull',
+  'push',
+  'chest',
+  'arms',
+  'back',
+  'legs',
+  'shoulders',
+  'unknown',
+];

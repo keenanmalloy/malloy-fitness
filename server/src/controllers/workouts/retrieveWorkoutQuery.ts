@@ -1,42 +1,14 @@
-import { db } from 'config/db';
+import {
+  doesWorkoutHaveSessions,
+  queryExercisesByWorkoutId,
+  queryWorkoutById,
+} from 'queries/workouts';
+import { Response } from 'express';
 
-interface Response {
-  status: string;
-  message: string;
-  workout: any;
-}
-
-export const retrieveWorkoutQuery = async (
-  res: any,
-  id: string
-): Promise<Response> => {
-  const query = `SELECT 
-  workouts.name as workout_name,
-  workouts.description as workout_description,
-  workouts.category as workout_category,
-  workouts.created_by as workout_created_by,
-  workouts.workout_id,
-  workouts.type,
-  e.name,
-  e.description,
-  e.category,
-  e.video,
-  e.profile,
-  e.exercise_id,
-  wte.sets,
-  wte.repetitions,
-  wte.reps_in_reserve,
-  wte.rest_period
-FROM workouts
-LEFT OUTER JOIN workout_tasks wc on workouts.workout_id = wc.workout_id
-LEFT OUTER JOIN workout_task_exercises wte on wc.workout_task_id = wte.workout_task_id
-LEFT OUTER JOIN exercises e on wte.exercise_id = e.exercise_id
-WHERE workouts.workout_id = $1`;
-  const params = [id];
-
+export const retrieveWorkoutQuery = async (res: Response, id: string) => {
   try {
-    const data = await db.query(query, params);
-    if (!data.rows.length) {
+    const workoutData = await queryWorkoutById(id);
+    if (!workoutData) {
       return res.status(404).json({
         role: res.locals.state.account.role,
         status: 'error',
@@ -45,39 +17,44 @@ WHERE workouts.workout_id = $1`;
       });
     }
 
-    // Because of the LEFT OUTER JOIN, we return a single exercise with a null id.
-    // Check if it exists and return an empty array if it does not.
-    const exercises = !data.rows[0].exercise_id
-      ? []
-      : data.rows.map((exercise) => {
-          return {
-            name: exercise.name,
-            description: exercise.description,
-            exercise_id: exercise.exercise_id,
-            category: exercise.category,
-            profile: exercise.profile,
-            video: exercise.video,
-            notes: exercise.notes,
-            sets: exercise.sets,
-            repetitions: exercise.repetitions,
-            repsInReserve: exercise.reps_in_reserve,
-            restPeriod: exercise.rest_period,
-          };
-        });
+    const exercisesData = await queryExercisesByWorkoutId(id);
+
+    const mappedTasks =
+      workoutData.task_order &&
+      workoutData.task_order.map((taskId: string) => {
+        const exercises = exercisesData.filter(
+          (e) => e.workout_task_id === taskId
+        );
+
+        return {
+          workout_task_id: taskId,
+          exercises: exercises.map((exercise) => {
+            return {
+              name: exercise.name,
+              description: exercise.description,
+              exercise_id: exercise.exercise_id,
+              category: exercise.category,
+              profile: exercise.profile,
+              video: exercise.video,
+              sets: exercise.sets,
+              repetitions: exercise.repetitions,
+              repsInReserve: exercise.reps_in_reserve,
+              restPeriod: exercise.rest_period,
+            };
+          }),
+        };
+      });
 
     const hasSessions = await doesWorkoutHaveSessions(id);
 
     const workout = {
-      name: data.rows[0].workout_name,
-      description: data.rows[0].workout_description,
-      category: data.rows[0].workout_category,
-      workout_id: data.rows[0].workout_id,
-      workout_dt: data.rows[0].workout_dt,
-      started_at: data.rows[0].started_at,
-      ended_at: data.rows[0].ended_at,
-      type: data.rows[0].type,
-      completed: data.rows[0].completed,
-      exercises,
+      name: workoutData.name,
+      description: workoutData.description,
+      category: workoutData.category,
+      workout_id: workoutData.workout_id,
+      type: workoutData.type,
+      task_order: workoutData.task_order,
+      tasks: mappedTasks,
       hasSessions,
     };
 
@@ -95,12 +72,4 @@ WHERE workouts.workout_id = $1`;
       workout: null,
     });
   }
-};
-
-const doesWorkoutHaveSessions = async (workoutId: string) => {
-  const query = `SELECT * FROM sessions WHERE workout_id = $1`;
-  const params = [workoutId];
-  const data = await db.query(query, params);
-  if (!data) return false;
-  return !!data.rows.length;
 };

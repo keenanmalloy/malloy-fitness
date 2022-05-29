@@ -12,14 +12,20 @@ export const authorize = async (
   res: Response,
   next: NextFunction
 ) => {
-  // if exerciseId is not a number, return 404
-  if (isNaN(+req.params.exerciseId)) {
-    return res.status(404).send();
-  }
   const requestUrl = res.locals.state.requestUrl;
   const workoutId = res.locals.state.workoutId;
   const exerciseId = res.locals.state.exerciseId;
   const sessionId = res.locals.state.sessionId;
+
+  if (!!exerciseId && isNaN(+req.params.exerciseId)) {
+    return res.status(404).send();
+  }
+  if (!!workoutId && isNaN(+req.params.workoutId)) {
+    return res.status(404).send();
+  }
+  if (!!sessionId && isNaN(+req.params.sessionId)) {
+    return res.status(404).send();
+  }
 
   const isDeveloper = res.locals.state.account.role === 'developer';
   if (isDeveloper) {
