@@ -69,6 +69,7 @@ export const cloneScheduleWorkoutMutation = async (
     return res.status(201).json({
       role: res.locals.state.account.role,
       message: 'Workout Successfully Cloned',
+      workoutId: newWorkoutId,
     });
   } catch (error) {
     console.log({ error });

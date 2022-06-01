@@ -1,5 +1,6 @@
 import { faker } from '@faker-js/faker';
 import axios, { AxiosInstance } from 'axios';
+import { WORKOUT_CATEGORIES, WORKOUT_TYPES } from 'test/helpers/env';
 import { createTestExercise } from 'test/helpers/exercise';
 import { createAndAuthorizeUser } from 'test/helpers/user';
 import { createTestWorkout } from 'test/helpers/workout';
@@ -203,6 +204,109 @@ describe('Workout API', function () {
       });
       expect(response.data.workout.tasks[0].exercises.length).toBe(2);
       expect(response.data.workout.tasks[1].exercises.length).toBe(1);
+    });
+  });
+
+  describe('Delete workout', function () {
+    it('responds with 401 if missing Cookie', async function () {
+      const response = await axiosAPIClient.delete('/workouts/not-found');
+      expect(response.status).toBe(401);
+    });
+
+    it('responds with 403 if unaccessable by user', async function () {
+      const workoutId = await createTestWorkout('-1');
+      const response = await axiosAPIClient.delete(`/workouts/${workoutId}`, {
+        headers: {
+          Cookie: cookie,
+        },
+      });
+      expect(response.status).toBe(403);
+    });
+
+    it('responds with 404 if not found', async () => {
+      const response = await axiosAPIClient.delete('/workouts/not-found', {
+        headers: {
+          Cookie: cookie,
+        },
+      });
+      expect(response.status).toBe(404);
+    });
+
+    it('responds with 200 when successful', async function () {
+      const workoutId = await createTestWorkout(accountId);
+      const response = await axiosAPIClient.delete(`/workouts/${workoutId}`, {
+        headers: {
+          Cookie: cookie,
+        },
+      });
+      expect(response.status).toBe(200);
+    });
+  });
+
+  describe('Update workout', function () {
+    it('responds with 401 if missing Cookie', async function () {
+      const response = await axiosAPIClient.put('/workouts/not-found');
+      expect(response.status).toBe(401);
+    });
+
+    it('responds with 403 if unaccessable by user', async function () {
+      const workoutId = await createTestWorkout('-1');
+      const response = await axiosAPIClient.put(
+        `/workouts/${workoutId}`,
+        {},
+        {
+          headers: {
+            Cookie: cookie,
+          },
+        }
+      );
+      expect(response.status).toBe(403);
+    });
+
+    it('responds with 422 if missing / invalid body', async function () {
+      const workoutId = await createTestWorkout(accountId);
+      const response = await axiosAPIClient.put(
+        `/workouts/${workoutId}`,
+        {},
+        {
+          headers: {
+            Cookie: cookie,
+          },
+        }
+      );
+      expect(response.status).toBe(422);
+    });
+
+    it('responds with 404 if not found', async () => {
+      const response = await axiosAPIClient.put(
+        '/workouts/not-found',
+        {},
+        {
+          headers: {
+            Cookie: cookie,
+          },
+        }
+      );
+      expect(response.status).toBe(404);
+    });
+
+    it('responds with 200 when successful', async function () {
+      const workoutId = await createTestWorkout(accountId);
+      const response = await axiosAPIClient.put(
+        `/workouts/${workoutId}`,
+        {
+          name: faker.random.word(),
+          description: faker.lorem.paragraph(),
+          category: faker.helpers.arrayElement(WORKOUT_CATEGORIES),
+          type: faker.helpers.arrayElement(WORKOUT_TYPES),
+        },
+        {
+          headers: {
+            Cookie: cookie,
+          },
+        }
+      );
+      expect(response.status).toBe(200);
     });
   });
 });

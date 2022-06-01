@@ -1,10 +1,12 @@
 import { db } from 'config/db';
+import { createSessionMutation } from 'controllers/sessions/createSessionMutation';
 import {
   exercises_table,
   workouts_table,
   workout_task_exercises_table,
 } from 'utils/databaseTypes';
 import { inferCloneName } from 'utils/inferCloneName';
+import { createSession } from './sessions';
 import { queryTaskExercisesByWorkoutId } from './workoutTaskExercises';
 
 interface CloneWorkoutParams {
@@ -64,44 +66,39 @@ export const cloneScheduleWorkout = async ({
   const workout = await retrieveWorkoutQuery(workoutId);
   if (!workout) throw new Error('Workout not found');
 
-  const distinguishDate = (date: string) => {
-    switch (date) {
-      case 'today':
-        return 'CURRENT_DATE';
-      case 'tomorrow':
-        return "CURRENT_DATE + INTERVAL '1 day'";
-      default:
-        return `TO_TIMESTAMP('${date}', 'YYYY-MM-DD')`;
-    }
-  };
-
   const clonedName = inferCloneName(workout.name as string);
-  const workoutDt = distinguishDate(date);
 
   const workoutQuery = `
           WITH
-            workoutdata(name, description, category, created_by, type, workout_dt) AS (
+            workoutdata(name, description, category, created_by, type) AS (
               VALUES
                   (
                     '${clonedName}', 
                     '${workout.description}', 
                     '${workout.category}', 
                     ${accountId}, 
-                    '${workout.type}',
-                    ${workoutDt}
+                    '${workout.type}'
                   )
               )
-            INSERT INTO workouts (name, description, category, created_by, type, workout_dt)
+            INSERT INTO workouts (name, description, category, created_by, type)
               SELECT *
                 FROM workoutdata
               RETURNING *
           `;
 
-  const data = await db.query(workoutQuery);
+  const data = await db.query<Required<workouts_table>>(workoutQuery);
+
+  const session = await createSession({
+    accountId,
+    sessionDt: date,
+    workoutId: data.rows[0].workout_id,
+  });
+
   const createdWorkoutId = data.rows[0].workout_id;
   return {
     oldWorkout: workout,
     newWorkoutId: createdWorkoutId,
+    session,
   };
 };
 
@@ -228,7 +225,7 @@ export const createWorkout = async ({
   WITH 
     data(name, description, category, created_by, type) AS (
       VALUES                           
-          ('${name}', '${description}', '${category}', ${accountId}, '${type}')
+          ($1, $2, $3, ${accountId}, $4)
       )
     INSERT INTO workouts (name, description, category, created_by, type)
       SELECT name, description, category, created_by, type
@@ -237,7 +234,8 @@ export const createWorkout = async ({
   `;
 
   const data = await db.query<Required<Pick<workouts_table, 'workout_id'>>>(
-    query
+    query,
+    [name, description, category, type]
   );
   if (!data.rowCount) throw new Error('Failed to create workout');
   return data.rows[0].workout_id;

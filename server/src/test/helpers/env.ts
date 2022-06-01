@@ -35,3 +35,11 @@ export const WORKOUT_CATEGORIES = [
   'shoulders',
   'unknown',
 ];
+
+export const WORKOUT_TYPES = [
+  'strength',
+  'rest',
+  'deload',
+  'cardio',
+  'therapy',
+];

@@ -223,6 +223,6 @@ export const createExercise = async (payload: CreateExerciseParams) => {
           FROM data
         RETURNING *
     `;
-  const data = await db.query<exercises_table>(query);
+  const data = await db.query<Required<exercises_table>>(query);
   return data.rows[0];
 };

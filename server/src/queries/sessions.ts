@@ -1,4 +1,5 @@
 import { db } from 'config/db';
+import { sessions_table } from 'utils/databaseTypes';
 
 export const getTodaysSessions = async (date: string, accountId: string) => {
   const query = `
@@ -113,5 +114,44 @@ export const updateSessionWorkout = async ({
 }: UpdateSessionWorkoutParams) => {
   const query = `UPDATE sessions SET workout_id = $1 WHERE session_id = $2 RETURNING session_id`;
   const data = await db.query(query, [workoutId, sessionId]);
+  return data.rows[0];
+};
+
+interface CreateSessionParams {
+  workoutId: string;
+  accountId: string;
+  sessionDt: string;
+}
+
+export const createSession = async ({
+  workoutId,
+  accountId,
+  sessionDt,
+}: CreateSessionParams) => {
+  const distinguishDate = (date: string) => {
+    switch (date) {
+      case 'today':
+        return 'CURRENT_DATE';
+      case 'tomorrow':
+        return "CURRENT_DATE + INTERVAL '1 day'";
+      default:
+        return `TO_TIMESTAMP('${date}', 'YYYY-MM-DD')`;
+    }
+  };
+  const workoutDt = distinguishDate(sessionDt);
+
+  const query = `
+    WITH 
+      data(session_dt, workout_id, created_by) AS (
+        VALUES                           
+            (${workoutDt}, ${workoutId}, ${accountId})
+        )
+      INSERT INTO sessions (session_dt, workout_id, created_by)
+        SELECT session_dt, workout_id, created_by
+          FROM data
+        RETURNING *
+    `;
+
+  const data = await db.query<sessions_table>(query);
   return data.rows[0];
 };

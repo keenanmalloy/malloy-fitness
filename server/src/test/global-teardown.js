@@ -2,6 +2,7 @@ const isCI = require('is-ci');
 const dockerCompose = require('docker-compose');
 const { deleteAllTestExercises } = require('./helpers/exercise');
 const { deleteAllTestWorkouts } = require('./helpers/workout');
+const { deleteAllAccounts } = require('./helpers/account');
 
 module.exports = async () => {
   if (isCI) {
@@ -12,6 +13,7 @@ module.exports = async () => {
     if (Math.ceil(Math.random() * 10) === 10) {
       await deleteAllTestExercises();
       await deleteAllTestWorkouts();
+      await deleteAllAccounts();
     }
   }
 };
