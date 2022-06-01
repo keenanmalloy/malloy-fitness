@@ -1,11 +1,10 @@
+/** @type {import('ts-jest').InitialOptionsTsJest} */
 export default {
   verbose: true,
   forceExit: true,
-  isolatedModules: true,
   testEnvironment: 'node',
   globalSetup: './src/test/global-setup.js',
   globalTeardown: './src/test/global-teardown.js',
-  notifyMode: 'change',
   moduleNameMapper: {
     '^/(.*)$': '<rootDir>/src/$1',
   },
@@ -15,6 +14,7 @@ export default {
   globals: {
     'ts-jest': {
       isolatedModules: true,
+      diagnostics: false,
     },
   },
 };
