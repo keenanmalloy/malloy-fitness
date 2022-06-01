@@ -1,8 +1,7 @@
 export default {
-  clearMocks: true,
-  verbose: false,
-  collectCoverage: false,
+  verbose: true,
   forceExit: true,
+  isolatedModules: true,
   testEnvironment: 'node',
   globalSetup: './src/test/global-setup.js',
   globalTeardown: './src/test/global-teardown.js',
@@ -13,4 +12,9 @@ export default {
   moduleDirectories: ['node_modules', 'src'],
   testPathIgnorePatterns: ['<rootDir>/dist/', '<rootDir>/node_modules/'],
   preset: 'ts-jest',
+  globals: {
+    'ts-jest': {
+      isolatedModules: true,
+    },
+  },
 };
