@@ -19,7 +19,7 @@ export const retrieveSessionsQuery = async (req: Request, res: Response) => {
   ${generateTypeFilter(typeQuery)}
   ${generateActivityFilter(activityQuery)}
   ${generateSortByFilter(sortByQuery)}
-  LIMIT 20`;
+  LIMIT 50`;
 
   try {
     const data = await db.query<sessions_table>(query);

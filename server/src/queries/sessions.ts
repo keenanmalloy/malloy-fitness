@@ -152,6 +152,23 @@ export const createSession = async ({
         RETURNING *
     `;
 
-  const data = await db.query<sessions_table>(query);
+  const data = await db.query<Required<sessions_table>>(query);
   return data.rows[0];
+};
+
+export const queryPreviewSessions = async (
+  accountId: string,
+  selectedDateQuery: string
+) => {
+  const query = `
+  SELECT session_id, session_dt, workouts.type FROM sessions
+  LEFT JOIN workouts 
+    ON workouts.workout_id = sessions.workout_id
+  WHERE workouts.created_by = ${accountId} AND 
+  DATE_TRUNC('month', session_dt) 
+      BETWEEN TIMESTAMP '${selectedDateQuery}' - INTERVAL '2 month' AND TIMESTAMP '${selectedDateQuery}' + INTERVAL '1 month'
+`;
+
+  const data = await db.query(query);
+  return data.rows;
 };
