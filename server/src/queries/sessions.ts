@@ -172,3 +172,10 @@ export const queryPreviewSessions = async (
   const data = await db.query(query);
   return data.rows;
 };
+
+export const deleteSessionById = async (sessionId: string) => {
+  const query = `DELETE FROM sessions WHERE session_id = $1`;
+  const params = [sessionId];
+  const data = await db.query(query, params);
+  return data.rowCount;
+};

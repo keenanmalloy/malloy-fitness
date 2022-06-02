@@ -5,7 +5,6 @@ import { z } from 'zod';
 const getExercisesSchema = z.object({
   status: z.string(),
   message: z.string(),
-  role: z.string(),
   exercises: z.array(
     z.object({
       name: z.string(),

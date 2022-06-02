@@ -5,7 +5,6 @@ import { z } from 'zod';
 const getExerciseSchema = z.object({
   status: z.string(),
   message: z.string(),
-  role: z.string(),
   exercise: z.object({
     exercise_id: z.string(),
     created_at: z.string(),

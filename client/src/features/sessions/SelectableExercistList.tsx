@@ -161,7 +161,7 @@ export const SelectableExerciseList = ({
         </button>
       ))}
 
-      {selectedExercises && selectedExercises.length && (
+      {selectedExercises && !!selectedExercises.length && (
         <div className="sticky bottom-5 right-0 left-0 flex ring-green-300 ring-1 rounded-md">
           <button
             className="p-2 bg-slate-800 rounded-l-md"

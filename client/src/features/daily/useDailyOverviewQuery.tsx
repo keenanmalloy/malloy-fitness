@@ -37,9 +37,9 @@ const getDailyOverviewSchema = z.object({
     account_id: z.string(),
     unit_preference: z.string(),
     appearance: z.string(),
-    daily_steps_goal: z.number(),
-    weekly_cardio_minutes_goal: z.number(),
-    body_weight_goal: z.number(),
+    daily_steps_goal: z.nullable(z.number()),
+    weekly_cardio_minutes_goal: z.nullable(z.number()),
+    body_weight_goal: z.nullable(z.number()),
   }),
 });
 

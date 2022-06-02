@@ -21,7 +21,8 @@ export const updateSessionMutation = async (
   id: string
 ) => {
   const { error, value, warning } = updateSessionSchema.validate(data);
-  if (error) {
+
+  if (error || !Object.keys(data).length) {
     return res.status(422).json({
       role: res.locals.state.account.role,
       status: 'error',

@@ -44,33 +44,34 @@ export const OverviewExercises = ({ sessionId, setIsOpen }: Props) => {
         <IoClose className="w-5 h-5" />
       </button>
       <ul className="pt-2 pb-2 divide-y divide-slate-800">
-        {data.session.tasks.map((task, key) => {
-          return (
-            <li key={task.workout_task_id}>
-              {task.exercises.map((exercise, index) => {
-                return (
-                  <OverviewRow
-                    key={exercise.exercise_id}
-                    order={`${getLetter(key)}${index + 1}`}
-                    name={exercise.name}
-                    sets="sets 3"
-                    reps="reps 10-12"
-                    rir="rir 1"
-                    rest="REST 90 seconds"
-                    exerciseId={exercise.exercise_id}
-                  />
-                );
-              })}
-            </li>
-          );
-        })}
+        {data.session.tasks &&
+          data.session.tasks.map((task, key) => {
+            return (
+              <li key={task.workout_task_id}>
+                {task.exercises.map((exercise, index) => {
+                  return (
+                    <OverviewRow
+                      key={exercise.exercise_id}
+                      order={`${getLetter(key)}${index + 1}`}
+                      name={exercise.name}
+                      sets="sets 3"
+                      reps="reps 10-12"
+                      rir="rir 1"
+                      rest="REST 90 seconds"
+                      exerciseId={exercise.exercise_id}
+                    />
+                  );
+                })}
+              </li>
+            );
+          })}
       </ul>
 
       <StartSession
         sessionId={sessionId}
         hasStarted={!!data.session.started_at}
         hasEnded={!!data.session.ended_at}
-        hasExercises={!data.session.tasks.length}
+        hasExercises={!data.session.tasks?.length}
         taskOrder={data.session.task_order}
       />
     </div>

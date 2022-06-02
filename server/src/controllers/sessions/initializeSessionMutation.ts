@@ -2,6 +2,7 @@ import { db } from 'config/db';
 import { Response } from 'express';
 import Joi from 'joi';
 import { createEmptyWorkout } from 'queries/workouts';
+import { sessions_table } from 'utils/databaseTypes';
 
 interface CreateSession {
   session_dt: string;
@@ -76,7 +77,7 @@ const createSession = async (
           RETURNING *
       `;
 
-  const data = await db.query(query);
-  if (!data.rowCount) throw new Error('Failed to create workout');
+  const data = await db.query<Required<sessions_table>>(query);
+  if (!data.rowCount) throw new Error('Failed to create session');
   return data.rows[0];
 };

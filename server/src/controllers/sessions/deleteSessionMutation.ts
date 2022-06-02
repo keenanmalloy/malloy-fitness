@@ -1,14 +1,12 @@
 import { db } from 'config/db';
 import { Response } from 'express';
+import { deleteSessionById } from 'queries/sessions';
 
 export const deleteSessionMutation = async (res: Response, id: string) => {
-  const query = `DELETE FROM sessions WHERE session_id = $1 RETURNING *;`;
-  const params = [id];
-
   try {
-    const data = await db.query(query, params);
+    const rowCount = await deleteSessionById(id);
 
-    if (!data.rowCount) {
+    if (!rowCount) {
       return res.status(404).json({
         role: res.locals.state.account.role,
         status: 'error',
@@ -21,7 +19,6 @@ export const deleteSessionMutation = async (res: Response, id: string) => {
       role: res.locals.state.account.role,
       status: 'success',
       message: 'session deleted successfully',
-      session: data.rows[0],
     });
   } catch (error) {
     console.log({ error });
