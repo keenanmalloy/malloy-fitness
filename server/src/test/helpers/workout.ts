@@ -53,7 +53,6 @@ export const createFullTestWorkout = async (
 
   const exercisesToAdd = exercises.slice(0, 2);
   const exerciseToAdd = exercises[2];
-
   const workoutTaskIds = await createTasksAndTaskExercises({
     workoutId,
     tasks: [
@@ -81,7 +80,10 @@ export const createFullTestWorkout = async (
     workoutId,
   });
 
-  return workoutId;
+  return {
+    workoutId,
+    exerciseIds: exercises.map((exercise) => exercise.exercise_id),
+  };
 };
 
 export const deleteAllTestWorkouts = async () => {

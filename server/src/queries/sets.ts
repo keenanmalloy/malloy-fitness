@@ -44,7 +44,7 @@ interface QueryParams {
   sessionId: string;
 }
 
-export const queryTaskToContinueFrom = async ({ sessionId }: QueryParams) => {
+export const queryLastSetUpdated = async ({ sessionId }: QueryParams) => {
   const query = `
     SELECT
         sets.updated_at,
@@ -66,7 +66,7 @@ export const queryTaskToContinueFrom = async ({ sessionId }: QueryParams) => {
       Pick<exercises_table, 'exercise_id'> &
       Pick<workout_task_exercises_table, 'workout_task_id'>
   >(query, params);
-  if (!data.rowCount) throw new Error('No exercise to continue from');
+  if (!data.rowCount) return null;
   return data.rows[0];
 };
 
@@ -126,7 +126,7 @@ export const createSet = async ({
       RETURNING *
   `;
 
-  const data = await db.query(query);
+  const data = await db.query<sets_table>(query);
   return data.rows[0];
 };
 

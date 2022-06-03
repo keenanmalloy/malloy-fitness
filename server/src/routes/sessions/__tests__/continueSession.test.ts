@@ -1,9 +1,12 @@
 import axios, { AxiosInstance } from 'axios';
-import { createTestSession } from 'test/helpers/session';
+import {
+  createTestSession,
+  createTestSessionWithSets,
+} from 'test/helpers/session';
 import { createAndAuthorizeUser } from 'test/helpers/user';
 import { initializeWebServer, stopWebServer } from 'test/server';
 
-describe('Delete Session API', function () {
+describe('Continue Session API', function () {
   let axiosAPIClient: AxiosInstance;
   let cookie: string;
   let accountId: string;
@@ -24,28 +27,17 @@ describe('Delete Session API', function () {
     await stopWebServer();
   });
 
-  describe('Deleting a session', function () {
+  describe('Continue a session', function () {
     it('responds with 401 if missing Cookie', async function () {
-      const response = await axiosAPIClient.delete('/sessions/not-found');
+      const response = await axiosAPIClient.get('/sessions/not-found/continue');
       expect(response.status).toBe(401);
-    });
-
-    it('responds with 404 if invalid sessionId', async function () {
-      const response = await axiosAPIClient.delete(
-        '/sessions/invalid-session-id',
-        {
-          headers: {
-            Cookie: cookie,
-          },
-        }
-      );
-      expect(response.status).toBe(404);
     });
 
     it('responds with 403 when id not owned by user', async function () {
       const session = await createTestSession('-1');
-      const response = await axiosAPIClient.delete(
-        `/sessions/${session.session_id}`,
+      const response = await axiosAPIClient.get(
+        `/sessions/${session.session_id}/continue`,
+
         {
           headers: {
             Cookie: cookie,
@@ -56,10 +48,25 @@ describe('Delete Session API', function () {
       expect(response.status).toBe(403);
     });
 
-    it('responds with 200 when successfully deleted', async function () {
+    it('responds with 404 when no sets have yet been updated', async function () {
       const session = await createTestSession(accountId);
-      const response = await axiosAPIClient.delete(
-        `/sessions/${session.session_id}`,
+      const response = await axiosAPIClient.get(
+        `/sessions/${session.session_id}/continue`,
+
+        {
+          headers: {
+            Cookie: cookie,
+          },
+        }
+      );
+
+      expect(response.status).toBe(404);
+    });
+
+    it('responds with 200 successfully found the last set updated', async function () {
+      const session = await createTestSessionWithSets(accountId);
+      const response = await axiosAPIClient.get(
+        `/sessions/${session.session_id}/continue`,
         {
           headers: {
             Cookie: cookie,

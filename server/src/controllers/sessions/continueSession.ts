@@ -1,9 +1,9 @@
 import { Response } from 'express';
-import { queryTaskToContinueFrom } from 'queries/sets';
+import { queryLastSetUpdated } from 'queries/sets';
 
 export const continueSession = async (res: Response, id: string) => {
   try {
-    const data = await queryTaskToContinueFrom({ sessionId: id });
+    const data = await queryLastSetUpdated({ sessionId: id });
     if (!data) {
       return res.status(404).json({
         role: res.locals.state.account.role,

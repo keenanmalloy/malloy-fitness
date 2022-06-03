@@ -179,3 +179,30 @@ export const deleteSessionById = async (sessionId: string) => {
   const data = await db.query(query, params);
   return data.rowCount;
 };
+
+interface EndSessionParams {
+  sessionId: string;
+  accountId: string;
+}
+
+export const endSession = async ({
+  sessionId,
+  accountId,
+}: EndSessionParams) => {
+  const query = `
+    UPDATE sessions
+    SET ended_at = $1, completed = true
+    WHERE session_id = $2 AND created_by = $3
+    RETURNING session_id;
+  `;
+
+  const startedAt = new Date();
+  const params = [startedAt, sessionId, accountId];
+
+  const data = await db.query<Required<Pick<sessions_table, 'session_id'>>>(
+    query,
+    params
+  );
+
+  return data.rows[0].session_id;
+};

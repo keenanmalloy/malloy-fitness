@@ -43,7 +43,7 @@ describe('Clone Workout API', function () {
         category: faker.helpers.arrayElement(WORKOUT_CATEGORIES),
         type: faker.helpers.arrayElement(WORKOUT_TYPES),
       };
-      const workoutId = await createFullTestWorkout(accountId, body);
+      const { workoutId } = await createFullTestWorkout(accountId, body);
       const response = await axiosAPIClient.post(
         `/workouts/${workoutId}/copy`,
         {},
@@ -64,7 +64,7 @@ describe('Clone Workout API', function () {
     });
 
     it('confirms the exercises and tasks are cloned correctly', async function () {
-      const workoutId = await createFullTestWorkout(accountId);
+      const { workoutId } = await createFullTestWorkout(accountId);
       const response = await axiosAPIClient.post(
         `/workouts/${workoutId}/copy`,
         {},
@@ -117,7 +117,7 @@ describe('Clone Workout API', function () {
         category: faker.helpers.arrayElement(WORKOUT_CATEGORIES),
         type: faker.helpers.arrayElement(WORKOUT_TYPES),
       };
-      const workoutId = await createFullTestWorkout(accountId, body);
+      const { workoutId } = await createFullTestWorkout(accountId, body);
       const response = await axiosAPIClient.post(
         `/workouts/${workoutId}/copy?date=today`,
         {},
@@ -145,7 +145,7 @@ describe('Clone Workout API', function () {
         category: faker.helpers.arrayElement(WORKOUT_CATEGORIES),
         type: faker.helpers.arrayElement(WORKOUT_TYPES),
       };
-      const workoutId = await createFullTestWorkout(accountId, body);
+      const { workoutId } = await createFullTestWorkout(accountId, body);
       const response = await axiosAPIClient.post(
         `/workouts/${workoutId}/copy?date=tomorrow`,
         {},
@@ -173,7 +173,7 @@ describe('Clone Workout API', function () {
         category: faker.helpers.arrayElement(WORKOUT_CATEGORIES),
         type: faker.helpers.arrayElement(WORKOUT_TYPES),
       };
-      const workoutId = await createFullTestWorkout(accountId, body);
+      const { workoutId } = await createFullTestWorkout(accountId, body);
       const response = await axiosAPIClient.post(
         `/workouts/${workoutId}/copy?date=2024-01-01`,
         {},
@@ -195,7 +195,7 @@ describe('Clone Workout API', function () {
     });
 
     it('confirms the exercises and tasks are cloned correctly during a schedule', async function () {
-      const workoutId = await createFullTestWorkout(accountId);
+      const { workoutId } = await createFullTestWorkout(accountId);
       const response = await axiosAPIClient.post(
         `/workouts/${workoutId}/copy?date=today`,
         {},

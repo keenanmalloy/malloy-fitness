@@ -1,5 +1,6 @@
 import { createSession } from 'queries/sessions';
-import { createTestWorkout } from './workout';
+import { createTestSet } from './sets';
+import { createFullTestWorkout, createTestWorkout } from './workout';
 
 interface SessionOverrides {
   date?: string;
@@ -18,4 +19,33 @@ export const createTestSession = async (
   });
 
   return data;
+};
+
+export const createTestSessionWithSets = async (
+  accountId: string,
+  overrides?: SessionOverrides
+) => {
+  const { workoutId, exerciseIds } = await createFullTestWorkout(accountId);
+  const data = await createSession({
+    workoutId,
+    accountId,
+    sessionDt: overrides?.date || 'today',
+  });
+
+  await Promise.all([
+    createTestSet({
+      exerciseId: exerciseIds[0],
+      sessionId: data.session_id,
+    }),
+    createTestSet({
+      exerciseId: exerciseIds[0],
+      sessionId: data.session_id,
+    }),
+    createTestSet({
+      exerciseId: exerciseIds[0],
+      sessionId: data.session_id,
+    }),
+  ]);
+
+  return { ...data, exerciseIds };
 };
