@@ -6,8 +6,10 @@ import {
 
 export const getMuscleGroups = async (exerciseId: string) => {
   const data = await db.query<
-    Pick<muscle_groups_table, 'name' | 'description' | 'muscle_group_id'> &
-      Pick<exercise_muscle_groups_table, 'group'>
+    Required<
+      Pick<muscle_groups_table, 'name' | 'description' | 'muscle_group_id'> &
+        Pick<exercise_muscle_groups_table, 'group'>
+    >
   >(
     `SELECT
           mg.name,

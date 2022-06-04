@@ -1,8 +1,9 @@
 import axios, { AxiosInstance } from 'axios';
+import { querySessionById } from 'queries/sessions';
 import { createTestExercise } from 'test/helpers/exercise';
 import { createTestSession } from 'test/helpers/session';
 import { createAndAuthorizeUser } from 'test/helpers/user';
-import { createFullTestWorkout, createTestWorkout } from 'test/helpers/workout';
+import { createFullTestWorkout } from 'test/helpers/workout';
 import { initializeWebServer, stopWebServer } from 'test/server';
 
 describe('Add Task API', function () {
@@ -100,6 +101,13 @@ describe('Add Task API', function () {
       );
 
       expect(response.status).toBe(201);
+
+      const initialTaskOrder = session.workout.task_order;
+      const sessionAfter = await querySessionById(session.session_id);
+      const newTaskOrder = sessionAfter.task_order;
+
+      // Check that the task_order on the workout has been updated accordingly
+      expect(newTaskOrder).toEqual([...initialTaskOrder, response.data.taskId]);
     });
 
     it('responds with 201 when successfully adding a task with multiple exercises to an unmarked workout', async function () {
@@ -122,6 +130,13 @@ describe('Add Task API', function () {
       );
 
       expect(response.status).toBe(201);
+
+      const initialTaskOrder = session.workout.task_order;
+      const sessionAfter = await querySessionById(session.session_id);
+      const newTaskOrder = sessionAfter.task_order;
+
+      // Check that the task_order on the workout has been updated accordingly
+      expect(newTaskOrder).toEqual([...initialTaskOrder, response.data.taskId]);
     });
 
     it('responds with 201 when successfully cloning the workout and adding a task with a single exercise', async function () {
@@ -145,6 +160,12 @@ describe('Add Task API', function () {
       );
 
       expect(response.status).toBe(201);
+
+      const sessionAfter = await querySessionById(firstSession.session_id);
+      const newTaskOrder = sessionAfter.task_order;
+
+      // Check that the task_order on the workout has been updated accordingly
+      expect(newTaskOrder.length).toEqual(3);
     });
 
     it('responds with 201 when successfully cloning the workout and adding a task with multiple exercise', async function () {
@@ -171,6 +192,12 @@ describe('Add Task API', function () {
       );
 
       expect(response.status).toBe(201);
+
+      const sessionAfter = await querySessionById(firstSession.session_id);
+      const newTaskOrder = sessionAfter.task_order;
+
+      // Check that the task_order on the workout has been updated accordingly
+      expect(newTaskOrder.length).toEqual(3);
     });
   });
 });

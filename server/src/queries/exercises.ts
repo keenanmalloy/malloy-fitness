@@ -13,7 +13,7 @@ export const getExerciseWithMuscleGroups = async ({
 }: getExerciseWithMuscleGroupsParams) => {
   const query = `SELECT * FROM exercises WHERE exercise_id = $1 AND (created_by = $2 OR view = 'public')`;
   const params = [exerciseId, accountId];
-  const data = await db.query<exercises_table>(query, params);
+  const data = await db.query<Required<exercises_table>>(query, params);
 
   if (!data.rows.length) throw new Error('Exercise not found');
   const muscleGroups = await getMuscleGroups(exerciseId);

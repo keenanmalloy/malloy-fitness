@@ -117,9 +117,10 @@ export const createWorkoutTaskWithExercises = async ({
 export const deleteWorkoutTask = async (
   workoutTaskId: string
 ): Promise<void> => {
-  const query = `DELETE FROM workout_tasks WHERE workout_task_id = $1`;
+  const query = `DELETE FROM workout_tasks WHERE workout_task_id = $1 RETURNING workout_task_id`;
   const data = await db.query(query, [workoutTaskId]);
   if (!data.rowCount) throw new Error('Workout Task not found');
+  return data.rows[0].workout_task_id;
 };
 
 export type WorkoutTask = {

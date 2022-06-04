@@ -1,5 +1,5 @@
 import { db } from 'config/db';
-import { sessions_table } from 'utils/databaseTypes';
+import { sessions_table, workouts_table } from 'utils/databaseTypes';
 
 export const getTodaysSessions = async (date: string, accountId: string) => {
   const query = `
@@ -58,7 +58,7 @@ export const querySessionById = async (sessionId: string) => {
     WHERE session_id = $1`;
 
   const params = [sessionId];
-  const data = await db.query(query, params);
+  const data = await db.query<sessions_table & workouts_table>(query, params);
   return data.rows[0];
 };
 

@@ -44,8 +44,7 @@ export const addTaskToSession = async (
     );
 
     if (hasSessions && sessionCount > 1) {
-      console.warn('WORKOUT ALREADY HAS SESSIONS - CLONING');
-      const data = await onTaskChangeClone({
+      const newWorkoutId = await onTaskChangeClone({
         workoutId,
         accountId,
         exerciseIds: body.exercises,
@@ -54,13 +53,12 @@ export const addTaskToSession = async (
 
       return res.status(201).json({
         role: res.locals.state.account.role,
-        message: 'Successfully cloned workout and added exercise.',
+        message: 'Successfully cloned workout and added task.',
         status: 'success',
-        exerciseId: data,
+        newWorkoutId,
       });
     }
 
-    console.warn('--ADDING TASK TO SESSION--');
     const addedTaskId = await onTaskAdd({
       workoutId,
       accountId,
@@ -75,7 +73,6 @@ export const addTaskToSession = async (
       taskId: addedTaskId,
     });
   } catch (error) {
-    console.error({ error });
     if (error instanceof WorkoutNotFoundError) {
       return res.status(404).json({
         role: res.locals.state.account.role,
@@ -92,6 +89,7 @@ export const addTaskToSession = async (
       });
     }
 
+    console.error({ error });
     const errorMessage = (error as unknown as { message: string })?.message;
     return res.status(500).json({
       error: 'Something went wrong',
@@ -148,14 +146,7 @@ const onTaskChangeClone = async ({
     payload: [...mappedTasks],
   });
 
-  await updateWorkoutTaskOrder({
-    workoutId: newWorkoutId,
-    taskOrder: JSON.stringify([
-      ...new Set(newWorkoutTasks.map((task) => task.workout_task_id)),
-    ]),
-  });
-
-  await createWorkoutTaskWithExercises({
+  const addedWorkoutTaskId = await createWorkoutTaskWithExercises({
     workoutId: newWorkoutId,
     payload: exerciseIds.map((id) => {
       return {
@@ -164,10 +155,22 @@ const onTaskChangeClone = async ({
     }),
   });
 
+  const newTaskOrder = JSON.stringify([
+    ...new Set(newWorkoutTasks.map((task) => task.workout_task_id)),
+    addedWorkoutTaskId,
+  ]);
+
+  await updateWorkoutTaskOrder({
+    workoutId: newWorkoutId,
+    taskOrder: newTaskOrder,
+  });
+
   await updateSessionWorkout({
     sessionId,
     workoutId: newWorkoutId,
   });
+
+  return newWorkoutId;
 };
 
 const onTaskAdd = async ({

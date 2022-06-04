@@ -14,6 +14,9 @@ import {
   updateWorkoutTaskOrder,
 } from 'queries/workouts';
 
+class WorkoutNotFoundError extends Error {}
+class TaskOrderNullError extends Error {}
+
 /**
  * Removes a task from a session.
  *
@@ -30,6 +33,13 @@ export const removeTask = async (
 ): Promise<Response> => {
   const accountId = res.locals.state.account.account_id;
 
+  // if missing query param return 400
+  if (!workoutId) {
+    return res.status(400).json({
+      error: 'Missing query param: workoutId',
+    });
+  }
+
   try {
     // first, check if the workout has previous sessions connected
     // if not, update the workout_exercise
@@ -39,11 +49,7 @@ export const removeTask = async (
     );
 
     if (hasSessions && sessionCount > 1) {
-      console.warn('WORKOUT ALREADY HAS SESSIONS - NEED TO CLONE', {
-        need_to_clone: sessionCount > 1,
-      });
-
-      const data = await onTaskDeleteClone({
+      const newWorkoutId = await onTaskDeleteClone({
         workoutId,
         accountId,
         workoutTaskId,
@@ -54,12 +60,11 @@ export const removeTask = async (
         role: res.locals.state.account.role,
         message: 'Successfully cloned workout and removed exercise.',
         status: 'success',
-        exerciseId: data,
+        newWorkoutId,
       });
     }
 
-    console.warn('REMOVING EXERCISE FROM SESSION');
-    const changedExerciseId = await onTaskDelete({
+    const deletedTaskId = await onTaskDelete({
       workoutId,
       accountId,
       sessionId,
@@ -68,11 +73,28 @@ export const removeTask = async (
 
     return res.status(200).json({
       role: res.locals.state.account.role,
-      message: 'Successfully removed exercise from session.',
+      message: 'Successfully removed task from session.',
       status: 'success',
-      exerciseId: changedExerciseId,
+      taskId: deletedTaskId,
     });
   } catch (error) {
+    if (error instanceof WorkoutNotFoundError) {
+      return res.status(404).json({
+        role: res.locals.state.account.role,
+        message: 'Workout not found.',
+        status: 'error',
+      });
+    }
+
+    if (error instanceof TaskOrderNullError) {
+      return res.status(400).json({
+        role: res.locals.state.account.role,
+        message: 'Workout has no exercises',
+        status: 'error',
+      });
+    }
+
+    console.error({ error });
     const errorMessage = (error as unknown as { message: string })?.message;
     return res.status(500).json({
       error: 'Something went wrong',
@@ -95,7 +117,11 @@ const onTaskDeleteClone = async ({
   sessionId,
 }: CloneMutationParams) => {
   const oldWorkout = await retrieveWorkoutQuery(workoutId);
-  if (!oldWorkout) throw new Error('Workout not found');
+  if (!oldWorkout) throw new WorkoutNotFoundError('Workout not found');
+  if (!oldWorkout.task_order)
+    throw new TaskOrderNullError(
+      `Task order is null for workout_id: ${oldWorkout.workout_id}`
+    );
 
   const { newWorkoutId } = await cloneWorkout({
     accountId,
@@ -128,11 +154,13 @@ const onTaskDeleteClone = async ({
     payload: [...mappedTasks],
   });
 
+  const newTaskOrder = JSON.stringify([
+    ...new Set(newWorkoutTasks.map((task) => task.workout_task_id)),
+  ]);
+
   await updateWorkoutTaskOrder({
     workoutId: newWorkoutId,
-    taskOrder: JSON.stringify([
-      ...new Set(newWorkoutTasks.map((task) => task.workout_task_id)),
-    ]),
+    taskOrder: newTaskOrder,
   });
 
   await updateSessionWorkout({
@@ -140,7 +168,7 @@ const onTaskDeleteClone = async ({
     workoutId: newWorkoutId,
   });
 
-  return workoutTaskId;
+  return newWorkoutId;
 };
 
 const onTaskDelete = async ({
@@ -150,7 +178,7 @@ const onTaskDelete = async ({
   sessionId,
 }: CloneMutationParams) => {
   const oldWorkout = await retrieveWorkoutQuery(workoutId);
-  if (!oldWorkout) throw new Error('Workout not found');
+  if (!oldWorkout) throw new WorkoutNotFoundError('Workout not found');
 
   // get task by id
   const task = oldWorkout.tasks.find(
@@ -168,12 +196,12 @@ const onTaskDelete = async ({
     workoutId,
   });
 
-  const changedExerciseId = await deleteWorkoutTask(task.workout_task_id);
+  const deletedTaskId = await deleteWorkoutTask(task.workout_task_id);
 
   await deleteSetsByTask({
     sessionId,
     workoutTaskId,
   });
 
-  return changedExerciseId;
+  return deletedTaskId;
 };

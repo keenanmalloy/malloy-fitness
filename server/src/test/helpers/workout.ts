@@ -5,10 +5,54 @@ import {
   createWorkout,
   updateWorkoutTaskOrder,
 } from 'queries/workouts';
-import { createTasksAndTaskExercises } from 'queries/workoutTasks';
+import {
+  createTasksAndTaskExercises,
+  createWorkoutTaskWithExercises,
+} from 'queries/workoutTasks';
 import { WORKOUT_CATEGORIES, WORKOUT_TYPES } from './env';
 import { createTestExercise } from './exercise';
 import { v4 as uuidv4 } from 'uuid';
+import {
+  workouts_table,
+  workout_task_exercises_table,
+} from 'utils/databaseTypes';
+
+interface CreateWorkout {
+  accountId: string;
+  category: string;
+  name: string;
+  description: string;
+  type: string;
+}
+
+const insertTestWorkout = async ({
+  name,
+  description,
+  category,
+  accountId,
+  type,
+}: CreateWorkout) => {
+  const query = `
+  WITH 
+    data(name, description, category, created_by, type) AS (
+      VALUES                           
+          ($1, $2, $3, ${accountId}, $4)
+      )
+    INSERT INTO workouts (name, description, category, created_by, type)
+      SELECT name, description, category, created_by, type
+        FROM data
+      RETURNING *
+  `;
+
+  const data = await db.query<Required<workouts_table>>(query, [
+    name,
+    description,
+    category,
+    type,
+  ]);
+  if (!data.rowCount) throw new Error('Failed to create workout');
+  return data.rows[0];
+};
 
 interface Overrides {
   category?: string;
@@ -41,7 +85,7 @@ export const createFullTestWorkout = async (
     type: string;
   }
 ) => {
-  const workoutId = await createWorkout({
+  const workout = await insertTestWorkout({
     accountId,
     description: faker.lorem.paragraph(),
     name: faker.lorem.sentence(),
@@ -59,7 +103,7 @@ export const createFullTestWorkout = async (
   const exercisesToAdd = exercises.slice(0, 2);
   const exerciseToAdd = exercises[2];
   const workoutTaskIds = await createTasksAndTaskExercises({
-    workoutId,
+    workoutId: workout.workout_id,
     tasks: [
       {
         id: uuidv4(),
@@ -82,11 +126,12 @@ export const createFullTestWorkout = async (
 
   await updateWorkoutTaskOrder({
     taskOrder: JSON.stringify(workoutTaskIds),
-    workoutId,
+    workoutId: workout.workout_id,
   });
 
   return {
-    workoutId,
+    workout: { ...workout, task_order: workoutTaskIds },
+    workoutId: workout.workout_id,
     exerciseIds: exercises.map((exercise) => exercise.exercise_id),
     workoutTaskIds,
   };
@@ -96,4 +141,37 @@ export const deleteAllTestWorkouts = async () => {
   const query = `DELETE FROM workouts;`;
   const data = await db.query(query);
   return data;
+};
+
+export const connectExerciseToWorkout = async (
+  exerciseId: string,
+  workoutId: string
+) => {
+  const workout_task_id = await createWorkoutTaskWithExercises({
+    workoutId,
+    payload: [
+      {
+        exercise_id: exerciseId,
+      },
+    ],
+  });
+
+  const workoutTaskExercises = await queryWorkoutTaskExercisesByTaskId(
+    workout_task_id
+  );
+
+  return { workout_task_id, workoutTaskExercises };
+};
+
+const queryWorkoutTaskExercisesByTaskId = async (taskId: string) => {
+  const query = `
+    SELECT *
+    FROM workout_task_exercises wte 
+    JOIN exercises ON wte.exercise_id = exercises.exercise_id
+    WHERE workout_task_id = $1
+  `;
+  const data = await db.query<Required<workout_task_exercises_table>>(query, [
+    taskId,
+  ]);
+  return data.rows;
 };

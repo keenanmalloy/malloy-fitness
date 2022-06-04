@@ -15,6 +15,10 @@ import {
 } from 'queries/workoutTaskExercises';
 import { cloneWorkout, retrieveWorkoutQuery } from 'queries/workouts';
 
+class WorkoutNotFoundError extends Error {}
+class TaskOrderNullError extends Error {}
+class NoRelatedExercisesError extends Error {}
+
 export const rotateTaskExercise = async (
   res: Response,
   sessionId: string,
@@ -35,10 +39,6 @@ export const rotateTaskExercise = async (
     );
 
     if (hasSessions && sessionCount > 1) {
-      console.warn('WORKOUT ALREADY HAS SESSIONS - NEED TO CLONE', {
-        need_to_clone: sessionCount > 1,
-      });
-
       const data = await onRelatedExerciseChangeClone({
         workoutId,
         accountId,
@@ -55,7 +55,6 @@ export const rotateTaskExercise = async (
       });
     }
 
-    console.warn('REPLACING EXERCISE IN SESSION');
     const newExerciseId = await onRelatedExerciseChangeSwap({
       workoutId,
       accountId,
@@ -71,6 +70,30 @@ export const rotateTaskExercise = async (
       exerciseId: newExerciseId,
     });
   } catch (error) {
+    if (error instanceof WorkoutNotFoundError) {
+      return res.status(404).json({
+        role: res.locals.state.account.role,
+        message: 'Workout not found.',
+        status: 'error',
+      });
+    }
+
+    if (error instanceof NoRelatedExercisesError) {
+      return res.status(404).json({
+        role: res.locals.state.account.role,
+        message: 'No related exercises found.',
+        status: 'error',
+      });
+    }
+
+    if (error instanceof TaskOrderNullError) {
+      return res.status(400).json({
+        role: res.locals.state.account.role,
+        message: 'Workout has no exercises',
+        status: 'error',
+      });
+    }
+    console.log({ error });
     const errorMessage = (error as unknown as { message: string })?.message;
     return res.status(500).json({
       error: 'Something went wrong',
@@ -95,24 +118,27 @@ const onRelatedExerciseChangeClone = async ({
   sessionId,
 }: CloneMutationParams) => {
   const oldWorkout = await retrieveWorkoutQuery(workoutId);
-  if (!oldWorkout) throw new Error('Workout not found');
+  if (!oldWorkout) throw new WorkoutNotFoundError('Workout not found');
   const currentExerciseData = await getExerciseWithMuscleGroups({
     exerciseId: currentExerciseId,
     accountId,
   });
 
+  const mgIds = [
+    ...currentExerciseData.primary.map((mg) => mg.muscle_group_id),
+    ...currentExerciseData.secondary.map((mg) => mg.muscle_group_id),
+  ];
+
+  if (!mgIds.length)
+    throw new NoRelatedExercisesError(
+      'No related exercises found - missing muscle groups'
+    );
+
   const relatedExercises = await getRelatedExercises({
     accountId: accountId,
     categoryQuery: currentExerciseData.category,
     exerciseIdQuery: currentExerciseData.exercise_id,
-    mgIds: [
-      ...currentExerciseData.primary.map(
-        (mg: { muscle_group_id: any }) => mg.muscle_group_id
-      ),
-      ...currentExerciseData.secondary.map(
-        (mg: { muscle_group_id: any }) => mg.muscle_group_id
-      ),
-    ],
+    mgIds: mgIds,
     profileQuery: currentExerciseData.profile,
     type: currentExerciseData.type as ExerciseType,
   });
@@ -190,25 +216,30 @@ const onRelatedExerciseChangeSwap = async ({
   sessionId,
 }: CloneMutationParams) => {
   const oldWorkout = await retrieveWorkoutQuery(workoutId);
-  if (!oldWorkout) throw new Error('Workout not found');
+  if (!oldWorkout) throw new WorkoutNotFoundError('Workout not found');
+  if (!oldWorkout.task_order)
+    throw new TaskOrderNullError('Workout has no exercises');
 
   const currentExerciseData = await getExerciseWithMuscleGroups({
     exerciseId: currentExerciseId,
     accountId,
   });
 
+  const mgIds = [
+    ...currentExerciseData.primary.map((mg) => mg.muscle_group_id),
+    ...currentExerciseData.secondary.map((mg) => mg.muscle_group_id),
+  ];
+
+  if (!mgIds.length)
+    throw new NoRelatedExercisesError(
+      'No related exercises found - missing muscle groups'
+    );
+
   const relatedExercises = await getRelatedExercises({
     accountId,
     categoryQuery: currentExerciseData.category,
     exerciseIdQuery: currentExerciseData.exercise_id,
-    mgIds: [
-      ...currentExerciseData.primary.map(
-        (mg: { muscle_group_id: any }) => mg.muscle_group_id
-      ),
-      ...currentExerciseData.secondary.map(
-        (mg: { muscle_group_id: any }) => mg.muscle_group_id
-      ),
-    ],
+    mgIds,
     profileQuery: currentExerciseData.profile,
     type: currentExerciseData.type as ExerciseType,
   });
@@ -221,12 +252,13 @@ const onRelatedExerciseChangeSwap = async ({
   );
 
   const rowLength = filteredRelatedExercises.length;
-  if (!rowLength) throw new Error('No related exercises found');
+  if (!rowLength)
+    throw new NoRelatedExercisesError('No related exercises found');
 
   const randomRelatedExercise =
     filteredRelatedExercises[Math.floor(Math.random() * rowLength)];
 
-  if (!oldWorkout) throw new Error('Workout not found');
+  if (!oldWorkout) throw new WorkoutNotFoundError('Workout not found');
 
   // get workout exercise with id
   const workoutTaskExercise = oldWorkout.tasks.find(
@@ -235,7 +267,7 @@ const onRelatedExerciseChangeSwap = async ({
   if (!workoutTaskExercise || !workoutTaskExercise.workout_task_exercise_id)
     throw new Error('Exercise not found');
   if (!randomRelatedExercise.exercise_id)
-    throw new Error('No related exercise found');
+    throw new NoRelatedExercisesError('No related exercise found');
 
   await updateTaskExercise({
     exercise_id: randomRelatedExercise.exercise_id,
