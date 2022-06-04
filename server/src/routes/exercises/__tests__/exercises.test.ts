@@ -3,6 +3,7 @@ import {
   createTestExercise,
   deleteAllTestExercises,
 } from 'test/helpers/exercise';
+import { deleteAllTestSets } from 'test/helpers/sets';
 import { createAndAuthorizeUser } from 'test/helpers/user';
 import { initializeWebServer, stopWebServer } from 'test/server';
 import { exercises_table } from 'utils/databaseTypes';
@@ -23,6 +24,7 @@ describe('Exercises API', function () {
     const user = await createAndAuthorizeUser();
     cookie = user.cookie;
     accountId = user.accountId;
+    await deleteAllTestSets();
     await deleteAllTestExercises();
     exerciseIds = await Promise.all([
       createTestExercise(accountId, {

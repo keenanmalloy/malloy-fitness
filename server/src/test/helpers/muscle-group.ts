@@ -9,9 +9,10 @@ interface CreateMuscleGroup {
 
 export const createTestMuscleGroup = async (overrides?: CreateMuscleGroup) => {
   const muscleGroup = await createMuscleGroup({
-    name: overrides?.name || faker.random.word(),
-    description: overrides?.description || faker.lorem.sentence(),
-    image: overrides?.image || faker.image.imageUrl(),
+    name: faker.random.word(),
+    description: faker.lorem.sentence(),
+    image: faker.image.imageUrl(),
+    ...overrides,
   });
   return muscleGroup;
 };

@@ -11,11 +11,11 @@ import {
 interface Overrides {
   name?: string;
   video?: string;
-  primary_tracker?: string;
-  secondary_tracker?: string;
+  primaryTracker?: string;
+  secondaryTracker?: string;
   profile?: string;
   category?: string;
-  created_by?: string;
+  createdBy?: string;
   description?: string;
   type?: string;
   view?: string;
@@ -26,21 +26,16 @@ export const createTestExercise = async (
   overrides?: Overrides
 ) => {
   const exercise = await createExercise({
-    category:
-      overrides?.category || faker.helpers.arrayElement(EXERCISE_CATEGORIES),
-    description: overrides?.description || faker.lorem.sentence(),
-    name: overrides?.name || faker.lorem.word(),
-    primaryTracker:
-      overrides?.primary_tracker ||
-      faker.helpers.arrayElement(EXERCISE_TRACKERS),
-    secondaryTracker:
-      overrides?.secondary_tracker ||
-      faker.helpers.arrayElement(EXERCISE_TRACKERS),
-    profile:
-      overrides?.profile || faker.helpers.arrayElement(EXERCISE_PROFILES),
+    category: faker.helpers.arrayElement(EXERCISE_CATEGORIES),
+    description: faker.lorem.sentence(),
+    name: faker.lorem.word(),
+    primaryTracker: faker.helpers.arrayElement(EXERCISE_TRACKERS),
+    secondaryTracker: faker.helpers.arrayElement(EXERCISE_TRACKERS),
+    profile: faker.helpers.arrayElement(EXERCISE_PROFILES),
     createdBy: accountId,
-    type: overrides?.type || faker.helpers.arrayElement(EXERCISE_TYPES),
-    video: overrides?.video || faker.image.imageUrl(),
+    type: faker.helpers.arrayElement(EXERCISE_TYPES),
+    video: faker.image.imageUrl(),
+    ...overrides,
   });
 
   return exercise;

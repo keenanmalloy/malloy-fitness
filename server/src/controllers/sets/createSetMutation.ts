@@ -54,7 +54,7 @@ export const createSetMutation = async (
         weight: weight,
       });
 
-      return res.status(200).json({
+      return res.status(201).json({
         role: res.locals.state.account.role,
         status: 'success',
         message: 'Set created successfully',

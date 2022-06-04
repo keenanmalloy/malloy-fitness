@@ -3,7 +3,7 @@ import { createTestSet } from './sets';
 import { createFullTestWorkout, createTestWorkout } from './workout';
 
 interface SessionOverrides {
-  date?: string;
+  sessionDt?: string;
   workoutId?: string;
 }
 
@@ -11,11 +11,12 @@ export const createTestSession = async (
   accountId: string,
   overrides?: SessionOverrides
 ) => {
-  const workoutId = await createTestWorkout(accountId);
+  const { workoutId, exerciseIds } = await createFullTestWorkout(accountId);
   const data = await createSession({
     workoutId,
     accountId,
-    sessionDt: overrides?.date || 'today',
+    sessionDt: 'today',
+    ...overrides,
   });
 
   return data;
@@ -29,10 +30,11 @@ export const createTestSessionWithSets = async (
   const data = await createSession({
     workoutId,
     accountId,
-    sessionDt: overrides?.date || 'today',
+    sessionDt: 'today',
+    ...overrides,
   });
 
-  await Promise.all([
+  const sets = await Promise.all([
     createTestSet({
       exerciseId: exerciseIds[0],
       sessionId: data.session_id,
@@ -47,5 +49,7 @@ export const createTestSessionWithSets = async (
     }),
   ]);
 
-  return { ...data, exerciseIds };
+  const setIds = sets.map((set) => set.set_id);
+
+  return { ...data, exerciseIds, setIds };
 };

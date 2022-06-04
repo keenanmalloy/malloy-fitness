@@ -1,4 +1,5 @@
 import { faker } from '@faker-js/faker';
+import { db } from 'config/db';
 import { createSet } from 'queries/sets';
 
 interface CreateTestSet {
@@ -24,4 +25,9 @@ export const createTestSet = async ({
   });
 
   return data;
+};
+
+export const deleteAllTestSets = async () => {
+  const query = `DELETE FROM sets`;
+  await db.query(query);
 };

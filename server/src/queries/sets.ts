@@ -146,3 +146,13 @@ export const deleteSetsByExercise = async (
   const data = await db.query(query, params);
   return data;
 };
+
+export const querySetsByExercise = async (
+  sessionId: string,
+  exerciseId: string
+) => {
+  const query = `SELECT * FROM sets WHERE session_id = $1 AND exercise_id = $2`;
+  const params = [sessionId, exerciseId];
+  const data = await db.query<sets_table>(query, params);
+  return data.rows;
+};

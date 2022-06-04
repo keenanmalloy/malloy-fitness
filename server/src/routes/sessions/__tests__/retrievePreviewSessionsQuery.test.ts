@@ -21,19 +21,19 @@ describe('Sessions Preview API', function () {
 
     await Promise.all([
       await createTestSession(accountId, {
-        date: '2022-03-30',
+        sessionDt: '2022-03-30',
       }),
       await createTestSession(accountId, {
-        date: '2022-04-30',
+        sessionDt: '2022-04-30',
       }),
       await createTestSession(accountId, {
-        date: '2022-05-30',
+        sessionDt: '2022-05-30',
       }),
       await createTestSession(accountId, {
-        date: '2022-06-30',
+        sessionDt: '2022-06-30',
       }),
       await createTestSession(accountId, {
-        date: '2022-07-30',
+        sessionDt: '2022-07-30',
       }),
     ]);
   });

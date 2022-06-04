@@ -21,8 +21,9 @@ export const createTestWorkout = async (
 ) => {
   const workoutId = await createEmptyWorkout({
     accountId,
-    session_dt: overrides?.session_dt || faker.date.recent().toISOString(),
-    category: overrides?.category || 'strength',
+    session_dt: faker.date.recent().toISOString(),
+    category: 'strength',
+    ...overrides,
   });
 
   return workoutId;
@@ -38,11 +39,11 @@ export const createFullTestWorkout = async (
 ) => {
   const workoutId = await createWorkout({
     accountId,
-    description: overrides?.description || faker.lorem.paragraph(),
-    name: overrides?.name || faker.lorem.sentence(),
-    type: overrides?.type || faker.helpers.arrayElement(WORKOUT_TYPES),
-    category:
-      overrides?.category || faker.helpers.arrayElement(WORKOUT_CATEGORIES),
+    description: faker.lorem.paragraph(),
+    name: faker.lorem.sentence(),
+    type: faker.helpers.arrayElement(WORKOUT_TYPES),
+    category: faker.helpers.arrayElement(WORKOUT_CATEGORIES),
+    ...overrides,
   });
 
   const exercises = await Promise.all([
