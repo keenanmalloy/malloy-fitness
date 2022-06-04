@@ -14,6 +14,9 @@ import {
   createWorkoutTaskWithExercises,
 } from 'queries/workoutTasks';
 
+class WorkoutNotFoundError extends Error {}
+class TaskOrderNullError extends Error {}
+
 export const addTaskToSession = async (
   res: Response,
   sessionId: string,
@@ -25,6 +28,13 @@ export const addTaskToSession = async (
   const accountId = res.locals.state.account.account_id;
   const workoutId = body.workoutId;
 
+  // check if body.exercises is an array
+  if (!Array.isArray(body.exercises)) {
+    return res.status(422).json({
+      error: 'Exercises must be an array',
+    });
+  }
+
   try {
     // first, check if the workout has previous sessions connected
     // if not, update the workout_exercise
@@ -34,10 +44,7 @@ export const addTaskToSession = async (
     );
 
     if (hasSessions && sessionCount > 1) {
-      console.warn('WORKOUT ALREADY HAS SESSIONS - NEED TO CLONE', {
-        need_to_clone: sessionCount > 1,
-      });
-
+      console.warn('WORKOUT ALREADY HAS SESSIONS - CLONING');
       const data = await onTaskChangeClone({
         workoutId,
         accountId,
@@ -68,6 +75,23 @@ export const addTaskToSession = async (
       taskId: addedTaskId,
     });
   } catch (error) {
+    console.error({ error });
+    if (error instanceof WorkoutNotFoundError) {
+      return res.status(404).json({
+        role: res.locals.state.account.role,
+        message: 'Workout not found.',
+        status: 'error',
+      });
+    }
+
+    if (error instanceof TaskOrderNullError) {
+      return res.status(400).json({
+        role: res.locals.state.account.role,
+        message: 'Workout has no exercises',
+        status: 'error',
+      });
+    }
+
     const errorMessage = (error as unknown as { message: string })?.message;
     return res.status(500).json({
       error: 'Something went wrong',
@@ -90,7 +114,11 @@ const onTaskChangeClone = async ({
   exerciseIds,
 }: CloneMutationParams) => {
   const oldWorkout = await retrieveWorkoutQuery(workoutId);
-  if (!oldWorkout) throw new Error('Workout not found');
+  if (!oldWorkout) throw new WorkoutNotFoundError('Workout not found');
+  if (!oldWorkout.task_order)
+    throw new TaskOrderNullError(
+      `Task order is null for workout_id: ${oldWorkout.workout_id}`
+    );
 
   const { newWorkoutId } = await cloneWorkout({
     accountId,
@@ -149,7 +177,7 @@ const onTaskAdd = async ({
   exerciseIds,
 }: CloneMutationParams) => {
   const oldWorkout = await retrieveWorkoutQuery(workoutId);
-  if (!oldWorkout) throw new Error('Workout not found');
+  if (!oldWorkout) throw new WorkoutNotFoundError('Workout not found');
 
   const addedTaskId = await createWorkoutTaskWithExercises({
     payload: exerciseIds.map((exerciseId) => {

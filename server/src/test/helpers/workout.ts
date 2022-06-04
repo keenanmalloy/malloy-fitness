@@ -29,6 +29,10 @@ export const createTestWorkout = async (
   return workoutId;
 };
 
+/**
+ * Creates a workout with 2 tasks and 3 exercises.
+ * The first task has 2 exercises, the second task has 1 exercise.
+ */
 export const createFullTestWorkout = async (
   accountId: string,
   overrides?: Overrides & {
@@ -84,6 +88,7 @@ export const createFullTestWorkout = async (
   return {
     workoutId,
     exerciseIds: exercises.map((exercise) => exercise.exercise_id),
+    workoutTaskIds,
   };
 };
 

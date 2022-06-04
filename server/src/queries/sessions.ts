@@ -206,3 +206,16 @@ export const endSession = async ({
 
   return data.rows[0].session_id;
 };
+
+export const startSession = async (sessionId: string, accountId: string) => {
+  const query = `
+    UPDATE sessions
+    SET started_at = CURRENT_TIMESTAMP, session_dt = date_trunc('day', CURRENT_TIMESTAMP - interval '12 hours') + interval '7 hours'
+    WHERE session_id = $1 AND created_by = $2
+    RETURNING *;
+  `;
+
+  const params = [sessionId, accountId];
+  const data = await db.query<sessions_table>(query, params);
+  return data.rows[0];
+};

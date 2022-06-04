@@ -12,13 +12,15 @@ export const retrieveTask = async (
 ) => {
   try {
     const task = await queryWorkoutTaskExercisesByWorkoutTaskId(workoutTaskId);
-    const taskExercises = await queryExerciseIdsByWorkoutId(task[0].workout_id);
     if (!task || !task.length) {
       return res.status(404).json({
         status: 'error',
-        message: 'Exercise not found',
+        message: 'Task not found',
       });
     }
+
+    const taskExercises = await queryExerciseIdsByWorkoutId(task[0].workout_id);
+
     // @@TODO
     // const sessionSetRecord = await queryWorkoutExerciseRecord(
     //   mainExercise.workout_id,
@@ -35,10 +37,12 @@ export const retrieveTask = async (
 
     return res.status(200).json({
       role: res.locals.state.account.role,
-      message: 'Exercise fetched successfully',
+      message: 'Task fetched successfully',
       status: 'success',
       task: task,
       record: null,
+
+      // The exercise IDs within the session so we can filter
       exerciseIds: taskExercises.map((e) => e.exercise_id),
       next: {
         order: {

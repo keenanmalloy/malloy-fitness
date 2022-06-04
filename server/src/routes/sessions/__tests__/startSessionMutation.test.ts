@@ -1,4 +1,3 @@
-import { faker } from '@faker-js/faker';
 import axios, { AxiosInstance } from 'axios';
 import {
   createTestSession,
@@ -7,7 +6,7 @@ import {
 import { createAndAuthorizeUser } from 'test/helpers/user';
 import { initializeWebServer, stopWebServer } from 'test/server';
 
-describe('Update Set API', function () {
+describe('Start Session API', function () {
   let axiosAPIClient: AxiosInstance;
   let cookie: string;
   let accountId: string;
@@ -28,18 +27,16 @@ describe('Update Set API', function () {
     await stopWebServer();
   });
 
-  describe('Update a set', function () {
+  describe('Start a session', function () {
     it('responds with 401 if missing Cookie', async function () {
-      const response = await axiosAPIClient.put(
-        '/sessions/not-found/sets/not-found'
-      );
+      const response = await axiosAPIClient.patch('/sessions/not-found/start');
       expect(response.status).toBe(401);
     });
 
     it('responds with 403 when id not owned by user', async function () {
-      const session = await createTestSessionWithSets('-1');
-      const response = await axiosAPIClient.put(
-        `/sessions/${session.session_id}/sets/-1`,
+      const session = await createTestSession('-1');
+      const response = await axiosAPIClient.patch(
+        `/sessions/${session.session_id}/start`,
         {},
         {
           headers: {
@@ -51,32 +48,10 @@ describe('Update Set API', function () {
       expect(response.status).toBe(403);
     });
 
-    it('responds with 422 when missing / invalid body', async function () {
-      const session = await createTestSessionWithSets(accountId);
-      const response = await axiosAPIClient.put(
-        `/sessions/${session.session_id}/sets/${session.setIds[0]}`,
-        {
-          weight: 0,
-          repetitions: 0,
-        },
-        {
-          headers: {
-            Cookie: cookie,
-          },
-        }
-      );
-
-      expect(response.status).toBe(422);
-    });
-
-    it('responds with 404 when set does not exist', async function () {
-      const session = await createTestSessionWithSets(accountId);
-      const response = await axiosAPIClient.put(
-        `/sessions/${session.session_id}/sets/-1`,
-        {
-          weight: 222,
-          repetitions: 22,
-        },
+    it('responds with 404 when no sets have yet been updated', async function () {
+      const response = await axiosAPIClient.patch(
+        `/sessions/not-found/start`,
+        {},
         {
           headers: {
             Cookie: cookie,
@@ -87,14 +62,11 @@ describe('Update Set API', function () {
       expect(response.status).toBe(404);
     });
 
-    it('responds with 200 when set is successfully created', async function () {
+    it('responds with 200 started session', async function () {
       const session = await createTestSessionWithSets(accountId);
-      const response = await axiosAPIClient.put(
-        `/sessions/${session.session_id}/sets/${session.setIds[0]}`,
-        {
-          weight: 222,
-          repetitions: 22,
-        },
+      const response = await axiosAPIClient.patch(
+        `/sessions/${session.session_id}/start`,
+        {},
         {
           headers: {
             Cookie: cookie,

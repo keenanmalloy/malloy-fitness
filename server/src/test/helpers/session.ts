@@ -11,7 +11,8 @@ export const createTestSession = async (
   accountId: string,
   overrides?: SessionOverrides
 ) => {
-  const { workoutId, exerciseIds } = await createFullTestWorkout(accountId);
+  const { workoutId, exerciseIds, workoutTaskIds } =
+    await createFullTestWorkout(accountId);
   const data = await createSession({
     workoutId,
     accountId,
@@ -19,7 +20,7 @@ export const createTestSession = async (
     ...overrides,
   });
 
-  return data;
+  return { ...data, exerciseIds, workoutTaskIds };
 };
 
 export const createTestSessionWithSets = async (

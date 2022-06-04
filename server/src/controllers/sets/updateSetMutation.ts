@@ -26,8 +26,8 @@ export const updateSetMutation = async (
     const { repetitions, weight } = data;
 
     if (
-      (typeof repetitions === 'number' && repetitions < 0) ||
-      (typeof weight === 'number' && weight < 0)
+      (typeof repetitions === 'number' && repetitions <= 0) ||
+      (typeof weight === 'number' && weight <= 0)
     ) {
       return res.status(422).json({
         role: res.locals.state.account.role,
