@@ -12,12 +12,19 @@ export const inferCloneName = (name: string) => {
       return semanticParts.join('.');
     case 'decimal':
       // increment minor version of decimal versioning
-      const decimalParts = name.split('.');
-      const secondToLastPart = decimalParts[decimalParts.length - 2];
+      const parts = name.split(' ');
+      const lastDecPart = parts[parts.length - 1];
+      const decimalParts = lastDecPart.split('.');
+
+      const secondToLastPart = decimalParts[decimalParts.length - 1];
       const secondToLastPartNumber = parseInt(secondToLastPart, 10);
       const newSecondToLastPart = secondToLastPartNumber + 1;
-      decimalParts[decimalParts.length - 2] = newSecondToLastPart.toString();
-      return decimalParts.join('.');
+
+      return (
+        parts.slice(0, parts.length - 1).join(' ') +
+        ' ' +
+        `${decimalParts[0]}.${newSecondToLastPart}`
+      );
     case 'versioned':
       // increment major version of versioned versioning
       const versionedParts = name.split(' ');
@@ -36,13 +43,11 @@ export const inferCloneName = (name: string) => {
     case 'alphabetic':
       // increment order by alphabetical versioning
       const alphabeticParts = name.split(' ');
-      const alphabeticLastPart =
-        alphabeticParts.length === 1
-          ? alphabeticParts[alphabeticParts.length - 1]
-          : null;
+      const alphabeticLastPart = alphabeticParts[alphabeticParts.length - 1];
 
       const alphabet = 'abcdefghijklmnopqrstuvwxyz';
-      if (!alphabeticLastPart) {
+
+      if (alphabeticLastPart.length > 1) {
         return `${name} a`;
       }
 
@@ -125,18 +130,17 @@ export const inferCloneName = (name: string) => {
   }
 };
 
-type Versioning =
+export type Versioning =
   | 'semantic'
   | 'numeric'
   | 'alphabetic'
   | 'decimal'
-  | 'hybrid'
   | 'versioned'
   | 'alphabetic-numeric'
   | 'numeric-alphabetic'
   | 'unknown';
 
-const determineVersion = (name: string): Versioning => {
+export const determineVersion = (name: string): Versioning => {
   const nameParts = name.split(' ');
   const lastNamePart = nameParts[nameParts.length - 1];
   const lastNamePartNumber = parseInt(lastNamePart, 10);
@@ -152,11 +156,7 @@ const determineVersion = (name: string): Versioning => {
   )
     return 'alphabetic-numeric';
 
-  if (
-    isFirstCharacterNumber(lastNamePart) &&
-    doesStringHaveNumber(lastNamePart) &&
-    isNaN(lastNamePartNumber)
-  )
+  if (isLastCharacterLetter(lastNamePart) && doesStringHaveNumber(lastNamePart))
     return 'numeric-alphabetic';
   if (typeof lastNamePartNumber === 'number') return 'numeric';
   return 'unknown';
@@ -164,5 +164,7 @@ const determineVersion = (name: string): Versioning => {
 
 const checkCount = (str: string, word: string) => str.split(word).length - 1;
 const isFirstCharacterLetter = (str: string) => /^[a-z]/i.test(str.charAt(0));
+const isLastCharacterLetter = (str: string) =>
+  /[a-z]$/i.test(str.charAt(str.length - 1));
 const isFirstCharacterNumber = (str: string) => /^[0-9]/i.test(str.charAt(0));
 const doesStringHaveNumber = (str: string) => /\d/.test(str);

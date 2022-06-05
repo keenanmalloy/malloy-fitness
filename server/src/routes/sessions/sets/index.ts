@@ -1,10 +1,11 @@
+import { createSetMutation } from 'controllers/sets/createSetMutation';
+import { deleteSetMutation } from 'controllers/sets/deleteSetMutation';
+import { deleteSetsByExerciseMutation } from 'controllers/sets/deleteSetsByExerciseMutation';
+import { retrieveSetsByExerciseQuery } from 'controllers/sets/retrieveSetsByExerciseQuery';
+import { retrieveSetsQuery } from 'controllers/sets/retrieveSetsQuery';
+import { updateSetMutation } from 'controllers/sets/updateSetMutation';
 import { Router } from 'express';
-import { retrieveSetsQuery } from 'controllers/retrieveSetsQuery';
-import { retrieveSetsByExerciseQuery } from 'controllers/retrieveSetsByExerciseQuery';
-import { createSetMutation } from 'controllers/createSetMutation';
-import { deleteSetMutation } from 'controllers/deleteSetMutation';
-import { updateSetMutation } from 'controllers/updateSetMutation';
-import { deleteSetsByExerciseMutation } from 'controllers/deleteSetsByExerciseMutation';
+
 import { authenticate } from 'middlewares/authenticate';
 import { authorize } from 'middlewares/authorize';
 

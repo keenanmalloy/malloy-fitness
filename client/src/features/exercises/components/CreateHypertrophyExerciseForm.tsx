@@ -7,6 +7,7 @@ import Select from 'react-select';
 import { useQueryClient } from 'react-query';
 import { EXERCISE_CATEGORIES } from 'features/environment';
 import { MuscleGroup } from 'features/muscle-groups/types';
+import { selectStyles } from 'features/common/selectStyles';
 
 interface Props {
   setIsOpen: (type: boolean) => void;
@@ -74,7 +75,7 @@ export const CreateHypertrophyExerciseForm = ({
   };
 
   return (
-    <section>
+    <section className="text-white">
       <h1 className="py-3 text-lg text-center">
         Creating Hypertrophy Exercise
       </h1>
@@ -111,6 +112,7 @@ export const CreateHypertrophyExerciseForm = ({
                     }
                   : {}),
               }),
+              ...selectStyles,
             }}
             options={EXERCISE_CATEGORIES}
           />
@@ -139,6 +141,7 @@ export const CreateHypertrophyExerciseForm = ({
               control: (base) => ({
                 ...base,
               }),
+              ...selectStyles,
             }}
             onChange={(data) => {
               setPrimary([...data]);
@@ -165,6 +168,7 @@ export const CreateHypertrophyExerciseForm = ({
                 value: muscleGroup.muscle_group_id,
               };
             })}
+            styles={selectStyles}
           />
         </div>
 

@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
-import { RiUser3Line, RiSearchLine } from 'react-icons/ri';
 import Link from 'next/link';
 import dynamic from 'next/dynamic';
 import { usePreviewWorkoutsQuery } from 'features/date-scroll/usePreviewWorkoutsQuery';
 import { generateCalendarState } from 'features/date-scroll/generateCalendarState';
-import { SelectedDate } from 'features/daily/types';
 import { BiCog } from 'react-icons/bi';
 import { Logo } from './Logo';
+import { SelectedDate } from 'features/daily/useDailyOverviewQuery';
 
 const ScrollDatePicker = dynamic(
   // @ts-ignore

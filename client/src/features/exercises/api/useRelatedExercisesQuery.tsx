@@ -1,6 +1,36 @@
 import { useQuery } from 'react-query';
 import { apiClient } from 'config/axios';
-import { GetRelatedExercisesResponse } from '../types';
+import { z } from 'zod';
+
+// {
+//   "message": "Exercises fetched successfully",
+//   "status": "success",
+//   "exercises": [
+//       {
+//           "name": "Single Arm Dumbell Preacher Curl",
+//           "exercise_id": "128"
+//       },
+//       {
+//           "name": "Cable Hammer Curl",
+//           "exercise_id": "131"
+//       }
+//   ]
+// }
+
+const getRelatedExercisesSchema = z.object({
+  status: z.string(),
+  message: z.string(),
+  exercises: z.array(
+    z.object({
+      name: z.string(),
+      exercise_id: z.string(),
+    })
+  ),
+});
+
+export type GetRelatedExercisesSchema = z.infer<
+  typeof getRelatedExercisesSchema
+>;
 
 interface FetchRelatedExercisesQueryParams {
   muscleGroupIds: string[];
@@ -22,7 +52,8 @@ const fetchExercises = async ({
       ','
     )}&type=${type}&profile=${profile}&category=${category}&exerciseId=${exerciseId}`
   );
-  return data;
+  const result = getRelatedExercisesSchema.parse(data);
+  return result;
 };
 
 export const useRelatedExercisesQuery = ({
@@ -32,7 +63,7 @@ export const useRelatedExercisesQuery = ({
   category,
   exerciseId,
 }: FetchRelatedExercisesQueryParams) => {
-  return useQuery<GetRelatedExercisesResponse>(
+  return useQuery<GetRelatedExercisesSchema>(
     ['fetchExerciseByIds', exerciseId],
     () =>
       fetchExercises({ muscleGroupIds, type, profile, category, exerciseId }),

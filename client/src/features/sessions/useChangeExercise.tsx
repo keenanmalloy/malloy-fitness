@@ -6,6 +6,8 @@ interface ChageExerciseParams {
   sessionId: string;
   oldExerciseId: string;
   newExerciseId: string;
+  workoutTaskId: string;
+  currentWorkoutTaskExerciseId: string;
 }
 
 const changeExercise = async ({
@@ -13,12 +15,16 @@ const changeExercise = async ({
   sessionId,
   oldExerciseId,
   newExerciseId,
+  workoutTaskId,
+  currentWorkoutTaskExerciseId,
 }: ChageExerciseParams) => {
   const { data } = await apiClient.post(
     `/sessions/${sessionId}/exercises/${oldExerciseId}`,
     {
-      workout_id: workoutId,
-      new_exercise_id: newExerciseId,
+      workoutId,
+      workoutTaskId,
+      currentWorkoutTaskExerciseId,
+      newExerciseId,
     }
   );
   return data;
@@ -37,13 +43,27 @@ export const useChangeExercise = ({ sessionId, oldExerciseId }: Props) => {
     {
       workoutId: string;
       newExerciseId: string;
+      workoutTaskId: string;
+      currentWorkoutTaskExerciseId: string;
     }
   >(
-    ({ workoutId, newExerciseId }) =>
-      changeExercise({ workoutId, sessionId, oldExerciseId, newExerciseId }),
+    ({
+      workoutId,
+      newExerciseId,
+      workoutTaskId,
+      currentWorkoutTaskExerciseId,
+    }) =>
+      changeExercise({
+        workoutId,
+        sessionId,
+        oldExerciseId,
+        newExerciseId,
+        workoutTaskId,
+        currentWorkoutTaskExerciseId,
+      }),
     {
       onSuccess: () => {
-        queryClient.refetchQueries('fetchSessions');
+        queryClient.refetchQueries('fetchSessionTask');
       },
     }
   );

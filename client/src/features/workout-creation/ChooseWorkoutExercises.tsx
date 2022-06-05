@@ -4,7 +4,6 @@ import { Button } from 'features/common/Button';
 import FullPageModal from 'features/modal/FullPageModal';
 import { ChooseWorkoutExerciseList } from './ChooseWorkoutExerciseList';
 import { IoMdClose } from 'react-icons/io';
-import { Exercise } from 'features/exercises/types';
 import { LocalExercise } from './CreateWorkout';
 import { v4 as uuidv4 } from 'uuid';
 

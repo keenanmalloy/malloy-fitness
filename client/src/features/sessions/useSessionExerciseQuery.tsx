@@ -1,29 +1,64 @@
 import { apiClient } from 'config/axios';
 import { useQuery } from 'react-query';
-import { GetSessionExerciseResponse } from './types';
+import { z } from 'zod';
 
-interface FetchSessionExerciseParams {
-  exerciseId: string;
+const taskSchema = z.object({
+  message: z.string(),
+  status: z.string(),
+  exerciseIds: z.array(z.string()),
+  task: z.array(
+    z.object({
+      exercise_id: z.string(),
+      name: z.string(),
+      description: z.nullable(z.string()),
+      category: z.string(),
+      view: z.string(),
+      video: z.nullable(z.string()),
+      profile: z.string(),
+      task_order: z.array(z.string()),
+      workout_id: z.string(),
+      exercise_order: z.nullable(z.array(z.string())),
+      workout_task_id: z.string(),
+      workout_task_exercise_id: z.string(),
+    })
+  ),
+  record: z.nullable(z.string()),
+  next: z.object({
+    order: z.object({
+      workoutTaskId: z.nullable(z.string()).optional(),
+    }),
+  }),
+  prev: z.object({
+    order: z.object({
+      workoutTaskId: z.nullable(z.string()).optional(),
+    }),
+  }),
+});
+
+export type TaskSchema = z.infer<typeof taskSchema>;
+
+interface FetchSessionTaskParams {
+  workoutTaskId: string;
   sessionId: string;
 }
 
-const fetchSessionExercise = async ({
-  exerciseId,
+const fetchSessionTask = async ({
+  workoutTaskId,
   sessionId,
-}: FetchSessionExerciseParams) => {
+}: FetchSessionTaskParams) => {
   const { data } = await apiClient.get(
-    `/sessions/${sessionId}/exercises/${exerciseId}`
+    `/sessions/${sessionId}/tasks/${workoutTaskId}`
   );
 
-  return data;
+  const result = taskSchema.parse(data);
+  return result;
 };
 
 export const useSessionExerciseQuery = (
-  exerciseId: string,
+  workoutTaskId: string,
   sessionId: string
 ) => {
-  return useQuery<GetSessionExerciseResponse>(
-    ['fetchSessionExercise', exerciseId],
-    () => fetchSessionExercise({ exerciseId, sessionId })
+  return useQuery<TaskSchema>(['fetchSessionTask', workoutTaskId], () =>
+    fetchSessionTask({ workoutTaskId, sessionId })
   );
 };

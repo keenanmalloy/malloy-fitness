@@ -42,7 +42,7 @@ export const CreateCardioExerciseForm = ({ setIsOpen }: Props) => {
   };
 
   return (
-    <section>
+    <section className="text-white">
       <h1 className="py-3 text-lg text-center">Creating Cardio Exercise</h1>
       <form onSubmit={handleSubmit}>
         <Input

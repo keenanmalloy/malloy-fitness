@@ -1,4 +1,3 @@
-import { GetExercisesResponse } from 'features/exercises/types';
 import React from 'react';
 import { BsArrowDown, BsArrowUp } from 'react-icons/bs';
 import { LocalExercise } from './CreateWorkout';
@@ -6,7 +5,7 @@ import { LocalExercise } from './CreateWorkout';
 interface Props {
   exercises: LocalExercise[];
   setExercises: (exercises: LocalExercise[]) => void;
-  exercise: GetExercisesResponse['exercises'][0];
+  exercise: any; //GetExercisesResponse['exercises'][0];
 }
 
 export const OrderWorkoutExercisePreview = ({

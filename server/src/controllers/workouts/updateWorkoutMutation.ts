@@ -1,27 +1,24 @@
 import { db } from 'config/db';
 import Joi from 'joi';
 import { update } from 'utils/update';
-
-interface Response {
-  status: string;
-  message: string;
-  workout: any;
-  error?: any;
-}
+import { Response } from 'express';
+import { WORKOUT_CATEGORIES, WORKOUT_TYPES } from 'test/helpers/env';
 
 const updateWorkoutSchema = Joi.object({
-  name: Joi.string().min(3).max(64).optional(),
-  description: Joi.string().max(250).allow('').optional(),
-  category: Joi.string().optional(),
+  name: Joi.string().min(1).max(64).optional(),
+  description: Joi.string().max(500).allow('').optional(),
+  category: Joi.string().allow(WORKOUT_CATEGORIES.join(', ')).optional(),
+  type: Joi.string().allow(WORKOUT_TYPES.join(', ')).optional(),
 });
 
 export const updateWorkoutMutation = async (
-  res: any,
+  res: Response,
   data: Record<string, string>,
   id: string
-): Promise<Response> => {
+) => {
   const { error, value, warning } = updateWorkoutSchema.validate(data);
-  if (error) {
+
+  if (error || Object.keys(value).length === 0) {
     return res.status(422).json({
       role: res.locals.state.account.role,
       status: 'error',

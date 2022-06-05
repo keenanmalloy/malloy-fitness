@@ -1,20 +1,12 @@
-import { db } from 'config/db';
 import { Response } from 'express';
+import { startSession } from 'queries/sessions';
 
 export const startSessionMutation = async (res: Response, id: string) => {
-  const query = `
-    UPDATE sessions
-    SET started_at = CURRENT_TIMESTAMP, session_dt = date_trunc('day', CURRENT_TIMESTAMP - interval '12 hours') + interval '7 hours'
-    WHERE session_id = $1 AND created_by = $2
-    RETURNING *;
-  `;
-
   const accountId = res.locals.state.account.account_id;
-  const params = [id, accountId];
 
   try {
-    const data = await db.query(query, params);
-    if (!data.rowCount) {
+    const data = await startSession(id, accountId);
+    if (!data) {
       return res.status(404).json({
         role: res.locals.state.account.role,
         status: 'error',
@@ -27,7 +19,7 @@ export const startSessionMutation = async (res: Response, id: string) => {
       role: res.locals.state.account.role,
       status: 'success',
       message: 'session updated successfully',
-      session: data.rows[0],
+      session: data,
     });
   } catch (error) {
     console.log({ error });

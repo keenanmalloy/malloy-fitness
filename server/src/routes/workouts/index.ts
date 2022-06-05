@@ -2,7 +2,6 @@ import { Router } from 'express';
 import { authenticate } from 'middlewares/authenticate';
 import { authorize } from 'middlewares/authorize';
 import { cloneWorkoutMutation } from 'controllers/workouts/cloneWorkoutMutation';
-import { createStrengthWorkoutMutation } from 'controllers/workouts/createStrengthWorkoutMutation';
 import { deleteWorkoutMutation } from 'controllers/workouts/deleteWorkoutMutation';
 import { retrieveWorkoutQuery } from 'controllers/workouts/retrieveWorkoutQuery';
 import { retrieveWorkoutsQuery } from 'controllers/workouts/retrieveWorkoutsQuery';
@@ -12,9 +11,7 @@ import setsRouter from '../sessions/sets';
 import exercisesRouter from '../workouts/exercises';
 
 import { cloneScheduleWorkoutMutation } from 'controllers/workouts/cloneScheduleMutation';
-import { createDeloadWorkoutMutation } from 'controllers/workouts/createDeloadWorkoutMutation';
-import { createCardioWorkoutMutation } from 'controllers/workouts/createCardioWorkoutMutation';
-import { createTherapyWorkoutMutation } from 'controllers/workouts/createTherapyWorkoutMutation';
+import { createWorkoutMutation } from 'controllers/workouts/createWorkoutMutation';
 
 const router = Router();
 
@@ -41,19 +38,8 @@ router.get('/:workoutId', authenticate, authorize, async (req, res) => {
 
 // Create new workout ----- /?type=cardio
 router.post('/', authenticate, authorize, async (req, res) => {
-  // 'strength', 'rest', 'deload', 'cardio', 'therapy'
-  switch (req.query.type) {
-    case 'strength':
-      return await createStrengthWorkoutMutation(res, req.body);
-    case 'deload':
-      return await createDeloadWorkoutMutation(res, req.body);
-    case 'cardio':
-      return await createCardioWorkoutMutation(res);
-    case 'therapy':
-      return await createTherapyWorkoutMutation(res, req.body);
-    default:
-      return await createStrengthWorkoutMutation(res, req.body);
-  }
+  // 'strength', 'deload', 'cardio', 'therapy'
+  return await createWorkoutMutation(res, req.body);
 });
 
 // Clone OR schedule workout ------------ /

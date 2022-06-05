@@ -1,5 +1,10 @@
-import { db } from 'config/db';
 import { Response } from 'express';
+import {
+  cloneScheduleWorkout,
+  retrieveWorkoutQuery,
+  updateWorkoutTaskOrder,
+} from 'queries/workouts';
+import { cloneWorkoutTasksWithExercises } from 'queries/workoutTasks';
 
 export const cloneScheduleWorkoutMutation = async (
   res: Response,
@@ -9,8 +14,7 @@ export const cloneScheduleWorkoutMutation = async (
   const accountId = res.locals.state.account.account_id;
 
   try {
-    const workout = await retrieveWorkoutQuery(workoutId, accountId);
-
+    const workout = await retrieveWorkoutQuery(workoutId);
     if (!workout) {
       return res.status(404).json({
         role: res.locals.state.account.role,
@@ -19,84 +23,53 @@ export const cloneScheduleWorkoutMutation = async (
       });
     }
 
-    const distinguishDate = () => {
-      switch (date) {
-        case 'today':
-          return 'CURRENT_DATE';
-        case 'tomorrow':
-          return "CURRENT_DATE + INTERVAL '1 day'";
-        default:
-          return `TO_TIMESTAMP('${date}', 'YYYY-MM-DD')`;
-      }
-    };
+    const { newWorkoutId } = await cloneScheduleWorkout({
+      workoutId,
+      accountId,
+      date,
+    });
 
-    const exerciseOrder = JSON.stringify(
-      workout.workoutExercises.map((e) => {
-        return e.exerciseId;
-      })
-    );
-
-    const workoutQuery = `
-      WITH
-        workoutdata(name, description, category, created_by, workout_dt, exercise_order) AS (
-          VALUES
-            (
-                '${workout.name}', 
-                '${workout.description}', 
-                '${workout.category}', 
-                ${accountId}, 
-                ${distinguishDate()},
-                '${exerciseOrder}'::jsonb
-            )
-        )
-        INSERT INTO workouts (name, description, category, created_by, workout_dt, exercise_order)
-          SELECT *
-            FROM workoutdata
-          RETURNING *
-      `;
-
-    const data = await db.query(workoutQuery);
-    const createdWorkoutId = data.rows[0].workout_id;
-
-    const generateWeValues = () => {
-      return workout.workoutExercises
-        .map(
-          (we) =>
-            `(${createdWorkoutId}, 
-              ${we.exerciseId}, 
-              ${we.notes ?? null}, 
-              ${we.sets ?? null}, 
-              ${we.repetitions ?? null}, 
-              ${we.reps_in_reserve ?? null}, 
-              ${we.rest_period ?? null})`
-        )
-        .join(',');
-    };
-
-    if (!workout.workoutExercises.length) {
+    if (!workout.tasks || workout.tasks.length === 0) {
       return res.status(201).json({
         role: res.locals.state.account.role,
-        message: 'Workout Successfully Cloned',
+        message: 'Successfully cloned workout',
+        status: 'success',
+        workoutId: newWorkoutId,
       });
     }
 
-    const weQuery = `
-        WITH
-          wedata(workout_id, exercise_id, notes, sets, repetitions, reps_in_reserve, rest_period) AS (
-              VALUES 
-                ${generateWeValues()}
-            )
-          INSERT INTO workout_exercises (workout_id, exercise_id, notes, sets, repetitions, reps_in_reserve, rest_period)
-            SELECT workout_id, exercise_id, notes, sets, repetitions, reps_in_reserve, rest_period
-              FROM wedata
-            RETURNING *
-      `;
+    const newWorkoutTasks = await cloneWorkoutTasksWithExercises({
+      newWorkoutId,
+      payload: workout.task_order.map((taskId, index) => {
+        const exercises = workout.tasks.filter(
+          (t) => t.workout_task_id === taskId
+        );
+        return {
+          workout_task_id: taskId,
+          exercises: exercises.map((t) => {
+            return {
+              exercise_id: t.exercise_id,
+              sets: t.sets,
+              repetitions: t.repetitions,
+              reps_in_reserve: t.reps_in_reserve,
+              rest_period: t.rest_period,
+            };
+          }),
+        };
+      }),
+    });
 
-    await db.query(weQuery);
+    await updateWorkoutTaskOrder({
+      workoutId: newWorkoutId,
+      taskOrder: JSON.stringify([
+        ...new Set(newWorkoutTasks.map((task) => task.workout_task_id)),
+      ]),
+    });
 
     return res.status(201).json({
       role: res.locals.state.account.role,
       message: 'Workout Successfully Cloned',
+      workoutId: newWorkoutId,
     });
   } catch (error) {
     console.log({ error });
@@ -104,56 +77,5 @@ export const cloneScheduleWorkoutMutation = async (
       message: 'Failed',
       error: 'Workout failed to clone',
     });
-  }
-};
-
-const retrieveWorkoutQuery = async (workoutId: string, accountId: string) => {
-  const query = `SELECT 
-  workouts.name as name,
-  workouts.description as description,
-  workouts.category as category,
-  workouts.workout_id,
-  workouts.created_by,
-  workouts.exercise_order,
-  we.exercise_id
-FROM workouts
-LEFT OUTER JOIN workout_exercises we on workouts.workout_id = we.workout_id
-WHERE workouts.workout_id = $1`;
-  const params = [workoutId];
-
-  try {
-    const data = await db.query(query, params);
-    if (!data.rows.length) {
-      return null;
-    }
-
-    // Because of the LEFT OUTER JOIN, we return a single exercise with a null id.
-    // Check if it exists and return an empty array if it does not.
-    const workoutExercises = !data.rows[0].exercise_id
-      ? []
-      : data.rows.map((we) => {
-          return {
-            exerciseId: we.exercise_id,
-            notes: data.rows[0].created_by === accountId ? we.notes : null,
-            sets: we.sets,
-            repetitions: we.repetitions,
-            reps_in_reserve: we.reps_in_reserve,
-            rest_period: we.rest_period,
-          };
-        });
-
-    const workout = {
-      name: data.rows[0].name,
-      description: data.rows[0].description,
-      category: data.rows[0].category,
-      workout_id: data.rows[0].workout_id,
-      exercise_order: data.rows[0].exercise_order,
-      workoutExercises,
-    };
-
-    return workout;
-  } catch (error) {
-    console.log({ error });
-    return null;
   }
 };

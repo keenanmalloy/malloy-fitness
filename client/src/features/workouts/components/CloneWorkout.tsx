@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { useCloneWorkoutMutation } from 'features/workouts/api/useCloneWorkoutMutation';
 import { useRouter } from 'next/router';
+import { DefaultModal } from 'features/modal/DefaultModal';
 
 interface Props {
   workoutId: string;
@@ -33,8 +34,8 @@ export const CloneWorkout = ({ workoutId, hasSessions }: Props) => {
   };
 
   return (
-    <Modal
-      title="This workout has previous sessions. We recommend you copy it if you wish to change it."
+    <DefaultModal
+      title="This workout has previous sessions connected. We recommend you copy it if you wish to change it."
       description="If you edit this workout without copying, your past connected sessions will be updated."
       isOpen={isOpen}
       closeModal={closeModal}
@@ -60,6 +61,6 @@ export const CloneWorkout = ({ workoutId, hasSessions }: Props) => {
           <small className="text-red-500">Something went wrong...</small>
         )}
       </div>
-    </Modal>
+    </DefaultModal>
   );
 };

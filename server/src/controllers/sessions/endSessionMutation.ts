@@ -1,33 +1,26 @@
-import { db } from 'config/db';
+import { endSession } from 'queries/sessions';
 
 export const endSessionMutation = async (res: any, id: string) => {
-  const query = `
-    UPDATE sessions
-    SET ended_at = $1, completed = true
-    WHERE session_id = $2 AND created_by = $3
-    RETURNING *;
-  `;
-
-  const startedAt = new Date();
-  const accountId = res.locals.state.account.account_id;
-  const params = [startedAt, id, accountId];
-
   try {
-    const data = await db.query(query, params);
-    if (!data.rowCount) {
+    const sessionId = await endSession({
+      accountId: res.locals.state.account.account_id,
+      sessionId: id,
+    });
+
+    if (!sessionId) {
       return res.status(404).json({
         role: res.locals.state.account.role,
         status: 'error',
         message: 'session does not exist',
-        session: null,
+        sessionId: null,
       });
     }
 
     return res.status(200).json({
       role: res.locals.state.account.role,
       status: 'success',
-      message: 'session updated successfully',
-      session: data.rows[0],
+      message: 'session ended',
+      sessionId: sessionId,
     });
   } catch (error) {
     console.log({ error });

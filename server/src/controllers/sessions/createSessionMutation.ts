@@ -1,6 +1,6 @@
-import { db } from 'config/db';
 import { Response } from 'express';
 import Joi from 'joi';
+import { createSession } from 'queries/sessions';
 
 interface CreateSession {
   session_dt: string;
@@ -29,28 +29,19 @@ export const createSessionMutation = async (
   } else {
     const { session_dt, workout_id } = data;
 
-    const date = new Date(session_dt).toISOString();
-
-    const query = `
-      WITH 
-        data(session_dt, workout_id, created_by) AS (
-          VALUES                           
-              (timestamp '${date}', ${workout_id}, ${res.locals.state.account.account_id})
-          )
-        INSERT INTO sessions (session_dt, workout_id, created_by)
-          SELECT session_dt, workout_id, created_by
-            FROM data
-          RETURNING *
-      `;
-
     try {
-      const data = await db.query(query);
+      const accountId = res.locals.state.account.account_id;
+      const session = await createSession({
+        workoutId: workout_id,
+        accountId,
+        sessionDt: new Date(session_dt).toISOString(),
+      });
 
       return res.status(201).json({
         role: res.locals.state.account.role,
         status: 'success',
         message: 'Session created successfully',
-        session: data.rows[0],
+        session,
       });
     } catch (error) {
       console.log({ error });

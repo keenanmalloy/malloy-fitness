@@ -1,10 +1,9 @@
 import { CustomInput } from 'features/form/CustomInput';
 import React, { ChangeEventHandler, useEffect, useState } from 'react';
 import { useGoalFieldMutation } from '../api/useGoalFieldMutation';
-import { GetGoalsResponse } from '../types';
 
 interface Props {
-  goals: GetGoalsResponse['goals'];
+  goals: any;
 }
 
 export const GoalPanel = ({ goals }: Props) => {

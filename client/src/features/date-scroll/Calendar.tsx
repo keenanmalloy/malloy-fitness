@@ -4,7 +4,7 @@ import Modal from 'features/modal/Modal';
 import { Button } from 'features/common/Button';
 import { generateCalendarState } from './generateCalendarState';
 import { BiChevronDown, BiChevronUp } from 'react-icons/bi';
-import { SelectedDate } from 'features/daily/types';
+import { SelectedDate } from 'features/daily/useDailyOverviewQuery';
 
 interface Props {
   displayDate: string;

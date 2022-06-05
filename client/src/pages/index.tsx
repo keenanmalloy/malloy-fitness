@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { HomeHeader } from 'features/common/HomeHeader';
 import Navbar from 'features/common/Navbar';
 import { GetSelectedDailyOverview } from 'features/daily/GetSelectedDailyOverview';
-import { SelectedDate } from 'features/daily/types';
+import { SelectedDate } from 'features/daily/useDailyOverviewQuery';
 
 function HomePage() {
   // the day selected by the user

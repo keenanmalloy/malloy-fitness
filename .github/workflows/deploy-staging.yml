@@ -1,0 +1,55 @@
+name: Deploy Staging
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy-server:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '2'
+
+      - name: Get changed files in /server
+        id: server-changes
+        uses: tj-actions/changed-files@v1.1.2
+        with:
+          files: |
+            server
+
+      - name: If changes to service, deploy to Heroku
+        if: steps.server-changes.outputs.any_changed == 'true'
+        uses: gonuit/heroku-docker-deploy@v1.3.3
+        with:
+          email: ${{ secrets.HEROKU_EMAIL }}
+          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
+          heroku_app_name: ${{ secrets.HEROKU_API_STAGING_APP_NAME }}
+          dockerfile_directory: ./server/
+          dockerfile_name: Dockerfile
+
+  deploy-client:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: '2'
+
+      - name: Get changed files in client
+        id: client-changes
+        uses: tj-actions/changed-files@v1.1.2
+        with:
+          files: |
+            client
+
+      - name: If changes to service, deploy to Vercel
+        if: steps.client-changes.outputs.any_changed == 'true'
+        uses: amondnet/vercel-action@v20.0.0
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
+          vercel-org-id: ${{ secrets.VERCEL_ORGANIZATION_ID}} #Required
+          vercel-project-id: ${{ secrets.VERCEL_STAGING_APP_PROJECT_ID}} #Required
+          vercel-args: '--prod' #Optional
+          working-directory: ./client

@@ -90,7 +90,9 @@ const EndPage = ({ sessionId }: Props) => {
         <div>
           <p className="text-center py-5">Want to add more?</p>
 
-          {data && <ChooseExerciseModal data={data} shouldRedirect />}
+          {data && (
+            <ChooseExerciseModal data={data} shouldRedirect isMultiSelectable />
+          )}
         </div>
         <FullPageModal isOpen={isOpen} closeModal={() => setIsOpen(false)}>
           <button
@@ -169,15 +171,16 @@ const EndPage = ({ sessionId }: Props) => {
         sessionId={sessionId}
         nextEx={{
           order: {
-            exercise_id: null,
+            workoutTaskId: null,
           },
         }}
         prevEx={{
           order: {
-            exercise_id:
-              data?.session.exercise_order[
-                data.session.exercise_order.length - 1
-              ] ?? null,
+            workoutTaskId:
+              (data &&
+                data.session.task_order &&
+                data.session.task_order[data.session.task_order.length - 1]) ??
+              null,
           },
         }}
       />

@@ -1,22 +1,14 @@
-import React, {
-  ChangeEventHandler,
-  FocusEvent,
-  useEffect,
-  useState,
-} from 'react';
-import { AiOutlineClockCircle } from 'react-icons/ai';
-import { CgCalendarDates, CgSpinner } from 'react-icons/cg';
-import { FaWeightHanging, FaRegTired } from 'react-icons/fa';
-import { GiTrafficLightsReadyToGo } from 'react-icons/gi';
-import { SessionSummaryResponse } from './types';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import { RemoveExerciseFromSession } from './RemoveExerciseFromSession';
 import StartSession from './StartSession';
 import { ChooseExerciseModal } from './ChooseExerciseModal';
-import { useUpdateWorkoutMutation } from 'features/workouts/api/useUpdateWorkoutMutation';
+import { SessionSchema } from './useSessionSummaryQuery';
+import { SessionEndStats } from './SessionEndStats';
+import { EditableSessionWorkoutTitle } from './EditableSessionWorkoutTitle';
 
 interface Props {
-  data: SessionSummaryResponse;
+  data: SessionSchema;
 }
 
 export const SessionSummary = ({ data }: Props) => {
@@ -27,11 +19,11 @@ export const SessionSummary = ({ data }: Props) => {
 
   const [workoutTitle, setWorkoutTitle] = useState(data.session.name);
 
-  if (!data.session.exercises.length) {
+  if (!data.session.tasks) {
     return (
       <main>
         <div className="p-3 text-center">
-          <SessionWorkoutTitle
+          <EditableSessionWorkoutTitle
             value={workoutTitle}
             prevValue={data.session.name}
             field={'workout_title'}
@@ -42,7 +34,7 @@ export const SessionSummary = ({ data }: Props) => {
 
         {!data.session.ended_at && (
           <div className="p-5 text-white">
-            <ChooseExerciseModal data={data} />
+            <ChooseExerciseModal data={data} isMultiSelectable />
           </div>
         )}
       </main>
@@ -52,7 +44,7 @@ export const SessionSummary = ({ data }: Props) => {
   return (
     <main className="py-1 bg-slate-900 min-h-screen text-white">
       <div className="p-3 text-center">
-        <SessionWorkoutTitle
+        <EditableSessionWorkoutTitle
           value={workoutTitle}
           prevValue={data.session.name}
           field={'workout_title'}
@@ -63,29 +55,31 @@ export const SessionSummary = ({ data }: Props) => {
 
       <SessionEndStats endedAt={data.session.ended_at} />
       <div className="px-5 w-full">
-        <StartSession
-          sessionId={data.session.session_id}
-          hasStarted={!!data.session.started_at}
-          hasEnded={!!data.session.ended_at}
-        />
+        {!data.session.ended_at && (
+          <StartSession
+            sessionId={data.session.session_id}
+            hasStarted={!!data.session.started_at}
+            hasEnded={!!data.session.ended_at}
+            taskOrder={data.session.task_order ?? []}
+          />
+        )}
       </div>
 
       <ul className="flex flex-col divide-y-2 divide-slate-700 px-3 pb-5">
-        {data.session.exercise_order &&
-          data.session.exercise_order
-            .map((exerciseId) =>
-              data.session.exercises.find(
-                (exercise) => exercise.exercise_id === exerciseId
-              )
-            )
-            .map((exercise, key) => {
-              if (!exercise) return null;
-              return (
-                <li
-                  key={exercise.exercise_id}
-                  className="flex flex-col justify-between border-solid "
-                >
-                  <div className="flex justify-between">
+        {data.session.tasks.map((task, key) => {
+          if (!task) return null;
+
+          return (
+            <li
+              className="flex flex-col justify-between border-solid "
+              key={task.workout_task_id}
+            >
+              {task.exercises.map((exercise, index) => {
+                return (
+                  <div
+                    className="flex justify-between"
+                    key={exercise.workout_task_exercise_id}
+                  >
                     <div className="border-solid flex-1">
                       <div className="text-left flex">
                         <div className="flex flex-col items-center pt-6">
@@ -93,7 +87,10 @@ export const SessionSummary = ({ data }: Props) => {
                           <IoMdArrowDropup size={30} />
                         </button> */}
                           <div className="flex p-3 rounded-md bg-slate-800 text-white items-center max-h-10 min-h-10 ">
-                            <p>{getLetter(key)}1</p>
+                            <p>
+                              {getLetter(key)}
+                              {index + 1}
+                            </p>
                           </div>
                           {/* <button className="-mt-1">
                           <IoMdArrowDropdown size={30} />
@@ -114,7 +111,7 @@ export const SessionSummary = ({ data }: Props) => {
                             </>
                           ) : (
                             <Link
-                              href={`/sessions/${data.session.session_id}/exercises/${exercise.exercise_id}`}
+                              href={`/sessions/${data.session.session_id}/tasks/${exercise.workout_task_id}`}
                             >
                               <a className="w-full">
                                 <h3 className="text-lg">{exercise.name}</h3>
@@ -164,142 +161,25 @@ export const SessionSummary = ({ data }: Props) => {
                     {!data.session.ended_at && (
                       <RemoveExerciseFromSession
                         data={data}
+                        workoutTaskId={exercise.workout_task_id}
                         exerciseId={exercise.exercise_id}
+                        taskExerciseId={exercise.workout_task_exercise_id}
+                        isSuperset={task.exercises.length > 1}
                       />
                     )}
                   </div>
-                </li>
-              );
-            })}
+                );
+              })}
+            </li>
+          );
+        })}
       </ul>
 
       {!data.session.ended_at && (
         <div className="p-5">
-          <ChooseExerciseModal data={data} />
+          <ChooseExerciseModal data={data} isMultiSelectable />
         </div>
       )}
     </main>
-  );
-};
-
-interface SessionEndStatsProps {
-  endedAt: string;
-}
-
-const SessionEndStats = ({ endedAt }: SessionEndStatsProps) => {
-  if (!endedAt) return null;
-  return (
-    <>
-      <div className="flex items-center flex-col py-5">
-        <div className="pb-5">
-          <FaWeightHanging size={50} />
-        </div>
-        <h2>Volume (LBS)</h2>
-        <p>0</p>
-      </div>
-      <div className="flex justify-evenly">
-        <span className="flex flex-col">
-          EXERCISES
-          <p className="flex justify-center">0</p>
-        </span>
-        <span className="flex flex-col">
-          SETS
-          <p className="flex ">0</p>
-        </span>
-        <span className="flex flex-col">
-          REPS
-          <p className="flex justify-center ">0</p>
-        </span>
-      </div>
-      <div className="flex justify-evenly py-6">
-        <span className="flex flex-col items-center">
-          <CgCalendarDates size={50} />
-          ROTATION
-          <p className="flex justify-center">1</p>
-        </span>
-        <span className="flex flex-col items-center">
-          <GiTrafficLightsReadyToGo size={50} />
-          READINESS
-          <p className="flex ">0/5</p>
-        </span>
-        <span className="flex flex-col items-center">
-          <AiOutlineClockCircle size={50} />
-          MINUTES
-          <p className="flex justify-center ">0</p>
-        </span>
-        <span className="flex flex-col items-center">
-          <FaRegTired size={50} />
-          INTENSITY
-          <p className="flex justify-center ">0/10</p>
-        </span>
-      </div>
-    </>
-  );
-};
-
-interface AccountFieldProps {
-  value: string;
-  prevValue: string;
-  field: string;
-  type?: string;
-  onChange: ChangeEventHandler<HTMLTextAreaElement | HTMLInputElement>;
-  isTextArea?: boolean;
-  placeholder?: string;
-  className?: string;
-  workoutId: string;
-}
-
-const SessionWorkoutTitle = ({
-  value,
-  field,
-  placeholder,
-  type,
-  onChange,
-  prevValue,
-  workoutId,
-}: AccountFieldProps) => {
-  const { mutate, isLoading, isError } = useUpdateWorkoutMutation(workoutId);
-
-  useEffect(() => {
-    const delayDebounceFn = setTimeout(() => {
-      if (value !== prevValue) {
-        mutate({
-          workout: {
-            name: value,
-          },
-        });
-      }
-    }, 500);
-
-    return () => clearTimeout(delayDebounceFn);
-  }, [value, field]);
-
-  const handleFocus = (event: FocusEvent<HTMLInputElement>) =>
-    event.target.select();
-
-  return (
-    <div className="flex-1 text-2xl relative text-white px-2 py-1">
-      <input
-        onChange={onChange}
-        value={value}
-        type={type}
-        placeholder={placeholder}
-        className="text-center bg-slate-800 rounded-md w-full py-1"
-        onFocus={handleFocus}
-      />
-      {isLoading && (
-        <CgSpinner
-          size={28}
-          className="animate-spin text-green-500 absolute top-0 right-0"
-        />
-      )}
-      {isError && (
-        <div className=" w-full pb-1 text-center">
-          <small className="text-red-600 text-xs">
-            Error updating workout title
-          </small>
-        </div>
-      )}
-    </div>
   );
 };

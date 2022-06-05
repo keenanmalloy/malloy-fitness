@@ -3,11 +3,10 @@ import React from 'react';
 import { useQueryClient } from 'react-query';
 import { useUpdateWorkoutExerciseMutation } from 'features/workout-exercises/api/useUpdateWorkoutExerciseMutation';
 import { AiOutlineCaretDown, AiOutlineCaretUp } from 'react-icons/ai';
-import { Exercise } from 'features/exercises/types';
 
 interface Props {
   workoutId: string;
-  exercise: Exercise;
+  exercise: any;
 }
 
 const WorkoutOrder = ({ exercise, workoutId }: Props) => {

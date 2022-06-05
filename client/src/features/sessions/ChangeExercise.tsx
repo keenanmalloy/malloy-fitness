@@ -9,20 +9,23 @@ import { FilterExercises } from 'features/exercises/components/FilterExercises';
 import { BiX } from 'react-icons/bi';
 import { useChangeExercise } from './useChangeExercise';
 import { useRouter } from 'next/router';
-import { GetSessionResponse } from './types';
 
 interface Props {
-  exercises: GetSessionResponse['session']['exercises'];
+  exerciseIds: string[];
   exerciseId: string;
   sessionId: string;
   workoutId: string;
+  workoutTaskId: string;
+  currentWorkoutTaskExerciseId: string;
 }
 
 export const ChangeExercise = ({
-  exercises,
+  exerciseIds,
   exerciseId,
   sessionId,
   workoutId,
+  workoutTaskId,
+  currentWorkoutTaskExerciseId,
 }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [query, setQuery] = useState('');
@@ -31,8 +34,6 @@ export const ChangeExercise = ({
   const [view, setView] = useState('');
   const [profile, setProfile] = useState('');
   const [sortBy, setSortBy] = useState('');
-
-  const router = useRouter();
 
   const { data, isLoading, isError, error, mutate } = useChangeExercise({
     sessionId,
@@ -44,13 +45,16 @@ export const ChangeExercise = ({
   };
 
   const handleExerciseSelection = (exerciseId: string) => {
-    // change exercise here:
     mutate(
-      { workoutId, newExerciseId: exerciseId },
+      {
+        workoutId,
+        newExerciseId: exerciseId,
+        workoutTaskId,
+        currentWorkoutTaskExerciseId,
+      },
       {
         onSuccess: (data) => {
           setIsOpen(false);
-          router.push(`/sessions/${sessionId}/exercises/${data.exerciseId}`);
         },
       }
     );
@@ -106,7 +110,7 @@ export const ChangeExercise = ({
           view={view}
           profile={profile}
           sortBy={sortBy}
-          exercises={exercises}
+          exerciseIds={exerciseIds}
           handleExerciseSelection={handleExerciseSelection}
         />
       </FullPageModal>

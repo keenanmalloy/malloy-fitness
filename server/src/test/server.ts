@@ -1,25 +1,32 @@
-import { app } from "../server";
-import { SuperTest, Test, agent } from "supertest";
-import { Server } from "http";
-import getPort from "get-port";
+import { app } from '../server';
+import { Server } from 'http';
+import getPort from 'get-port';
+import { AddressInfo } from 'net';
 
-export let request: SuperTest<Test>;
-export let server: Server;
+export let connection: Server;
 
-const start = async () => {
-  server = app.listen(await getPort(), "localhost");
-  request = agent(server);
+export const initializeWebServer = async (): Promise<AddressInfo> => {
+  const port = await getPort();
+
+  return new Promise((resolve, reject) => {
+    connection = app.listen(port, () => {
+      resolve(connection.address() as AddressInfo);
+    });
+  });
 };
 
-const close = async () => {
-  server.close();
+export const stopWebServer = async () => {
+  return new Promise<void>((resolve, reject) => {
+    connection.close(() => {
+      resolve();
+    });
+  });
 };
 
 beforeAll(async () => {
-  await start();
-  request = agent(server);
+  await initializeWebServer();
 });
 
 afterAll(async () => {
-  await close();
+  await stopWebServer();
 });

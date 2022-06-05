@@ -9,6 +9,7 @@ import { retrieveSessionsQuery } from 'controllers/sessions/retrieveSessionsQuer
 import { updateSessionMutation } from 'controllers/sessions/updateSessionMutation';
 import startSessionRouter from './start';
 import endSessionRouter from './end';
+import tasksRouter from './tasks';
 import exercisesRouter from './exercises';
 import setsRouter from './sets';
 import continueRouter from './continue';
@@ -69,6 +70,7 @@ router.patch('/:sessionId', authenticate, authorize, async (req, res) => {
 
 startSessionRouter(router);
 endSessionRouter(router);
+tasksRouter(router);
 exercisesRouter(router);
 setsRouter(router);
 continueRouter(router);

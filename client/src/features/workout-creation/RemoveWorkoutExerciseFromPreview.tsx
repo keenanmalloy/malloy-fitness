@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { IoMdClose } from 'react-icons/io';
 import { Button } from 'features/common/Button';
 import { LocalExercise } from './CreateWorkout';
-import { GetExercisesResponse } from 'features/exercises/types';
 import { DefaultModal } from 'features/modal/DefaultModal';
 
 interface Props {
-  exercise: GetExercisesResponse['exercises'][0];
+  exercise: any; //GetExercisesResponse['exercises'][0];
   setExercises: (exercises: LocalExercise[]) => void;
   exercises: LocalExercise[];
 }

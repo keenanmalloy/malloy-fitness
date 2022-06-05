@@ -1,14 +1,14 @@
-version: "3.8"
+version: '3.8'
 
 services:
   database:
     container_name: test-postgres
     build:
       context: ../../db
-    command: postgres -c fsync=off -c synchronous_commit=off -c full_page_writes=off -c random_page_cost=1.0 
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=postgres
+      - PGUSER=postgres
     ports:
       - '4444:5432'
-    tmpfs: /var/lib/postgresql/data

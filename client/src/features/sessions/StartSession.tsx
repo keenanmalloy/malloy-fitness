@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
 import { apiClient } from 'config/axios';
-import { GetSessionResponse } from './types';
 import { CgSpinner } from 'react-icons/cg';
 import Link from 'next/link';
 
@@ -11,6 +10,7 @@ interface Props {
   hasStarted: boolean;
   hasEnded: boolean;
   hasExercises?: boolean;
+  taskOrder: string[] | null;
 }
 
 const StartSession = ({
@@ -18,15 +18,11 @@ const StartSession = ({
   hasStarted,
   hasEnded,
   hasExercises,
+  taskOrder,
 }: Props) => {
   const [isLoading, setIsLoading] = useState(false);
   const queryClient = useQueryClient();
   const router = useRouter();
-
-  const getSingleWorkout = async (id: string) => {
-    const { data } = await apiClient.get<GetSessionResponse>(`/sessions/${id}`);
-    return data;
-  };
 
   const initSession = async (id: string) => {
     try {
@@ -37,39 +33,7 @@ const StartSession = ({
     }
   };
 
-  const startOrContinueWorkout = async (sessionId: string) => {
-    setIsLoading(true);
-    const data = await getSingleWorkout(sessionId);
-    if (data.status !== 'success') {
-      return;
-    }
-
-    const firstExerciseId = data.session.exercise_order[0];
-
-    const isStarted = data.session.started_at;
-    if (isStarted) {
-      try {
-        const { data } = await apiClient(`/sessions/${sessionId}/continue`);
-        return router.push(data.url);
-      } catch (error) {
-        // if error, then redirect to the first exercise in the session instead
-        console.log({ error });
-        if (!firstExerciseId) return router.push(`/sessions/${sessionId}/`);
-        return router.push(
-          `/sessions/${sessionId}/exercises/${firstExerciseId}`
-        );
-      }
-    }
-    const json = await initSession(sessionId);
-    if (json.status !== 'success') {
-      return;
-    }
-    queryClient.invalidateQueries('fetchSession');
-    if (!firstExerciseId) return router.push(`/sessions/${sessionId}/`);
-    router.push(`/sessions/${sessionId}/start`);
-  };
-
-  if (hasEnded || hasExercises) {
+  if (hasEnded || hasExercises || !taskOrder) {
     return (
       <Link href={`/sessions/${sessionId}`}>
         <button
@@ -84,6 +48,31 @@ const StartSession = ({
       </Link>
     );
   }
+
+  const startOrContinueWorkout = async (sessionId: string) => {
+    setIsLoading(true);
+
+    const firstTaskId = taskOrder[0];
+
+    if (hasStarted) {
+      try {
+        const { data } = await apiClient(`/sessions/${sessionId}/continue`);
+        return router.push(data.url);
+      } catch (error) {
+        // if error, then redirect to the first exercise in the session instead
+        console.log({ error });
+        if (!firstTaskId) return router.push(`/sessions/${sessionId}/`);
+        return router.push(`/sessions/${sessionId}/tasks/${firstTaskId}`);
+      }
+    }
+    const json = await initSession(sessionId);
+    if (json.status !== 'success') {
+      return;
+    }
+    queryClient.invalidateQueries('fetchSession');
+    if (!firstTaskId) return router.push(`/sessions/${sessionId}/`);
+    router.push(`/sessions/${sessionId}/start`);
+  };
 
   return (
     <button

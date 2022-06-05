@@ -8,12 +8,12 @@ interface SessionFooterProps {
   sessionId: string;
   nextEx: {
     order: {
-      exercise_id: string | null;
+      workoutTaskId?: string | null | undefined;
     };
   };
   prevEx: {
     order: {
-      exercise_id: string | null;
+      workoutTaskId?: string | null | undefined;
     };
   };
 }
@@ -28,7 +28,7 @@ export const SessionFooter = ({
   return (
     <div className="flex justify-center w-full fixed bottom-0 left-0 right-0 bg-slate-900 text-white">
       <div className="flex justify-between items-center max-w-md w-full">
-        {!prevEx.order.exercise_id ? (
+        {!prevEx.order.workoutTaskId ? (
           <Link href={`/sessions/${sessionId}/start`}>
             <button className="flex flex-col justify-center items-center p-4 disabled:opacity-50">
               <BsArrowLeftShort className="w-5 h-5 text-green-500" />
@@ -37,7 +37,7 @@ export const SessionFooter = ({
           </Link>
         ) : (
           <Link
-            href={`/sessions/${sessionId}/exercises/${prevEx.order.exercise_id}`}
+            href={`/sessions/${sessionId}/tasks/${prevEx.order.workoutTaskId}`}
           >
             <button className="flex flex-col justify-center items-center p-4 disabled:opacity-50">
               <BsArrowLeftShort className="w-5 h-5 text-green-500" />
@@ -52,12 +52,12 @@ export const SessionFooter = ({
           setTimerType={setTimerType}
         />
 
-        {!!nextEx.order.exercise_id ? (
+        {!!nextEx.order.workoutTaskId ? (
           <Link
-            href={`/sessions/${sessionId}/exercises/${nextEx.order.exercise_id}`}
+            href={`/sessions/${sessionId}/tasks/${nextEx.order.workoutTaskId}`}
           >
             <button
-              disabled={!nextEx.order.exercise_id}
+              disabled={!nextEx.order.workoutTaskId}
               className="flex flex-col justify-center items-center p-4 disabled:opacity-50"
             >
               <BsArrowRightShort className="w-5 h-5 text-green-500" />
@@ -67,7 +67,7 @@ export const SessionFooter = ({
         ) : (
           <Link href={`/sessions/${sessionId}/end`}>
             <button
-              disabled={nextEx.order.exercise_id === null}
+              disabled={nextEx.order.workoutTaskId === null}
               className="flex flex-col justify-center items-center p-4 disabled:opacity-50"
             >
               <BsArrowRightShort className="w-5 h-5 text-green-500" />

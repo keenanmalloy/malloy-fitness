@@ -1,5 +1,4 @@
 import { apiClient } from 'config/axios';
-import { MuscleGroup } from 'features/muscle-groups/types';
 import { useMutation } from 'react-query';
 
 interface Params {

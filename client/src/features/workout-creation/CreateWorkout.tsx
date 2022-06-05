@@ -8,6 +8,7 @@ import { WorkoutExercisesPreview } from 'features/workout-creation/WorkoutExerci
 import { Button } from 'features/common/Button';
 import { useRouter } from 'next/router';
 import { useQueryClient } from 'react-query';
+import { selectStyles } from 'features/common/selectStyles';
 
 export interface LocalExercise {
   id: string;
@@ -96,6 +97,7 @@ export const CreateWorkout = ({
                   }
                 : {}),
             }),
+            ...selectStyles,
           }}
           options={WORKOUT_CATEGORIES}
         />

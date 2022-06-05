@@ -1,16 +1,15 @@
 import { Response } from 'express';
-import { queryGoalSettings } from 'queries/goals';
+import { queryGoalSettings } from 'queries/settings';
 
 export const fetchGoalsQuery = async (res: Response) => {
   const accountId = res.locals.state.account.account_id;
 
   try {
     const goals = await queryGoalSettings(accountId);
-
     return res.status(200).json({
       role: res.locals.state.account.role,
       status: 'success',
-      message: 'Goals feError fetching Goals',
+      message: 'Goals fetched successfully',
       goals,
     });
   } catch (error) {

@@ -1,27 +1,11 @@
+import { changeTaskExercise } from 'controllers/tasks/changeTaskExercise';
+import { removeTaskExercise } from 'controllers/tasks/removeTaskExercise';
+import { rotateTaskExercise } from 'controllers/tasks/rotateTaskExercise';
 import { Router } from 'express';
 import { authenticate } from 'middlewares/authenticate';
 import { authorize } from 'middlewares/authorize';
-import { rotateSessionExercise } from 'controllers/sessions/rotateSessionExercise';
-import { retrieveExerciseSessionQuery } from 'controllers/sessions/retrieveExerciseSessionQuery';
-import { changeSessionExercise } from 'controllers/sessions/changeSessionExercise';
-import { addExerciseToSession } from 'controllers/sessions/addExerciseToSession';
-import { removeExerciseInSession } from 'controllers/sessions/removeExerciseInSession';
 
 const router = Router();
-
-// Get exercise in the session
-router.get(
-  '/:sessionId/exercises/:exerciseId',
-  authenticate,
-  authorize,
-  async (req, res) => {
-    await retrieveExerciseSessionQuery(
-      res,
-      req.params.sessionId,
-      req.params.exerciseId
-    );
-  }
-);
 
 // Rotate to a related exercise in the session
 router.put(
@@ -29,7 +13,7 @@ router.put(
   authenticate,
   authorize,
   async (req, res) => {
-    await rotateSessionExercise(
+    await rotateTaskExercise(
       res,
       req.params.sessionId,
       req.params.exerciseId,
@@ -44,22 +28,12 @@ router.post(
   authenticate,
   authorize,
   async (req, res) => {
-    await changeSessionExercise(
+    await changeTaskExercise(
       res,
       req.params.sessionId,
       req.params.exerciseId,
       req.body
     );
-  }
-);
-
-// Add exercise to the session
-router.post(
-  '/:sessionId/exercises',
-  authenticate,
-  authorize,
-  async (req, res) => {
-    await addExerciseToSession(res, req.params.sessionId, req.body);
   }
 );
 
@@ -69,11 +43,12 @@ router.delete(
   authenticate,
   authorize,
   async (req, res) => {
-    await removeExerciseInSession(
+    await removeTaskExercise(
       res,
       req.params.sessionId,
       req.params.exerciseId,
-      req.query.workoutId as string
+      req.query.workoutId as string,
+      req.query.workoutTaskExerciseId as string
     );
   }
 );

@@ -1,9 +1,9 @@
 import { Response } from 'express';
-import { queryExerciseToContinueFrom } from 'queries/queryExerciseToContinueFrom';
+import { queryLastSetUpdated } from 'queries/sets';
 
 export const continueSession = async (res: Response, id: string) => {
   try {
-    const data = await queryExerciseToContinueFrom({ sessionId: id });
+    const data = await queryLastSetUpdated({ sessionId: id });
     if (!data) {
       return res.status(404).json({
         role: res.locals.state.account.role,
@@ -16,7 +16,7 @@ export const continueSession = async (res: Response, id: string) => {
       role: res.locals.state.account.role,
       status: 'success',
       message: 'continuing session',
-      url: `${process.env.APP_ENDPOINT}/sessions/${id}/exercises/${data.exercise_id}`,
+      url: `${process.env.APP_ENDPOINT}/sessions/${id}/tasks/${data.workout_task_id}`,
     });
   } catch (error) {
     console.log({ error });

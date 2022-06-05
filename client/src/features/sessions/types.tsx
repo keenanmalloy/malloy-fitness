@@ -64,6 +64,8 @@ export interface SessionSummaryResponse extends SharedResponse {
     exercises: {
       name: string;
       exercise_id: string;
+      workout_task_id: string;
+      workout_task_exercise_id: string;
       video: string;
       primary_tracker: string;
       secondary_tracker: string;
@@ -77,12 +79,12 @@ export interface GetSessionExerciseResponse extends SharedResponse {
   record: any[];
   next: {
     order: {
-      exercise_id: string;
+      workoutTaskId: string;
     };
   };
   prev: {
     order: {
-      exercise_id: string;
+      workoutTaskId: string;
     };
   };
 }

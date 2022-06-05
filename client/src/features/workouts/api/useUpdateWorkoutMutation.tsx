@@ -1,10 +1,9 @@
 import { useMutation } from 'react-query';
 import { apiClient } from 'config/axios';
-import { EditableWorkoutFields } from '../types';
 
 interface UpdateWorkoutParams {
   id: string;
-  workout: EditableWorkoutFields;
+  workout?: any;
 }
 
 const updateWorkout = async ({ id, workout }: UpdateWorkoutParams) => {
@@ -13,7 +12,7 @@ const updateWorkout = async ({ id, workout }: UpdateWorkoutParams) => {
 };
 
 export const useUpdateWorkoutMutation = (id: string) => {
-  return useMutation<any, any, { workout: EditableWorkoutFields }>(
-    ({ workout }) => updateWorkout({ id, workout })
+  return useMutation<any, any, { workout: any }>(({ workout }) =>
+    updateWorkout({ id, workout })
   );
 };

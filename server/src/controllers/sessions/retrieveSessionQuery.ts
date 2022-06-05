@@ -1,30 +1,38 @@
-import { db } from 'config/db';
 import { Response } from 'express';
+import { fetchSessionExercises } from 'queries/sessionExercises';
+import { querySessionById } from 'queries/sessions';
 
 export const retrieveSessionQuery = async (res: Response, id: string) => {
-  const query = `
-  SELECT * FROM sessions
-  JOIN workouts ON workouts.workout_id = sessions.workout_id 
-  WHERE session_id = $1`;
-
-  const params = [id];
-
   try {
-    const data = await db.query(query, params);
-    if (!data.rows.length) {
-      return res.status(404).json({
-        role: res.locals.state.account.role,
-        status: 'error',
-        message: 'Session does not exist',
-        session: null,
-      });
-    }
+    const data = await querySessionById(id);
+    const taskExercises = await fetchSessionExercises(id);
 
-    const exercises = await fetchSessionExercises(id);
+    const mappedTasks =
+      data.task_order &&
+      data.task_order.map((taskId: string) => {
+        const exercises = taskExercises.filter(
+          (t) => t.workout_task_id === taskId
+        );
+
+        return {
+          workout_task_id: taskId,
+          exercises: exercises.map((t) => {
+            return {
+              exercise_id: t.exercise_id,
+              name: t.name,
+              repetitions: t.repetitions,
+              reps_in_reserve: t.reps_in_reserve,
+              rest_period: t.rest_period,
+              workout_task_id: t.workout_task_id,
+              workout_task_exercise_id: t.workout_task_exercise_id,
+            };
+          }),
+        };
+      });
 
     const session = {
-      ...data.rows[0],
-      exercises,
+      ...data,
+      tasks: mappedTasks,
     };
 
     return res.status(200).json({
@@ -41,25 +49,4 @@ export const retrieveSessionQuery = async (res: Response, id: string) => {
       session: null,
     });
   }
-};
-
-const fetchSessionExercises = async (sessionId: string) => {
-  const query = `
-  SELECT 
-    e.exercise_id,
-    e.name,
-    repetitions,
-    reps_in_reserve,
-    sets,
-    rest_period,
-    notes
-  FROM exercises e
-  JOIN workout_exercises we on e.exercise_id = we.exercise_id
-  JOIN workouts w on we.workout_id = w.workout_id
-  JOIN sessions s on s.workout_id = w.workout_id
-  WHERE session_id = $1`;
-
-  const params = [sessionId];
-  const data = await db.query(query, params);
-  return data.rows;
 };

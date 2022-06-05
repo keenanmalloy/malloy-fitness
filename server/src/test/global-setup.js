@@ -1,34 +1,36 @@
-const isPortReachable = require("is-port-reachable");
-const path = require("path");
-const dockerCompose = require("docker-compose");
-const { execSync } = require("child_process");
+const isPortReachable = require('is-port-reachable');
+const path = require('path');
+const dockerCompose = require('docker-compose');
+const { execSync } = require('child_process');
+
+require('module-alias/register');
 
 module.exports = async () => {
-  console.time("global-setup");
+  console.time('global-setup');
 
   // ️️️✅ Best Practice: Speed up during development, if already live then do nothing
-  const isDBReachable = await isPortReachable(4444, { host: "localhost" });
+  const isDBReachable = await isPortReachable(4444, { host: 'localhost' });
   if (!isDBReachable) {
     // ️️️✅ Best Practice: Start the infrastructure within a test hook - No failures occur because the DB is down
     await dockerCompose.upAll({
       cwd: path.join(__dirname),
-      log: true,
+      log: false,
     });
 
     await dockerCompose.exec(
-      "database",
-      ["sh", "-c", "until pg_isready ; do sleep 1; done"],
+      'database',
+      ['sh', '-c', 'until pg_isready ; do sleep 1; done'],
       {
         cwd: path.join(__dirname),
       }
     );
 
     // ️️️✅ Best Practice: Use npm script for data seeding and migrations
-    // execSync("npm run db:migrate");
+    execSync('npm run migrate');
     // ✅ Best Practice: Seed only metadata and not test record, read "Dealing with data" section for further information
-    // execSync("npm run db:seed");
+    // execSync("npm run seed");
   }
 
   // 👍🏼 We're ready
-  console.timeEnd("global-setup");
+  console.timeEnd('global-setup');
 };

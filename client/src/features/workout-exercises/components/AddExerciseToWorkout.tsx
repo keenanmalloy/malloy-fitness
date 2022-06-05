@@ -115,14 +115,16 @@ const AddExerciseToWorkout = ({ workout }: Props) => {
               name="order"
               options={
                 // create dynamic array of objects with key value pairs
-                Array.from(Array(workout.exercises.length + 1).keys()).map(
-                  (i) => {
-                    return {
-                      label: i + 1,
-                      value: i + 1,
-                    };
-                  }
-                ) as any
+                Array.from(
+                  Array(
+                    workout.exercises ? workout.exercises.length + 1 : 0
+                  ).keys()
+                ).map((i) => {
+                  return {
+                    label: i + 1,
+                    value: i + 1,
+                  };
+                }) as any
               }
               className="basic-multi-select"
               classNamePrefix="select"

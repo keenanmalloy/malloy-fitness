@@ -18,7 +18,7 @@ export const RadioGroup = ({
   name,
 }: Props) => {
   return (
-    <div className="py-2">
+    <div className="py-2 ">
       <label>{label}</label>
       <ul className="grid grid-cols-3 mt-2">
         {options.map((option, key) => {
@@ -35,7 +35,7 @@ export const RadioGroup = ({
                 onChange={() => onChange(option)}
               />
               <label
-                className="flex justify-center mx-1 px-5 py-3 w-full bg-white rounded-md cursor-pointer hover:bg-gray-50 peer-checked:ring-blue-500 peer-checked:ring-2 peer-checked:bg-white"
+                className="text-white flex justify-center mx-1 px-5 py-3 w-full bg-slate-800 rounded-md cursor-pointer  peer-checked:ring-green-400 peer-checked:ring-2 peer-checked:bg-slate-700"
                 htmlFor={option}
               >
                 {option}

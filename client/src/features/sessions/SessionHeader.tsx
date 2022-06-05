@@ -4,19 +4,19 @@ import { useSessionQuery } from 'features/sessions/useSessionQuery';
 import { RiTimerFill } from 'react-icons/ri';
 import SessionTimer from 'features/sessions/SessionTimer';
 import { useRouter } from 'next/router';
-import { RotateExercise } from './RotateExercise';
-import { OverviewRow } from 'features/workout-overview/OverviewRow';
-import { ChangeExercise } from './ChangeExercise';
 
 interface Props {
   sessionId: string;
-  exerciseId: string;
+  workoutTaskId: string;
   workoutId: string;
 }
 
-const SessionHeader = ({ sessionId, exerciseId, workoutId }: Props) => {
+const SessionHeader = ({ sessionId, workoutTaskId, workoutId }: Props) => {
   const router = useRouter();
-  const { data, isError, isLoading } = useSessionQuery(sessionId, exerciseId);
+  const { data, isError, isLoading } = useSessionQuery(
+    sessionId,
+    workoutTaskId
+  );
 
   if (isLoading) {
     return <div className="pt-1"></div>;
@@ -29,19 +29,6 @@ const SessionHeader = ({ sessionId, exerciseId, workoutId }: Props) => {
   if (!data) {
     return <p>none available...</p>;
   }
-
-  const currentExercise = data.session.exercises.find(
-    (ex) => ex.exercise_id === exerciseId
-  );
-
-  const getLetter = (index: number) => {
-    const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    return letters[index];
-  };
-
-  const currentExerciseIndex = data.session.exercise_order.findIndex(
-    (id: string) => id === exerciseId
-  );
 
   return (
     <header className="fixed top-0 left-0 right-0 bg-slate-900 text-white z-10 flex flex-col items-center">
@@ -69,32 +56,7 @@ const SessionHeader = ({ sessionId, exerciseId, workoutId }: Props) => {
             </div>
           </div>
         </div>
-
-        <div className="flex">
-          <ChangeExercise
-            exercises={data.session.exercises}
-            exerciseId={exerciseId}
-            sessionId={sessionId}
-            workoutId={workoutId}
-          />
-          <RotateExercise
-            exerciseId={exerciseId}
-            sessionId={sessionId}
-            workoutId={workoutId}
-          />
-        </div>
       </section>
-      <div className="px-1 pt-0.5 border-solid border-slate-700 border-t w-full max-w-md">
-        <OverviewRow
-          order={`${getLetter(currentExerciseIndex)}1`}
-          name={currentExercise?.name ?? ''}
-          sets="sets 3"
-          reps="reps 10-12"
-          rir="rir 1"
-          rest="REST 90 seconds"
-          exerciseId={currentExercise?.exercise_id ?? ''}
-        />
-      </div>
     </header>
   );
 };

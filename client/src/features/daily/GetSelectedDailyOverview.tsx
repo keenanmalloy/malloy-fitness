@@ -1,5 +1,8 @@
 import React from 'react';
-import { useDailyOverviewQuery } from 'features/daily/useDailyOverviewQuery';
+import {
+  SelectedDate,
+  useDailyOverviewQuery,
+} from 'features/daily/useDailyOverviewQuery';
 import { DietPanel } from 'features/daily/DietPanel';
 import { TrainingPanel } from 'features/daily/TrainingPanel';
 import { ActivityPanel } from './ActivityPanel';
@@ -7,7 +10,6 @@ import { SleepPanel } from './SleepPanel';
 import { HealthPanel } from './HealthPanel';
 import { Divider } from 'features/feed/Divider';
 import { UserAction } from './UserAction';
-import { SelectedDate } from './types';
 import { AuthorizeGoogleFitButton } from './AuthorizeGoogleFitButton';
 
 interface Props {

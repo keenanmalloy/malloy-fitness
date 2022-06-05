@@ -1,7 +1,8 @@
 import { db } from 'config/db';
 import { Response, Request } from 'express';
 import { fetchGoogleFitSteps } from './fetchGoogleFitSteps';
-import { getGoalSettings } from '../../queries/getGoalSettings';
+import { getTodaysSessions } from 'queries/sessions';
+import { getGoalSettings } from 'queries/settings';
 
 export const retrieveDailyOverviewQuery = async (
   req: Request,
@@ -54,53 +55,4 @@ export const retrieveDailyOverviewQuery = async (
       sessions: null,
     });
   }
-};
-
-const getTodaysSessions = async (date: string, accountId: string) => {
-  const query = `
-  WITH
-  TodaysSessions as (
-       SELECT
-            session_id
-          FROM sessions
-      WHERE session_dt = $1
-      AND created_by = $2
-  ),
-   ExerciseVideo as (
-       SELECT
-           distinct session_id,
-           MAX(video) as video
-       FROM exercises
-       JOIN workout_exercises we on exercises.exercise_id = we.exercise_id
-       JOIN sessions s on we.workout_id = s.workout_id
-       WHERE session_id IN(select session_id from TodaysSessions)
-       GROUP BY 1
-   ),
-   PreparedSessions as (
-        SELECT
-          sessions.workout_id,
-          sessions.created_by,
-          workouts.name,
-          workouts.description,
-          workouts.category,
-          workouts.type,
-          workouts.view,
-          sessions.session_id,
-          started_at,
-          ended_at,
-          session_dt,
-          completed,
-          ExerciseVideo.video,
-          deload
-        FROM TodaysSessions
-        LEFT OUTER JOIN ExerciseVideo on ExerciseVideo.session_id = TodaysSessions.session_id
-        JOIN sessions on TodaysSessions.session_id = sessions.session_id
-        JOIN workouts on workouts.workout_id = sessions.workout_id
-)
-
-
-  SELECT * FROM PreparedSessions
-  `;
-  const data = await db.query(query, [date, accountId]);
-  return data.rows;
 };

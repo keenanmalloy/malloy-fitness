@@ -1,9 +1,9 @@
 import { Router } from 'express';
 import { authenticate } from 'middlewares/authenticate';
 import { authorize } from 'middlewares/authorize';
-import { addExerciseToWorkoutMutation } from 'controllers/addExerciseToWorkoutMutation';
-import { removeExerciseFromWorkoutMutation } from 'controllers/removeExerciseFromWorkoutMutation';
 import { updateWorkoutExerciseMetadataMutation } from 'controllers/updateWorkoutExerciseMetadataMutation';
+import { addExerciseToWorkoutMutation } from 'controllers/workouts/addExerciseToWorkoutMutation';
+import { removeExerciseFromWorkoutMutation } from 'controllers/workouts/removeExerciseFromWorkoutMutation';
 
 const router = Router();
 
@@ -13,11 +13,7 @@ router.delete(
   authenticate,
   authorize,
   async (req, res) => {
-    await removeExerciseFromWorkoutMutation(
-      res,
-      req.params.workoutId,
-      req.params.exerciseId
-    );
+    await removeExerciseFromWorkoutMutation(res, req.params.exerciseId);
   }
 );
 
