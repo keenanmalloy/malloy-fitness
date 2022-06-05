@@ -13,6 +13,18 @@ import {
   retrieveWorkoutQuery,
   updateWorkoutTaskOrder,
 } from 'queries/workouts';
+import Joi from 'joi';
+
+class WorkoutNotFoundError extends Error {}
+class TaskOrderNullError extends Error {}
+class ExerciseNotFoundError extends Error {}
+
+const changeTaskExerciseBodySchema = Joi.object({
+  workoutId: Joi.string().max(200).required(),
+  workoutTaskId: Joi.string().max(200).required(),
+  currentWorkoutTaskExerciseId: Joi.string().max(200).required(),
+  newExerciseId: Joi.string().max(200).required(),
+});
 
 /**
  * Changes the ```workout_task_exercise```.
@@ -36,6 +48,17 @@ export const changeTaskExercise = async (
   const workoutTaskId = body.workoutTaskId;
   const currentWorkoutTaskExerciseId = body.currentWorkoutTaskExerciseId;
 
+  const { error, value } = changeTaskExerciseBodySchema.validate(body);
+  if (error) {
+    return res.status(422).json({
+      role: res.locals.state.account.role,
+      status: 'error',
+      message: 'Invalid body',
+      exercise: value,
+      error: error,
+    });
+  }
+
   try {
     // first, check if the workout has previous sessions connected
     // if not, update the workout_exercise
@@ -45,10 +68,6 @@ export const changeTaskExercise = async (
     );
 
     if (hasSessions && sessionCount > 1) {
-      console.warn('WORKOUT ALREADY HAS SESSIONS - NEED TO CLONE', {
-        need_to_clone: sessionCount > 1,
-      });
-
       const data = await onExerciseChangeClone({
         accountId,
         workoutId,
@@ -67,7 +86,6 @@ export const changeTaskExercise = async (
       });
     }
 
-    console.warn('REPLACING EXERCISE IN SESSION');
     const changedExerciseId = await onExerciseChangeSwap({
       accountId,
       workoutId,
@@ -85,6 +103,31 @@ export const changeTaskExercise = async (
       exerciseId: changedExerciseId,
     });
   } catch (error) {
+    if (error instanceof WorkoutNotFoundError) {
+      return res.status(404).json({
+        role: res.locals.state.account.role,
+        message: 'Workout not found.',
+        status: 'error',
+      });
+    }
+
+    if (error instanceof ExerciseNotFoundError) {
+      return res.status(404).json({
+        role: res.locals.state.account.role,
+        message: 'No exercise found.',
+        status: 'error',
+      });
+    }
+
+    if (error instanceof TaskOrderNullError) {
+      return res.status(400).json({
+        role: res.locals.state.account.role,
+        message: 'Workout has no exercises',
+        status: 'error',
+      });
+    }
+
+    console.log({ error });
     const errorMessage = (error as unknown as { message: string })?.message;
     return res.status(500).json({
       error: 'Something went wrong',
@@ -117,13 +160,13 @@ const onExerciseChangeClone = async ({
   sessionId,
 }: CloneMutationParams) => {
   const oldWorkout = await retrieveWorkoutQuery(workoutId);
-  if (!oldWorkout) throw new Error('Workout not found');
+  if (!oldWorkout) throw new WorkoutNotFoundError('Workout not found');
 
   // get task exercise with id
   const taskExercise = oldWorkout.tasks.find(
     (task) => task.workout_task_exercise_id === currentWorkoutTaskExerciseId
   );
-  if (!taskExercise) throw new Error('Exercise not found');
+  if (!taskExercise) throw new ExerciseNotFoundError('Exercise not found');
 
   const { newWorkoutId } = await cloneWorkout({
     accountId,
@@ -189,14 +232,14 @@ const onExerciseChangeSwap = async ({
   sessionId,
 }: CloneMutationParams) => {
   const oldWorkout = await retrieveWorkoutQuery(workoutId);
-  if (!oldWorkout) throw new Error('Workout not found');
+  if (!oldWorkout) throw new WorkoutNotFoundError('Workout not found');
 
   // get workout exercise with id
   const currentTaskExercise = oldWorkout.tasks.find(
     (task) => task.workout_task_exercise_id === currentWorkoutTaskExerciseId
   );
   if (!currentTaskExercise || !currentTaskExercise.workout_task_exercise_id)
-    throw new Error('Exercise not found');
+    throw new ExerciseNotFoundError('Exercise not found');
 
   await updateTaskExercise({
     exercise_id: newExerciseId,

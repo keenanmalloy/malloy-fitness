@@ -163,6 +163,24 @@ export const connectExerciseToWorkout = async (
   return { workout_task_id, workoutTaskExercises };
 };
 
+export const connectManyExercisesToWorkout = async (
+  payload: {
+    exercise_id: string;
+  }[],
+  workoutId: string
+) => {
+  const workout_task_id = await createWorkoutTaskWithExercises({
+    workoutId,
+    payload,
+  });
+
+  const workoutTaskExercises = await queryWorkoutTaskExercisesByTaskId(
+    workout_task_id
+  );
+
+  return { workout_task_id, workoutTaskExercises };
+};
+
 const queryWorkoutTaskExercisesByTaskId = async (taskId: string) => {
   const query = `
     SELECT *

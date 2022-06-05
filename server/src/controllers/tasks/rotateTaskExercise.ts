@@ -151,7 +151,8 @@ const onRelatedExerciseChangeClone = async ({
   );
 
   const rowLength = filteredRelatedExercises.length;
-  if (!rowLength) throw new Error('No related exercises found');
+  if (!rowLength)
+    throw new NoRelatedExercisesError('No related exercises found');
 
   const randomRelatedExercise =
     filteredRelatedExercises[Math.floor(Math.random() * rowLength)];
@@ -160,7 +161,8 @@ const onRelatedExerciseChangeClone = async ({
   const workoutTaskExercise = oldWorkout.tasks.find(
     (task) => task.exercise_id === currentExerciseId
   );
-  if (!workoutTaskExercise) throw new Error('Exercise not found');
+  if (!workoutTaskExercise)
+    throw new NoRelatedExercisesError('Exercise not found');
 
   const { newWorkoutId } = await cloneWorkout({
     accountId,

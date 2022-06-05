@@ -1,6 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
+import { querySessionById } from 'queries/sessions';
 import { updateWorkoutTaskOrder } from 'queries/workouts';
-import muscleGroups from 'routes/muscle-groups';
 import {
   EXERCISE_CATEGORIES,
   EXERCISE_PROFILES,
@@ -24,7 +24,7 @@ import {
 import { initializeWebServer, stopWebServer } from 'test/server';
 import { exercises_table, muscle_groups_table } from 'utils/databaseTypes';
 
-describe('Rotate Exercise in Workout API', function () {
+describe('Change Exercise in Workout API', function () {
   let axiosAPIClient: AxiosInstance;
   let cookie: string;
   let accountId: string;
@@ -106,9 +106,9 @@ describe('Rotate Exercise in Workout API', function () {
     await stopWebServer();
   });
 
-  describe('Rotating an exercise within a workout', function () {
+  describe('Changing an exercise within a workout', function () {
     it('responds with 401 if missing Cookie', async function () {
-      const response = await axiosAPIClient.put(
+      const response = await axiosAPIClient.post(
         '/sessions/not-found/exercises/:exerciseId'
       );
       expect(response.status).toBe(401);
@@ -116,7 +116,7 @@ describe('Rotate Exercise in Workout API', function () {
 
     it('responds with 403 when resource not owned by user', async function () {
       const session = await createTestSessionWithSets('-1');
-      const response = await axiosAPIClient.put(
+      const response = await axiosAPIClient.post(
         `/sessions/${session.session_id}/exercises/${session.exerciseIds[0]}`,
         {},
         {
@@ -129,9 +129,9 @@ describe('Rotate Exercise in Workout API', function () {
       expect(response.status).toBe(403);
     });
 
-    it('responds with 404 when the exercise to be rotated does not exist', async function () {
+    it('responds with 404 when the exercise ID is invalid', async function () {
       const session = await createTestSession(accountId);
-      const response = await axiosAPIClient.put(
+      const response = await axiosAPIClient.post(
         `/sessions/${session.session_id}/exercises/not-found`,
         {},
         {
@@ -145,7 +145,33 @@ describe('Rotate Exercise in Workout API', function () {
     });
 
     describe('That does not have sessions', () => {
-      it('responds with 201 successfully found and replaced exercise with related exercise', async function () {
+      it('responds with 422 if invalid body', async function () {
+        const workoutId = await createTestWorkout(accountId);
+        const session = await createTestSessionOnWorkout(workoutId, accountId);
+        const { workout_task_id } = await connectExerciseToWorkout(
+          exercises[2].exercise_id!,
+          workoutId
+        );
+        await updateWorkoutTaskOrder({
+          taskOrder: JSON.stringify([workout_task_id]),
+          workoutId,
+        });
+
+        const currentExerciseId = exercises[2].exercise_id;
+        const response = await axiosAPIClient.post(
+          `/sessions/${session.session_id}/exercises/${currentExerciseId}`,
+          {},
+          {
+            headers: {
+              Cookie: cookie,
+            },
+          }
+        );
+
+        expect(response.status).toBe(422);
+      });
+
+      it('responds with 201 successfully found and replaced exercise with chosen exercise', async function () {
         const workoutId = await createTestWorkout(accountId);
         const session = await createTestSessionOnWorkout(workoutId, accountId);
         const { workout_task_id, workoutTaskExercises } =
@@ -155,14 +181,16 @@ describe('Rotate Exercise in Workout API', function () {
           workoutId,
         });
 
-        const response = await axiosAPIClient.put(
-          `/sessions/${session.session_id}/exercises/${exercises[0]
-            .exercise_id!}`,
+        const currentExerciseId = exercises[0].exercise_id;
+        const chosenExerciseId = exercises[1].exercise_id!;
+        const response = await axiosAPIClient.post(
+          `/sessions/${session.session_id}/exercises/${currentExerciseId}`,
           {
             workoutId: session.workout_id,
             workoutTaskId: workout_task_id,
-            workoutTaskExerciseId:
+            currentWorkoutTaskExerciseId:
               workoutTaskExercises[0].workout_task_exercise_id,
+            newExerciseId: chosenExerciseId,
           },
           {
             headers: {
@@ -173,72 +201,9 @@ describe('Rotate Exercise in Workout API', function () {
 
         expect(response.status).toBe(201);
       });
-
-      it('responds with 404 if does not find a related exercise', async function () {
-        const workoutId = await createTestWorkout(accountId);
-        const session = await createTestSessionOnWorkout(workoutId, accountId);
-        const { workout_task_id, workoutTaskExercises } =
-          await connectExerciseToWorkout(exercises[2].exercise_id!, workoutId);
-        await updateWorkoutTaskOrder({
-          taskOrder: JSON.stringify([workout_task_id]),
-          workoutId,
-        });
-
-        const response = await axiosAPIClient.put(
-          `/sessions/${session.session_id}/exercises/${exercises[2]
-            .exercise_id!}`,
-          {
-            workoutId: session.workout_id,
-            workoutTaskId: workout_task_id,
-            workoutTaskExerciseId:
-              workoutTaskExercises[0].workout_task_exercise_id,
-          },
-          {
-            headers: {
-              Cookie: cookie,
-            },
-          }
-        );
-
-        expect(response.status).toBe(404);
-      });
     });
 
     describe('That has sessions', () => {
-      it('responds with 404 if does not find a related exercise before clone', async function () {
-        const workoutId = await createTestWorkout(accountId);
-        await createTestSessionOnWorkout(workoutId, accountId);
-        const secondSession = await createTestSessionOnWorkout(
-          workoutId,
-          accountId
-        );
-
-        const { workout_task_id, workoutTaskExercises } =
-          await connectExerciseToWorkout(exercises[2].exercise_id!, workoutId);
-        await updateWorkoutTaskOrder({
-          taskOrder: JSON.stringify([workout_task_id]),
-          workoutId,
-        });
-
-        const response = await axiosAPIClient.put(
-          `/sessions/${secondSession.session_id}/exercises/${exercises[2]
-            .exercise_id!}`,
-          {
-            workoutId: secondSession.workout_id,
-            workoutTaskId: workout_task_id,
-            workoutTaskExerciseId:
-              workoutTaskExercises[0].workout_task_exercise_id,
-          },
-          {
-            headers: {
-              Cookie: cookie,
-            },
-          }
-        );
-
-        expect(response.status).toBe(404);
-      });
-
       it('responds with 201 if cloned workout successfully replacing the exercise selected by its related exercise', async function () {
         const workoutId = await createTestWorkout(accountId);
         await createTestSessionOnWorkout(workoutId, accountId);
@@ -246,7 +211,6 @@ describe('Rotate Exercise in Workout API', function () {
           workoutId,
           accountId
         );
-
         const { workout_task_id, workoutTaskExercises } =
           await connectExerciseToWorkout(exercises[0].exercise_id!, workoutId);
         await updateWorkoutTaskOrder({
@@ -254,14 +218,17 @@ describe('Rotate Exercise in Workout API', function () {
           workoutId,
         });
 
-        const response = await axiosAPIClient.put(
-          `/sessions/${secondSession.session_id}/exercises/${exercises[0]
-            .exercise_id!}`,
+        const currentExerciseId = exercises[0].exercise_id;
+        const chosenExerciseId = exercises[1].exercise_id!;
+
+        const response = await axiosAPIClient.post(
+          `/sessions/${secondSession.session_id}/exercises/${currentExerciseId}`,
           {
             workoutId: secondSession.workout_id,
             workoutTaskId: workout_task_id,
-            workoutTaskExerciseId:
+            currentWorkoutTaskExerciseId:
               workoutTaskExercises[0].workout_task_exercise_id,
+            newExerciseId: chosenExerciseId,
           },
           {
             headers: {
@@ -269,7 +236,6 @@ describe('Rotate Exercise in Workout API', function () {
             },
           }
         );
-
         expect(response.status).toBe(201);
       });
     });
