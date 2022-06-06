@@ -62,8 +62,7 @@ const fetchExercises = async ({
     }&profile=${profile ?? ''}&sortBy=${sortBy ?? ''}`
   );
 
-  const result = getExercisesSchema.parse(data);
-  return result;
+  return data;
 };
 
 export const useExercisesQuery = ({

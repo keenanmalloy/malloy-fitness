@@ -44,6 +44,7 @@ export const retrieveExercisesQuery = async (req: Request, res: Response) => {
   } catch (error) {
     console.log({ error });
     return res.status(500).json({
+      role: res.locals.state.account.role,
       status: 'error',
       message: 'Database error',
       exercises: null,

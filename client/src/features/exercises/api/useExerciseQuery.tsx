@@ -43,8 +43,7 @@ export type GetExerciseSchema = z.infer<typeof getExerciseSchema>;
 
 const fetchExercise = async (id: string) => {
   const { data } = await apiClient.get(`/exercises/${id}`);
-  const result = getExerciseSchema.parse(data);
-  return result;
+  return data;
 };
 
 export const useExerciseQuery = (id: string) => {
