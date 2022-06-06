@@ -5,12 +5,13 @@
   "main": "src/start.ts",
   "private": true,
   "scripts": {
-    "dev": "ts-node-dev -r tsconfig-paths/register --no-deps --respawn --poll --interval 1000 --no-notify src/start.ts",
     "build": "ls -la && tsc",
     "test": "NODE_ENV=test && node --expose-gc --no-compilation-cache ./node_modules/.bin/jest --no-cache --runInBand --logHeapUsage",
     "start": "node -r ./dist/ts-start.js",
     "generate": "npx @rmp135/sql-ts -c ./sql.json",
-    "migrate": "ts-node-dev -r tsconfig-paths/register src/db/migrate.ts"
+    "migrate": "ts-node-dev -r tsconfig-paths/register src/db/migrate.ts",
+    "dev:staging": "ts-node-dev -r tsconfig-paths/register --no-deps --respawn --poll --interval 1000 --no-notify src/start.ts",
+    "dev:local": "ts-node-dev -r tsconfig-paths/register src/local.ts"
   },
   "_moduleAliases": {
     "middlewares": "./dist/middlewares",

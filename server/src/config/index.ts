@@ -3,9 +3,11 @@ import dotenv from 'dotenv';
 
 const envFile =
   process.env.NODE_ENV === 'test'
-    ? `test.env`
+    ? `local.test.env`
     : process.env.NODE_ENV === 'development'
-    ? 'development.env'
+    ? 'local.dev.env'
+    : process.env.NODE_ENV === 'staging'
+    ? 'local.staging.env'
     : '.env';
 dotenv.config({ path: envFile });
 

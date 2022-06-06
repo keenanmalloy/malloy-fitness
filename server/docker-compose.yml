@@ -4,7 +4,7 @@ services:
   postgres:
     container_name: postgres
     env_file:
-      - ./development.env
+      - ./local.dev.env
     build:
       context: ./db
     ports:
@@ -15,7 +15,7 @@ services:
       context: ./
       dockerfile: dev.Dockerfile
     env_file:
-      - ./development.env
+      - ./local.dev.env
     depends_on:
       - 'postgres'
     ports:

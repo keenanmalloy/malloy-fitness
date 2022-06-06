@@ -2,6 +2,7 @@ dist
 .env.production
 !.env.ci
 !.env*.example
+local.*.env
 *.log
 coverage
 private.pem

@@ -21,7 +21,9 @@ sessions(router);
 overview(router);
 account(router);
 
-router.get('/health', (req, res) => res.send('OK'));
+router.get('/health', (req, res) => {
+  res.send('OK');
+});
 
 // all other routes should throw 404 not found
 router.use('*', (req, res) => {

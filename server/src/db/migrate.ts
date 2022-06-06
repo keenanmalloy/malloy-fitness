@@ -1,10 +1,11 @@
 import dotenv from 'dotenv';
 const envFile =
   process.env.NODE_ENV === 'test'
-    ? `test.env`
-    : process.env.NODE_ENV === 'development'
-    ? 'development.env'
-    : '.env';
+    ? `local.test.env`
+    : process.env.NODE_ENV === 'staging'
+    ? `local.staging.env`
+    : 'local.test.env';
+
 dotenv.config({ path: envFile });
 
 import { Client } from 'pg';
@@ -15,6 +16,11 @@ class DBConnectionError extends Error {}
 
 (async function runMigrations() {
   process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+  console.info(
+    `STARTING MIGRATION ENVIRONMENT - ${
+      process.env.NODE_ENV || 'development'
+    } ⌛`
+  );
 
   try {
     await loadMigrationFiles('src/db/migrations');
@@ -33,6 +39,7 @@ class DBConnectionError extends Error {}
     await client.connect();
   } catch (error) {
     console.error({ error });
+    console.error(process.env);
     throw new DBConnectionError('Could not connect to database ❌');
   }
 
