@@ -1,4 +1,4 @@
-name: Deploy Staging
+name: Migrate and Deploy Staging
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  deploy-server:
+  migrate-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -20,8 +20,18 @@ jobs:
           files: |
             server
 
-      - name: If changes to service, deploy to Heroku
-        if: steps.server-changes.outputs.any_changed == 'true'
+      - name: If changes to service, attempt to migrate
+        id: migrate-if-changes
+        if: server-changes.outputs.any_changed == 'true'
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16.10'
+        run: npm ci && npm run migrate
+
+      - name: If changes to service, and successfully migrated, deploy to Heroku
+        if: migrate-if-changes.status == success && server-changes.outputs.any_changed == 'true'
         uses: gonuit/heroku-docker-deploy@v1.3.3
         with:
           email: ${{ secrets.HEROKU_EMAIL }}
@@ -30,13 +40,6 @@ jobs:
           dockerfile_directory: ./server/
           dockerfile_name: Dockerfile
 
-  deploy-client:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: '2'
-
       - name: Get changed files in client
         id: client-changes
         uses: tj-actions/changed-files@v1.1.2
@@ -44,8 +47,8 @@ jobs:
           files: |
             client
 
-      - name: If changes to service, deploy to Vercel
-        if: steps.client-changes.outputs.any_changed == 'true'
+      - name: If changes to service, and successfully migrated, deploy to Vercel
+        if: migrate-if-changes.status == success && client-changes.outputs.any_changed == 'true'
         uses: amondnet/vercel-action@v20.0.0
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }} # Required
