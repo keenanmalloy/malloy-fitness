@@ -10,7 +10,7 @@
     "start": "node -r ./dist/ts-start.js",
     "generate": "npx @rmp135/sql-ts -c ./sql.json",
     "migrate": "ts-node-dev -r tsconfig-paths/register src/db/migrate.ts",
-    "dev:staging": "ts-node-dev -r tsconfig-paths/register --no-deps --respawn --poll --interval 1000 --no-notify src/start.ts",
+    "dev:staging": "ts-node-dev -r tsconfig-paths/register --no-deps --respawn --poll --interval 1000 src/start.ts",
     "dev:local": "ts-node-dev -r tsconfig-paths/register src/local.ts"
   },
   "_moduleAliases": {

@@ -8,7 +8,7 @@ const envFile =
     ? 'local.dev.env'
     : process.env.NODE_ENV === 'staging'
     ? 'local.staging.env'
-    : '.env';
+    : 'local.dev.env';
 dotenv.config({ path: envFile });
 
 export * from './application';
